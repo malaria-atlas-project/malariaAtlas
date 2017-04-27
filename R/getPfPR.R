@@ -1,7 +1,7 @@
+## NOTES/QUESTIONS:
 
-
-
-
+# what is the difference between pf_pos & pf_positive??
+# chat about which fields would be useful
 
 #' @examples
 #' getPfPR(country = c("Nigeria", "Kenya"))
@@ -10,30 +10,46 @@
 getPfPR <- function(country, myData = "subset") {
 
 URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pfpr"
+columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country_code,country,continent_id,who_region_id,citation1"
 
-if(country == "ALL") {
+if("ALL" %in% country){
   message("Importing PfPR point data for all locations, please wait...")
-  df <-   utils::read.csv(URL)
-  assign("PfPR_points_ALL",df, envir = .GlobalEnv)
+  df <-   utils::read.csv(paste(URL,columns,"&cql_filter=is_available=%27true%27",sep = ""))[,-1]
+  return(df)
 
 }else{
   message(paste("Importing PfPR point data for", paste(country, collapse = ", "), "please wait..."))
   country.list <- paste("%27",country, "%27", sep = "", collapse = "," )
-  df <- utils::read.csv(paste(URL,"&cql_filter=country%20IN%20(",country.list,")", sep = ""))
-  assign("PfPR_points_subset",df, envir = .GlobalEnv)
+  df <- utils::read.csv(paste(URL,
+                              columns,
+                              "&cql_filter=country%20IN%20(",
+                              country.list,
+                              ")%20AND%20is_available=%27true%27", sep = ""))[,-1]
+  if(length(df$id) == 0) {
+    message("No data downloaded - check spelling of country name and/or availability of data for specificed country.")
+  } else {
+  return(df)
+  }
 }
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+# all possible columns:
+# names(PfPR_points_ALL)
+#
+# names(PfPR_points_ALL)
+# > [1] "FID"                 "id"                  "month_start"         "year_start"          "month_end"
+# > [6] "year_end"            "lower_age"           "upper_age"           "examined"            "pf_pos"
+# > [11] "pf_pr"               "pf_positive"         "dhs_id"              "admin1_paper"        "admin2_paper"
+# > [16] "admin3_paper"        "method"              "rdt_type"            "survey_notes"        "pcr_type"
+# > [21] "site_id"             "admin_id"            "latitude"            "longitude"           "name"
+# > [26] "latlong_source_id"   "site_notes"          "forest"              "rice"                "country_id"
+# > [31] "area_type_id"        "rural_urban"         "geom"                "country_code"        "country"
+# > [36] "pf_endemic"          "pv_endemic"          "continent_id"        "area"                "eliminating"
+# > [41] "geo_region_id"       "map_region_id"       "who_region_id"       "source_id1"          "year1"
+# > [46] "pdf_status_id1"      "title1"              "citation1"           "source_type_id1"     "contact_id1"
+# > [51] "permission_type_id1" "cinfidential2"       "pdf_status_id2"      "title2"              "citation2"
+# > [56] "source_id2"          "source_type_id2"     "contact_id2"         "year2"               "permission_type_id2"
+# > [61] "confidential3"       "pdf_status_id3"      "title3"              "citation3"           "source_type_id3"
+# > [66] "contact_id3"         "source_id3"          "year3"               "permission_type_id3" "time_start"
+# > [71] "time_end"            "is_available"
