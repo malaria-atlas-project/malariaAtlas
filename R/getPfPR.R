@@ -1,13 +1,24 @@
-## NOTES/QUESTIONS:
-
-# what is the difference between pf_pos & pf_positive??
-# chat about which fields would be useful
-
+#' Download publicly available PfPR points from MAP's geoserver.
+#'
+#' \code{getPfPR} downloads all publicly available PfPR points for a specified country and returns this as a dataframe.
+#'
+#'
+#' @param country \code{ = c("Country1", "Country2", ...)} OR \code{ = "ALL"}
+#'
+#' specifies which country/countries you wish to include in your download
+#' @return \code{getPfPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
+#'
+#' \enumerate{
+#' \item \code{COLUMNNAME} description of contents
+#' \item \code{COLUMNNAME} description of contents
+#' \item \code{COLUMNNAME} description of contents
+#' }
+#'
 #' @examples
 #' getPfPR(country = c("Nigeria", "Kenya"))
 #' getPfPR(country = "ALL")
-
-getPfPR <- function(country, myData = "subset") {
+#' @export
+getPfPR <- function(country) {
 
 URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pfpr"
 columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country_code,country,continent_id,who_region_id,citation1"
@@ -32,8 +43,6 @@ if("ALL" %in% country){
   }
 }
 }
-
-
 # all possible columns:
 # names(PfPR_points_ALL)
 #
