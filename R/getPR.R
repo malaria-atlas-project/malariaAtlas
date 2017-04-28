@@ -26,7 +26,7 @@ getPR <- function(country, species) {
   } else if(species == "Pf") {
 
     URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pfpr"
-    columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country_code,country,continent_id,who_region_id,citation1"
+    columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country,continent_id,who_region_id,citation1,site_id"
 
     if("ALL" %in% country){
       message("Importing PfPR point data for all locations, please wait...")
@@ -49,11 +49,33 @@ getPR <- function(country, species) {
     }
   } else if(species == "Pv") {
 
-  ## TEST & INSERT A SECTION FOR PV ##
+    URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pvpr"
+    columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_pos,pv_positive,pv_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country,continent_id,who_region_id,citation1,site_id"
 
-  } else { warning("Provided species argument not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"") }
+    if("ALL" %in% country){
+      message("Importing PvPR point data for all locations, please wait...")
+      df <-   utils::read.csv(paste(URL,columns,"&cql_filter=is_available=%27true%27",sep = ""))[,-1]
+      return(df)
+
+    }else{
+      message(paste("Importing PvPR point data for", paste(country, collapse = ", "), "please wait..."))
+      country.list <- paste("%27",country, "%27", sep = "", collapse = "," )
+      df <- utils::read.csv(paste(URL,
+                                  columns,
+                                  "&cql_filter=country%20IN%20(",
+                                  country.list,
+                                  ")%20AND%20is_available=%27true%27", sep = ""))[,-1]
+      if(length(df$id) == 0) {
+        message("No data downloaded - check spelling of country name and/or availability of data for specificed country.")
+      } else {
+        return(df)
+      }
+    }
+
+  } else {stop("Provided species argument not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
 
 }
+
 # all possible columns:
 # names(PfPR_points_ALL)
 #
