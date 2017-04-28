@@ -1,12 +1,12 @@
 #' Download publicly available PfPR points from MAP's geoserver.
 #'
-#' \code{getPfPR} downloads all publicly available PfPR points for a specified country and returns this as a dataframe.
+#' \code{getPR} downloads all publicly available PfPR points for a specified country and returns this as a dataframe.
 #'
 #'
 #' @param country \code{ = c("Country1", "Country2", ...)} OR \code{ = "ALL"}
 #'
 #' specifies which country/countries you wish to include in your download
-#' @return \code{getPfPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
+#' @return \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 #'
 #' \enumerate{
 #' \item \code{COLUMNNAME} description of contents
@@ -15,33 +15,44 @@
 #' }
 #'
 #' @examples
-#' getPfPR(country = c("Nigeria", "Kenya"))
-#' getPfPR(country = "ALL")
+#' getPR(country = c("Nigeria", "Kenya"))
+#' getPR(country = "ALL")
 #' @export
-getPfPR <- function(country) {
+getPR <- function(country, species) {
+  if(species == "BOTH") {
 
-URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pfpr"
-columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country_code,country,continent_id,who_region_id,citation1"
+    ### SET UP AND TEST A SECTION TO COMBINE/MERGE BOTH PF&PV
 
-if("ALL" %in% country){
-  message("Importing PfPR point data for all locations, please wait...")
-  df <-   utils::read.csv(paste(URL,columns,"&cql_filter=is_available=%27true%27",sep = ""))[,-1]
-  return(df)
+  } else if(species == "Pf") {
 
-}else{
-  message(paste("Importing PfPR point data for", paste(country, collapse = ", "), "please wait..."))
-  country.list <- paste("%27",country, "%27", sep = "", collapse = "," )
-  df <- utils::read.csv(paste(URL,
+    URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pfpr"
+    columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country_code,country,continent_id,who_region_id,citation1"
+
+    if("ALL" %in% country){
+      message("Importing PfPR point data for all locations, please wait...")
+      df <-   utils::read.csv(paste(URL,columns,"&cql_filter=is_available=%27true%27",sep = ""))[,-1]
+      return(df)
+
+    }else{
+      message(paste("Importing PfPR point data for", paste(country, collapse = ", "), "please wait..."))
+      country.list <- paste("%27",country, "%27", sep = "", collapse = "," )
+      df <- utils::read.csv(paste(URL,
                               columns,
                               "&cql_filter=country%20IN%20(",
                               country.list,
                               ")%20AND%20is_available=%27true%27", sep = ""))[,-1]
-  if(length(df$id) == 0) {
-    message("No data downloaded - check spelling of country name and/or availability of data for specificed country.")
-  } else {
-  return(df)
-  }
-}
+    if(length(df$id) == 0) {
+      message("No data downloaded - check spelling of country name and/or availability of data for specificed country.")
+    } else {
+      return(df)
+    }
+    }
+  } else if(species == "Pv") {
+
+  ## TEST & INSERT A SECTION FOR PV ##
+
+  } else { warning("Provided species argument not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"") }
+
 }
 # all possible columns:
 # names(PfPR_points_ALL)
