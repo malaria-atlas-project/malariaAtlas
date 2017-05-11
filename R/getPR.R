@@ -1,6 +1,6 @@
 #' Download publicly available PR points from MAP's geoserver.
 #'
-#' \code{getPR} downloads all publicly available PfPR points for a specified country and returns this as a dataframe.
+#' \code{getPR} downloads all publicly available PR points for a specified country and returns this as a dataframe.
 #'
 #'
 #' @param country \code{ = c("Country1", "Country2", ...)} OR \code{ = "ALL"}
