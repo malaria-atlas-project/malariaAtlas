@@ -1,6 +1,6 @@
-#' Download publicly available PR points from MAP's geoserver.
+#' Download publicly available PfPR points from MAP's geoserver.
 #'
-#' \code{getPR} downloads all publicly available PR points for a specified country and returns this as a dataframe.
+#' \code{getPR} downloads all publicly available PfPR points for a specified country and returns this as a dataframe.
 #'
 #'
 #' @param country \code{ = c("Country1", "Country2", ...)} OR \code{ = "ALL"}
@@ -37,15 +37,15 @@ getPR <- function(country, species) {
       message(paste("Importing PfPR point data for", paste(country, collapse = ", "), "please wait..."))
       country.list <- paste("%27",country, "%27", sep = "", collapse = "," )
       df <- utils::read.csv(paste(URL,
-                              columns,
-                              "&cql_filter=country%20IN%20(",
-                              country.list,
-                              ")%20AND%20is_available=%27true%27", sep = ""))[,-1]
-    if(length(df$id) == 0) {
-      message("No data downloaded - check spelling of country name and/or availability of data for specificed country.")
-    } else {
-      return(df)
-    }
+                                  columns,
+                                  "&cql_filter=country%20IN%20(",
+                                  country.list,
+                                  ")%20AND%20is_available=%27true%27", sep = ""))[,-1]
+      if(length(df$id) == 0) {
+        message("No data downloaded - check spelling of country name and/or availability of data for specificed country.")
+      } else {
+        return(df)
+      }
     }
   } else if(species == "Pv") {
 
