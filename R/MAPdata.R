@@ -1,15 +1,15 @@
 #' Download publicly available Parasite Rate Data from the Malaria Atlas Project geoserver.
 #'
-#' \code{MAPPR} provides a suite of tools to allow you to
-#'  download all publicly available PfPR points for a specified country
+#' \code{MAPdata} provides a suite of tools to allow you to
+#'  download all publicly available PR points for a specified country
 #'  (or ALL countries) into R as a dataframe.
 #'
-#' @section MAPPfPR functions:
+#' @section MAPdata functions:
 #'  \enumerate {
 #'  \item listAll - what does it do?
-#'  \item getPfPR - what does it do?}
+#'  \item getPR - what does it do?}
 #' @docType package
-#' @name MAPPFPR
+#' @name MAPdata
 NULL
 
 # devtools::use_package(package = "utils")

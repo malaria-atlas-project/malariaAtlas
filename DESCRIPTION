@@ -1,9 +1,9 @@
-Package: MAPPfPR
+Package: MAPdata
 Title: Download publicly available Parasite Rate Data from the Malaria Atlas Project geoserver
 Version: 0.0.0.9000
 Authors@R: person("Daniel", "Pfeffer", email = "daniel.pfeffer@bdi.ox.ac.uk", role = c("aut", "cre"))
-Description: MAPPR provides a suite of tools to allow you to
-    download all publicly available PfPR points for a specified country
+Description: MAPdata provides a suite of tools to allow you to
+    download all publicly available PR points for a specified country
     (or ALL countries) into R as a dataframe.
 License: What license is it under?
 Encoding: UTF-8
