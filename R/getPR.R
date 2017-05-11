@@ -15,8 +15,8 @@
 #' }
 #'
 #' @examples
-#' getPR(country = c("Nigeria", "Kenya"))
-#' getPR(country = "ALL")
+#' getPR(country = c("Nigeria", "Kenya"), species = "Pf")
+#' getPR(country = "ALL", species = "Pv")
 #' @export
 getPR <- function(country, species) {
   if(species == "BOTH") {
@@ -42,7 +42,7 @@ getPR <- function(country, species) {
                                   country.list,
                                   ")%20AND%20is_available=%27true%27", sep = ""))[,-1]
       if(length(df$id) == 0) {
-        message("No data downloaded - check spelling of country name and/or availability of data for specificed country.")
+        stop("No data downloaded: - check spelling of country name and/or availability of data for specificed country.")
       } else {
         return(df)
       }
@@ -66,7 +66,7 @@ getPR <- function(country, species) {
                                   country.list,
                                   ")%20AND%20is_available=%27true%27", sep = ""))[,-1]
       if(length(df$id) == 0) {
-        message("No data downloaded - check spelling of country name and/or availability of data for specificed country.")
+        stop("No data downloaded - check spelling of country name and/or availability of data for specificed country.")
       } else {
         return(df)
       }
@@ -75,6 +75,9 @@ getPR <- function(country, species) {
   } else {stop("Provided species argument not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
 
 }
+
+# pr_data <- getPR(country = c("Australia"), species = "Pf")
+# pr_data <- getPR(country = c("Nigeria", "Madagascar"), species = "Pf")
 
 # all possible columns:
 # names(PfPR_points_ALL)
@@ -95,3 +98,6 @@ getPR <- function(country, species) {
 # > [61] "confidential3"       "pdf_status_id3"      "title3"              "citation3"           "source_type_id3"
 # > [66] "contact_id3"         "source_id3"          "year3"               "permission_type_id3" "time_start"
 # > [71] "time_end"            "is_available"
+
+
+
