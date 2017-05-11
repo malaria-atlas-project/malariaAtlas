@@ -1,9 +1,10 @@
 Package: MAPPfPR
-Title: What the Package Does (one line, title case)
+Title: Download publicly available Parasite Rate Data from the Malaria Atlas Project geoserver
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-Depends: R (>= 3.3.3)
+Authors@R: person("Daniel", "Pfeffer", email = "daniel.pfeffer@bdi.ox.ac.uk", role = c("aut", "cre"))
+Description: MAPPR provides a suite of tools to allow you to
+    download all publicly available PfPR points for a specified country
+    (or ALL countries) into R as a dataframe.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true

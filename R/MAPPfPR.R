@@ -1,8 +1,8 @@
-#' Download publicly available PfPR Data from MAP's geoserver.
+#' Download publicly available Parasite Rate Data from the Malaria Atlas Project geoserver.
 #'
-#' \code{MAPPfPR} provides a suite of tools to allow you to
-#'  download all publicly available PfPR points for a specified country (or ALL countries)
-#'  into R as a dataframe.
+#' \code{MAPPR} provides a suite of tools to allow you to
+#'  download all publicly available PfPR points for a specified country
+#'  (or ALL countries) into R as a dataframe.
 #'
 #' @section MAPPfPR functions:
 #'  \enumerate {
@@ -13,3 +13,4 @@
 NULL
 
 # devtools::use_package(package = "utils")
+

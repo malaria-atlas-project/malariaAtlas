@@ -4,11 +4,11 @@
 \name{MAPPFPR}
 \alias{MAPPFPR}
 \alias{MAPPFPR-package}
-\title{Download publicly available PfPR Data from MAP's geoserver.}
+\title{Download publicly available Parasite Rate Data from the Malaria Atlas Project geoserver.}
 \description{
-\code{MAPPfPR} provides a suite of tools to allow you to
- download all publicly available PfPR points for a specified country (or ALL countries)
- into R as a dataframe.
+\code{MAPPR} provides a suite of tools to allow you to
+ download all publicly available PfPR points for a specified country
+ (or ALL countries) into R as a dataframe.
 }
 \section{MAPPfPR functions}{
 
