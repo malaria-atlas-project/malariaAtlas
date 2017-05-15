@@ -19,7 +19,6 @@
 #' getPR(country = "ALL", species = "Pv")
 #' @export
 
-
 getPR <- function(country, species) {
 
   URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
@@ -38,8 +37,9 @@ unused_countries <- list()
     }
 
   if(length(country_list) == 0) {
-    stop("No data available for - ",paste(unused_countries, collapse = ", ")," - check spelling matches one of: \n",
+    stop("No data available for - ",paste(unused_countries, collapse = ", ")," - check specified country matches one of: \n",
               paste(available_countries, collapse = " \n "))}
+
 
   if(species == "BOTH") {
 
