@@ -56,17 +56,17 @@ unused_countries <- list()
   } else {stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
 
   if("ALL" %in% country){
-    message(paste("Importing",species,"PR point data for all locations, please wait...", sep = ""))
+    message(paste("Importing PR point data for all locations, please wait...", sep = ""))
     df <-   utils::read.csv(paste(URL,columns,"&cql_filter=is_available=%27true%27",sep = ""))[,-1]
     return(df)
 
   }else{
-    message(paste("Importing", paste(species,"PR", sep = ""), "point data for", paste(country, collapse = ", "), "..."))
-    country.list <- paste("%27",country, "%27", sep = "", collapse = "," )
+    message(paste("Importing PR point data for", paste(country, collapse = ", "), "..."))
+    country_URL <- paste("%27",country_list, "%27", sep = "", collapse = "," )
     df <- utils::read.csv(paste(URL,
                                 columns,
                                 "&cql_filter=country%20IN%20(",
-                                country.list,")", sep = ""))[,-1]
+                                country_URL,")", sep = ""))[,-1]
 
       return(df)
   }
