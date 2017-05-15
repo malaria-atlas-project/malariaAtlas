@@ -19,22 +19,27 @@
 #' getPR(country = "ALL", species = "Pv")
 #' @export
 
+
 getPR <- function(country, species) {
 
   URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
+
+  message("Confirming availability of PR data for: ", paste(country, collapse = ", "), "...")
   available_countries <- c(levels(utils::read.csv(paste(URL, "&PROPERTYNAME=country", sep = ""))$country))
-count <- 0
-  for(i in unique(country)) {
-    if(!(i %in% available_countries)){
-      message(paste("No data available for ",i))
 
-      count <- count + 1
+country_list <- list()
+unused_countries <- list()
+  for(i in 1:length(unique(country))) {
+    if(!(country[i] %in% available_countries)){
+      unused_countries[i] <- country[i]
+      } else {
+      country_list <- country[i]
     }
     }
 
-  if(count == length(country)) {
-    stop("No data available for specified countries, check spelling matches one of: \n",
-              paste(available_countries, collapse = "\n "))}
+  if(length(country_list) == 0) {
+    stop("No data available for - ",paste(unused_countries, collapse = ", ")," - check spelling matches one of: \n",
+              paste(available_countries, collapse = " \n "))}
 
   if(species == "BOTH") {
 
@@ -56,7 +61,7 @@ count <- 0
     return(df)
 
   }else{
-    message(paste("Importing PfPR point data for", paste(country, collapse = ", "), "please wait..."))
+    message(paste("Importing", paste(species,"PR", sep = ""), "point data for", paste(country, collapse = ", "), "..."))
     country.list <- paste("%27",country, "%27", sep = "", collapse = "," )
     df <- utils::read.csv(paste(URL,
                                 columns,
@@ -65,10 +70,10 @@ count <- 0
 
       return(df)
   }
-
+message("Done.")
 }
 
-# pr_data <- getPR(country = c("Australia"), species = "Pf")
+# pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
 # pr_data <- getPR(country = c("Nigeria", "Madagascar"), species = "Pf")
 
 # all possible columns:
