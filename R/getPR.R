@@ -32,7 +32,7 @@ unused_countries <- list()
     if(!(country[i] %in% available_countries)){
       unused_countries[i] <- country[i]
       } else {
-      country_list <- country[i]
+      country_list[i] <- country[i]
     }
     }
 
@@ -62,7 +62,7 @@ unused_countries <- list()
 
   }else{
 
-    message(paste("Importing PR point data for", paste(country, collapse = ", "), "..."))
+    message(paste("Importing PR point data for", paste(country_list, collapse = ", "), "..."))
     country_URL <- paste("%27",country_list, "%27", sep = "", collapse = "," )
     df <- utils::read.csv(paste(URL,
                                 columns,
@@ -76,6 +76,7 @@ message("Done.")
 
 # pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
 # pr_data <- getPR(country = c("Nigeria", "Madagascar"), species = "Pf")
+# pr_data <- getPR(country = c("Eritrea"), species = "BOTH")
 
 # all possible columns:
 #

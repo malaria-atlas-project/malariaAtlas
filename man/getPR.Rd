@@ -2,7 +2,7 @@
 % Please edit documentation in R/getPR.R
 \name{getPR}
 \alias{getPR}
-\title{Download publicly available PfPR points from MAP's geoserver.}
+\title{Download publicly available PR points from MAP's geoserver.}
 \usage{
 getPR(country, species)
 }
@@ -21,9 +21,9 @@ specifies which country/countries you wish to include in your download}
 }
 }
 \description{
-\code{getPR} downloads all publicly available PfPR points for a specified country and returns this as a dataframe.
+\code{getPR} downloads all publicly available PR points for a specified country and returns this as a dataframe.
 }
 \examples{
-getPR(country = c("Nigeria", "Kenya"))
-getPR(country = "ALL")
+getPR(country = c("Nigeria", "Kenya"), species = "Pf")
+getPR(country = "ALL", species = "Pv")
 }

@@ -7,7 +7,7 @@
 \title{Download publicly available Parasite Rate Data from the Malaria Atlas Project geoserver.}
 \description{
 \code{MAPdata} provides a suite of tools to allow you to
- download all publicly available PfPR points for a specified country
+ download all publicly available PR points for a specified country
  (or ALL countries) into R as a dataframe.
 }
 \section{MAPdata functions}{

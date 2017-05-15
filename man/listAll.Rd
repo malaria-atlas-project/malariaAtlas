@@ -2,15 +2,15 @@
 % Please edit documentation in R/listAll.R
 \name{listAll}
 \alias{listAll}
-\title{List countries with available PfPR data.}
+\title{List countries with available PR data.}
 \usage{
 listAll()
 }
 \value{
-\code{listAll} returns a list of countries for which PfPR points are publicly available.
+\code{listAll} returns a list of countries for which PR points are publicly available.
 }
 \description{
-\code{listAll} lists all countries for which there are publicly available PfPR datapoints.
+\code{listAll} lists all countries for which there are publicly available PR datapoints.
 }
 \examples{
 listAll()
