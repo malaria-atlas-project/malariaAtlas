@@ -61,6 +61,7 @@ unused_countries <- list()
     return(df)
 
   }else{
+
     message(paste("Importing PR point data for", paste(country, collapse = ", "), "..."))
     country_URL <- paste("%27",country_list, "%27", sep = "", collapse = "," )
     df <- utils::read.csv(paste(URL,
