@@ -29,17 +29,15 @@ getPR <- function(country, species) {
 
   if(species == "BOTH") {
 
-    columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country,continent_id,who_region_id,citation1,site_id"
-
-    ### SET UP AND TEST A SECTION TO COMBINE/MERGE BOTH PF&PV
+    columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_positive,pf_pr,pv_positive,pv_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
 
   } else if(species == "Pf") {
 
-    columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country,continent_id,who_region_id,citation1,site_id"
+    columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
 
   } else if(species == "Pv") {
 
-    columns <- "&PROPERTYNAME=id,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_pos,pv_positive,pv_pr,method,rdt_type,pcr_type,latitude,longitude,name,area_type_id,rural_urban,country_id,country,continent_id,who_region_id,citation1,site_id"
+    columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_positive,pv_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
 
   } else {stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
 
