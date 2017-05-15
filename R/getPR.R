@@ -76,7 +76,7 @@ message("Done.")
 
 # pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
 # pr_data <- getPR(country = c("Nigeria", "Madagascar"), species = "Pf")
-# pr_data <- getPR(country = c("Eritrea"), species = "BOTH")
+# pr_data <- getPR(country = c("Kenya"), species = "Pv")
 
 # all possible columns:
 #
