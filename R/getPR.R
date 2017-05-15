@@ -18,13 +18,22 @@
 #' getPR(country = c("Nigeria", "Kenya"), species = "Pf")
 #' getPR(country = "ALL", species = "Pv")
 #' @export
+
 getPR <- function(country, species) {
 
   URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
   available_countries <- c(levels(utils::read.csv(paste(URL, "&PROPERTYNAME=country", sep = ""))$country))
+count <- 0
+  for(i in unique(country)) {
+    if(!(i %in% available_countries)){
+      message(paste("No data available for ",i))
 
-  if(!(country %in% available_countries))
-  {stop("No data available for ",country," use one of: \n",
+      count <- count + 1
+    }
+    }
+
+  if(count == length(country)) {
+    stop("No data available for specified countries, check spelling matches one of: \n",
               paste(available_countries, collapse = "\n "))}
 
   if(species == "BOTH") {
@@ -52,13 +61,9 @@ getPR <- function(country, species) {
     df <- utils::read.csv(paste(URL,
                                 columns,
                                 "&cql_filter=country%20IN%20(",
-                                country.list,
-                                ")%20AND%20is_available=%27true%27", sep = ""))[,-1]
-    if(length(df$id) == 0) {
-      stop("No data downloaded: - check spelling of country name and/or availability of data for specificed country.")
-    } else {
+                                country.list,")", sep = ""))[,-1]
+
       return(df)
-    }
   }
 
 }
