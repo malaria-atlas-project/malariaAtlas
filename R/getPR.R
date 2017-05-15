@@ -62,11 +62,11 @@ unused_countries <- list()
 
   }else{
     message(paste("Importing", paste(species,"PR", sep = ""), "point data for", paste(country, collapse = ", "), "..."))
-    country.list <- paste("%27",country, "%27", sep = "", collapse = "," )
+    country_URL <- paste("%27",country_list, "%27", sep = "", collapse = "," )
     df <- utils::read.csv(paste(URL,
                                 columns,
                                 "&cql_filter=country%20IN%20(",
-                                country.list,")", sep = ""))[,-1]
+                                country_URL,")", sep = ""))[,-1]
 
       return(df)
   }
