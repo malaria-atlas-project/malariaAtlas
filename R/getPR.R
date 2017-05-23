@@ -41,15 +41,15 @@ unused_countries <- list()
               paste(available_countries, collapse = " \n "))}
 
 
-  if(species == "BOTH") {
+  if(tolower(species) == "both") {
 
     columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_positive,pf_pr,pv_positive,pv_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
 
-  } else if(species == "Pf") {
+  } else if(tolower(species) == "pf") {
 
     columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
 
-  } else if(species == "Pv") {
+  } else if(tolower(species) == "pv") {
 
     columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_positive,pv_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
 
