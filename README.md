@@ -72,57 +72,30 @@ specified country and plasmodium species (Pf, Pv or BOTH) and returns
 this as a dataframe with the following format:
 
     pr_data <- MAPdata::getPR(country = "Kenya", species = "Pf")
+    str(pr_data)
 
-    ##   month_start year_start month_end year_end lower_age upper_age examined
-    ## 1           9       1976         9     1976         0        15      100
-    ## 2           9       2008         9     2008         5        15      109
-    ## 3           1       1985         1     1985         5        17       80
-    ## 4          11       2009        11     2009         5        17      110
-    ## 5           9       1976         9     1976         0        15      100
-    ## 6           3       1979         3     1979         0        14      315
-
-    ##   pf_pr pf_positive     method              rdt_type pcr_type site_id
-    ## 1    NA           0 Microscopy                             NA     817
-    ## 2    NA           0        RDT            OptiMAL-IT       NA    5467
-    ## 3    NA          29 Microscopy                             NA   21595
-    ## 4    NA           0        RDT Paracheck Pf (Device)       NA    4554
-    ## 5    NA           2 Microscopy                             NA   13493
-    ## 6    NA         172 Microscopy                             NA    7716
-
-    ##   latitude longitude                      name country_id rural_urban
-    ## 1 -3.17500  40.10960               Kisima Farm        KEN       rural
-    ## 2 -3.53947  39.45463    Mnagoni Primary School        KEN            
-    ## 3  0.05522  34.27706      Awelo Primary School        KEN       urban
-    ## 4 -0.69375  37.06622 Gatunduini Primary School        KEN       rural
-    ## 5 -3.20850  40.06990                  Maziwani        KEN       rural
-    ## 6 -3.22054  40.00088                  Kakuyuni        KEN       rural
-
-    ##   country continent_id who_region_id
-    ## 1   Kenya       Africa          AFRO
-    ## 2   Kenya       Africa          AFRO
-    ## 3   Kenya       Africa          AFRO
-    ## 4   Kenya       Africa          AFRO
-    ## 5   Kenya       Africa          AFRO
-    ## 6   Kenya       Africa          AFRO
-
-    ##                                                                                                                                                                                                              citation1
-    ## 1                                                                                              DVBD. (1976). Monthly report September 1976. Nairobi, Kenya: Division of Vector-Borne Diseases, Ministry of Health 4pg.
-    ## 2 Gitonga, CW, Karanja, PN, Kihara, J, Mwanje, M, Juma, E, Snow, RW, Noor, AM and Brooker, S. (2010).  Implementing school malaria surveys in Kenya: towards a national surveillance system. Malaria Journal, 9(0):306
-    ## 3                                                                                            DVBD. (1985). Monthly report for January 1985. Nairobi, Kenya: Division of Vector-Borne Diseases, Ministry of Health 2pg.
-    ## 4                                                                                                   Snow, RW, Noor, A and Gitonga, C. Nairobi, KEMRI-Wellcome Trust Research Programme, (2009) personal communication.
-    ## 5                                                                                              DVBD. (1976). Monthly report September 1976. Nairobi, Kenya: Division of Vector-Borne Diseases, Ministry of Health 4pg.
-    ## 6                                                                                                                                 DVBD. (1979). Nairobi, Kenya: Division of Vector-Borne Diseases, Ministry of Health.
-    ##                                                                                                                                                                                                              citation2
-    ## 1                                                                                                                                                                                                                     
-    ## 2                                                                                                                                                                                                                     
-    ## 3                                                                                                                                                                                                                     
-    ## 4 Gitonga, CW, Karanja, PN, Kihara, J, Mwanje, M, Juma, E, Snow, RW, Noor, AM and Brooker, S. (2010).  Implementing school malaria surveys in Kenya: towards a national surveillance system. Malaria Journal, 9(0):306
-    ## 5                                                                                                                                                                                                                     
-    ## 6                                                                                                                                                                                                                     
-    ##   citation3
-    ## 1          
-    ## 2          
-    ## 3          
-    ## 4          
-    ## 5          
-    ## 6
+    ## 'data.frame':    4073 obs. of  24 variables:
+    ##  $ month_start  : int  9 9 1 11 9 3 11 9 2 9 ...
+    ##  $ year_start   : int  1976 2008 1985 2009 1976 1979 1979 1981 2006 2008 ...
+    ##  $ month_end    : int  9 9 1 11 9 3 11 9 2 9 ...
+    ##  $ year_end     : int  1976 2008 1985 2009 1976 1979 1979 1981 2006 2008 ...
+    ##  $ lower_age    : num  0 5 5 5 0 0 0 0 6 5 ...
+    ##  $ upper_age    : int  15 15 17 17 15 14 14 15 8 15 ...
+    ##  $ examined     : int  100 109 80 110 100 315 276 100 100 106 ...
+    ##  $ pf_pr        : num  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ pf_positive  : num  0 0 29 0 2 172 93 9 1 0 ...
+    ##  $ method       : Factor w/ 4 levels "Microscopy","PCR",..: 1 3 1 3 1 1 1 1 1 3 ...
+    ##  $ rdt_type     : Factor w/ 11 levels "","ICT","ICT diagnostics",..: 1 7 1 9 1 1 1 1 1 7 ...
+    ##  $ pcr_type     : logi  NA NA NA NA NA NA ...
+    ##  $ site_id      : int  817 5467 21595 4554 13493 7716 5413 7444 20970 11101 ...
+    ##  $ latitude     : num  -3.175 -3.5395 0.0552 -0.6937 -3.2085 ...
+    ##  $ longitude    : num  40.1 39.5 34.3 37.1 40.1 ...
+    ##  $ name         : Factor w/ 2790 levels "Abakore Primary School",..: 1326 1819 60 468 1722 698 2390 1714 2389 1241 ...
+    ##  $ country_id   : Factor w/ 1 level "KEN": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ rural_urban  : Factor w/ 5 levels "","Peri-urban",..: 3 1 5 3 3 3 3 3 1 5 ...
+    ##  $ country      : Factor w/ 1 level "Kenya": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ continent_id : Factor w/ 1 level "Africa": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ who_region_id: Factor w/ 1 level "AFRO": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ citation1    : Factor w/ 476 levels " (2015). Kenya Malaria Indicator Survey 2015 . DHS Survey ID 493. Nairobi: National Malaria Control Programme / Ministry of Hea"| __truncated__,..: 45 342 195 457 45 70 70 93 357 342 ...
+    ##  $ citation2    : Factor w/ 25 levels "","(2010). http://mara-database.org/mara/.: MARA/ARMA. 31 Aug 2010.",..: 1 1 1 10 1 1 1 1 1 1 ...
+    ##  $ citation3    : Factor w/ 2 levels "","Le Sueur, D., Binka, F., Lengeler, C., De Savigny, D., Snow, B., Teuscher, T. and Toure, Y. (1997).  An atlas of malaria in Afr"| __truncated__: 1 1 1 1 1 1 1 1 1 1 ...

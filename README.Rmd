@@ -29,15 +29,8 @@ print(available_countries)
 
 ```{r message = FALSE}
 pr_data <- MAPdata::getPR(country = "Kenya", species = "Pf")
+str(pr_data)
 ```
-```{r echo=FALSE}
-head(pr_data[1:7])
-head(pr_data[8:13])
-head(pr_data[14:18])
-head(pr_data[19:21])
-head(pr_data[22:24])
-```
-
 
 
 
