@@ -7,16 +7,25 @@ Rate Data from the Malaria Atlas Project geoserver.
 Overview
 --------
 
+<<<<<<< HEAD
 ### PR Data Source
 
 *blurb re what the data is and where it comes from*
 
+=======
+>>>>>>> 6dea07fe6cb3dd79260a141198c13fb6d45f8d47
 ### listAll
 
 The listAll function retrieves a list of countries for which Parasite
 Rate data is available to download.
 
+<<<<<<< HEAD
     available_countries <- MAPdata::listAll()
+=======
+    MAPdata::listAll()
+
+    ## Creating list of countries for which PR data is available, please wait...
+>>>>>>> 6dea07fe6cb3dd79260a141198c13fb6d45f8d47
 
     ## [1] "Countries with PR Data:"
     ## Afghanistan 
@@ -107,8 +116,11 @@ Rate data is available to download.
     ##  Zambia 
     ##  Zimbabwe
 
+<<<<<<< HEAD
     print(available_countries)
 
+=======
+>>>>>>> 6dea07fe6cb3dd79260a141198c13fb6d45f8d47
     ## NULL
 
 ### getPR

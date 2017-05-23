@@ -15,9 +15,14 @@ _blurb re what the data is and where it comes from_
 
 The listAll function retrieves a list of countries for which Parasite Rate data is available to download. 
 
+<<<<<<< HEAD
 ```{r listAll, message = FALSE}
 available_countries <- MAPdata::listAll()
 print(available_countries)
+=======
+```{r listAll}
+MAPdata::listAll()
+>>>>>>> 6dea07fe6cb3dd79260a141198c13fb6d45f8d47
 ```
 
 ### getPR
