@@ -98,6 +98,7 @@ return(df)
 # pr_data <- getPR(country = c("Kenya", "Australia", "Ngeria"), species = "Pv")
 # pr_data <- getPR(country = c("Krnya"), species = "Pv")
 # pr_data <- getPR(country = c("Madagascar"), species = "BOTH")
+#
 
 # all possible columns:
 #
