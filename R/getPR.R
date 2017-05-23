@@ -40,8 +40,19 @@ unused_countries <- list()
     }
 
   if(length(country_list) == 0) {
-    stop("No data available for - ",paste(unused_countries, collapse = ", ")," - check specified country matches one of: \n",
-              paste(available_countries, collapse = " \n "))}
+  agrep_list <- lapply(unused_countries, agrep, x = available_countries, ignore.case = TRUE, value = TRUE)
+  x <- character()
+    for(i in 1:length(agrep_list)) {
+
+      if(agrep_list[i] != "character(0)") {
+      x[i] <- paste("Data not found for '",unused_countries[i],"', did you mean", agrep_list[i], "?")
+      } else {
+      x[i] <- paste("Data not found for '",unused_countries[i],"', use listAll() to check data availability. ")
+        }
+    }
+  stop("No data downloaded, see below comments: \n \n",
+       paste(x, collapse = " \n"))
+    }
 
 country <- curl_escape(country)
 
@@ -80,6 +91,7 @@ return(df)
 # pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
 # pr_data <- getPR(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), species = "Pf")
 # pr_data <- getPR(country = c("Kenya"), species = "Pv")
+# pr_data <- getPR(country = c("Krnya"), species = "Pv")
 
 # all possible columns:
 #
