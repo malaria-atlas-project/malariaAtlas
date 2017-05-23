@@ -13,7 +13,7 @@ _blurb re what the data is and where it comes from_
 
 ### listAll
 
-The listAll function retrieves a list of countries for which Parasite Rate data is available to download. 
+`listAll()` retrieves a list of countries for which Parasite Rate data is available to download. 
 
 ```{r message = FALSE}
 available_countries <- MAPdata::listAll()
@@ -24,13 +24,18 @@ print(available_countries)
 
 ### getPR
 
-`getPR` downloads all publicly available PR data points for a specified country and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format: 
+`getPR()` downloads all publicly available PR data points for a specified country and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format: 
 
 
-```{r}
+```{r message = FALSE}
 pr_data <- MAPdata::getPR(country = "Kenya", species = "Pf")
-
-head(pr_data)
+```
+```{r echo=FALSE}
+head(pr_data[1:7])
+head(pr_data[8:13])
+head(pr_data[14:18])
+head(pr_data[19:21])
+head(pr_data[22:24])
 ```
 
 

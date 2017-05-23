@@ -13,8 +13,8 @@ Overview
 
 ### listAll
 
-The listAll function retrieves a list of countries for which Parasite
-Rate data is available to download.
+`listAll()` retrieves a list of countries for which Parasite Rate data
+is available to download.
 
     available_countries <- MAPdata::listAll()
 
@@ -67,17 +67,11 @@ Rate data is available to download.
 
 ### getPR
 
-`getPR` downloads all publicly available PR data points for a specified
-country and plasmodium species (Pf, Pv or BOTH) and returns this as a
-dataframe with the following format:
+`getPR()` downloads all publicly available PR data points for a
+specified country and plasmodium species (Pf, Pv or BOTH) and returns
+this as a dataframe with the following format:
 
     pr_data <- MAPdata::getPR(country = "Kenya", species = "Pf")
-
-    ## Confirming availability of PR data for: Kenya...
-
-    ## Importing PR point data for Kenya ...
-
-    head(pr_data)
 
     ##   month_start year_start month_end year_end lower_age upper_age examined
     ## 1           9       1976         9     1976         0        15      100
@@ -86,6 +80,7 @@ dataframe with the following format:
     ## 4          11       2009        11     2009         5        17      110
     ## 5           9       1976         9     1976         0        15      100
     ## 6           3       1979         3     1979         0        14      315
+
     ##   pf_pr pf_positive     method              rdt_type pcr_type site_id
     ## 1    NA           0 Microscopy                             NA     817
     ## 2    NA           0        RDT            OptiMAL-IT       NA    5467
@@ -93,6 +88,7 @@ dataframe with the following format:
     ## 4    NA           0        RDT Paracheck Pf (Device)       NA    4554
     ## 5    NA           2 Microscopy                             NA   13493
     ## 6    NA         172 Microscopy                             NA    7716
+
     ##   latitude longitude                      name country_id rural_urban
     ## 1 -3.17500  40.10960               Kisima Farm        KEN       rural
     ## 2 -3.53947  39.45463    Mnagoni Primary School        KEN            
@@ -100,6 +96,7 @@ dataframe with the following format:
     ## 4 -0.69375  37.06622 Gatunduini Primary School        KEN       rural
     ## 5 -3.20850  40.06990                  Maziwani        KEN       rural
     ## 6 -3.22054  40.00088                  Kakuyuni        KEN       rural
+
     ##   country continent_id who_region_id
     ## 1   Kenya       Africa          AFRO
     ## 2   Kenya       Africa          AFRO
@@ -107,6 +104,7 @@ dataframe with the following format:
     ## 4   Kenya       Africa          AFRO
     ## 5   Kenya       Africa          AFRO
     ## 6   Kenya       Africa          AFRO
+
     ##                                                                                                                                                                                                              citation1
     ## 1                                                                                              DVBD. (1976). Monthly report September 1976. Nairobi, Kenya: Division of Vector-Borne Diseases, Ministry of Health 4pg.
     ## 2 Gitonga, CW, Karanja, PN, Kihara, J, Mwanje, M, Juma, E, Snow, RW, Noor, AM and Brooker, S. (2010).  Implementing school malaria surveys in Kenya: towards a national surveillance system. Malaria Journal, 9(0):306
