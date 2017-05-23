@@ -1,3 +1,6 @@
+---
+output: md_document
+---
 # MAPdata 
 
 A package that enables users to download publicly available Parasite Rate Data from the Malaria Atlas Project geoserver.
@@ -9,7 +12,7 @@ A package that enables users to download publicly available Parasite Rate Data f
 The listAll function retrieves a list of countries for which Parasite Rate data is available to download. 
 
 ```{r listAll}
-listAll()
+MAPdata::listAll()
 ```
 
 ### getPR
@@ -18,7 +21,7 @@ listAll()
 
 
 ```{r}
-pr_data <- getPR(country = "Kenya", species = "Pf")
+pr_data <- MAPdata::getPR(country = "Kenya", species = "Pf")
 
 head(pr_data)
 ```
