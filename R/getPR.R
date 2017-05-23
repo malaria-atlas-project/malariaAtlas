@@ -23,6 +23,8 @@ getPR <- function(country, species) {
 
   URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
 
+  country <- as.character(country)
+
   message("Confirming availability of PR data for: ", paste(country, collapse = ", "), "...")
   available_countries <- c(levels(utils::read.csv(paste(URL, "&PROPERTYNAME=country", sep = ""))$country))
 
@@ -58,7 +60,6 @@ unused_countries <- list()
   if("ALL" %in% country){
     message(paste("Importing PR point data for all locations, please wait...", sep = ""))
     df <-   utils::read.csv(paste(URL,columns,"&cql_filter=is_available=%27true%27",sep = ""))[,-1]
-    return(df)
 
   }else{
 
@@ -68,10 +69,9 @@ unused_countries <- list()
                                 columns,
                                 "&cql_filter=country%20IN%20(",
                                 country_URL,")", sep = ""))[,-1]
-
-      return(df)
   }
-message("Done.")
+
+return(df)
 }
 
 # pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
