@@ -35,7 +35,7 @@ agrep_list <- list()
   for(i in 1:length(unique(country))) {
     if(!(country[i] %in% available_countries)){
       unused_countries[i] <- country[i]
-      agrep_list[i] <- agrep(unused_countries[i], x = available_countries, ignore.case = TRUE, value = TRUE)
+      agrep_list[i] <- agrep(unused_countries[i], x = available_countries, ignore.case = TRUE, value = TRUE, max.distance = 1.1)
       } else {
       country_list[i] <- country[i]
       }
@@ -44,7 +44,7 @@ agrep_list <- list()
 if(length(agrep_list) != 0){
 agrep_list[agrep_list == "NULL"] <- NA
   x <- character()
-    for(i in 1:length(agrep_list)) {
+  for(i in 1:length(agrep_list)) {
 
       if(!(agrep_list[i] %in% c("character(0)","NA"))) {
       x[i] <- paste("Data not found for '",unused_countries[i],"', did you mean", agrep_list[i], "?")
@@ -52,7 +52,7 @@ agrep_list[agrep_list == "NULL"] <- NA
       x[i] <- paste("Data not found for '",unused_countries[i],"', use listAll() to check data availability. ")
       }
     }
-  x <- x[-(grep("NULL",x))]
+  x <- x[x!= "NA"]
 }
 
   if(length(country_list) == 0) {
