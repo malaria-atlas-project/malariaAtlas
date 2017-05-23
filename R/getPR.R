@@ -41,6 +41,7 @@ agrep_list <- list()
       }
     }
 
+if(length(agrep_list) != 0){
 agrep_list[agrep_list == "NULL"] <- NA
   x <- character()
     for(i in 1:length(agrep_list)) {
@@ -51,14 +52,14 @@ agrep_list[agrep_list == "NULL"] <- NA
       x[i] <- paste("Data not found for '",unused_countries[i],"', use listAll() to check data availability. ")
       }
     }
-
-x <- x[-(grep("NULL",x))]
+  x <- x[-(grep("NULL",x))]
+}
 
   if(length(country_list) == 0) {
   stop("No data downloaded, see below comments: \n \n",
        paste(x, collapse = " \n"))
-    } else warning(paste(x, collapse = " \n"),call. = FALSE)
-
+    } else if (length(unused_countries) != 0) { warning(paste(x, collapse = " \n"),call. = FALSE)
+}
 country <- curl::curl_escape(country)
 
   if(tolower(species) == "both") {
@@ -88,7 +89,7 @@ country <- curl::curl_escape(country)
                                 "&cql_filter=country%20IN%20(",
                                 country_URL,")", sep = ""), encoding = "UTF-8")[,-1]
   }
-
+message("Data downloaded for ", country_list, ".")
 return(df)
 }
 
@@ -96,6 +97,7 @@ return(df)
 # pr_data <- getPR(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), species = "Pf")
 # pr_data <- getPR(country = c("Kenya", "Australia", "Ngeria"), species = "Pv")
 # pr_data <- getPR(country = c("Krnya"), species = "Pv")
+# pr_data <- getPR(country = c("Madagascar"), species = "BOTH")
 
 # all possible columns:
 #
