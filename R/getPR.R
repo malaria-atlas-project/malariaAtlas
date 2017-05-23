@@ -25,8 +25,9 @@ getPR <- function(country, species) {
 
   country <- as.character(country)
 
+
   message("Confirming availability of PR data for: ", paste(country, collapse = ", "), "...")
-  available_countries <- c(levels(utils::read.csv(paste(URL, "&PROPERTYNAME=country", sep = ""))$country))
+  available_countries <- c(levels(utils::read.csv(paste(URL, "&PROPERTYNAME=country", sep = ""), encoding = "UTF-8")$country))
 
 country_list <- list()
 unused_countries <- list()
@@ -42,8 +43,10 @@ unused_countries <- list()
     stop("No data available for - ",paste(unused_countries, collapse = ", ")," - check specified country matches one of: \n",
               paste(available_countries, collapse = " \n "))}
 
+country <- curl_escape(country)
 
   if(tolower(species) == "both") {
+
 
     columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_positive,pf_pr,pv_positive,pv_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
 
@@ -59,7 +62,7 @@ unused_countries <- list()
 
   if("ALL" %in% country){
     message(paste("Importing PR point data for all locations, please wait...", sep = ""))
-    df <-   utils::read.csv(paste(URL,columns,"&cql_filter=is_available=%27true%27",sep = ""))[,-1]
+    df <-   utils::read.csv(paste(URL,columns,"&cql_filter=is_available=%27true%27",sep = ""), encoding = "UTF-8")[,-1]
 
   }else{
 
@@ -68,14 +71,14 @@ unused_countries <- list()
     df <- utils::read.csv(paste(URL,
                                 columns,
                                 "&cql_filter=country%20IN%20(",
-                                country_URL,")", sep = ""))[,-1]
+                                country_URL,")", sep = ""), encoding = "UTF-8")[,-1]
   }
 
 return(df)
 }
 
 # pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
-# pr_data <- getPR(country = c("Nigeria", "Madagascar"), species = "Pf")
+# pr_data <- getPR(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), species = "Pf")
 # pr_data <- getPR(country = c("Kenya"), species = "Pv")
 
 # all possible columns:
