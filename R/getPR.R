@@ -54,7 +54,7 @@ unused_countries <- list()
        paste(x, collapse = " \n"))
     }
 
-country <- curl_escape(country)
+country <- curl::curl_escape(country)
 
   if(tolower(species) == "both") {
 

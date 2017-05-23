@@ -18,98 +18,52 @@ Rate data is available to download.
 
     available_countries <- MAPdata::listAll()
 
-    ## [1] "Countries with PR Data:"
-    ## Afghanistan 
-    ##  Angola 
-    ##  Bangladesh 
-    ##  Benin 
-    ##  Bhutan 
-    ##  Bolivia 
-    ##  Botswana 
-    ##  Brazil 
-    ##  Burkina Faso 
-    ##  Burundi 
-    ##  CÃ´te d'Ivoire 
-    ##  Cambodia 
-    ##  Cameroon 
-    ##  Cape Verde 
-    ##  Central African Republic 
-    ##  Chad 
-    ##  China 
-    ##  Colombia 
-    ##  Comoros 
-    ##  Congo 
-    ##  Costa Rica 
-    ##  Democratic Republic of the Congo 
-    ##  Djibouti 
-    ##  Ecuador 
-    ##  Equatorial Guinea 
-    ##  Eritrea 
-    ##  Ethiopia 
-    ##  French Guiana 
-    ##  Gabon 
-    ##  Ghana 
-    ##  Guatemala 
-    ##  Guinea 
-    ##  Guinea-Bissau 
-    ##  Haiti 
-    ##  Honduras 
-    ##  India 
-    ##  Indonesia 
-    ##  Iraq 
-    ##  Kenya 
-    ##  Lao People's Democratic Republic 
-    ##  Liberia 
-    ##  Madagascar 
-    ##  Malawi 
-    ##  Malaysia 
-    ##  Mali 
-    ##  Mauritania 
-    ##  Mayotte 
-    ##  Mexico 
-    ##  Morocco 
-    ##  Mozambique 
-    ##  Myanmar 
-    ##  Namibia 
-    ##  Nepal 
-    ##  Nicaragua 
-    ##  Niger 
-    ##  Nigeria 
-    ##  Pakistan 
-    ##  Papua New Guinea 
-    ##  Peru 
-    ##  Philippines 
-    ##  Rwanda 
-    ##  SÃ£o TomÃ© and PrÃ­ncipe 
-    ##  Saudi Arabia 
-    ##  Senegal 
-    ##  Sierra Leone 
-    ##  Solomon Islands 
-    ##  Somalia 
-    ##  South Africa 
-    ##  South Sudan 
-    ##  Sri Lanka 
-    ##  Sudan 
-    ##  Suriname 
-    ##  Swaziland 
-    ##  Tajikistan 
-    ##  Tanzania (United Republic of) 
-    ##  Thailand 
-    ##  The Gambia 
-    ##  Timor-Leste 
-    ##  Togo 
-    ##  Turkey 
-    ##  Uganda 
-    ##  Vanuatu 
-    ##  Venezuela 
-    ##  Viet Nam 
-    ##  Yemen 
-    ##  Zambia 
-    ##  Zimbabwe
-
     print(available_countries)
 
-    ## NULL
+    ##  [1] "Afghanistan"                      "Angola"                          
+    ##  [3] "Bangladesh"                       "Benin"                           
+    ##  [5] "Bhutan"                           "Bolivia"                         
+    ##  [7] "Botswana"                         "Brazil"                          
+    ##  [9] "Burkina Faso"                     "Burundi"                         
+    ## [11] "Cambodia"                         "Cameroon"                        
+    ## [13] "Cape Verde"                       "Central African Republic"        
+    ## [15] "Chad"                             "China"                           
+    ## [17] "Colombia"                         "Comoros"                         
+    ## [19] "Congo"                            "Costa Rica"                      
+    ## [21] "Côte d'Ivoire"                    "Democratic Republic of the Congo"
+    ## [23] "Djibouti"                         "Ecuador"                         
+    ## [25] "Equatorial Guinea"                "Eritrea"                         
+    ## [27] "Ethiopia"                         "French Guiana"                   
+    ## [29] "Gabon"                            "Ghana"                           
+    ## [31] "Guatemala"                        "Guinea"                          
+    ## [33] "Guinea-Bissau"                    "Haiti"                           
+    ## [35] "Honduras"                         "India"                           
+    ## [37] "Indonesia"                        "Iraq"                            
+    ## [39] "Kenya"                            "Lao People's Democratic Republic"
+    ## [41] "Liberia"                          "Madagascar"                      
+    ## [43] "Malawi"                           "Malaysia"                        
+    ## [45] "Mali"                             "Mauritania"                      
+    ## [47] "Mayotte"                          "Mexico"                          
+    ## [49] "Morocco"                          "Mozambique"                      
+    ## [51] "Myanmar"                          "Namibia"                         
+    ## [53] "Nepal"                            "Nicaragua"                       
+    ## [55] "Niger"                            "Nigeria"                         
+    ## [57] "Pakistan"                         "Papua New Guinea"                
+    ## [59] "Peru"                             "Philippines"                     
+    ## [61] "Rwanda"                           "São Tomé and Príncipe"           
+    ## [63] "Saudi Arabia"                     "Senegal"                         
+    ## [65] "Sierra Leone"                     "Solomon Islands"                 
+    ## [67] "Somalia"                          "South Africa"                    
+    ## [69] "South Sudan"                      "Sri Lanka"                       
+    ## [71] "Sudan"                            "Suriname"                        
+    ## [73] "Swaziland"                        "Tajikistan"                      
+    ## [75] "Tanzania (United Republic of)"    "Thailand"                        
+    ## [77] "The Gambia"                       "Timor-Leste"                     
+    ## [79] "Togo"                             "Turkey"                          
+    ## [81] "Uganda"                           "Vanuatu"                         
+    ## [83] "Venezuela"                        "Viet Nam"                        
+    ## [85] "Yemen"                            "Zambia"                          
+    ## [87] "Zimbabwe"
 
 ### getPR
 
