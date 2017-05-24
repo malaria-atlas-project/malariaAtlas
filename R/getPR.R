@@ -117,4 +117,6 @@ return(df)
 # [67] "source_id3"          "year3"               "permission_type_id3"
 
 
+# to check columns
 
+# x <- read.csv("http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr&cql_filter=country%20IN%20(%27Kenya%27)", encoding = "UTF-8")
