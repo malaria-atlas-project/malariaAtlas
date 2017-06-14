@@ -3,7 +3,6 @@
 ## question - should tests always be repeated over all species options?
 
 
-library(MAPdata)
 context("Downloading PR data with getPR")
 
 test_that("data is downloaded", {
