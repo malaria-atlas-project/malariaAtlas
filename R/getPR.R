@@ -26,7 +26,7 @@ getPR <- function(country, species) {
   country <- as.character(country)
 
   message("Confirming availability of PR data for: ", paste(country, collapse = ", "), "...")
-  available_countries <- c(levels(utils::read.csv(paste(URL, "&PROPERTYNAME=country", sep = ""), encoding = "UTF-8")$country))
+  available_countries <- listAll(printed = FALSE)
 
 country_list <- list()
 unused_countries <- list()
@@ -35,7 +35,9 @@ agrep_list <- list()
   for(i in 1:length(unique(country))) {
     if(!(country[i] %in% available_countries)){
       unused_countries[i] <- country[i]
-      agrep_list[i] <- agrep(unused_countries[i], x = available_countries, ignore.case = TRUE, value = TRUE, max.distance = 1.1)
+
+      matches <- agrep(unused_countries[i], x = available_countries, ignore.case = TRUE, value = TRUE, max.distance = 1)
+      agrep_list[i] <- paste(matches, collapse = " OR ")
       } else {
       country_list[i] <- country[i]
       }
@@ -43,16 +45,18 @@ agrep_list <- list()
 
 if(length(agrep_list) != 0){
 agrep_list[agrep_list == "NULL"] <- NA
-  x <- character()
-  for(i in 1:length(agrep_list)) {
 
-      if(!(agrep_list[i] %in% c("character(0)","NA"))) {
+  x <- character()
+  for(i in 1:length(unused_countries)) {
+
+      if(!(agrep_list[i] %in% c("character(0)","","NA"))) {
       x[i] <- paste("Data not found for '",unused_countries[i],"', did you mean", agrep_list[i], "?")
       } else {
       x[i] <- paste("Data not found for '",unused_countries[i],"', use listAll() to check data availability. ")
       }
     }
   x <- x[x!= "NA"]
+  x <- x[grep("NULL", x,invert = TRUE)]
 }
 
   if(length(country_list) == 0) {
@@ -64,15 +68,15 @@ country <- curl::curl_escape(country)
 
   if(tolower(species) == "both") {
 
-    columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_positive,pf_pr,pv_positive,pv_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
+    columns <- "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
 
   } else if(tolower(species) == "pf") {
 
-    columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_positive,pf_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
+    columns <- "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
 
   } else if(tolower(species) == "pv") {
 
-    columns <- "&PROPERTYNAME=month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_positive,pv_pr,method,rdt_type,pcr_type,latitude,longitude,name,rural_urban,country_id,country,continent_id,who_region_id,citation1,citation2,citation3,site_id"
+    columns <- "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
 
   } else {stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
 
@@ -89,12 +93,13 @@ country <- curl::curl_escape(country)
                                 "&cql_filter=country%20IN%20(",
                                 country_URL,")", sep = ""), encoding = "UTF-8")[,-1]
   }
-message("Data downloaded for ", country_list, ".")
+message("Data downloaded for ", paste(country_list, collapse = ", "), ".")
 return(df)
 }
 
 # pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
 # pr_data <- getPR(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), species = "Pf")
+# pr_data <- getPR(country = c("Nigeria", "Madagascar", "Sao Tome and Principe"), species = "Pf")
 # pr_data <- getPR(country = c("Kenya", "Australia", "Ngeria"), species = "Pv")
 # pr_data <- getPR(country = c("Krnya"), species = "Pv")
 # pr_data <- getPR(country = c("Madagascar"), species = "BOTH")
