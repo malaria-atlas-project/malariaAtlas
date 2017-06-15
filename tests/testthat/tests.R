@@ -12,15 +12,25 @@ multiple_pv <- getPR(country = c("Madagascar","Nigeria","Suriname"), species = "
 multiple_pf <- getPR(country = c("Madagascar","Nigeria","Suriname"), species = "Pf")
 multiple_BOTH <- getPR(country = c("Madagascar","Nigeria","Suriname"), species = "BOTH")
 
+ALL_pv <- getPR(country = "ALL", species = "Pv")
+ALL_pf <- getPR(country = "ALL", species = "Pf")
+ALL_BOTH <- getPR(country = "ALL", species = "BOTH")
+
 test_that("data is downloaded as a data.frame", {
   #confirm that more than 0 rows are downloaded for Kenya
   expect_true(length(kenya_pv$country)>0)
   expect_true(length(kenya_pf$country)>0)
   expect_true(length(kenya_BOTH$country)>0)
+  expect_true(length(ALL_pv$country)>0)
+  expect_true(length(ALL_pf$country)>0)
+  expect_true(length(ALL_BOTH$country)>0)
   #checking that getPR returns a data.frame
   expect_true(inherits(kenya_pv,"data.frame"))
   expect_true(inherits(kenya_pf,"data.frame"))
   expect_true(inherits(kenya_BOTH,"data.frame"))
+  expect_true(inherits(ALL_pv,"data.frame"))
+  expect_true(inherits(ALL_pf,"data.frame"))
+  expect_true(inherits(ALL_BOTH,"data.frame"))
   })
 
 test_that("dataframe contains expected data", {
@@ -64,7 +74,6 @@ test_that("species specification works as desired",{
 
 
 #confirm that the correct error is returned if user inputs country with no PR data (here - New Zealand)
-expect_error(getPR(country = "New Zealand", species = "Pf"),"No data available for - New Zealand - check specified country matches one of:")
 
 
 
