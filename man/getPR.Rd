@@ -4,7 +4,7 @@
 \alias{getPR}
 \title{Download publicly available PR points from MAP's geoserver.}
 \usage{
-getPR(country, species)
+getPR(country = NULL, ISO = NULL, species)
 }
 \arguments{
 \item{country}{\code{ = c("Country1", "Country2", ...)} OR \code{ = "ALL"}

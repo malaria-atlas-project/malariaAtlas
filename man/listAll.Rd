@@ -4,7 +4,7 @@
 \alias{listAll}
 \title{List countries with available PR data.}
 \usage{
-listAll()
+listAll(printed = TRUE)
 }
 \value{
 \code{listAll} returns a list of countries for which PR points are publicly available.
