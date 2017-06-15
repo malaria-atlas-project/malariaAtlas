@@ -10,7 +10,7 @@ listAll(printed = TRUE)
 \code{listAll} returns a list of countries for which PR points are publicly available.
 }
 \description{
-\code{listAll} lists all countries for which there are publicly available PR datapoints.
+\code{listAll} lists all countries for which there are publicly visible PR datapoints in the MAP database.
 }
 \examples{
 listAll()
