@@ -1,6 +1,4 @@
-# Tests
-
-## question - should tests always be repeated over all species options?
+# getPR Tests
 
 context("Using getPR to download PR points")
 
