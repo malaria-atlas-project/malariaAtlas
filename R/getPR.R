@@ -1,11 +1,13 @@
-#' Download publicly available PR points from MAP's geoserver.
+#' Download PR points from the MAP database
 #'
-#' \code{getPR} downloads all publicly available PR points for a specified country and returns this as a dataframe.
+#' \code{getPR} downloads all publicly available PR points for a specified country (or countries) and returns this as a dataframe.
 #'
 #'
-#' @param country \code{ = c("Country1", "Country2", ...)} OR \code{ = "ALL"}
+#' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
+#' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
+#' @param species string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}
 #'
-#' specifies which country/countries you wish to include in your download
+#'
 #' @return \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 #'
 #' \enumerate{

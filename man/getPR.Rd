@@ -2,14 +2,16 @@
 % Please edit documentation in R/getPR.R
 \name{getPR}
 \alias{getPR}
-\title{Download publicly available PR points from MAP's geoserver.}
+\title{Download PR points from the MAP database}
 \usage{
 getPR(country = NULL, ISO = NULL, species)
 }
 \arguments{
-\item{country}{\code{ = c("Country1", "Country2", ...)} OR \code{ = "ALL"}
+\item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)}
 
-specifies which country/countries you wish to include in your download}
+\item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)}
+
+\item{species}{string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}}
 }
 \value{
 \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
@@ -21,7 +23,7 @@ specifies which country/countries you wish to include in your download}
 }
 }
 \description{
-\code{getPR} downloads all publicly available PR points for a specified country and returns this as a dataframe.
+\code{getPR} downloads all publicly available PR points for a specified country (or countries) and returns this as a dataframe.
 }
 \examples{
 getPR(country = c("Nigeria", "Kenya"), species = "Pf")

@@ -1,6 +1,6 @@
 #' List countries with available PR data.
 #'
-#' \code{listAll} lists all countries for which there are publicly available PR datapoints.
+#' \code{listAll} lists all countries for which there are publicly visible PR datapoints in the MAP database.
 #'
 #' @return \code{listAll} returns a list of countries for which PR points are publicly available.
 #'
