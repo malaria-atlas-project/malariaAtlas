@@ -5,16 +5,20 @@
 
 context("Downloading PR data with getPR")
 
-test_that("data is downloaded", {
-  #checking that getPR returns a data.frame
-  expect_output(str(getPR(country = "Kenya", species = "Pv")),"data.frame")
-  expect_output(str(getPR(country = "Kenya", species = "Pf")),"data.frame")
-  expect_output(str(getPR(country = "Kenya", species = "BOTH")),"data.frame")
+kenya_pv <- getPR(country = "Kenya", species = "Pv")
+kenya_pf <- getPR(country = "Kenya", species = "Pf")
+kenya_BOTH <- getPR(country = "Kenya", species = "BOTH")
+
+test_that("data is downloaded as a data.frame", {
   #confirm that more than 0 rows are downloaded for Kenya
-  expect_true(length(getPR(country = "Kenya", species = "Pf")$country)>0)
-  #confirm that the correct error is returned if user inputs country with no PR data (here - New Zealand)
-  expect_error(getPR(country = "New Zealand", species = "Pf"),"No data available for - New Zealand - check specified country matches one of:")
-})
+  expect_true(length(kenya_pv$country)>0)
+  expect_true(length(kenya_pf$country)>0)
+  expect_true(length(kenya_BOTH$country)>0)
+  #checking that getPR returns a data.frame
+  expect_true(inherits(kenya_pv,"data.frame"))
+  expect_true(inherits(kenya_pf,"data.frame"))
+  expect_true(inherits(kenya_BOTH,"data.frame"))
+  })
 
 
 test_that("dataframe contains expected data", {
@@ -38,3 +42,6 @@ test_that("dataframe contains expected data", {
 })
 
 
+
+#confirm that the correct error is returned if user inputs country with no PR data (here - New Zealand)
+expect_error(getPR(country = "New Zealand", species = "Pf"),"No data available for - New Zealand - check specified country matches one of:")
