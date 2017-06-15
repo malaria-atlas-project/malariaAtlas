@@ -19,27 +19,45 @@
 #' getPR(country = "ALL", species = "Pv")
 #' @export
 
-getPR <- function(country, species) {
+getPR <- function(country = NULL, ISO = NULL, species) {
 
   URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
 
-  country <- as.character(country)
+  capwords <- function(s, strict = FALSE) {
+    cap <- function(s) paste(toupper(substring(s, 1, 1)),
+                             {s <- substring(s, 2); if(strict) tolower(s) else s},
+                             sep = "", collapse = " " )
+    sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
+  }
 
-  message("Confirming availability of PR data for: ", paste(country, collapse = ", "), "...")
-  available_countries <- listAll(printed = FALSE)
+  if(!(is.null(country))){
+  country_input <- as.character(capwords(country))
+  available_countries <- listAll(printed = FALSE)$country
+  cql_filter <- "country"
+  } else if(!(is.null(ISO))){
+  country_input <- as.character(toupper(ISO))
+  if(nchar(country_input)!= 3){
+    stop("Specifying by iso-code only works with ISO3, use listAll() to check available countries & their ISO3")
+  }
+  available_countries <- listAll(printed = FALSE)$country_id
+  cql_filter <- "country_id"
+  }
+
+
+  message("Confirming availability of PR data for: ", paste(country_input, collapse = ", "), "...")
 
 country_list <- list()
 unused_countries <- list()
 agrep_list <- list()
 
-  for(i in 1:length(unique(country))) {
-    if(!(country[i] %in% available_countries)){
-      unused_countries[i] <- country[i]
+  for(i in 1:length(unique(country_input))) {
+    if(!(country_input[i] %in% available_countries)){
+      unused_countries[i] <- country_input[i]
 
       matches <- agrep(unused_countries[i], x = available_countries, ignore.case = TRUE, value = TRUE, max.distance = 1)
       agrep_list[i] <- paste(matches, collapse = " OR ")
       } else {
-      country_list[i] <- country[i]
+      country_list[i] <- country_input[i]
       }
     }
 
@@ -80,9 +98,9 @@ country <- curl::curl_escape(country)
 
   } else {stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
 
-  if("ALL" %in% country){
+  if("ALL" %in% country_input){
     message(paste("Importing PR point data for all locations, please wait...", sep = ""))
-    df <-   utils::read.csv(paste(URL,columns,"&cql_filter=is_available=%27true%27",sep = ""), encoding = "UTF-8")[,-1]
+    df <-   utils::read.csv(paste(URL,columns,sep = ""), encoding = "UTF-8")[,-1]
 
   }else{
 
@@ -90,7 +108,7 @@ country <- curl::curl_escape(country)
     country_URL <- paste("%27",country_list, "%27", sep = "", collapse = "," )
     df <- utils::read.csv(paste(URL,
                                 columns,
-                                "&cql_filter=country%20IN%20(",
+                                "&cql_filter=",cql_filter,"%20IN%20(",
                                 country_URL,")", sep = ""), encoding = "UTF-8")[,-1]
   }
 message("Data downloaded for ", paste(country_list, collapse = ", "), ".")
