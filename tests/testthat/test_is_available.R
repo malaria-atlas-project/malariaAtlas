@@ -1,0 +1,45 @@
+# is_available() tests
+
+context("Using is_available to check whether there are PR points for specified country/countries in the MAP database")
+
+
+# specify the example sets that I want to be available to test the returned data frame
+
+
+test_that("correct error messages are returned for various combinations of countries", {
+#one right
+  expect_message(is_available(country = "Madagascar"), "Data is available for Madagascar")
+#one right, one wrong
+  expect_message(is_available(country = c("Madagascar","Australia")), "Data is available for Madagascar")
+  expect_warning(is_available(country = c("Madagascar","Australia")), "Data not found for ' Australia ', use listAll()")
+#one right, one mispelled
+  expect_message(is_available(country = c("Madagascar","Ngeria")), "Data is available for Madagascar")
+  expect_warning(is_available(country = c("Madagascar","Ngeria")), "Data not found for ' Ngeria ', did you mean Nigeria")
+#one right, one wrong, one mispelled
+  expect_message(is_available(country = c("Madagascar","Australia","Ngeria")), "Data is available for Madagascar")
+  expect_warning(is_available(country = c("Madagascar","Australia","Ngeria")), "Data not found for ' Australia ', use listAll()")
+  expect_warning(is_available(country = c("Madagascar","Australia","Ngeria")), "Data not found for ' Ngeria ', did you mean Nigeria")
+#one wrong
+  expect_error(is_available(country = "Australia"), "Specified countries not found, see below comments:")
+  expect_error(is_available(country = "Australia"), "Data not found for ' Australia ', use listAll()")
+#one mispelled
+  expect_error(is_available(country = "Ngeria"), "Specified countries not found, see below comments:")
+  expect_error(is_available(country = "Ngeria"), "Data not found for ' Ngeria ', did you mean Nigeria")
+#one wrong, one mispelled
+  expect_error(is_available(country = c("Australia","Ngeria")), "Specified countries not found, see below comments:")
+  expect_error(is_available(country = c("Australia","Ngeria")), "Data not found for ' Australia ', use listAll()")
+  expect_error(is_available(country = c("Australia","Ngeria")), "Data not found for ' Ngeria ', did you mean Nigeria")
+#nonsense
+  expect_error(is_available(country = "XfUEC43"), "Specified countries not found, see below comments:")
+  expect_error(is_available(country = "XfUEC43"), "Data not found for ' XfUEC43 ', use listAll()")
+
+  })
+
+test_that("is_available returnes the proper data frame if full_results is specified", {
+  #available column contains the right things
+  #not_available column contains the right things
+  #possible match column contains the right things
+
+
+})
+

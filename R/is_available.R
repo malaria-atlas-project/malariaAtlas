@@ -101,3 +101,11 @@ is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
 
 
 }
+
+
+# is_available(country = c("Australia", "xxxx"), full_results = TRUE)
+# x <- is_available(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), full_results = TRUE)
+# x <- is_available(country = c("Nigeria", "Madagascar", "Sao Tome and Principe"), full_results = TRUE)
+# x <- is_available(country = c("Kenya", "Australia", "Ngeria"), full_results = TRUE)
+# x <- is_available(country = c("Krnya"), full_results = TRUE)
+# x <- is_available(country = c("Madagascar"), full_results = TRUE)

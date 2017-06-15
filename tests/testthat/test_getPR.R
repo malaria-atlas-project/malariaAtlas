@@ -1,4 +1,4 @@
-# getPR Tests
+# getPR() Tests
 
 context("Using getPR to download PR points")
 
@@ -70,8 +70,6 @@ test_that("species specification works as desired",{
 })
 
 
-
-#confirm that the correct error is returned if user inputs country with no PR data (here - New Zealand)
 
 
 
