@@ -16,7 +16,8 @@
 #'
 #' @examples
 #' getPR(country = c("Nigeria", "Kenya"), species = "Pf")
-#' getPR(country = "ALL", species = "Pv")
+#' getPR(country = "Suriname", species = "Pv")
+#' \dontrun{getPR(country = "ALL", species = "BOTH")}
 #' @export
 
 getPR <- function(country = NULL, ISO = NULL, species) {
