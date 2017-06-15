@@ -25,5 +25,6 @@ specifies which country/countries you wish to include in your download}
 }
 \examples{
 getPR(country = c("Nigeria", "Kenya"), species = "Pf")
-getPR(country = "ALL", species = "Pv")
+getPR(country = "Suriname", species = "Pv")
+\dontrun{getPR(country = "ALL", species = "BOTH")}
 }
