@@ -10,7 +10,8 @@
 #' @section MAPdata functions:
 #'  \enumerate {
 #'  \item listAll - what does it do?
-#'  \item getPR - what does it do?}
+#'  \item getPR - what does it do?
+#'  }
 #' @docType package
 #' @name MAPdata
 NULL

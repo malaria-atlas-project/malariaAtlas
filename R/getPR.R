@@ -42,7 +42,7 @@ if(tolower(species) == "both") {
 if("ALL" %in% country){
 message(paste("Importing PR point data for all locations, please wait...", sep = ""))
 df <-   utils::read.csv(paste(URL,columns,sep = ""), encoding = "UTF-8")[,-1]
-message("Data downloaded for all available locations,")
+message("Data downloaded for all available locations.")
 }else{
 
   if(!(is.null(country))){
@@ -62,11 +62,13 @@ df <- utils::read.csv(paste(URL,
 message("Data downloaded for ", paste(checked_availability$available[!is.na(checked_availability$available)], collapse = ", "), ".")
 }
 
-if(tolower(species) == "both" & is.na(all(unique(df$pv_pos)))) {
-  message("NOTE: All available data was downloaded for both species, but there are no PR points for P. vivax in the MAP database. \nTo check endemicity patterns or to contribute data, visit map.ox.ac.uk OR email us at map@well.ox.ac.uk.")
-  }else if(tolower(species) == "both" & is.na(all(unique(df$pf_pos)))){
+if(tolower(species) == "both"){
+  if(all(is.na(unique(df$pv_pos)))) {
+    message("NOTE: All available data was downloaded for both species, but there are no PR points for P. vivax in the MAP database. \nTo check endemicity patterns or to contribute data, visit map.ox.ac.uk OR email us at map@well.ox.ac.uk.")
+  }else if(all(is.na(unique(df$pf_pos)))){
     message("NOTE: All available data was downloaded for both species, but there are no PR points for P. falciparum in the MAP database. \nTo check endemicity patterns or to contribute data, visit map.ox.ac.uk OR email us at map@well.ox.ac.uk.")
   }
+}
 
 return(df)
 }
