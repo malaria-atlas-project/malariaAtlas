@@ -21,97 +21,45 @@
 
 getPR <- function(country = NULL, ISO = NULL, species) {
 
-  URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
+URL <- "http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
 
-  capwords <- function(s, strict = FALSE) {
-    cap <- function(s) paste(toupper(substring(s, 1, 1)),
-                             {s <- substring(s, 2); if(strict) tolower(s) else s},
-                             sep = "", collapse = " " )
-    sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
-  }
+if(tolower(species) == "both") {
+
+  columns <- "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
+
+} else if(tolower(species) == "pf") {
+
+  columns <- "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
+
+} else if(tolower(species) == "pv") {
+
+  columns <- "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
+
+} else {stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
+
+
+if("ALL" %in% country){
+message(paste("Importing PR point data for all locations, please wait...", sep = ""))
+df <-   utils::read.csv(paste(URL,columns,sep = ""), encoding = "UTF-8")[,-1]
+message("Data downloaded for all available locations,")
+}else{
 
   if(!(is.null(country))){
-  country_input <- as.character(capwords(country))
-  available_countries <- listAll(printed = FALSE)$country
-  cql_filter <- "country"
+    cql_filter <- "country"
   } else if(!(is.null(ISO))){
-  country_input <- as.character(toupper(ISO))
-  if(nchar(country_input)!= 3){
-    stop("Specifying by iso-code only works with ISO3, use listAll() to check available countries & their ISO3")
-  }
-  available_countries <- listAll(printed = FALSE)$country_id
-  cql_filter <- "country_id"
+    cql_filter <- "country_id"
   }
 
+checked_availability <- is_available(country = country, ISO = ISO, full_results = TRUE)
+message(paste("Importing PR point data for", paste(checked_availability$available[!is.na(checked_availability$available)], collapse = ", "), "..."))
+country_URL <- paste("%27",curl::curl_escape(checked_availability$available[!is.na(checked_availability$available)]), "%27", sep = "", collapse = "," )
+df <- utils::read.csv(paste(URL,
+                            columns,
+                            "&cql_filter=",cql_filter,"%20IN%20(",
+                            country_URL,")", sep = ""), encoding = "UTF-8")[,-1]
 
-  message("Confirming availability of PR data for: ", paste(country_input, collapse = ", "), "...")
-
-country_list <- list()
-unused_countries <- list()
-agrep_list <- list()
-
-  for(i in 1:length(unique(country_input))) {
-    if(!(country_input[i] %in% available_countries)){
-      unused_countries[i] <- country_input[i]
-
-      matches <- agrep(unused_countries[i], x = available_countries, ignore.case = TRUE, value = TRUE, max.distance = 1)
-      agrep_list[i] <- paste(matches, collapse = " OR ")
-      } else {
-      country_list[i] <- country_input[i]
-      }
-    }
-
-if(length(agrep_list) != 0){
-agrep_list[agrep_list == "NULL"] <- NA
-
-  x <- character()
-  for(i in 1:length(unused_countries)) {
-
-      if(!(agrep_list[i] %in% c("character(0)","","NA"))) {
-      x[i] <- paste("Data not found for '",unused_countries[i],"', did you mean", agrep_list[i], "?")
-      } else {
-      x[i] <- paste("Data not found for '",unused_countries[i],"', use listAll() to check data availability. ")
-      }
-    }
-  x <- x[x!= "NA"]
-  x <- x[grep("NULL", x,invert = TRUE)]
-}
-
-  if(length(country_list) == 0) {
-  stop("No data downloaded, see below comments: \n \n",
-       paste(x, collapse = " \n"))
-    } else if (length(unused_countries) != 0) { warning(paste(x, collapse = " \n"),call. = FALSE)
-}
-country <- curl::curl_escape(country)
-
-  if(tolower(species) == "both") {
-
-    columns <- "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
-
-  } else if(tolower(species) == "pf") {
-
-    columns <- "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
-
-  } else if(tolower(species) == "pv") {
-
-    columns <- "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
-
-  } else {stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
-
-  if("ALL" %in% country_input){
-    message(paste("Importing PR point data for all locations, please wait...", sep = ""))
-    df <-   utils::read.csv(paste(URL,columns,sep = ""), encoding = "UTF-8")[,-1]
-
-  }else{
-
-    message(paste("Importing PR point data for", paste(country_list, collapse = ", "), "..."))
-    country_URL <- paste("%27",country_list, "%27", sep = "", collapse = "," )
-    df <- utils::read.csv(paste(URL,
-                                columns,
-                                "&cql_filter=",cql_filter,"%20IN%20(",
-                                country_URL,")", sep = ""), encoding = "UTF-8")[,-1]
+message("Data downloaded for ", paste(checked_availability$available[!is.na(checked_availability$available)], collapse = ", "), ".")
   }
-message("Data downloaded for ", paste(country_list, collapse = ", "), ".")
 return(df)
 }
 

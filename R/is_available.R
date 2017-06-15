@@ -1,0 +1,77 @@
+is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
+
+
+  capwords <- function(s, strict = FALSE) {
+    cap <- function(s) paste(toupper(substring(s, 1, 1)),
+                             {s <- substring(s, 2); if(strict) tolower(s) else s},
+                             sep = "", collapse = " " )
+    sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
+  }
+
+
+  if(!(is.null(country))){
+    country_input <- as.character(capwords(country))
+    country_input <- gsub("And", "and", country_input)
+    available_countries <- listAll(printed = FALSE)$country
+  } else if(!(is.null(ISO))){
+    country_input <- as.character(toupper(ISO))
+    if(nchar(country_input)!= 3){
+      stop("Specifying by iso-code only works with ISO3, use listAll() to check available countries & their ISO3")
+    }
+    available_countries <- listAll(printed = FALSE)$country_id
+  }
+
+
+  message("Confirming availability of PR data for: ", paste(country_input, collapse = ", "), "...")
+
+  checked_availability <- data.frame("available"=rep(NA,length = length(country)), "not_available"=rep(NA,length = length(country)), "possible_match"=rep(NA,length = length(country)))
+
+
+  for(i in 1:length(unique(country_input))) {
+    if(!(country_input[i] %in% available_countries)){
+      checked_availability$not_available[i] <- country_input[i]
+
+      matches <- agrep(checked_availability$not_available[i], x = available_countries, ignore.case = TRUE, value = TRUE, max.distance = 1)
+      checked_availability$possible_match[i] <- paste(matches, collapse = " OR ")
+    } else {
+      checked_availability$available[i] <- country_input[i]
+    }
+    checked_availability$possible_match[checked_availability$possible_match %in% c("NULL","")] <- NA
+  }
+
+
+  if(FALSE %in% is.na(checked_availability$available)) {
+    message("Data is available for ", paste(checked_availability$available[!is.na(checked_availability$available)], collapse = ", "), ".")
+  }
+
+  error_message <- character()
+
+  if(FALSE %in% is.na(unique(checked_availability[,c("not_available","possible_match")]))){
+    for(i in 1:length(checked_availability$not_available)) {
+
+      if(!(checked_availability$possible_match[i] %in% c("character(0)","",NA))) {
+        error_message[i] <- paste("Data not found for '",checked_availability$not_available[i],"', did you mean", checked_availability$possible_match[i], "?")
+      } else {
+        error_message[i] <- paste("Data not found for '",checked_availability$not_available[i],"', use listAll() to check data availability. ")
+      }
+    }
+
+    error_message <- error_message[grep(' NA ' , error_message,invert = TRUE)]
+  }
+
+  if(identical(checked_availability$not_available, country_input)) {
+    stop("Specified countries not found, see below comments: \n \n",
+         paste(error_message, collapse = " \n"))
+  } else if (length(error_message) != 0) {
+    warning(paste(error_message, collapse = " \n"),call. = FALSE)
+  }
+
+
+      if(full_results == TRUE) {
+
+    return(checked_availability)
+
+  }
+
+
+}
