@@ -72,6 +72,7 @@ if(tolower(species) == "both"){
   }
 }
 
+class(df) <- c("pr.points",class(df))
 return(df)
 }
 
