@@ -6,6 +6,7 @@
 #' autoplot(pr_data)}
 #' @export
 
+
 autoplot.pr.points <- function(pr_data, col_both = "orchid3", col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral", map_title = NULL, ...){
 
   if(is.null(map_title)){
