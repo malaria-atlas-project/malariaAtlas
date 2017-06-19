@@ -50,7 +50,7 @@ is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
 
   message("Confirming availability of PR data for: ", paste(country_input, collapse = ", "), "...")
 
-  checked_availability <- data.frame("available"=rep(NA,length = length(country)), "not_available"=rep(NA,length = length(country)), "possible_match"=rep(NA,length = length(country)))
+  checked_availability <- data.frame("available"=rep(NA,length = length(country_input)), "not_available"=rep(NA,length = length(country_input)), "possible_match"=rep(NA,length = length(country_input)))
 
 
   for(i in 1:length(unique(country_input))) {

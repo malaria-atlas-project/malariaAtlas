@@ -41,7 +41,7 @@ if(tolower(species) == "both") {
 } else {stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
 
 
-if("ALL" %in% country){
+if("ALL" %in% c(country, ISO)){
 message(paste("Importing PR point data for all locations, please wait...", sep = ""))
 df <-   utils::read.csv(paste(URL,columns,sep = ""), encoding = "UTF-8")[,-1]
 message("Data downloaded for all available locations.")
@@ -74,7 +74,9 @@ if(tolower(species) == "both"){
 
 class(df) <- c("pr.points",class(df))
 return(df)
+
 }
+
 
 # pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
 # pr_data <- getPR(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), species = "Pf")
