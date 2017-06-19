@@ -2,15 +2,15 @@
 #'
 #' \code{text} more text
 #' @examples
-#' \dontrun{pr_data <- getPR(country = c("Nigeria"), species = "Pf")
-#' autoplot(pr_data)}
+#' \dontrun{object <- getPR(country = c("Nigeria"), species = "Pf")
+#' autoplot(object)}
 #' @export
 
 
-autoplot.pr.points <- function(pr_data, col_both = "orchid3", col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral", map_title = NULL, ...){
+autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral", map_title = NULL, ...){
 
   if(is.null(map_title)){
-    map_title <- paste("PR Points Downloaded for", paste(unique(pr_data$country), collapse = ", "))
+    map_title <- paste("PR Points Downloaded for", paste(unique(object$country), collapse = ", "))
   }
 
   bbox_0.05 <- function(x){
@@ -25,25 +25,25 @@ autoplot.pr.points <- function(pr_data, col_both = "orchid3", col_confidential =
     return(bbox)
   }
 
-  bbox <- bbox_0.05(pr_data)
+  bbox <- bbox_0.05(object)
 
-  if(all(c("pv_pr", "pf_pr") %in% colnames(pr_data))){
-  pr_data$species[is.na(pr_data$pv_pos)&is.na(pr_data$pf_pos)] <- "conf"
-  pr_data$species[is.na(pr_data$pv_pos)&!is.na(pr_data$pf_pos)] <- "pf"
-  pr_data$species[!is.na(pr_data$pv_pos)&is.na(pr_data$pf_pos)] <- "pv"
-  pr_data$species[!is.na(pr_data$pv_pos)&!is.na(pr_data$pf_pos)] <- "both"
-  }else if("pv_pr" %in% colnames(pr_data) & !("pf_pr" %in% colnames(pr_data))){
-    pr_data$species[is.na(pr_data$pv_pos)] <- "conf"
-    pr_data$species[!is.na(pr_data$pv_pos)] <- "pv"
-  }else if(!("pv_pr" %in% colnames(pr_data)) & "pf_pr" %in% colnames(pr_data)){
-    pr_data$species[is.na(pr_data$pf_pos)] <- "conf"
-    pr_data$species[!is.na(pr_data$pf_pos)] <- "pf"
+  if(all(c("pv_pr", "pf_pr") %in% colnames(object))){
+  object$species[is.na(object$pv_pos)&is.na(object$pf_pos)] <- "conf"
+  object$species[is.na(object$pv_pos)&!is.na(object$pf_pos)] <- "pf"
+  object$species[!is.na(object$pv_pos)&is.na(object$pf_pos)] <- "pv"
+  object$species[!is.na(object$pv_pos)&!is.na(object$pf_pos)] <- "both"
+  }else if("pv_pr" %in% colnames(object) & !("pf_pr" %in% colnames(object))){
+    object$species[is.na(object$pv_pos)] <- "conf"
+    object$species[!is.na(object$pv_pos)] <- "pv"
+  }else if(!("pv_pr" %in% colnames(object)) & "pf_pr" %in% colnames(object)){
+    object$species[is.na(object$pf_pos)] <- "conf"
+    object$species[!is.na(object$pf_pos)] <- "pf"
 
 
   }
 
    ggmap(ggmap = get_stamenmap(bbox = bbox, zoom = 6, maptype = "toner-background", colour = "color"), extent = "device", legend = "bottom")+
-     geom_point(data = pr_data, aes(x = longitude, y = latitude, colour = species), alpha = 0.7)+
+     geom_point(data = object, aes(x = longitude, y = latitude, colour = species), alpha = 0.7)+
      ggtitle(paste(map_title))+
      theme(plot.title = element_text(vjust=-1))+
      scale_color_manual(name = "Species tested:", values = c("both" = col_both, "conf" = col_confidential, "pf" = col_pf, "pv" = col_pv),
