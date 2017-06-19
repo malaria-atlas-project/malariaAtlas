@@ -76,7 +76,7 @@ is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
     for(i in 1:length(checked_availability$not_available)) {
 
       if(!(checked_availability$possible_match[i] %in% c("character(0)","",NA))) {
-        error_message[i] <- paste("Data not found for '",checked_availability$not_available[i],"', did you mean", checked_availability$possible_match[i], "?", sep = "")
+        error_message[i] <- paste("Data not found for '",checked_availability$not_available[i],"', did you mean ", checked_availability$possible_match[i], "?", sep = "")
       } else {
         error_message[i] <- paste("Data not found for '",checked_availability$not_available[i],"', use listAll() to check data availability. ", sep = "")
       }
