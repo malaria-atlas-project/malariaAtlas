@@ -12,9 +12,9 @@ autoplot.pr.points <- function(pr_data, col_both = "orchid3", col_confidential =
   if(is.null(map_title)){
     map_title <- paste("PR Points Downloaded for", paste(unique(pr_data$country), collapse = ", "))
   }
-  
+
   bbox_0.05 <- function(x){
-    bbox = c(min(x$longitude[!is.na(x$longitude)]),
+    bbox <-  c(min(x$longitude[!is.na(x$longitude)]),
              min(x$latitude[!is.na(x$latitude)]),
              max(x$longitude[!is.na(x$longitude)]),
              max(x$latitude[!is.na(x$latitude)]))
@@ -38,10 +38,10 @@ autoplot.pr.points <- function(pr_data, col_both = "orchid3", col_confidential =
   }else if(!("pv_pr" %in% colnames(pr_data)) & "pf_pr" %in% colnames(pr_data)){
     pr_data$species[is.na(pr_data$pf_pos)] <- "conf"
     pr_data$species[!is.na(pr_data$pf_pos)] <- "pf"
-   
-    
+
+
   }
-  
+
    ggmap(ggmap = get_stamenmap(bbox = bbox, zoom = 6, maptype = "toner-background", colour = "color"), extent = "device", legend = "bottom")+
      geom_point(data = pr_data, aes(x = longitude, y = latitude, colour = species), alpha = 0.7)+
      ggtitle(paste(map_title))+
@@ -54,7 +54,7 @@ autoplot.pr.points <- function(pr_data, col_both = "orchid3", col_confidential =
 # MDG_both <- getPR(country = "Madagascar", species = "BOTH")
 # autoplot(MDG_both)
 # autoplot(MDG_both, map_title = "CUSTOM TITLE!")
-#   
+#
 
 # asia_ex <- getPR(country = c("Myanmar","Thailand","China"), species = "both")
 # autoplot(asia_ex)
