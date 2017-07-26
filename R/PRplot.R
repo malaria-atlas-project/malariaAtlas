@@ -6,7 +6,7 @@
 #' autoplot(object)}
 #' @export
 
-autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral", map_title = NULL, facet =FALSE, ...){
+autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral", map_title = NULL, extent = "national_only", facet =FALSE, ...){
 
   if(is.null(map_title)){
     map_title <- paste("PR Points Downloaded for", paste(unique(object$country), collapse = ", "))
@@ -39,7 +39,12 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
     object$species[!is.na(object$pf_pos)] <- "P. falciparum only"
   }
 
-  URL_list <- list("admin0" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin0_map_2013&srsName=EPSG:4326&bbox=",paste(bbox,collapse = ","), sep = ""), "admin1" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin1_map_2013&srsName=EPSG:4326&bbox=",paste(bbox,collapse = ","), sep = ""))
+  if(extent == "bbox"){
+    URL_list <- list("admin0" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin0_map_2013&srsName=EPSG:4326&bbox=",paste(bbox,collapse = ","), sep = ""), "admin1" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin1_map_2013&srsName=EPSG:4326&bbox=",paste(bbox,collapse = ","), sep = ""))
+  }else if(extent == "national_only"){
+  URL_list <- list("admin0" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin0_map_2013&srsName=EPSG:4326&cql_filter=COUNTRY_ID%20IN%20(",paste("%27",unique(object$country_id),"%27",collapse = ",", sep = ""),")", sep = ""),
+                   "admin1" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin1_map_2013&srsName=EPSG:4326&cql_filter=COUNTRY_ID%20IN%20(",paste("%27",unique(object$country_id),"%27",collapse = ",", sep = ""),")", sep = ""))
+  }
 
   download_shp <- function(URL) {
 
@@ -54,7 +59,7 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
     shp <- dir(td, "*.shp$")
     lyr <- sub(".shp$", "", shp)
 
-    shapefile_dl <- readOGR(dsn = shp, layer = lyr)
+    shapefile_dl <- rgdal::readOGR(dsn = shp, layer = lyr)
     setwd(wd)
     return(shapefile_dl)}
 
@@ -71,7 +76,7 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
 pr_polygon_df <- lapply(pr_polygon, polygon_to_df)
 
 pr_plot <-   ggplot()+
-  geom_polygon(data = pr_polygon_df$admin1, aes(x=long, y = lat, group = group), colour = "grey80", fill = "white")+
+  geom_polygon(data = pr_polygon_df$admin1, aes(x=long, y = lat, group = group), colour = "grey80", fill = "grey95")+
   geom_polygon(data = pr_polygon_df$admin0, aes(x=long, y = lat, group = group), colour = "grey50", alpha = 0)+
   geom_point(data = object, aes(x = longitude, y = latitude, colour = species), alpha = 0.7)+
   coord_equal()+
