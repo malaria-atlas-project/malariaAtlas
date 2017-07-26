@@ -17,8 +17,14 @@
 #' }
 #'
 #' @examples
-#' getPR(country = c("Nigeria", "Kenya"), species = "Pf")
-#' getPR(country = "Suriname", species = "Pv")
+#' Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
+#' NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
+#' autoplot(NGA_CMR_PR)
+#'
+#' Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
+#' Madagascar_pr_points <- getPR(ISO = "MDG", species = "Pv")
+#'
+#'
 #' \dontrun{getPR(country = "ALL", species = "BOTH")}
 #' @export
 
