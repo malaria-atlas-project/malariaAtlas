@@ -10,9 +10,10 @@ multiple_pv <- getPR(country = c("Madagascar","Nigeria","Suriname"), species = "
 multiple_pf <- getPR(country = c("Madagascar","Nigeria","Suriname"), species = "Pf")
 multiple_BOTH <- getPR(country = c("Madagascar","Nigeria","Suriname"), species = "BOTH")
 
-ALL_pv <- getPR(country = "ALL", species = "Pv")
-ALL_pf <- getPR(country = "ALL", species = "Pf")
-ALL_BOTH <- getPR(country = "ALL", species = "BOTH")
+available_countries <- paste(listAll(printed = FALSE)$country)
+ALL_pv <- getPR(country = available_countries, species = "Pv")
+ALL_pf <- getPR(country = available_countries, species = "Pf")
+ALL_BOTH <- getPR(country = available_countries, species = "BOTH")
 
 test_that("data is downloaded as a data.frame", {
   #confirm that more than 0 rows are downloaded for Kenya

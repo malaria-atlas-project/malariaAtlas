@@ -20,31 +20,66 @@
 #' x <- is_available(ISO = "NGA", full_results = TRUE)
 #' @export
 
-
-
-
-
 is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
 
+  if(exists('available_countries_stored', envir = .MAPdataHidden)){
+    available_countries <- .MAPdataHidden$available_countries_stored
+  }else{available_countries <- listAll(printed = FALSE)}
 
-  capwords <- function(s, strict = FALSE) {
-    cap <- function(s) paste(toupper(substring(s, 1, 1)),
-                             {s <- substring(s, 2); if(strict) tolower(s) else s},
-                             sep = "", collapse = " " )
-    sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
+
+  capwords <- function(string) {
+    cap <- function(s) {
+
+      if(grepl("\\(", s)){
+        l1 <- toupper(substring(s, 2, 2))
+      }else{
+        l1 <- toupper(substring(s, 1, 1))
+      }
+
+      if(grepl("\\(", s)){
+        l2 <- tolower(substring(s, 3))
+      }else{
+        l2 <- tolower(substring(s, 2))
+      }
+
+      if(grepl("\\(", s)){
+        s <- paste(strtrim(s,1),l1,l2,sep = "", collapse = " ")
+      }else{
+        s <- paste(l1,l2,sep = "", collapse = " ")
+      }
+
+      if(grepl("d'ivo",s, ignore.case = TRUE)){
+        s <- gsub("d'ivo", "d'Ivo",s, ignore.case = TRUE)
+      }
+      if(grepl("of",s, ignore.case = TRUE)){
+        s <- gsub("of", "of",s, ignore.case = TRUE)
+      }
+       if(grepl("the",s, ignore.case = TRUE)& !grepl("gambia", string, ignore.case =TRUE)){
+         s <- gsub("the", "the",s, ignore.case = TRUE)
+       }
+      if(grepl("and",s, ignore.case = TRUE)){
+        s <- gsub("and", "and",s, ignore.case = TRUE)
+      }
+      return(s)
+    }
+
+    string_return <- paste(sapply(unlist(strsplit(string, split = " ")), cap, USE.NAMES = !is.null(names(string))), collapse = " ")
+
+    if(grepl("-",string)){
+      string_return <- paste(sapply(unlist(strsplit(string, split = "-")), cap, USE.NAMES = !is.null(names(string))), collapse = "-")
+    }
+    return(string_return)
   }
 
-
   if(!(is.null(country))){
-    country_input <- as.character(capwords(country))
-    country_input <- gsub("And", "and", country_input)
-    available_countries <- listAll(printed = FALSE)$country
+    country_input <- sapply(country, capwords)
+    available_countries <- available_countries$country
   } else if(!(is.null(ISO))){
     country_input <- as.character(toupper(ISO))
     if(nchar(country_input)!= 3){
       stop("Specifying by iso-code only works with ISO3, use listAll() to check available countries & their ISO3")
     }
-    available_countries <- listAll(printed = FALSE)$country_id
+    available_countries <- available_countries$country_id
   }
 
 
@@ -83,22 +118,15 @@ is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
     }
 
   }
-
   if(identical(checked_availability$country[checked_availability$is_available==0], country_input)) {
     stop("Specified countries not found, see below comments: \n \n",
          paste(error_message, collapse = " \n"))
   } else if (length(error_message) != 0) {
     warning(paste(error_message, collapse = " \n"),call. = FALSE)
   }
-
-
       if(full_results == TRUE) {
-
     return(checked_availability)
-
   }
-
-
 }
 
 
