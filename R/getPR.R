@@ -77,7 +77,6 @@ return(df)
 
 }
 
-
 # pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
 # pr_data <- getPR(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), species = "Pf")
 # pr_data <- getPR(country = c("Nigeria", "Madagascar", "Sao Tome and Principe"), species = "Pf")
