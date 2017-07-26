@@ -71,7 +71,21 @@ test_that("species specification works as desired",{
 })
 
 
-
-
-
+test_that("error messages are appropriate to given error",{
+  expect_error(getPR(country = "knya", species = "both"), regexp = "did you mean Kenya")
+  expect_error(getPR(country = "kenya", species = "both"), regexp = NA)
+  expect_error(getPR(country = "xxxx", species = "both"), regexp = "'Xxxx', use listAll()")
+  expect_error(getPR(country = "Australia", species = "both"), regexp = "'Australia', use listAll()")
+  expect_warning(getPR(country = c("kenya","ngeria"), species = "both"), regexp = "did you mean Nigeria")
+  expect_message(getPR(country = c("kenya","ngeria"), species = "both"), regexp = "Data downloaded for Kenya")
+  expect_error(getPR(country = c("kenya","ngeria"), species = "both"), regexp = NA)
+  expect_warning(getPR(country = c("kenya","Australia"), species = "both"), regexp = "'Australia', use listAll()")
+  expect_message(getPR(country = c("kenya","Australia"), species = "both"), regexp = "Data downloaded for Kenya")
+  expect_error(getPR(country = c("kenya","Australia"), species = "both"), regexp = NA)
+  expect_error(getPR(country = c("Ngeria","Australia"), species = "both"), regexp = "'Australia', use listAll()")
+  expect_error(getPR(country = c("Ngeria","Australia"), species = "both"), regexp = "did you mean Nigeria")
+  expect_warning(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "did you mean Nigeria")
+  expect_warning(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "'Australia', use listAll()")
+  expect_message(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "Data downloaded for Kenya")
+})
 
