@@ -5,9 +5,9 @@ confirm_runtime_available:
   stage: env_test
   tags: ['dev1-ssh-deploy']
   script:
-    - which node || echo 'NodeJS runtime is not available - could not proceed'
+    - which R || echo 'R runtime is not available - could not proceed'
 run_tests:
   stage: code_test
   tags: ['dev1-ssh-deploy']
   script:
-    - node tests.js
+    - R tests/testthat.R
