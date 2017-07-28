@@ -10,6 +10,5 @@ run_tests:
   stage: code_test
   tags: ['dev1-ssh-deploy']
   script:
-    - RDscript -e 'install.packages(c("devtools", "roxygen2"))'
-    - RDscript -e 'devtools::install_dev_deps()'
-    - RDscript -e 'devtools::check()'
+    - R -e 'install.packages(c("devtools", "roxygen2"))'
+    - R -e 'devtools::check()'
