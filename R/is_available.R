@@ -22,10 +22,12 @@
 
 is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
 
-  if(exists('available_countries_stored', envir = .MAPdataHidden)){
-    available_countries <- .MAPdataHidden$available_countries_stored
-  }else{available_countries <- listAll(printed = FALSE)}
 
+  if(exists(".MAPdataHidden", mode = 'environment')){
+    if(exists('available_countries_stored', envir = .MAPdataHidden)){
+    available_countries <- .MAPdataHidden$available_countries_stored
+    }
+  }else{available_countries <- listAll(printed = FALSE)}
 
   capwords <- function(string) {
     cap <- function(s) {
