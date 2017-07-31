@@ -16,54 +16,123 @@ Overview
 `listAll()` retrieves a list of countries for which Parasite Rate data
 is available to download.
 
-    available_countries <- MAPdata::listAll()
+    listAll()
 
-    print(available_countries)
+    ## Creating list of countries for which PR data is available, please wait...
 
-    ##  [1] "Afghanistan"                      "Angola"                          
-    ##  [3] "Bangladesh"                       "Benin"                           
-    ##  [5] "Bhutan"                           "Bolivia"                         
-    ##  [7] "Botswana"                         "Brazil"                          
-    ##  [9] "Burkina Faso"                     "Burundi"                         
-    ## [11] "Cambodia"                         "Cameroon"                        
-    ## [13] "Cape Verde"                       "Central African Republic"        
-    ## [15] "Chad"                             "China"                           
-    ## [17] "Colombia"                         "Comoros"                         
-    ## [19] "Congo"                            "Costa Rica"                      
-    ## [21] "Côte d'Ivoire"                    "Democratic Republic of the Congo"
-    ## [23] "Djibouti"                         "Ecuador"                         
-    ## [25] "Equatorial Guinea"                "Eritrea"                         
-    ## [27] "Ethiopia"                         "French Guiana"                   
-    ## [29] "Gabon"                            "Ghana"                           
-    ## [31] "Guatemala"                        "Guinea"                          
-    ## [33] "Guinea-Bissau"                    "Haiti"                           
-    ## [35] "Honduras"                         "India"                           
-    ## [37] "Indonesia"                        "Iraq"                            
-    ## [39] "Kenya"                            "Lao People's Democratic Republic"
-    ## [41] "Liberia"                          "Madagascar"                      
-    ## [43] "Malawi"                           "Malaysia"                        
-    ## [45] "Mali"                             "Mauritania"                      
-    ## [47] "Mayotte"                          "Mexico"                          
-    ## [49] "Morocco"                          "Mozambique"                      
-    ## [51] "Myanmar"                          "Namibia"                         
-    ## [53] "Nepal"                            "Nicaragua"                       
-    ## [55] "Niger"                            "Nigeria"                         
-    ## [57] "Pakistan"                         "Papua New Guinea"                
-    ## [59] "Peru"                             "Philippines"                     
-    ## [61] "Rwanda"                           "São Tomé and Príncipe"           
-    ## [63] "Saudi Arabia"                     "Senegal"                         
-    ## [65] "Sierra Leone"                     "Solomon Islands"                 
-    ## [67] "Somalia"                          "South Africa"                    
-    ## [69] "South Sudan"                      "Sri Lanka"                       
-    ## [71] "Sudan"                            "Suriname"                        
-    ## [73] "Swaziland"                        "Tajikistan"                      
-    ## [75] "Tanzania (United Republic of)"    "Thailand"                        
-    ## [77] "The Gambia"                       "Timor-Leste"                     
-    ## [79] "Togo"                             "Turkey"                          
-    ## [81] "Uganda"                           "Vanuatu"                         
-    ## [83] "Venezuela"                        "Viet Nam"                        
-    ## [85] "Yemen"                            "Zambia"                          
-    ## [87] "Zimbabwe"
+    ## Countries with PR Data: 
+    ##  Kenya (KEN) 
+    ##  Afghanistan (AFG) 
+    ##  Somalia (SOM) 
+    ##  Indonesia (IDN) 
+    ##  Zimbabwe (ZWE) 
+    ##  Ethiopia (ETH) 
+    ##  Burkina Faso (BFA) 
+    ##  Madagascar (MDG) 
+    ##  India (IND) 
+    ##  Yemen (YEM) 
+    ##  Tanzania (United Republic of) (TZA) 
+    ##  Cambodia (KHM) 
+    ##  Malawi (MWI) 
+    ##  Zambia (ZMB) 
+    ##  Senegal (SEN) 
+    ##  Uganda (UGA) 
+    ##  Bangladesh (BGD) 
+    ##  Central African Republic (CAF) 
+    ##  Colombia (COL) 
+    ##  Togo (TGO) 
+    ##  Sudan (SDN) 
+    ##  Viet Nam (VNM) 
+    ##  Mozambique (MOZ) 
+    ##  Burundi (BDI) 
+    ##  Papua New Guinea (PNG) 
+    ##  Venezuela (VEN) 
+    ##  Comoros (COM) 
+    ##  Solomon Islands (SLB) 
+    ##  Pakistan (PAK) 
+    ##  Ghana (GHA) 
+    ##  Guinea (GIN) 
+    ##  Bolivia (BOL) 
+    ##  Philippines (PHL) 
+    ##  The Gambia (GMB) 
+    ##  Niger (NER) 
+    ##  Nigeria (NGA) 
+    ##  Eritrea (ERI) 
+    ##  Guinea-Bissau (GNB) 
+    ##  Côte d'Ivoire (CIV) 
+    ##  Nepal (NPL) 
+    ##  Thailand (THA) 
+    ##  Djibouti (DJI) 
+    ##  Democratic Republic of the Congo (COD) 
+    ##  South Africa (ZAF) 
+    ##  Namibia (NAM) 
+    ##  Vanuatu (VUT) 
+    ##  China (CHN) 
+    ##  Tajikistan (TJK) 
+    ##  Botswana (BWA) 
+    ##  Swaziland (SWZ) 
+    ##  Brazil (BRA) 
+    ##  Congo (COG) 
+    ##  Cameroon (CMR) 
+    ##  Equatorial Guinea (GNQ) 
+    ##  Suriname (SUR) 
+    ##  Liberia (LBR) 
+    ##  Haiti (HTI) 
+    ##  Myanmar (MMR) 
+    ##  Mayotte (MYT) 
+    ##  Benin (BEN) 
+    ##  Cape Verde (CPV) 
+    ##  Lao People's Democratic Republic (LAO) 
+    ##  Malaysia (MYS) 
+    ##  Peru (PER) 
+    ##  Mali (MLI) 
+    ##  Gabon (GAB) 
+    ##  Sri Lanka (LKA) 
+    ##  French Guiana (GUF) 
+    ##  Iraq (IRQ) 
+    ##  Saudi Arabia (SAU) 
+    ##  Honduras (HND) 
+    ##  São Tomé and Príncipe (STP) 
+    ##  Turkey (TUR) 
+    ##  Ecuador (ECU) 
+    ##  South Sudan (SSD) 
+    ##  Timor-Leste (TLS) 
+    ##  Sierra Leone (SLE) 
+    ##  Chad (TCD) 
+    ##  Mauritania (MRT) 
+    ##  Rwanda (RWA) 
+    ##  Mexico (MEX) 
+    ##  Costa Rica (CRI) 
+    ##  Angola (AGO) 
+    ##  Nicaragua (NIC) 
+    ##  Bhutan (BTN)
+
+### is\_available
+
+`is_available` confirms whether or not PR data is available to download
+for a specified country.
+
+Check whether PR data is available for Madagascar:
+
+    MAPdata::is_available(country = "Madagascar")
+
+    ## Creating list of countries for which PR data is available, please wait...
+
+    ## Confirming availability of PR data for: Madagascar...
+
+    ## Data is available for Madagascar.
+
+Check whether PR data is available for the United States of America
+
+    is_available(ISO = "USA")
+
+    ## Creating list of countries for which PR data is available, please wait...
+
+    ## Confirming availability of PR data for: USA...
+
+    ## Error in is_available(ISO = "USA"): Specified countries not found, see below comments: 
+    ##  
+    ## Data not found for 'USA', did you mean UGA OR SAU?
 
 ### getPR
 
@@ -71,31 +140,53 @@ is available to download.
 specified country and plasmodium species (Pf, Pv or BOTH) and returns
 this as a dataframe with the following format:
 
-    pr_data <- MAPdata::getPR(country = "Kenya", species = "Pf")
-    str(pr_data)
+    MDG_pr_data <- MAPdata::getPR(country = "Madagascar", species = "Both")
 
-    ## 'data.frame':    4073 obs. of  24 variables:
-    ##  $ month_start  : int  9 9 1 11 9 3 11 9 2 9 ...
-    ##  $ year_start   : int  1976 2008 1985 2009 1976 1979 1979 1981 2006 2008 ...
-    ##  $ month_end    : int  9 9 1 11 9 3 11 9 2 9 ...
-    ##  $ year_end     : int  1976 2008 1985 2009 1976 1979 1979 1981 2006 2008 ...
-    ##  $ lower_age    : num  0 5 5 5 0 0 0 0 6 5 ...
-    ##  $ upper_age    : int  15 15 17 17 15 14 14 15 8 15 ...
-    ##  $ examined     : int  100 109 80 110 100 315 276 100 100 106 ...
-    ##  $ pf_pr        : num  NA NA NA NA NA NA NA NA NA NA ...
-    ##  $ pf_positive  : num  0 0 29 0 2 172 93 9 1 0 ...
-    ##  $ method       : Factor w/ 4 levels "Microscopy","PCR",..: 1 3 1 3 1 1 1 1 1 3 ...
-    ##  $ rdt_type     : Factor w/ 11 levels "","ICT","ICT diagnostics",..: 1 7 1 9 1 1 1 1 1 7 ...
-    ##  $ pcr_type     : logi  NA NA NA NA NA NA ...
-    ##  $ site_id      : int  817 5467 21595 4554 13493 7716 5413 7444 20970 11101 ...
-    ##  $ latitude     : num  -3.175 -3.5395 0.0552 -0.6937 -3.2085 ...
-    ##  $ longitude    : num  40.1 39.5 34.3 37.1 40.1 ...
-    ##  $ name         : Factor w/ 2790 levels "Abakore Primary School",..: 1326 1819 60 468 1722 698 2390 1714 2389 1241 ...
-    ##  $ country_id   : Factor w/ 1 level "KEN": 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ rural_urban  : Factor w/ 5 levels "","Peri-urban",..: 3 1 5 3 3 3 3 3 1 5 ...
-    ##  $ country      : Factor w/ 1 level "Kenya": 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ continent_id : Factor w/ 1 level "Africa": 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ who_region_id: Factor w/ 1 level "AFRO": 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ citation1    : Factor w/ 476 levels " (2015). Kenya Malaria Indicator Survey 2015 . DHS Survey ID 493. Nairobi: National Malaria Control Programme / Ministry of Hea"| __truncated__,..: 45 342 195 457 45 70 70 93 357 342 ...
-    ##  $ citation2    : Factor w/ 25 levels "","(2010). http://mara-database.org/mara/.: MARA/ARMA. 31 Aug 2010.",..: 1 1 1 10 1 1 1 1 1 1 ...
-    ##  $ citation3    : Factor w/ 2 levels "","Le Sueur, D., Binka, F., Lengeler, C., De Savigny, D., Snow, B., Teuscher, T. and Toure, Y. (1997).  An atlas of malaria in Afr"| __truncated__: 1 1 1 1 1 1 1 1 1 1 ...
+    ## Observations: 899
+    ## Variables: 29
+    ## $ dhs_id                    <fctr> , , , , , , , , , , , , , , , , , ,...
+    ## $ site_id                   <int> 16586, 2683, 8008, 8689, 16899, 2167...
+    ## $ site_name                 <fctr> Tsarahasina, Manalalondo, Andafiats...
+    ## $ latitude                  <dbl> -19.74900, -19.25900, -19.38400, -16...
+    ## $ longitude                 <dbl> 46.79900, 47.11300, 47.66600, 49.683...
+    ## $ rural_urban               <fctr> , , , rural, , , , rural, , , , , ,...
+    ## $ country                   <fctr> Madagascar, Madagascar, Madagascar,...
+    ## $ country_id                <fctr> MDG, MDG, MDG, MDG, MDG, MDG, MDG, ...
+    ## $ continent_id              <fctr> Africa, Africa, Africa, Africa, Afr...
+    ## $ month_start               <int> NA, NA, NA, 11, NA, NA, 1, 11, NA, 3...
+    ## $ year_start                <int> NA, NA, NA, 1989, NA, NA, 1987, 1989...
+    ## $ month_end                 <int> NA, NA, NA, 11, NA, NA, 1, 12, NA, 3...
+    ## $ year_end                  <int> NA, NA, NA, 1989, NA, NA, 1987, 1989...
+    ## $ lower_age                 <dbl> NA, NA, NA, 5, NA, NA, 0, 5, NA, 0, ...
+    ## $ upper_age                 <int> NA, NA, NA, 15, NA, NA, 99, 15, NA, ...
+    ## $ examined                  <int> NA, NA, NA, 165, NA, NA, 50, 258, NA...
+    ## $ pf_pos                    <dbl> NA, NA, NA, 144.0, NA, NA, 7.5, 139....
+    ## $ pf_pr                     <dbl> NA, NA, NA, 0.87272727, NA, NA, 0.15...
+    ## $ pv_pos                    <int> NA, NA, NA, 10, NA, NA, NA, 2, NA, N...
+    ## $ pv_pr                     <dbl> NA, NA, NA, 0.06060606, NA, NA, NA, ...
+    ## $ method                    <fctr> , , , Microscopy, , , Microscopy, M...
+    ## $ rdt_type                  <fctr> , , , , , , , , , , , , , , , , , ,...
+    ## $ pcr_type                  <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
+    ## $ malaria_metrics_available <fctr> false, false, false, true, false, f...
+    ## $ location_available        <fctr> true, true, true, true, true, true,...
+    ## $ permissions_info          <fctr> No permission to release data, No p...
+    ## $ citation1                 <fctr> Jambou, R., Ranaivo, L., Raharimala...
+    ## $ citation2                 <fctr> Jambou, R. (2008) personal communic...
+    ## $ citation3                 <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
+
+### autoplot
+
+`autoplot.pr.points` configures autoplot methods to enable quick mapping
+of the locations of downloaded PR points.
+
+    autoplot(MDG_pr_data)
+
+![](README_files/figure-markdown_strict/unnamed-chunk-7-1.png)
+
+N.B. Facet-wrapped option is also available for species stratification.
+
+    autoplot(MDG_pr_data,
+             facet = TRUE,
+             map_title = "Example MAP of PR point locations,\nstratified by species")
+
+![](README_files/figure-markdown_strict/unnamed-chunk-8-1.png)

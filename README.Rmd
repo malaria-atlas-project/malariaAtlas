@@ -1,6 +1,15 @@
 ---
 output: md_document
 ---
+
+```{r, echo = FALSE, message = FALSE, results = "hide"}
+library(MAPdata)
+library(ggmap)
+library(rgdal)
+library(tibble)
+```
+
+
 # MAPdata 
 
 A package that enables users to download publicly available Parasite Rate Data from the Malaria Atlas Project geoserver.
@@ -15,11 +24,23 @@ _blurb re what the data is and where it comes from_
 
 `listAll()` retrieves a list of countries for which Parasite Rate data is available to download. 
 
-```{r message = FALSE}
-available_countries <- MAPdata::listAll()
-```
 ```{r}
-print(available_countries)
+listAll()
+```
+
+
+### is_available
+
+`is_available` confirms whether or not PR data is available to download for a specified country. 
+
+Check whether PR data is available for Madagascar:
+```{r highlight = TRUE}
+MAPdata::is_available(country = "Madagascar")
+```
+
+Check whether PR data is available for the United States of America
+```{r, error = TRUE, highlight = TRUE}
+is_available(ISO = "USA")
 ```
 
 ### getPR
@@ -28,9 +49,27 @@ print(available_countries)
 
 
 ```{r message = FALSE}
-pr_data <- MAPdata::getPR(country = "Kenya", species = "Pf")
-str(pr_data)
+MDG_pr_data <- MAPdata::getPR(country = "Madagascar", species = "Both")
+```
+```{r echo = FALSE}
+tibble::glimpse(MDG_pr_data)
 ```
 
+###autoplot 
+
+`autoplot.pr.points` configures autoplot methods to enable quick mapping of the locations of downloaded PR points. 
+
+
+
+```{r message = FALSE, warning = FALSE, results = "hide"}
+autoplot(MDG_pr_data)
+```
+
+N.B. Facet-wrapped option is also available for species stratification. 
+```{r message = FALSE, warning = FALSE, results = "hide"}
+autoplot(MDG_pr_data,
+         facet = TRUE,
+         map_title = "Example MAP of PR point locations,\nstratified by species")
+```
 
 
