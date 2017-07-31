@@ -48,19 +48,15 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
 
   download_shp <- function(URL) {
 
-    wd <- getwd()
     td <- tempdir()
-    setwd(td)
-    temp <- tempfile(fileext = ".zip")
+    temp <- tempfile(tmpdir = td, fileext = ".zip")
     download.file(URL, temp, mode = "wb")
-    unzip(temp)
+    unzip(temp, exdir = td)
 
-    on.exit(unlink(td, recursive = TRUE))
     shp <- dir(td, "*.shp$")
     lyr <- sub(".shp$", "", shp)
 
     shapefile_dl <- rgdal::readOGR(dsn = shp, layer = lyr)
-    setwd(wd)
     return(shapefile_dl)}
 
   pr_polygon <- lapply(URL_list, download_shp)
