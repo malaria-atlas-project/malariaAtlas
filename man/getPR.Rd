@@ -26,7 +26,18 @@ getPR(country = NULL, ISO = NULL, species)
 \code{getPR} downloads all publicly available PR points for a specified country (or countries) and returns this as a dataframe.
 }
 \examples{
-getPR(country = c("Nigeria", "Kenya"), species = "Pf")
-getPR(country = "Suriname", species = "Pv")
+#Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
+NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
+autoplot(NGA_CMR_PR)
+
+#Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
+Madagascar_pr <- getPR(ISO = "MDG", species = "Pv")
+autoplot(Madagascar_pr)
+
 \dontrun{getPR(country = "ALL", species = "BOTH")}
+
+
+}
+\seealso{
+Autoplot method for quick mapping of PR point locations (\code{\link{autoplot.pr.points}}).
 }
