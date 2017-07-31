@@ -47,7 +47,6 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
   }
 
   download_shp <- function(URL) {
-
     td <- tempdir()
     temp <- tempfile(tmpdir = td, fileext = ".zip")
     download.file(URL, temp, mode = "wb")
@@ -56,7 +55,8 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
     shp <- dir(td, "*.shp$")
     lyr <- sub(".shp$", "", shp)
 
-    shapefile_dl <- rgdal::readOGR(dsn = shp, layer = lyr)
+    shapefile_dl <- rgdal::readOGR(dsn = file.path(td,shp), layer = lyr)
+    on.exit(unlink(td, recursive = TRUE))
     return(shapefile_dl)}
 
   pr_polygon <- lapply(URL_list, download_shp)
