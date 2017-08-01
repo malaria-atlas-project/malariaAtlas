@@ -11,4 +11,4 @@ run_tests:
   stage: code_test
   tags: ['dev1-ssh-deploy']
   script:
-    - Rscript -e source('tests/tests_for_CI.R')
+    - Rscript -e 'source('tests/tests_for_CI.R')'
