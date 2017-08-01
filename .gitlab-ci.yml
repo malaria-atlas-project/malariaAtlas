@@ -1,6 +1,7 @@
 stages:
   - env_test
   - code_test
+  - code_coverage
 confirm_runtime_available:
   stage: env_test
   tags: ['dev1-ssh-deploy']
@@ -10,4 +11,4 @@ run_tests:
   stage: code_test
   tags: ['dev1-ssh-deploy']
   script:
-    - R -e 'devtools::check()'
+    - Rscript -e source('tests/tests_for_CI.R')
