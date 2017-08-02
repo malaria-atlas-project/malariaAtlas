@@ -116,8 +116,6 @@ Check whether PR data is available for Madagascar:
 
     MAPdata::is_available(country = "Madagascar")
 
-    ## Creating list of countries for which PR data is available, please wait...
-
     ## Confirming availability of PR data for: Madagascar...
 
     ## Data is available for Madagascar.
@@ -125,8 +123,6 @@ Check whether PR data is available for Madagascar:
 Check whether PR data is available for the United States of America
 
     is_available(ISO = "USA")
-
-    ## Creating list of countries for which PR data is available, please wait...
 
     ## Confirming availability of PR data for: USA...
 
