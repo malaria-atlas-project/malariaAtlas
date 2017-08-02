@@ -2,7 +2,7 @@
 
 
 library(ggplot2)
-
+library(devtools)
 
 test_results <- devtools::check()
 
