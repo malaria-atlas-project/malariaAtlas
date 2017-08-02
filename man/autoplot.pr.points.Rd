@@ -4,9 +4,9 @@
 \alias{autoplot.pr.points}
 \title{Create a basic plot showing locations of downloaded PR points}
 \usage{
-autoplot.pr.points(object, col_both = "orchid3", col_confidential = "grey",
-  col_pf = "royalblue3", col_pv = "coral", map_title = NULL,
-  extent = "national_only", facet = FALSE, ...)
+\method{autoplot}{pr.points}(object, col_both = "orchid3",
+  col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral",
+  map_title = NULL, extent = "national_only", facet = FALSE, ...)
 }
 \description{
 \code{text} more text
