@@ -10,11 +10,6 @@
 listAll <- function(printed = TRUE) {
   message("Creating list of countries for which PR data is available, please wait...")
 
-  # Check if we've made an environment called MAPdataHidden yet
-  # If not make one.
-  if(!exists(".MAPdataHidden", mode = 'environment')){
-    assign(x = ".MAPdataHidden", value = new.env(), pos = "package:MAPdata")
-  }
 
   # If we've already downloaded a list of available countries, print that.
   # Otherwise download a list from the geoserver
