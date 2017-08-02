@@ -31,7 +31,7 @@ test_that("correct error messages are returned for various combinations of count
   expect_error(is_available(country = c("Australia","Ngeria")), "Data not found for 'Ngeria', did you mean Nigeria")
 #nonsense
   expect_error(is_available(country = "XfUEC43"), "Specified countries not found, see below comments:")
-  expect_error(is_available(country = "XfUEC43"), "Data not found for 'XfUEC43', use listAll()")
+  expect_error(is_available(country = "XfUEC43"), "Data not found for 'Xfuec43', use listAll()")
 
   })
 
