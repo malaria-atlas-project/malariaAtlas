@@ -11,5 +11,4 @@ run_tests:
   stage: code_test
   tags: ['dev1-ssh-deploy']
   script:
-    - pwd
     - Rscript ./tests/tests_for_CI.R
