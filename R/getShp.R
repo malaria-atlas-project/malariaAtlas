@@ -3,13 +3,13 @@
 #' \code{getShp} downloads shapefiles for a specified country (or countries) and returns this as a spatial
 #'
 #'
-#' @param object string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
-#' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
-#' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
-#' @param species string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}
+#' @param object object of class pr.points (e.g. data downloaded uisng getPR()) for which corresponding shapefiles are desired (use either \code{object} OR \code{ISO} OR \code{country}, not in combination)
+#' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{object} OR \code{ISO} OR \code{country}, not in combination)
+#' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{object} OR \code{ISO} OR \code{country}, not in combination)
+#' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "both" accepted)
+#' @param extent string specifying method of defining shapefile extent - accepts either \code{bbox} (for use with pr.points object only - defines 2% bounding box around data and downloads shapefiles intersecting this box) or "national_only" (the default - downloads all shapefiles associated with specified country name or names of countries within 'object')
 #'
-#'
-#' @return \code{getShp} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
+#' @return \code{getShp} returns a list containing separate shapefile dataframes for each administrative level. The following attribute fields are included:
 #'
 #' \enumerate{
 #' \item \code{COLUMNNAME} description of contents
@@ -18,19 +18,20 @@
 #' }
 #'
 #' @examples
-#' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-#' NGA_CMR_PR <- getShp(country = c("Nigeria", "Cameroon"), species = "Pf")
-#' \dontrun{autoplot(NGA_CMR_PR)}
+#' #Download PfPR data & associated shapefiles for Nigeria and Cameroon
+#' \dontrun{NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")}
+#' \dontrun{NGA_CMR_shp <- getShp(country = c("Nigeria", "Cameroon"))}
 #'
-#' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-#' Madagascar_pr <- getShp(ISO = "MDG", species = "Pv")
-#' \dontrun{autoplot(Madagascar_pr)}
+#'#' #Download PfPR data & associated shapefiles for Chad
+#' \dontrun{Chad_PR <- getPR(ISO = "TCD", species = "both")}
+#' \dontrun{Chad_shp <- getShp(ISO = "TCD")}
 #'
-#' \dontrun{getShp(country = "ALL", species = "BOTH")}
+#' #' #Download PfPR data & associated shapefiles defined by bbox for Madagascar
+#' \dontrun{MDG_PR <- getPR(country = "Madagascar", species = "Pv")}
+#' \dontrun{MDG_shp <- getShp(object = MDG_PR, extent = "bbox")}
 #'
 #'
 #' @seealso \code{autoplot} method for quick mapping of PR point locations (\code{\link{autoplot.pr.points}}).
-#'
 #'
 #' @export getShp
 
@@ -127,4 +128,5 @@ polygon2df <- function(polygon){
 
 # a <- ggplot()+geom_polygon(data = x$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
 # a <- ggplot()+geom_polygon(data = zz$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
+# a <- ggplot()+geom_polygon(data = MDG_shp$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
 #a
