@@ -66,7 +66,7 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
 
   polygon_to_df <- function(polygon){
     polygon@data$id <- rownames(polygon@data)
-    polygon_df <- fortify(polygon)
+    polygon_df <- ggplot2::fortify(polygon)
     polygon_df <- merge(polygon_df, polygon@data, by = "id")
 
     return(polygon_df)

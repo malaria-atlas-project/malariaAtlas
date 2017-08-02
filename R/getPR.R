@@ -19,11 +19,11 @@
 #' @examples
 #' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
 #' NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
-#' autoplot(NGA_CMR_PR)
+#' ggplot2::autoplot(NGA_CMR_PR)
 #'
 #' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
 #' Madagascar_pr <- getPR(ISO = "MDG", species = "Pv")
-#' autoplot(Madagascar_pr)
+#' ggplot2::autoplot(Madagascar_pr)
 #'
 #' \dontrun{getPR(country = "ALL", species = "BOTH")}
 #'
