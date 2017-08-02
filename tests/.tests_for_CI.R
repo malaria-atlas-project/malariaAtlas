@@ -1,8 +1,12 @@
 ## Run devtools check and see whether or not it returns any errors
 
+install.packages("devtools")
+
+library(devtools)
+
+devtools::install_deps()
 
 library(ggplot2)
-library(devtools)
 
 test_results <- devtools::check()
 
