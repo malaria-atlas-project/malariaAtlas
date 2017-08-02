@@ -2,8 +2,8 @@
 #'
 #' \code{text} more text
 #' @examples
-#' \dontrun{object <- getPR(country = c("Nigeria"), species = "Pf")
-#' autoplot(object)}
+#' \dontrun{object <- getPR(country = c("Nigeria"), species = "Pf")}
+#' \dontrun{autoplot(object)}
 #' @export
 
 autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral", map_title = NULL, extent = "national_only", facet =FALSE, ...){

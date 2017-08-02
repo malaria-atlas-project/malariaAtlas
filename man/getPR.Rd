@@ -28,16 +28,16 @@ getPR(country = NULL, ISO = NULL, species)
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
-autoplot(NGA_CMR_PR)
+\dontrun{autoplot(NGA_CMR_PR)}
 
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
 Madagascar_pr <- getPR(ISO = "MDG", species = "Pv")
-autoplot(Madagascar_pr)
+\dontrun{autoplot(Madagascar_pr)}
 
 \dontrun{getPR(country = "ALL", species = "BOTH")}
 
 
 }
 \seealso{
-Autoplot method for quick mapping of PR point locations (\code{\link{autoplot.pr.points}}).
+\code{autoplot} method for quick mapping of PR point locations (\code{\link{autoplot.pr.points}}).
 }

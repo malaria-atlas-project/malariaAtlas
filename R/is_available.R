@@ -18,7 +18,7 @@
 #' @examples
 #' is_available(country = "Suriname")
 #' x <- is_available(ISO = "NGA", full_results = TRUE)
-#' @export
+#' @export is_available
 
 is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
 

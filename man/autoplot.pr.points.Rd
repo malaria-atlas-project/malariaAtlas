@@ -12,6 +12,6 @@ autoplot.pr.points(object, col_both = "orchid3", col_confidential = "grey",
 \code{text} more text
 }
 \examples{
-\dontrun{object <- getPR(country = c("Nigeria"), species = "Pf")
-autoplot(object)}
+\dontrun{object <- getPR(country = c("Nigeria"), species = "Pf")}
+\dontrun{autoplot(object)}
 }

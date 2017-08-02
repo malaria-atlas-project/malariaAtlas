@@ -6,7 +6,7 @@
 #'
 #' @examples
 #' listAll()
-#' @export
+#' @export listAll
 listAll <- function(printed = TRUE) {
   message("Creating list of countries for which PR data is available, please wait...")
 
