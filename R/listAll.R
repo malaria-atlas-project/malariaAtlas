@@ -13,10 +13,8 @@ listAll <- function(printed = TRUE) {
   # Check if we've made an environment called MAPdataHidden yet
   # If not make one.
   if(!exists(".MAPdataHidden", mode = 'environment')){
-    #assign(".MAPdataHidden", new.env(), envir = environment(listAll))
-    .MAPdataHidden <- new.env()
+    assign(x = ".MAPdataHidden", value = new.env(), pos = "package:MAPdata")
   }
-
 
   # If we've already downloaded a list of available countries, print that.
   # Otherwise download a list from the geoserver
