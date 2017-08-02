@@ -12,4 +12,4 @@ run_tests:
   tags: ['dev1-ssh-deploy']
   script:
     - pwd
-    - Rscript ./tests_for_CI.R
+    - Rscript ./tests/tests_for_CI.R
