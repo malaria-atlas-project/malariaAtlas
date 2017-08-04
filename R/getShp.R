@@ -35,7 +35,7 @@
 #'
 #' @export getShp
 
-getShp <- function(object = NULL,country = NULL, ISO = NULL,admin_level = "both", extent = "national_only") {
+getShp <- function(object = NULL,country = NULL, ISO = NULL,admin_level = "both", extent = "national_only", format = "spatialpolygon") {
 
   if(!is.null(object)){
     if(!"pr.points" %in% class(object)){
@@ -108,17 +108,19 @@ downloadShp <- function(URL){
 
 Shp_polygon <- lapply(URL_input, downloadShp)
 
-polygon2df <- function(polygon){
-    polygon@data$id <- rownames(polygon@data)
-    polygon_df <- ggplot2::fortify(polygon)
-    polygon_df <- merge(polygon_df, polygon@data, by = "id")
-    return(polygon_df)
+if(tolower(format)=="spatialpolygon"){
+  return(Shp_polygon)
+  }else if(tolower(format)=="df"){
+    polygon2df <- function(polygon){
+      polygon@data$id <- rownames(polygon@data)
+      polygon_df <- ggplot2::fortify(polygon)
+      polygon_df <- merge(polygon_df, polygon@data, by = "id")
+      return(polygon_df) }
+
+      Shp_df <- lapply(Shp_polygon, polygon2df)
+      return(Shp_df)
   }
-
-  Shp_df <- lapply(Shp_polygon, polygon2df)
-
-  return(Shp_df)
- }
+}
 
 
 ## x <- getShp(object = object, admin_level = "both")
@@ -130,3 +132,7 @@ polygon2df <- function(polygon){
 # a <- ggplot()+geom_polygon(data = zz$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
 # a <- ggplot()+geom_polygon(data = MDG_shp$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
 #a
+
+
+
+#ggplot()+geom_polygon(data = x_shp$admin0, aes(x= long, y = lat, group = group))+coord_equal()
