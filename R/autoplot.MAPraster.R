@@ -1,9 +1,4 @@
-autoplot.MAPraster <- function(object, country = NULL, shp_df = NULL, legend = ""){
-
-  if(!"data.frame" %in% class(object)){
-    object <- as(object, "SpatialPixelsDataFrame")
-    object <- as.data.frame(object)
-  }
+autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend = ""){
 
   plot <- ggplot()+
     geom_tile(data = object, aes(x=x, y=y, fill = object[,1]))+
@@ -19,7 +14,7 @@ autoplot.MAPraster <- function(object, country = NULL, shp_df = NULL, legend = "
     plot$layers <- c(geom_polygon(data = shp_df, aes(x=long, y=lat, group = group), fill = "grey65"),
                      plot$layers)
     plot <- plot + geom_polygon(data = shp_df, aes(x=long, y=lat, group = group), alpha = 0, colour = "black")
-  } else if(!is.null(country)){
+  } else if(!is.null(boundaries)){
     plot_shp <- getShp(country = country, admin_level = "admin0", format = "df")[[1]]
     plot$layers <- c(geom_polygon(data = plot_shp, aes(x=long, y=lat, group = group), fill = "grey65"),
                      plot$layers)
