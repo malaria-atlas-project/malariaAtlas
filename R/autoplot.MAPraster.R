@@ -1,5 +1,10 @@
 autoplot.MAPraster <- function(object, country = NULL, shp_df = NULL, legend = ""){
 
+  if(!"data.frame" %in% class(object)){
+    object <- as(object, "SpatialPixelsDataFrame")
+    object <- as.data.frame(object)
+  }
+
   plot <- ggplot()+
     geom_tile(data = object, aes(x=x, y=y, fill = object[,1]))+
     coord_equal()+
