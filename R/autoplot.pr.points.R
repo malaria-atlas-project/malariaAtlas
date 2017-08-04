@@ -36,7 +36,7 @@ pr_plot <-   ggplot()+
   coord_equal()+
   ggtitle(paste(map_title))+
   theme(plot.title = element_text(vjust=-1),
-        panel.background = element_rect(fill = "lightblue1"),
+        panel.background = element_rect(fill = "white"),
         panel.grid = element_blank(),
         axis.title = element_blank(),
         panel.border = element_rect(colour = "grey50", fill=NA, size = 0.5))+
