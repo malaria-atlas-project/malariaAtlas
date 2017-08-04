@@ -1,4 +1,4 @@
-getRaster <- function(surface = "PfPR_2010", shp = NULL, bbox = NULL, file_path = tempdir(), format = "rasterlayer"){
+getRaster <- function(surface = "PfPR2010", shp = NULL, bbox = NULL, file_path = tempdir(), format = "rasterlayer"){
 
   if(!is.null(bbox)){
     bbox <- bbox
@@ -6,10 +6,24 @@ getRaster <- function(surface = "PfPR_2010", shp = NULL, bbox = NULL, file_path 
   bbox <- sp::bbox(shp)
   }
 
-  if(surface == "PfPR_2010"){
+  if(surface == "PfPR2010"){
     raster_code <- "ST_PR_mean"
+  }else if(surface == "PvPR2010"){
+    raster_code <- "PvPR_mean_2010"
+  }else if(surface == "Pk2016"){
+    raster_code <- "Pk_SEAsia_masked_280216"
+  }else if(surface == "Pf Limits 2010"){
+    raster_code <- "Pf_Limits_2010_decomp_tiled"
   }else if(surface == "funestus"){
     raster_code <- "Anophele funestus"
+  }else if(surface == "G6PDd2010"){
+    raster_code <- "G6PDd_allele_freq"
+  }else if(surface == "Duffy2010"){
+    raster_code <- "duffy_neg_tiled"
+  }else if (surface == "Africa_ACT_2000-2015"){
+    raster_code <- "africa-act-2000-2015"
+  }else if (surface == "Africa_Pf_Incidence_2000-2015"){
+    raster_code <- "africa-inc-2000-2015"
   }
 
   xml_rqst <- paste("<?xml version=\"1.0\" encoding=\"UTF-8\"?><GetCoverage version=\"1.0.0\" service=\"WCS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.opengis.net/wcs\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xsi:schemaLocation=\"http://www.opengis.net/wcs http://schemas.opengis.net/wcs/1.0.0/getCoverage.xsd\">
@@ -38,19 +52,18 @@ getRaster <- function(surface = "PfPR_2010", shp = NULL, bbox = NULL, file_path 
   </output>
 </GetCoverage>", sep = "")
 
-
-  hdl <- curl::new_handle()
-  curl::handle_setopt(hdl,
-                copypostfields = paste(xml_rqst))
-  curl::handle_setheaders(hdl,
-                    "Content-Type" = "application/xml",
-                    "Cache-Control" = "no-cache")
-
   rstdir <- file.path(file_path,"getRaster")
-  dir.create(rstdir)
+  dir.create(rstdir, showWarnings = FALSE)
   temp_rst <- tempfile(pattern = paste(surface,"_",sep = ""), tmpdir = rstdir, fileext = ".tiff")
 
-  curl::curl_download(url = "http://map-prod3.ndph.ox.ac.uk/geoserver/wps", destfile = temp_rst, handle = hdl)
+  r <- httr::POST(url = "http://map-prod3.ndph.ox.ac.uk/geoserver/wps",
+            body = xml_rqst,
+            httr::write_disk(temp_rst, overwrite = TRUE))
+
+  if(!"image/tiff" %in% r$headers$`content-type`){
+    stop("Raster download error - check surface is available for specified extent at map.ox.ac.uk/explorer.")
+  }
+
 
   rst_dl <- raster::raster(temp_rst)
 

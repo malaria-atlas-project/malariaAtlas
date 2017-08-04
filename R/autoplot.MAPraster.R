@@ -15,7 +15,7 @@ autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend 
                      plot$layers)
     plot <- plot + geom_polygon(data = shp_df, aes(x=long, y=lat, group = group), alpha = 0, colour = "black")
   } else if(!is.null(boundaries)){
-    plot_shp <- getShp(country = country, admin_level = "admin0", format = "df")[[1]]
+    plot_shp <- getShp(country = boundaries, admin_level = "admin0", format = "df")[[1]]
     plot$layers <- c(geom_polygon(data = plot_shp, aes(x=long, y=lat, group = group), fill = "grey65"),
                      plot$layers)
     plot <- plot + geom_polygon(data = plot_shp, aes(x=long, y=lat, group = group), alpha = 0, colour = "black")
