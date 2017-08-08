@@ -35,7 +35,7 @@
 #'
 #' @export getShp
 
-getShp <- function(object = NULL,country = NULL, ISO = NULL,admin_level = "both", extent = "national_only", format = "spatialpolygon") {
+getShp <- function(object = NULL,country = NULL, ISO = NULL,admin_level = "both", extent = "national_only", format = "spatialpolygon", bbox = NULL) {
 
   if(!is.null(object)){
     if(!"pr.points" %in% class(object)){
@@ -46,29 +46,21 @@ getShp <- function(object = NULL,country = NULL, ISO = NULL,admin_level = "both"
     country_input <- ISO
   }else if (!is.null(country)){
       country_input <- as.character(suppressMessages(listAll())$country_id[suppressMessages(listAll())$country %in% country])
+  }else{
+    country_input <-  NULL
   }
 
-  if(length(country_input)==0){
+  if(length(country_input)==0 & is.null(bbox)){
     stop("Invalid country/ISO definition, use is_available() OR listAll() to confirm country spelling and/or ISO code.")
   }
 
   # if bbox is wanted for shapefile extent definition, create a 2% bounding box around data and pass this into URL query
   if(tolower(extent) == "bbox"){
-    bbox_0.02 <- function(x){
-      bbox <-  c(min(x$latitude[!is.na(x$latitude)]),
-                 min(x$longitude[!is.na(x$longitude)]),
-                 max(x$latitude[!is.na(x$latitude)]),
-                 max(x$longitude[!is.na(x$longitude)]))
-
-      bbox[1:2] <- bbox[1:2]-(0.02*abs(bbox[1:2]))
-      bbox[3:4] <- bbox[3:4]+(0.02*abs(bbox[3:4]))
-
-      return(bbox)
+    if(is.null(bbox)){
+      bbox <- sp::bbox(object)
     }
 
-  bbox <- bbox_0.02(object)
-
-  URL_filter <- paste("&bbox=",paste(bbox,collapse = ","), sep = "")
+  URL_filter <- paste("&bbox=",paste(c(bbox[2,1],bbox[1,1],bbox[2,2],bbox[1,2]),collapse = ","), sep = "")
 
   #otherwise by default use object country names to download shapefiles for these countries only via cql_filter.
   }else if(tolower(extent) == "national_only"){
