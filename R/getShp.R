@@ -2,12 +2,9 @@
 #'
 #' \code{getShp} downloads shapefiles for a specified country (or countries) and returns this as a spatial
 #'
-#'
-#' @param object object of class pr.points (e.g. data downloaded uisng getPR()) for which corresponding shapefiles are desired (use either \code{object} OR \code{ISO} OR \code{country}, not in combination)
-#' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{object} OR \code{ISO} OR \code{country}, not in combination)
-#' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{object} OR \code{ISO} OR \code{country}, not in combination)
+#' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
+#' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "both" accepted)
-#' @param extent string specifying method of defining shapefile extent - accepts either \code{bbox} (for use with pr.points object only - defines 2% bounding box around data and downloads shapefiles intersecting this box) or "national_only" (the default - downloads all shapefiles associated with specified country name or names of countries within 'object')
 #'
 #' @return \code{getShp} returns a list containing separate shapefile dataframes for each administrative level. The following attribute fields are included:
 #'
@@ -28,21 +25,18 @@
 #'
 #' #' #Download PfPR data & associated shapefiles defined by bbox for Madagascar
 #' \dontrun{MDG_PR <- getPR(country = "Madagascar", species = "Pv")}
-#' \dontrun{MDG_shp <- getShp(object = MDG_PR, extent = "bbox")}
 #'
 #'
 #' @seealso \code{autoplot} method for quick mapping of PR point locations (\code{\link{autoplot.pr.points}}).
 #'
 #' @export getShp
+#'
 
-getShp <- function(object = NULL,country = NULL, ISO = NULL,admin_level = "both", extent = "national_only", format = "spatialpolygon", bbox = NULL) {
+getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both", format = "spatialpolygon", long = NULL, lat = NULL) {
 
-  if(!is.null(object)){
-    if(!"pr.points" %in% class(object)){
-      stop("Supplying 'object' argument only valid for objects of class \'pr.points\' (e.g. data downloaded using getPR()), in all other cases use country or ISO instead.")
-    }
-  country_input <- unique(object$country_id)
-  }else if(!is.null(ISO)){
+# Specifcy country_input (ISO3 code) for db query
+
+ if(!is.null(ISO)){
     country_input <- ISO
   }else if (!is.null(country)){
       country_input <- as.character(suppressMessages(listAll())$country_id[suppressMessages(listAll())$country %in% country])
@@ -50,24 +44,58 @@ getShp <- function(object = NULL,country = NULL, ISO = NULL,admin_level = "both"
     country_input <-  NULL
   }
 
-  if(length(country_input)==0 & is.null(bbox)){
+  # return error if ISO or country are not correctly specified and bbox is unspecified
+  if(length(country_input)==0 & is.null(c(bbox, lat, long))){
     stop("Invalid country/ISO definition, use is_available() OR listAll() to confirm country spelling and/or ISO code.")
   }
 
-  # if bbox is wanted for shapefile extent definition, create a 2% bounding box around data and pass this into URL query
-  if(tolower(extent) == "bbox"){
-    if(is.null(bbox)){
-      bbox <- sp::bbox(object)
+
+  if(admin_level=="both"){
+  admin_num <- c(0,1)
+  }else if (admin_level=="admin1"){
+  admin_num <- 1
+  }else if (admin_level=="admin0"){
+  admin_num <- 0
+  }
+
+
+##if not using bbox - check to see if we have a previosuly stored version of the shapefile we can use.
+  if(is.null(bbox)){
+    if(exists("stored_polygons", envir = .MAPdataHidden)){
+
+      if(unique(paste(country_input,"_", admin_num, sep ="") %in% unique(.MAPdataHidden$stored_polygons$country_level))){
+        Shp_polygon <- .MAPdataHidden$stored_polygons[.MAPdataHidden$stored_polygons$country_level %in% paste(country_input,"_", admin_num, sep =""),]
+
+      if(tolower(format)=="spatialpolygon"){
+        return(Shp_polygon)
+        }else if(tolower(format)=="df"){
+          polygon2df <- function(polygon){
+        polygon@data$id <- rownames(polygon@data)
+        polygon_df <- ggplot2::fortify(polygon)
+        polygon_df <- merge(polygon_df, polygon@data, by = "id")
+        return(polygon_df)}
+          Shp_df <- polygon2df(Shp_polygon)
+          return(Shp_df)
+        }
+      }
     }
+  }
 
+  # if lat and long are provided, define bbox from lat-longs
+
+  if(!is.null(lat)&!is.null(long)){
+    bbox <- sp::bbox(array(data.frame(long, lat)))
+  }
+
+  # if bbox is specified, use this for geoserver query URL
+ if(!is.null(bbox)){
   URL_filter <- paste("&bbox=",paste(c(bbox[2,1],bbox[1,1],bbox[2,2],bbox[1,2]),collapse = ","), sep = "")
-
   #otherwise by default use object country names to download shapefiles for these countries only via cql_filter.
-  }else if(tolower(extent) == "national_only"){
+  }else{
   URL_filter <- paste("&cql_filter=COUNTRY_ID%20IN%20(",paste("%27",country_input,"%27",collapse = ",", sep = ""),")", sep = "")
   }
 
-  #define which admin levels are queried and return as a list correct query URL
+  #define which admin levels are queried and return as a list full geoserver query URL
   if(tolower(admin_level) == "admin0"){
     URL_input <- list("admin0" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin0_map_2013&srsName=EPSG:4326",paste(URL_filter), sep = ""))
   } else if(tolower(admin_level) == "admin1"){
@@ -100,25 +128,46 @@ downloadShp <- function(URL){
 
 Shp_polygon <- lapply(URL_input, downloadShp)
 
-if(tolower(format)=="spatialpolygon"){
-  return(Shp_polygon)
-  }else if(tolower(format)=="df"){
-    polygon2df <- function(polygon){
+if(admin_level!="both"){
+  Shp_polygon <- Shp_polygon[[paste(admin_level)]]
+}else if (admin_level == "both"){
+  Shp_polygon <- sp::rbind.SpatialPolygonsDataFrame(Shp_polygon$admin0[names(Shp_polygon$admin1)], Shp_polygon$admin1)
+}
+
+Shp_polygon$country_level <- paste(Shp_polygon$COUNTRY_ID,"_",Shp_polygon$ADMN_LEVEL,sep = "")
+
+if(is.null(bbox)){
+  if(!exists("stored_polygons", envir = .MAPdataHidden)){
+    .MAPdataHidden$stored_polygons <- Shp_polygon
+    }else if(exists("stored_polygons", envir = .MAPdataHidden)){
+      new_shps <- Shp_polygon[!Shp_polygon$country_level %in% unique(.MAPdataHidden$stored_polygons$country_level),]
+      .MAPdataHidden$stored_polygons <- sp::rbind.SpatialPolygonsDataFrame(.MAPdataHidden$stored_polygons, new_shps[names(.MAPdataHidden$stored_polygons)])
+    }
+}
+
+
+  if(tolower(format)=="spatialpolygon"){
+    return(Shp_polygon)
+    }else if(tolower(format)=="df"){
+      polygon2df <- function(polygon){
       polygon@data$id <- rownames(polygon@data)
       polygon_df <- ggplot2::fortify(polygon)
       polygon_df <- merge(polygon_df, polygon@data, by = "id")
       return(polygon_df) }
 
-      Shp_df <- lapply(Shp_polygon, polygon2df)
-      return(Shp_df)
-  }
+      Shp_df <- polygon2df(Shp_polygon)
+    return(Shp_df)
+    }
+
+
 }
 
 
-## x <- getShp(object = object, admin_level = "both")
+
+
+
 ## zz <- getShp(ISO = "CHN")
 ## zz <- getShp(country = "Chad")
-## i <- getShp (object = a)
 
 # a <- ggplot()+geom_polygon(data = x$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
 # a <- ggplot()+geom_polygon(data = zz$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
@@ -127,4 +176,5 @@ if(tolower(format)=="spatialpolygon"){
 
 
 
-#ggplot()+geom_polygon(data = x_shp$admin0, aes(x= long, y = lat, group = group))+coord_equal()
+#ggplot()+geom_polygon(data = polygon2df(test), aes(x= long, y = lat, group = group, fill = COUNTRY_ID), colour = "white")+coord_equal()
+#ggplot()+geom_polygon(data = polygon2df(MDG_shp), aes(x= long, y = lat, group = group, fill = COUNTRY_ID), colour = "white")+coord_equal()

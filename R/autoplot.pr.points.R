@@ -7,10 +7,14 @@
 #' @importFrom ggplot2 autoplot
 #' @export
 
-autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral", map_title = NULL, extent = "national_only", facet =FALSE, ...){
+autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral", map_title = NULL, extent = "national_only", facet =FALSE, hide_confidential = FALSE, ...){
 
   if(is.null(map_title)){
-    map_title <- paste("PR Points Downloaded for", paste(unique(object$country), collapse = ", "))
+    map_title <- paste("PR Survey Locations in", paste(unique(object$country), collapse = ", "))
+  }
+
+  if(hide_confidential==TRUE){
+    object <- object[object$permissions_info=="",]
   }
 
   if(all(c("pv_pr", "pf_pr") %in% colnames(object))){
@@ -27,11 +31,11 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
   }
 
 
-  pr_shp <- getShp(object = object)
+  pr_shp <- getShp(ISO = unique(object$country_id))
 
 pr_plot <-   ggplot()+
-  geom_polygon(data = pr_shp$admin1, aes(x=long, y = lat, group = group), colour = "grey80", fill = "grey95")+
-  geom_polygon(data = pr_shp$admin0, aes(x=long, y = lat, group = group), colour = "grey50", alpha = 0)+
+  geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,], aes(x=long, y = lat, group = group), colour = "grey80", fill = "grey95")+
+  geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,], aes(x=long, y = lat, group = group), colour = "grey50", alpha = 0)+
   geom_point(data = object, aes(x = longitude, y = latitude, colour = species), alpha = 0.7)+
   coord_equal()+
   ggtitle(paste(map_title))+
