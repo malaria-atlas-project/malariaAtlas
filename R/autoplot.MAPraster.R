@@ -23,3 +23,8 @@ autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend 
   return(plot)
 }
 
+
+# CHN_pvpr_2010 <- getRaster(surface = "PvPR2010", shp = getShp(lat = CHN$latitude, long = CHN$longitude))
+# autoplot(as.MAPraster(CHN_pvpr_2010), boundaries = "China")
+
+
