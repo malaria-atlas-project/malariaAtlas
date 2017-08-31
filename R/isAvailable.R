@@ -1,8 +1,8 @@
 #' Check whether PR points are available for a given country
 #'
-#' \code{is_available} checks whether the MAP database contains PR points for the specified country/countries.
+#' \code{isAvailable} checks whether the MAP database contains PR points for the specified country/countries.
 #'
-#' @return \code{is_available} returns a list of countries for which PR points are publicly available.
+#' @return \code{isAvailable} returns a list of countries for which PR points are publicly available.
 #'
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
@@ -16,11 +16,11 @@
 #' }
 #'
 #' @examples
-#' is_available(country = "Suriname")
-#' x <- is_available(ISO = "NGA", full_results = TRUE)
-#' @export is_available
+#' isAvailable(country = "Suriname")
+#' x <- isAvailable(ISO = "NGA", full_results = TRUE)
+#' @export isAvailable
 
-is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
+isAvailable <- function(country = NULL, ISO = NULL, full_results = FALSE) {
 
 
   if(exists('available_countries_stored', envir = .MAPdataHidden)){
@@ -130,9 +130,9 @@ is_available <- function(country = NULL, ISO = NULL, full_results = FALSE) {
 }
 
 
-# is_available(country = c("Australia", "xxxx"), full_results = TRUE)
-# x <- is_available(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), full_results = TRUE)
-# x <- is_available(country = c("Nigeria", "Madagascar", "Sao Tome and Principe"), full_results = TRUE)
-# x <- is_available(country = c("Kenya", "Australia", "Ngeria"), full_results = TRUE)
-# x <- is_available(country = c("Krnya"), full_results = TRUE)
-# x <- is_available(country = c("Madagascar"), full_results = TRUE)
+# isAvailable(country = c("Australia", "xxxx"), full_results = TRUE)
+# x <- isAvailable(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), full_results = TRUE)
+# x <- isAvailable(country = c("Nigeria", "Madagascar", "Sao Tome and Principe"), full_results = TRUE)
+# x <- isAvailable(country = c("Kenya", "Australia", "Ngeria"), full_results = TRUE)
+# x <- isAvailable(country = c("Krnya"), full_results = TRUE)
+# x <- isAvailable(country = c("Madagascar"), full_results = TRUE)

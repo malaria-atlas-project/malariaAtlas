@@ -64,7 +64,7 @@ message("Data downloaded for all available locations.")
     cql_filter <- "country_id"
   }
 
-checked_availability <- is_available(country = country, ISO = ISO, full_results = TRUE)
+checked_availability <- isAvailable(country = country, ISO = ISO, full_results = TRUE)
 message(paste("Importing PR point data for", paste(checked_availability$country[checked_availability$is_available==1], collapse = ", "), "..."))
 country_URL <- paste("%27",curl::curl_escape(gsub("'", "''", checked_availability$country[checked_availability$is_available==1])), "%27", sep = "", collapse = "," )
 df <- utils::read.csv(paste(URL,
