@@ -81,5 +81,5 @@ getRaster <- function(surface = "PfPR2010", shp = NULL, bbox = NULL, file_path =
   }
 }
 
-## TEST <- getRaster(shp_df = tcdshp$admin0, file_path = "C:/Users/whgu0734/Test/")
-## TEST2 <- getRaster(shp_df = MDGshp$admin0, file_path = "C:/Users/whgu0734/Test/")
+## TEST_SHP <- getShp(ISO = "MDG")
+## TEST <- getRaster(shp = TEST_SHP)
