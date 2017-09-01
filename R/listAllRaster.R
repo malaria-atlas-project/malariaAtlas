@@ -14,23 +14,26 @@ listAllRaster <- function(printed = TRUE){
 
   available_rasters <- data.frame(cbind("raster_code" = codes, "title" = title, "abstract" = abstracts))
 
+  #define small function to remove html tags from raster titles
   html2text <- function(htmlString) {
     htmlString <-  gsub("<small>", ":", htmlString)
     return(gsub("<.*?>", "", htmlString))
   }
 
+  #adjust text in various dataframe columns & order these as desired
   available_rasters$raster_code <- sub("Explorer:", "", available_rasters$raster_code)
   available_rasters$title_extended <- sub("^.*:","",html2text(available_rasters$title))
   available_rasters$title <- sub(":.*$","",html2text(available_rasters$title))
   available_rasters$abstract <- html2text(available_rasters$abstract)
-
   available_rasters <- dplyr::select(available_rasters, 1,2,4,3)
 
+  #print out message of long raster names
   if(printed == TRUE){
     message("Rasters Available for Download: \n ",paste(available_rasters$title_extended, collapse = " \n "))
   }
 
   return(available_rasters)
 }
-z <- listAllRaster()
+
+## z <- listAllRaster()
 
