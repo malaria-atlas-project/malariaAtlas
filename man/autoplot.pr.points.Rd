@@ -6,7 +6,8 @@
 \usage{
 \method{autoplot}{pr.points}(object, col_both = "orchid3",
   col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral",
-  map_title = NULL, extent = "national_only", facet = FALSE, ...)
+  map_title = NULL, extent = "national_only", facet = FALSE,
+  hide_confidential = FALSE, ...)
 }
 \description{
 \code{text} more text

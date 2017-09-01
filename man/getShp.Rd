@@ -4,19 +4,15 @@
 \alias{getShp}
 \title{Download MAPadmin2013 Administrative Boundary Shapefiles from the MAP geoserver}
 \usage{
-getShp(object = NULL, country = NULL, ISO = NULL, admin_level = "both",
-  extent = "national_only")
+getShp(country = NULL, ISO = NULL, bbox = NULL, admin_level = "both",
+  format = "spatialpolygon", long = NULL, lat = NULL)
 }
 \arguments{
-\item{object}{object of class pr.points (e.g. data downloaded uisng getPR()) for which corresponding shapefiles are desired (use either \code{object} OR \code{ISO} OR \code{country}, not in combination)}
+\item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})}
 
-\item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{object} OR \code{ISO} OR \code{country}, not in combination)}
-
-\item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{object} OR \code{ISO} OR \code{country}, not in combination)}
+\item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})}
 
 \item{admin_level}{string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "both" accepted)}
-
-\item{extent}{string specifying method of defining shapefile extent - accepts either \code{bbox} (for use with pr.points object only - defines 2% bounding box around data and downloads shapefiles intersecting this box) or "national_only" (the default - downloads all shapefiles associated with specified country name or names of countries within 'object')}
 }
 \value{
 \code{getShp} returns a list containing separate shapefile dataframes for each administrative level. The following attribute fields are included:
@@ -41,7 +37,6 @@ getShp(object = NULL, country = NULL, ISO = NULL, admin_level = "both",
 
 #' #Download PfPR data & associated shapefiles defined by bbox for Madagascar
 \dontrun{MDG_PR <- getPR(country = "Madagascar", species = "Pv")}
-\dontrun{MDG_shp <- getShp(object = MDG_PR, extent = "bbox")}
 
 
 }
