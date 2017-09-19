@@ -19,7 +19,7 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, bbox = NULL, file_path =
   download_rst <- function(raster_code, bbox, file_path){
 
     rst_path <- file.path(file_path,"getRaster",paste(available_rasters$title[match(raster_code,available_rasters$raster_code)],"_",paste(substr(bbox,1,5),collapse = "_"),"_",Sys.Date(),".tiff",sep = ""))
-    rst_URL <- paste("http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code,"&subset=Long(",paste(bbox[1,],collapse = ","),")&subset=Lat(",paste(bbox[2,],collapse = ","),")", sep = "")
+    rst_URL <- paste("http://map-prod3.ndph.ox.ac.uk:8080/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code,"&subset=Long(",paste(bbox[1,],collapse = ","),")&subset=Lat(",paste(bbox[2,],collapse = ","),")", sep = "")
     r <- httr::GET(rst_URL, httr::write_disk(paste(rst_path), overwrite = TRUE))
 
     if(!"image/geotiff" %in% r$headers$`content-type`){

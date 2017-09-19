@@ -96,13 +96,14 @@ getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both",
   }
 
   #define which admin levels are queried and return as a list full geoserver query URL
+  base_URL <- "http://map-prod3.ndph.ox.ac.uk:8080/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
   if(tolower(admin_level) == "admin0"){
-    URL_input <- list("admin0" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin0_map_2013&srsName=EPSG:4326",paste(URL_filter), sep = ""))
+    URL_input <- list("admin0" = paste(base_URL,"&TypeName=admin0_map_2013",paste(URL_filter), sep = ""))
   } else if(tolower(admin_level) == "admin1"){
-    URL_input <- list("admin1" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin1_map_2013&srsName=EPSG:4326",paste(URL_filter), sep = ""))
+    URL_input <- list("admin1" = paste(base_URL,"&TypeName=admin1_map_2013",paste(URL_filter), sep = ""))
   } else if(tolower(admin_level) == "both"){
-    URL_input <- list("admin0" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin0_map_2013&srsName=EPSG:4326",paste(URL_filter), sep = ""),
-                      "admin1" = paste("http://map-prod3.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&TypeName=admin1_map_2013&srsName=EPSG:4326",paste(URL_filter), sep = ""))
+    URL_input <- list("admin0" = paste(base_URL,"&TypeName=admin0_map_2013",paste(URL_filter), sep = ""),
+                      "admin1" = paste(base_URL,"&TypeName=admin1_map_2013",paste(URL_filter), sep = ""))
   }
 
 downloadShp <- function(URL){
