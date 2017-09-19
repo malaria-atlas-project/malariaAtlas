@@ -1,7 +1,7 @@
 test_coverage <- function(path){
   
-  coverage_obj <- package_coverage(path = path, type = "tests")
-  coverage_percent <- percent_coverage(coverage_obj)
+  coverage_obj <- covr::package_coverage(path = path, type = "tests")
+  coverage_percent <- covr::percent_coverage(coverage_obj)
   
   message(paste("Code coverage: ", coverage_percent, "%", sep = ""))
   
