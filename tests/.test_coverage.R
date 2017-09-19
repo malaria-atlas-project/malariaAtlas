@@ -3,6 +3,8 @@ test_coverage <- function(path){
   coverage_obj <- package_coverage(path = path, type = "tests")
   coverage_percent <- percent_coverage(coverage_obj)
   
+  message(paste("Code coverage: ", coverage_percent, "%", sep = ""))
+  
   if(coverage_percent<30){
     stop("Code coverage less than 30%")
   }else{
