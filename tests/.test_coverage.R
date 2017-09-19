@@ -12,4 +12,5 @@ test_coverage <- function(path){
   }
 }
 
+install.packages("covr")
 test_coverage(path = ".")
