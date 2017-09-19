@@ -12,5 +12,5 @@ test_coverage <- function(path){
   }
 }
 
-install.packages("covr")
+install.packages("covr", repos = "https://cran.ma.imperial.ac.uk/")
 test_coverage(path = ".")
