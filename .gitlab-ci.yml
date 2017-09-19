@@ -12,3 +12,8 @@ run_tests:
   tags: ['dev1-ssh-deploy']
   script:
     - Rscript ./tests/.tests_for_CI.R
+check_coverage:
+    stage: code_coverage
+    tags: ['dev1-ssh-deploy']
+    script:
+    - Rscript ./tests/.test_coverage.R
