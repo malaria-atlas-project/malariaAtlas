@@ -1,25 +1,29 @@
-getRaster <- function(surface = "PfPR2-10", shp = NULL, bbox = NULL, file_path = tempdir(), format = "raster"){
+getRaster <- function(surface = "PfPR2-10", shp = NULL, bbox = NULL, file_path = tempdir(), format = "raster", year = NULL){
 
   ## if bbox is not defined by user, use sp::bbox to define this from provided shapefile
   if(is.null(bbox)&!is.null(shp)){
   bbox <- sp::bbox(shp)
   }
 
-  #bbox[,1] <- substr(bbox[,1], 1,5)
-  #bbox[,2] <- substr(bbox[,2], 1,5)
   ## return all available rasters and use this df to define raster codes for specifed 'Surfaces'
   available_rasters <- listAllRaster(printed = FALSE)
   raster_code_list <- available_rasters$raster_code[match(surface, available_rasters$title)]
 
+  ## create directory to which rasters will be downloaded
   rstdir <- file.path(file_path,"getRaster")
   dir.create(rstdir, showWarnings = FALSE)
 
   message("Downloading the following rasters: \n", paste(available_rasters$title[match(raster_code_list, available_rasters$raster_code)], collapse = "\n"))
 
-  download_rst <- function(raster_code, bbox, file_path){
+  download_rst <- function(raster_code, bbox, target_path, year){
 
-    rst_path <- file.path(file_path,"getRaster",paste(available_rasters$title[match(raster_code,available_rasters$raster_code)],"_",paste(substr(bbox,1,5),collapse = "_"),"_",Sys.Date(),".tiff",sep = ""))
+    rst_path <- file.path(target_path, paste(available_rasters$title[match(raster_code,available_rasters$raster_code)],"_",paste(substr(bbox,1,5),collapse = "_"),"_",Sys.Date(),".tiff",sep = ""))
     rst_URL <- paste("http://map-prod3.ndph.ox.ac.uk:8080/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code,"&subset=Long(",paste(bbox[1,],collapse = ","),")&subset=Lat(",paste(bbox[2,],collapse = ","),")", sep = "")
+
+    if(!is.null(year)){
+      rst_URL <- paste(rst_URL, "&SUBSET=time(\"", year, "-01-01T00:00:00.000Z\")", sep = "")
+    }
+
     r <- httr::GET(rst_URL, httr::write_disk(paste(rst_path), overwrite = TRUE))
 
     if(!"image/geotiff" %in% r$headers$`content-type`){
@@ -30,7 +34,7 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, bbox = NULL, file_path =
   }
 
  #download rasters to designated file_path (tempdir as default)
-  invisible(sapply(X = raster_code_list, FUN = download_rst, bbox = bbox, file_path = file_path))
+  invisible(sapply(X = raster_code_list, FUN = download_rst, bbox = bbox, target_path = rstdir, year = year))
 
   #create vector of filenames for rasters downloaded in the current query
   newrst <- grep(paste(surface,"_",paste(substr(bbox,1,5),collapse = "_"),"_",Sys.Date(),collapse = "|", sep = ""),dir(rstdir), value = TRUE)
@@ -42,7 +46,7 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, bbox = NULL, file_path =
   }else if(length(newrst)==1){
     rst_dl <- raster::raster(file.path(rstdir, newrst))
     if(!is.null(shp)){
-      rst_dl <- mask(rst_dl, shp)
+      rst_dl <- raster::mask(rst_dl, shp)
     }
     return(rst_dl)
   #if more than one raster is found we want a raster stack - but only for rasters with the same resolution
@@ -59,7 +63,7 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, bbox = NULL, file_path =
     if(length(unique(rst_list_index$res_id))==1){
       rst_stk <- stack(rst_list)
       if(!is.null(shp)){
-        rst_stk <- mask(rst_stk, shp)
+        rst_stk <- raster::mask(rst_stk, shp)
       }
       return(rst_stk)
       #if not then we want to return a list of raster stacks - one for each resolution present in the index dataframe above.
@@ -72,7 +76,7 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, bbox = NULL, file_path =
         stk_list[i] <- stack(rst_list[rst_list_index$res_id == i])
       }
         if(!is.null(shp)){
-          stk_list<- lapply(X =stk_list, FUN = mask, mask = shp)
+          stk_list<- lapply(X =stk_list, FUN = raster::mask, mask = shp)
         }
         return(stk_list)
         }
