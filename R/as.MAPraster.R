@@ -3,9 +3,9 @@ as.MAPraster <- function(raster_object){
   if("RasterLayer" %in% class(raster_object)){
   raster_df <- as(raster_object, "SpatialPixelsDataFrame")
   raster_df <- as.data.frame(raster_df)
+  raster_df$raster_name <- names(raster_df[1])
+  names(raster_df) <- c("z","x","y","raster_name")
   class(raster_df) <- c(class(raster_df), "MAPraster")
-  attr(raster_df, "raster_name") <- names(raster_df[1])
-  names(raster_df) <- c("z","x","y")
   return(raster_df)
   }else if("RasterBrick"%in% class(raster_object)){
     raster_df <- as(raster_object, "SpatialPixelsDataFrame")

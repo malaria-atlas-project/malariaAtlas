@@ -51,6 +51,7 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, view_bbox = NULL, file_p
     rst_dl <- raster::raster(file.path(rstdir, newrst))
     if(!is.null(shp)){
       rst_dl <- raster::mask(rst_dl, shp)
+      names(rst_dl) <- lapply(X = sub("_.*","",names(rst_dl)), FUN = agrep, x = surface, value = TRUE, ignore.case = TRUE)
     }
     return(rst_dl)
   #if more than one raster is found we want a raster stack - but only for rasters with the same resolution
