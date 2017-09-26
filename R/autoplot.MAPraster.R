@@ -1,7 +1,7 @@
 autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend = ""){
 
   plot <- ggplot()+
-    geom_tile(data = object, aes(x=x, y=y, fill = object[,1]))+
+    geom_tile(data = object, aes(x=x, y=y, fill = z))+
     coord_equal()+
     scale_fill_distiller(name = paste(legend), palette = "RdYlBu")+
   theme(plot.title = element_text(vjust=-1),
@@ -19,7 +19,11 @@ autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend 
     plot$layers <- c(geom_polygon(data = plot_shp, aes(x=long, y=lat, group = group), fill = "grey65"),
                      plot$layers)
     plot <- plot + geom_polygon(data = plot_shp, aes(x=long, y=lat, group = group), alpha = 0, colour = "black")
-}
+  }
+
+  if(length(object$raster_name) >1){
+    plot <- plot + facet_wrap(~raster_name)
+  }
   return(plot)
 }
 
