@@ -10,7 +10,7 @@ as.MAPraster <- function(raster_object){
   }else if("RasterBrick"%in% class(raster_object)){
     raster_df <- as(raster_object, "SpatialPixelsDataFrame")
     raster_df <- as.data.frame(raster_df)
-    raster_df <- gather(raster_df, key = "raster_name", value = "z", -x,-y)
+    raster_df <- tidyr::gather(raster_df, key = "raster_name", value = "z", -x,-y)
 
     class(raster_df) <- c(class(raster_df), "MAPraster")
 

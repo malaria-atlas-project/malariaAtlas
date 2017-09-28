@@ -17,7 +17,7 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, view_bbox = NULL, file_p
 
   download_rst <- function(raster_code, view_bbox, target_path, year){
 
-    if(raster_code %in% SPECIFY_LIST_HERE){
+    if(!raster_code %in% c("africa-act-2000-2015","africa-inc-2000-2015","africa-irs-2000-2015","africa-itn-2000-2015","africa-pr-2000-2015")){
       year = NULL
     }
 
@@ -51,9 +51,10 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, view_bbox = NULL, file_p
     rst_dl <- raster::raster(file.path(rstdir, newrst))
     if(!is.null(shp)){
       rst_dl <- raster::mask(rst_dl, shp)
-      names(rst_dl) <- lapply(X = sub("_.*","",names(rst_dl)), FUN = agrep, x = surface, value = TRUE, ignore.case = TRUE)
+      names(rst_dl) <- lapply(X = sub("^([^_]*_[^_]*).*","\\1",names(rst_dl)), FUN = agrep, x = surface, value = TRUE, ignore.case = TRUE)
     }
     return(rst_dl)
+
   #if more than one raster is found we want a raster stack - but only for rasters with the same resolution
   }else if(length(newrst)>1){
     #read in multiple rasters into a list
@@ -66,31 +67,37 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, view_bbox = NULL, file_p
     #check whether more than one resolution is present in downloaded rasters
     #if only one resolution is present, create a raster stack of all downloaded rasters
     if(length(unique(rst_list_index$res_id))==1){
-      rst_stk <- stack(rst_list)
+      rst_stk <- raster::stack(rst_list)
       if(!is.null(shp)){
         rst_stk <- raster::mask(rst_stk, shp)
-        names(rst_stk) <- lapply(X = sub("_.*","",names(rst_stk)), FUN = agrep, x = surface, value = TRUE, ignore.case = TRUE)
+        names(rst_stk) <- lapply(X = sub("^([^_]*_[^_]*).*","\\1",names(rst_stk)), FUN = agrep, x = surface, value = TRUE, ignore.case = TRUE)
       }
       return(rst_stk)
       #if not then we want to return a list of raster stacks - one for each resolution present in the index dataframe above.
     }else if (length(unique(rst_list_index$res_id))!=1){
       #create empty list
-      stk_list <- list()
 
       #for each unique raster resolution create a raster stack and store this in stk_list
-      for(i in 1:length(unique(rst_list_index$res_id))){
-        stk_list[i] <- stack(rst_list[rst_list_index$res_id == i])
+
+      stack_rst <- function(res_id){
+        return(raster::stack(rst_list[rst_list_index$res_id==res_id]))
       }
-        if(!is.null(shp)){
+
+      stk_list <- lapply(X = unique(rst_list_index$res_id), FUN = stack_rst)
+
+      # mask each stack by shapefile if this is provided
+      if(!is.null(shp)){
           stk_list<- lapply(X =stk_list, FUN = raster::mask, mask = shp)
         }
 
-      raster_name <- function(stack){
-        names(stack) <- lapply(X = sub("_.*","",names(stack)), FUN = agrep, x = surface, value = TRUE, ignore.case = TRUE)
+
+      # tidy names of rasters within the stacks within this list.
+      name_stk <- function(stack){
+        names(stack) <- lapply(X = sub("^([^_]*_[^_]*).*","\\1",names(stack)), FUN = agrep, x = surface, value = TRUE, ignore.case = TRUE)
         return(stack)
       }
 
-      stk_list <- lapply(stk_list, FUN = raster_name)
+      stk_list <- lapply(X = stk_list, FUN = name_stk)
 
         return(stk_list)
         }
