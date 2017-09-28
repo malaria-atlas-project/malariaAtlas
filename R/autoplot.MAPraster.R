@@ -1,4 +1,4 @@
-autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_title = ""){
+autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_title = "", plot_title = ""){
 
   make_plot <- function(object, rastername, boundaries, shp_df, legend_title){
 
@@ -10,7 +10,8 @@ autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_
         panel.background = element_rect(fill = "white"),
         panel.grid = element_blank(),
         axis.title = element_blank(),
-        panel.border = element_rect(colour = "grey50", fill=NA, size = 0.5))
+        panel.border = element_rect(colour = "grey50", fill=NA, size = 0.5))+
+    ggtitle(paste(rastername))
 
   if(!is.null(shp_df)){
     plot$layers <- c(geom_polygon(data = shp_df, aes(x=long, y=lat, group = group), fill = "grey65"),
@@ -28,11 +29,16 @@ autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_
 
 plot_list <- lapply(X = unique(object$raster_name), FUN = make_plot, object = object, boundaries = boundaries, shp_df = shp_df, legend_title = legend_title)
 
-grid.arrange(grobs = plot_list, ncol = 2)
+if(length(plot_list)<=3){
+  ncol = length(plot_list)
+}else {
+  ncol = 2
+}
 
-plot <- lapply(1:length(plot_list),
-               function(x,i) {grid.arrange(grobs = x[[i]], top = "TITLE")},
-               x = plot_list)
+gridExtra::grid.arrange(grobs = plot_list, ncol = 2, top = grid::textGrob(paste("\n",plot_title),
+                                                                          gp = grid::gpar(fontsize = 15, font = 2)))
+
+
 
 
   return(plot)
