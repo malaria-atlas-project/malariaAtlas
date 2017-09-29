@@ -1,5 +1,17 @@
 listAllRaster <- function(printed = TRUE){
 
+  if(exists('available_rasters_stored', envir = .MAPdataHidden)){
+    available_rasters <- .MAPdataHidden$available_rasters_stored
+
+    #print out message of long raster names
+    if(printed == TRUE){
+      message("Rasters Available for Download: \n ",paste(available_rasters$title_extended, collapse = " \n "))
+    }
+
+    return(invisible(available_rasters))
+
+  }else{
+
   #query the geoserver to return xml containing a list of all available rasters & convert this to a list
   xml <- XML::xmlParse("http://map-prod3.ndph.ox.ac.uk:8080/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities")
   xml_data <- XML::xmlToList(xml)
@@ -32,7 +44,9 @@ listAllRaster <- function(printed = TRUE){
     message("Rasters Available for Download: \n ",paste(available_rasters$title_extended, collapse = " \n "))
   }
 
+  .MAPdataHidden$available_rasters_stored <- available_rasters
   return(available_rasters)
+  }
 }
 
 ## z <- listAllRaster()
