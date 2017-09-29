@@ -8,6 +8,6 @@ Description: MAPdata provides a suite of tools to allow you to
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Imports: curl, ggplot2, rgdal, raster, sp, XML
+Imports: curl, ggplot2, rgdal, raster, sp, XML, grid, gridExtra
 RoxygenNote: 6.0.1
 Suggests: testthat
