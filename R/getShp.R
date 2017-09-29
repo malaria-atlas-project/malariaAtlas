@@ -34,6 +34,13 @@
 
 getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both", format = "spatialpolygon", long = NULL, lat = NULL) {
 
+  #specify function to convert 'SpatialPolygon' to data.frame if needed later
+  polygon2df <- function(polygon){
+    polygon@data$id <- rownames(polygon@data)
+    polygon_df <- ggplot2::fortify(polygon)
+    polygon_df <- merge(polygon_df, polygon@data, by = "id")
+    return(polygon_df)}
+
 # Specifcy country_input (ISO3 code) for db query
 
  if(!is.null(ISO)){
@@ -57,6 +64,28 @@ getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both",
   admin_num <- 0
   }
 
+  # if lat and long are provided, define bbox from lat-longs
+
+  if(!is.null(lat)&!is.null(long)){
+    bbox <- sp::bbox(array(data.frame(long, lat)))
+  }
+
+  #treat ISO = "ALL" separately - return stored polygon OR define big bounding box.
+  if("ALL" %in% ISO){
+    if(exists("all_polygons", envir = .MAPdataHidden)){
+      Shp_polygon <- .MAPdataHidden$all_polygons
+
+      if(tolower(format)=="spatialpolygon"){
+        return(Shp_polygon)
+      }else if(tolower(format)=="df"){
+        Shp_df <- polygon2df(Shp_polygon)
+        return(Shp_df)
+      }
+
+    } else {
+    bbox <- matrix(c(-180,-60, 180,85), nrow = 2)
+    }
+  }
 
 ##if not using bbox - check to see if we have a previosuly stored version of the shapefile we can use.
   if(is.null(bbox)){
@@ -68,22 +97,11 @@ getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both",
       if(tolower(format)=="spatialpolygon"){
         return(Shp_polygon)
         }else if(tolower(format)=="df"){
-          polygon2df <- function(polygon){
-        polygon@data$id <- rownames(polygon@data)
-        polygon_df <- ggplot2::fortify(polygon)
-        polygon_df <- merge(polygon_df, polygon@data, by = "id")
-        return(polygon_df)}
           Shp_df <- polygon2df(Shp_polygon)
           return(Shp_df)
         }
       }
     }
-  }
-
-  # if lat and long are provided, define bbox from lat-longs
-
-  if(!is.null(lat)&!is.null(long)){
-    bbox <- sp::bbox(array(data.frame(long, lat)))
   }
 
   # if bbox is specified, use this for geoserver query URL
@@ -136,8 +154,10 @@ if(admin_level!="both"){
 
 Shp_polygon$country_level <- paste(Shp_polygon$COUNTRY_ID,"_",Shp_polygon$ADMN_LEVEL,sep = "")
 
-if(is.null(bbox)){
-  if(!exists("stored_polygons", envir = .MAPdataHidden)){
+if("ALL" %in% ISO){
+  .MAPdataHidden$all_polygons <- Shp_polygon
+  } else if(is.null(bbox)){
+   if(!exists("stored_polygons", envir = .MAPdataHidden)){
     .MAPdataHidden$stored_polygons <- Shp_polygon
     }else if(exists("stored_polygons", envir = .MAPdataHidden)){
       new_shps <- Shp_polygon[!Shp_polygon$country_level %in% unique(.MAPdataHidden$stored_polygons$country_level),]
@@ -145,25 +165,13 @@ if(is.null(bbox)){
     }
 }
 
-
   if(tolower(format)=="spatialpolygon"){
     return(Shp_polygon)
     }else if(tolower(format)=="df"){
-      polygon2df <- function(polygon){
-      polygon@data$id <- rownames(polygon@data)
-      polygon_df <- ggplot2::fortify(polygon)
-      polygon_df <- merge(polygon_df, polygon@data, by = "id")
-      return(polygon_df) }
-
       Shp_df <- polygon2df(Shp_polygon)
     return(Shp_df)
     }
-
-
 }
-
-
-
 
 
 ## zz <- getShp(ISO = "CHN")
