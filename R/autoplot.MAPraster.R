@@ -1,11 +1,20 @@
-autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_title = "", plot_title = ""){
+autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_title = "", plot_title = "", log_scale = FALSE){
 
   make_plot <- function(object, rastername, boundaries, shp_df, legend_title){
+
+  if(log_scale == TRUE){
+    trans <- "log10"
+  }else{
+    trans <- "identity"
+  }
 
   plot <- ggplot()+
     geom_tile(data = object[object$raster_name == rastername,], aes(x=x, y=y, fill = z))+
     coord_equal()+
-    scale_fill_distiller(name = paste(legend_title), palette = "RdYlBu")+
+    scale_fill_distiller(name = paste(legend_title),
+                         palette = "RdYlBu",
+                         trans = trans,
+                         na.value = grey(0.9))+
   theme(plot.title = element_text(vjust=-1),
         panel.background = element_rect(fill = "white"),
         panel.grid = element_blank(),
