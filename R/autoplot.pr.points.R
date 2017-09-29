@@ -31,7 +31,7 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
   }
 
 
-  pr_shp <- getShp(ISO = unique(object$country_id))
+  pr_shp <- getShp(ISO = unique(object$country_id), format = "df")
 
 pr_plot <-   ggplot()+
   geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,], aes(x=long, y = lat, group = group), colour = "grey80", fill = "grey95")+
