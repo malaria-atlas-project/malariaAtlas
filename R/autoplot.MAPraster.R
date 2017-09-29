@@ -35,7 +35,7 @@ if(length(plot_list)<=3){
   ncol = 2
 }
 
-gridExtra::grid.arrange(grobs = plot_list, ncol = 2, top = grid::textGrob(paste("\n",plot_title),
+gridExtra::grid.arrange(grobs = plot_list, ncol = ncol, top = grid::textGrob(paste("\n",plot_title),
                                                                           gp = grid::gpar(fontsize = 15, font = 2)))
 
 
