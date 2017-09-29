@@ -37,7 +37,7 @@ getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both",
 # Specifcy country_input (ISO3 code) for db query
 
  if(!is.null(ISO)){
-    country_input <- ISO
+    country_input <- toupper(ISO)
   }else if (!is.null(country)){
       country_input <- as.character(suppressMessages(listAll())$country_id[suppressMessages(listAll())$country %in% country])
   }else{
@@ -48,7 +48,6 @@ getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both",
   if(length(country_input)==0 & is.null(c(bbox, lat, long))){
     stop("Invalid country/ISO definition, use is_available() OR listAll() to confirm country spelling and/or ISO code.")
   }
-
 
   if(admin_level=="both"){
   admin_num <- c(0,1)
