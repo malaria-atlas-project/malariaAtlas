@@ -56,7 +56,7 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, view_bbox = NULL, file_p
     raster_codes <- lapply(X = gsub(paste("_",gsub("-","\\.",file_tag), sep = ""),"",names(rst)),
                            FUN = agrep,
                            x = unique(available_rasters$raster_code),
-                           max.distance = 3, value = TRUE)
+                           max.distance = 2, value = TRUE)
 
     names(rst) <- available_rasters$title[available_rasters$raster_code %in% raster_codes]
     return(rst)
