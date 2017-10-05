@@ -56,7 +56,7 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, view_bbox = NULL, file_p
     raster_codes <- lapply(X = gsub(paste("_",gsub("-","\\.",file_tag), sep = ""),"",names(rst)),
                            FUN = agrep,
                            x = unique(available_rasters$raster_code),
-                           max.distance = 2, value = TRUE)
+                           max.distance = 3, value = TRUE)
 
     names(rst) <- available_rasters$title[available_rasters$raster_code %in% raster_codes]
     return(rst)
@@ -68,9 +68,9 @@ getRaster <- function(surface = "PfPR2-10", shp = NULL, view_bbox = NULL, file_p
   # If only one new raster is found, read this in
   }else if(length(newrst)==1){
     rst_dl <- raster::raster(file.path(rstdir, newrst))
+    rst_dl <- name_rst(rst_dl)
     if(!is.null(shp)){
       rst_dl <- raster::mask(rst_dl, shp)
-      rst_dl <- name_rst(rst_dl)
     }
     return(rst_dl)
 
