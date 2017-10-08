@@ -1,3 +1,21 @@
+#' List all MAP Rasters available to download.
+#'
+#' \code{listAllRaster} lists all rasters available to download from the Malaria Atlas Project database. 
+#' @return \code{listAllRaster} returns a data.frame detailing the following information for each raster available to download from the Malaria Atlas Project database.
+#'
+#' \enumerate{
+#' \item \code{raster_code} unique identifier for each raster
+#' \item \code{title} abbreviated title for each raster, used as \code{surface} argument in getRaster()
+#' \item \code{title_extended} extended title for each raster, detailing raster content
+#' \item \code{abstract} full description of each raster, outlining raster creation methods, raster content and more.
+#' \item \code{citation} citation of peer-reviewed article in which each raster has been published
+#' \item \code{pub_year} year in which raster was published, used as \code{pub_year} argument in getRaster() to updated raster versions from their predecessor(s).
+#' \item \code{min_raster_year} earliest year for which each raster is available 
+#' \item \code{max_raster_year} latest year for which each raster is available
+#' }
+#' @examples
+#' available_rasters <- listAllRaster()
+#' @export listAllRaster
 listAllRaster <- function(printed = TRUE){
 
   if(exists('available_rasters_stored', envir = .MAPdataHidden)){
