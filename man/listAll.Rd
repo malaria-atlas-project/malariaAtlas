@@ -7,7 +7,7 @@
 listAll(printed = TRUE)
 }
 \value{
-\code{listAll} returns a list of countries for which PR points are publicly available.
+\code{listAll} returns a data.frame detailing the countries for which PR points are publicly available.
 }
 \description{
 \code{listAll} lists all countries for which there are publicly visible PR datapoints in the MAP database.
