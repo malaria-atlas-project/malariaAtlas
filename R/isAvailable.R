@@ -23,8 +23,8 @@
 isAvailable <- function(country = NULL, ISO = NULL, full_results = FALSE) {
 
 
-  if(exists('available_countries_stored', envir = .MAPdataHidden)){
-    available_countries <- .MAPdataHidden$available_countries_stored
+  if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
+    available_countries <- .malariaAtlasHidden$available_countries_stored
   }else{available_countries <- listAll(printed = FALSE)}
 
   capwords <- function(string) {

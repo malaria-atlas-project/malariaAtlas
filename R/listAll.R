@@ -13,8 +13,8 @@ listAll <- function(printed = TRUE) {
 
   # If we've already downloaded a list of available countries, print that.
   # Otherwise download a list from the geoserver
-  if(exists('available_countries_stored', envir = .MAPdataHidden)){
-    available_countries <- .MAPdataHidden$available_countries_stored
+  if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
+    available_countries <- .malariaAtlasHidden$available_countries_stored
 
     if(printed == TRUE){
       message("Countries with PR Data: \n ",paste(available_countries$country_and_iso, collapse = " \n "))
@@ -31,7 +31,7 @@ listAll <- function(printed = TRUE) {
     message("Countries with PR Data: \n ",paste(available_countries$country_and_iso, collapse = " \n "))
   }
 
-  .MAPdataHidden$available_countries_stored <- available_countries
+  .malariaAtlasHidden$available_countries_stored <- available_countries
 
   return(invisible(available_countries))
   }

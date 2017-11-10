@@ -72,8 +72,8 @@ getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both",
 
   #treat ISO = "ALL" separately - return stored polygon OR define big bounding box.
   if("ALL" %in% ISO){
-    if(exists("all_polygons", envir = .MAPdataHidden)){
-      Shp_polygon <- .MAPdataHidden$all_polygons
+    if(exists("all_polygons", envir = .malariaAtlasHidden)){
+      Shp_polygon <- .malariaAtlasHidden$all_polygons
 
       if(tolower(format)=="spatialpolygon"){
         return(Shp_polygon)
@@ -89,10 +89,10 @@ getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both",
 
 ##if not using bbox - check to see if we have a previosuly stored version of the shapefile we can use.
   if(is.null(bbox)){
-    if(exists("stored_polygons", envir = .MAPdataHidden)){
+    if(exists("stored_polygons", envir = .malariaAtlasHidden)){
 
-      if(unique(paste(country_input,"_", admin_num, sep ="") %in% unique(.MAPdataHidden$stored_polygons$country_level))){
-        Shp_polygon <- .MAPdataHidden$stored_polygons[.MAPdataHidden$stored_polygons$country_level %in% paste(country_input,"_", admin_num, sep =""),]
+      if(unique(paste(country_input,"_", admin_num, sep ="") %in% unique(.malariaAtlasHidden$stored_polygons$country_level))){
+        Shp_polygon <- .malariaAtlasHidden$stored_polygons[.malariaAtlasHidden$stored_polygons$country_level %in% paste(country_input,"_", admin_num, sep =""),]
 
       if(tolower(format)=="spatialpolygon"){
         return(Shp_polygon)
@@ -155,13 +155,13 @@ if(admin_level!="both"){
 Shp_polygon$country_level <- paste(Shp_polygon$COUNTRY_ID,"_",Shp_polygon$ADMN_LEVEL,sep = "")
 
 if("ALL" %in% ISO){
-  .MAPdataHidden$all_polygons <- Shp_polygon
+  .malariaAtlasHidden$all_polygons <- Shp_polygon
   } else if(is.null(bbox)){
-   if(!exists("stored_polygons", envir = .MAPdataHidden)){
-    .MAPdataHidden$stored_polygons <- Shp_polygon
-    }else if(exists("stored_polygons", envir = .MAPdataHidden)){
-      new_shps <- Shp_polygon[!Shp_polygon$country_level %in% unique(.MAPdataHidden$stored_polygons$country_level),]
-      .MAPdataHidden$stored_polygons <- sp::rbind.SpatialPolygonsDataFrame(.MAPdataHidden$stored_polygons, new_shps[names(.MAPdataHidden$stored_polygons)])
+   if(!exists("stored_polygons", envir = .malariaAtlasHidden)){
+    .malariaAtlasHidden$stored_polygons <- Shp_polygon
+    }else if(exists("stored_polygons", envir = .malariaAtlasHidden)){
+      new_shps <- Shp_polygon[!Shp_polygon$country_level %in% unique(.malariaAtlasHidden$stored_polygons$country_level),]
+      .malariaAtlasHidden$stored_polygons <- sp::rbind.SpatialPolygonsDataFrame(.malariaAtlasHidden$stored_polygons, new_shps[names(.malariaAtlasHidden$stored_polygons)])
     }
 }
 

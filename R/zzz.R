@@ -1,3 +1,3 @@
 .onLoad <- function(libname, pkgname){
- assign(x = ".MAPdataHidden", value = new.env(), pos = parent.env(environment()))
+ assign(x = ".malariaAtlasHidden", value = new.env(), pos = parent.env(environment()))
 }
