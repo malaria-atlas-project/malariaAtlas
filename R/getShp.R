@@ -32,14 +32,46 @@
 #' @export getShp
 #'
 
-getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both", format = "spatialpolygon", long = NULL, lat = NULL) {
 
-  #specify function to convert 'SpatialPolygon' to data.frame if needed later
-  polygon2df <- function(polygon){
-    polygon@data$id <- rownames(polygon@data)
-    polygon_df <- ggplot2::fortify(polygon)
-    polygon_df <- merge(polygon_df, polygon@data, by = "id")
-    return(polygon_df)}
+#Define a few utility funcitons:
+
+#define function that downloads a shapefiles from map geoserver to tempdir and loads this into R
+downloadShp <- function(URL){
+  # create a temporary filepath & directory to download shapefiles from MAP geoserver
+  td <- tempdir()
+  shpdir <- file.path(td,"shp")
+  dir.create(shpdir)
+  temp <- tempfile(tmpdir = shpdir, fileext = ".zip")
+  # download shapefile to temp directory & extract shapefilepath & layername
+  download.file(URL, temp, mode = "wb")
+  unzip(temp, exdir = shpdir)
+  shp <- dir(shpdir, "*.shp$")
+  shp.path <- file.path(shpdir,shp)
+  lyr <- sub(".shp$", "", shp)
+
+  ## read shapefile into R
+  shapefile_dl <- rgdal::readOGR(dsn = shp.path, layer = lyr)
+
+  ## delete temporary directory and return shapefile object
+  on.exit(unlink(shpdir, recursive = TRUE))
+  return(shapefile_dl)
+}
+
+#define function to convert 'SpatialPolygon' to data.frame if needed later
+polygon2df <- function(polygon){
+  polygon@data$id <- rownames(polygon@data)
+  polygon_df <- ggplot2::fortify(polygon)
+  polygon_df <- merge(polygon_df, polygon@data, by = "id")
+  return(polygon_df)}
+
+
+getShp <- function(country = NULL,
+                   ISO = NULL,
+                   bbox = NULL,
+                   admin_level = "both",
+                   format = "spatialpolygon",
+                   long = NULL,
+                   lat = NULL) {
 
 # Specifcy country_input (ISO3 code) for db query
 
@@ -91,8 +123,8 @@ getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both",
   if(is.null(bbox)){
     if(exists("stored_polygons", envir = .malariaAtlasHidden)){
 
-      if(unique(paste(country_input,"_", admin_num, sep ="") %in% unique(.malariaAtlasHidden$stored_polygons$country_level))){
-        Shp_polygon <- .malariaAtlasHidden$stored_polygons[.malariaAtlasHidden$stored_polygons$country_level %in% paste(country_input,"_", admin_num, sep =""),]
+      if(all(unlist(lapply(X = country_input, FUN = function(x) paste(x, admin_num, sep = "_"))) %in% unique(.malariaAtlasHidden$stored_polygons$country_level))){
+        Shp_polygon <- .malariaAtlasHidden$stored_polygons[.malariaAtlasHidden$stored_polygons$country_level %in% unlist(lapply(X = country_input, FUN = function(x) paste(x, admin_num, sep = "_"))),]
 
       if(tolower(format)=="spatialpolygon"){
         return(Shp_polygon)
@@ -123,31 +155,13 @@ getShp <- function(country = NULL, ISO = NULL, bbox = NULL,admin_level = "both",
                       "admin1" = paste(base_URL,"&TypeName=admin1_map_2013",paste(URL_filter), sep = ""))
   }
 
-downloadShp <- function(URL){
-  # create a temporary filepath & directory to download shapefiles from MAP geoserver
-  td <- tempdir()
-  shpdir <- file.path(td,"shp")
-  dir.create(shpdir)
-  temp <- tempfile(tmpdir = shpdir, fileext = ".zip")
-  # download shapefile to temp directory & extract shapefilepath & layername
-  download.file(URL, temp, mode = "wb")
-  unzip(temp, exdir = shpdir)
-  shp <- dir(shpdir, "*.shp$")
-  shp.path <- file.path(shpdir,shp)
-  lyr <- sub(".shp$", "", shp)
-
-  ## read shapefile into R
-  shapefile_dl <- rgdal::readOGR(dsn = shp.path, layer = lyr)
-
-  ## delete temporary directory and return shapefile object
-  on.exit(unlink(shpdir, recursive = TRUE))
-  return(shapefile_dl)
-}
-
 Shp_polygon <- lapply(URL_input, downloadShp)
 
 if(admin_level!="both"){
   Shp_polygon <- Shp_polygon[[paste(admin_level)]]
+  if("sum" %in% names(Shp_polygon)|"mean" %in% names(Shp_polygon)){
+    Shp_polygon <- Shp_polygon[,!names(Shp_polygon)%in% c("sum", "mean")]
+  }
 }else if (admin_level == "both"){
   Shp_polygon <- sp::rbind.SpatialPolygonsDataFrame(Shp_polygon$admin0[names(Shp_polygon$admin1)], Shp_polygon$admin1)
 }
@@ -157,11 +171,11 @@ Shp_polygon$country_level <- paste(Shp_polygon$COUNTRY_ID,"_",Shp_polygon$ADMN_L
 if("ALL" %in% ISO){
   .malariaAtlasHidden$all_polygons <- Shp_polygon
   } else if(is.null(bbox)){
-   if(!exists("stored_polygons", envir = .malariaAtlasHidden)){
+    if(!exists("stored_polygons", envir = .malariaAtlasHidden)){
     .malariaAtlasHidden$stored_polygons <- Shp_polygon
     }else if(exists("stored_polygons", envir = .malariaAtlasHidden)){
       new_shps <- Shp_polygon[!Shp_polygon$country_level %in% unique(.malariaAtlasHidden$stored_polygons$country_level),]
-      .malariaAtlasHidden$stored_polygons <- sp::rbind.SpatialPolygonsDataFrame(.malariaAtlasHidden$stored_polygons, new_shps[names(.malariaAtlasHidden$stored_polygons)])
+      .malariaAtlasHidden$stored_polygons <- sp::rbind.SpatialPolygonsDataFrame(.malariaAtlasHidden$stored_polygons, new_shps[names(new_shps)[names(new_shps)%in% names(.malariaAtlasHidden$stored_polygons)]])
     }
 }
 
@@ -172,6 +186,9 @@ if("ALL" %in% ISO){
     return(Shp_df)
     }
 }
+
+
+# currently only uses stored polygons if ALL of the requested country/admin_levels are present - add version that uses some from stored polygons and adds some new ones?
 
 
 ## zz <- getShp(ISO = "CHN")
