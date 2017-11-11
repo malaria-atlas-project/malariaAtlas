@@ -1,3 +1,9 @@
+#' Documentation
+#'
+#'
+#' @export getRaster
+#'
+
 getRaster <- function(surface = "PfPR2-10", shp = NULL, view_bbox = NULL, file_path = tempdir(), format = "raster", year = NULL){
 
   ## if bbox is not defined by user, use sp::bbox to define this from provided shapefile

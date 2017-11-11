@@ -1,6 +1,5 @@
 ## Run devtools check and see whether or not it returns any errors
 
-
 test_results <- devtools::check()
 
 if(length(test_results$errors)>0){

@@ -2,6 +2,7 @@
 
 S3method(autoplot,pr.points)
 export(getPR)
+export(getRaster)
 export(getShp)
 export(isAvailable)
 export(listAll)

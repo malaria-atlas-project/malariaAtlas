@@ -1,4 +1,4 @@
 library(testthat)
-library(MAPdata)
+library(malariaAtlas)
 
-test_check("MAPdata")
+test_check("malariaAtlas")
