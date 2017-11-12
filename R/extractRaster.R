@@ -1,37 +1,64 @@
+extractRaster <- function(df = NULL,
+                          csv_path = NULL,
+                          surface = "PfPR2-10",
+                          year = NULL){
+  min_year <- min(year)
+  max_year <- max(year)
+
+  available_rasters <- suppressMessages(listAllRaster())
+
+  surface_code <- unlist(available_rasters$raster_code[available_rasters$title %in% surface])
+
+  working_dir <- file.path(tempdir(), "extractRaster")
+  dir.create(working_dir)
+
+  #create a random foldername
+  temp_foldername <- stringi::stri_rand_strings(1, 10)
+  #create POST request body from temp foldername
+  body = paste('{"name":','"',paste(temp_foldername),'"}',sep = "")
+
+  #create folder on MAP server via POST request
+  r1 <- httr::POST("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers",
+                  body = body,
+                  add_headers("content-type" = "application/json;charset=UTF-8"))
+
+  if(r1$status_code != 200){
+    error("Error uploading coords, could not create temporary directory.")
+  }
+
+  if(!is.null(df)){
+    write.csv(df, file.path(working_dir, "extractRaster_coords.csv"))
+    csv_path <- file.path(working_dir, "extractRaster_coords.csv")
+  }
+
+  file_name <- basename(csv_path)
+
+  r2 <- httr::POST(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/",temp_foldername,"/upload", sep = ""),
+             body = list(data = upload_file(csv_path, "text/csv")))
+
+  if(r2$status_code != 200){
+    error("Error uploading coords, could not upload file.")
+  }
+
+  r3 <- GET(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year, sep = ""))
+
+  if(r3$status_code != 200){
+    stop("Error performing extraction, check server status.")
+  }
+
+
+  download.file(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/",temp_foldername,"/download/analysis_",file_name, sep = ""), file.path(working_dir, "extractRaster_results.csv"), mode = "wb")
+
+  new_df <- read.csv(file.path(working_dir, "extractRaster_results.csv"))
+
+  r4 <- DELETE(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/", temp_foldername, sep = ""))
+
+  if(r4$status_code != 200){
+    stop("Error deleting file, check deletion from server.")
+  }
+  return(new_df)
+}
 #
-# temp_foldername <- stringi::stri_rand_strings(1, 10)
-#
-# body = paste('{"name":','"',paste(temp_foldername),'"}',sep = "")
-# body = '{"name":"R7Uw26vvqv"}'
-#
-# library(httr)
-#
-# r <- httr::POST("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers",
-#                 body = '{"name":"R7Uw26vvqv"}',
-#                 add_headers("content-type" = "application/json;charset=UTF-8"))
-# content(r)
-#
-# r$status_code
-#
-# x <- head(getPR(ISO = "MDG", species = "pf"))
-#
-# write.csv(x, file = "J:/extraction_api_test.csv")
-#
-#
-# r2 <- POST("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/R7Uw26vvqv/upload",
-#         body = list(data = upload_file("J:/extraction_api_test.csv", "text/csv")))
-#
-# content(r2)
-#
-#
-# r3 <- GET("http://map-prod3.ndph.ox.ac.uk/explorer-api/ExtractLayerValues?container=R7Uw26vvqv&endYear=2015&file=extraction_api_test.csv&raster=africa-pr-2000-2015&startYear=2000")
-#
-# content(r3)
-#
-# download.file("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/R7Uw26vvqv/download/analysis_extraction_api_test.csv", "J:/test_download_extraction_api_test.csv", mode = "wb")
-#
-# x2 <- read.csv("J:/test_download_extraction_api_test.csv")
-#
-# r4 <- DELETE("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/R7Uw26vvqv")
-#
-# content(r4)
+# xx <- extractRaster(df = x, year = 2000)
+# xy <- extractRaster(csv_path = file.path(tempdir(),"extractRaster/extractRaster_coords.csv"), year = 2000)
+
