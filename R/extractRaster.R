@@ -1,3 +1,6 @@
+### NOTE you can only currently use a sequence of years for the query, the URL only takes a min and a max. Making the user remove excess years at the end is probably easier than splitting up the query into multiples.
+
+
 extractRaster <- function(df = NULL,
                           csv_path = NULL,
                           surface = "PfPR2-10",
@@ -20,7 +23,7 @@ extractRaster <- function(df = NULL,
   #create folder on MAP server via POST request
   r1 <- httr::POST("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers",
                   body = body,
-                  add_headers("content-type" = "application/json;charset=UTF-8"))
+                  httr::add_headers("content-type" = "application/json;charset=UTF-8"))
 
   if(r1$status_code != 200){
     error("Error uploading coords, could not create temporary directory.")
@@ -34,13 +37,13 @@ extractRaster <- function(df = NULL,
   file_name <- basename(csv_path)
 
   r2 <- httr::POST(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/",temp_foldername,"/upload", sep = ""),
-             body = list(data = upload_file(csv_path, "text/csv")))
+             body = list(data = httr::upload_file(csv_path, "text/csv")))
 
   if(r2$status_code != 200){
     error("Error uploading coords, could not upload file.")
   }
 
-  r3 <- GET(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year, sep = ""))
+  r3 <- httr::GET(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year, sep = ""))
 
   if(r3$status_code != 200){
     stop("Error performing extraction, check server status.")
@@ -51,14 +54,16 @@ extractRaster <- function(df = NULL,
 
   new_df <- read.csv(file.path(working_dir, "extractRaster_results.csv"))
 
-  r4 <- DELETE(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/", temp_foldername, sep = ""))
+  r4 <- httr::DELETE(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/", temp_foldername, sep = ""))
 
   if(r4$status_code != 200){
     stop("Error deleting file, check deletion from server.")
   }
   return(new_df)
 }
-#
+# x <- getPR(ISO = "MDG", species = "both")
 # xx <- extractRaster(df = x, year = 2000)
 # xy <- extractRaster(csv_path = file.path(tempdir(),"extractRaster/extractRaster_coords.csv"), year = 2000)
+
+
 
