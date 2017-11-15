@@ -60,9 +60,12 @@ getGAUL <- function(loc_name = NULL, ISO = NULL){
   }
 }
 
-zonalStatDownload <- function(GAUL_CODE,shp, surface){
+zonalStatDownload <- function(GAUL_CODE = NULL,shp = NULL, surface = "PfPR2-10", file_path = tempdir(), format = "df"){
   ##polygon specification
   if(is.null(shp)){
+    available_admin <- listAdmin()
+    admin_level <- available_admin$ADMN_LEVEL[available_admin$GAUL_CODE==GAUL_CODE]
+
     poly_xml <-  paste0('<p0:Input>',
                         '<p1:Identifier xmlns:p1="http://www.opengis.net/ows/1.1">zones</p1:Identifier>',
                         '<p0:Reference xmlns:p7="http://www.w3.org/1999/xlink" p7:href="http://geoserver/wps" method="POST" mimeType="text/xml; subtype=wfs-collection/1.0">',
@@ -74,7 +77,7 @@ zonalStatDownload <- function(GAUL_CODE,shp, surface){
                         '<p0:Reference xmlns:p6="http://www.w3.org/1999/xlink" p6:href="http://geoserver/wfs" method="POST" mimeType="text/xml">',
                         '<p0:Body>',
                         '<p5:GetFeature xmlns:p5="http://www.opengis.net/wfs" service="WFS" version="1.1.0" outputFormat="GML3">',
-                        '<p5:Query typeName="Explorer:admin0_map_2013" srsName="EPSG:3857" />',
+                        '<p5:Query typeName="Explorer:admin',paste(admin_level),'_map_2013" srsName="EPSG:3857" />',
                         '</p5:GetFeature>',
                         '</p0:Body>',
                         '</p0:Reference>',
@@ -161,7 +164,7 @@ zonalStatDownload <- function(GAUL_CODE,shp, surface){
                      '<p3:timePosition xmlns:p3="http://www.opengis.net/gml">2000-01-01T00:00:00.00Z</p3:timePosition>',
                      '</p2:TemporalSubset>',
                      '</p2:DomainSubset>',
-                     '<p2:Output format="image/tiff" />',
+                     '<p2:Output format="image/tiff"/>',
                      '</p2:GetCoverage>',
                      '</p0:Body>',
                      '</p0:Reference>',
@@ -191,7 +194,27 @@ zonalStatDownload <- function(GAUL_CODE,shp, surface){
 
   zs_dl <- XML::xmlToList(temp_zs_dl)
 
-  return(zs_dl)
+  if(format == "list"){
+    return(zs_dl)
+  }else if(format == "df"){
+  zs_dl_df <- as.data.frame(zs_dl$featureMember[[1]][names(zs_dl$featureMember[[1]]) %in% c("z_COUNTRY_ID", "z_GAUL_CODE", "z_ADMN_LEVEL", "z_PARENT_ID", "z_NAME", "min", "max", "avg", "stddev")])
+
+  if("z_NAME" %in% names(zs_dl_df)){ zs_dl_df <- dplyr::rename(zs_dl_df, "COUNTRY_ID" = "z_COUNTRY_ID", "GAUL_CODE" = "z_GAUL_CODE", "ADMN_LEVEL" = "z_ADMN_LEVEL", "PARENT_ID" = "z_PARENT_ID", "NAME" = "z_NAME")
+  }else if(!"z_NAME" %in% names(zs_dl_df)){
+
+    if("GAUL_CODE" %in% names(shp)){
+      zs_dl_df$GAUL_CODE <- unique(shp$GAUL_CODE)
+    }
+    if("NAME" %in% names(shp)){
+      zs_dl_df$NAME <- unique(shp$NAME)
+    }
+    if("ID" %in% names(shp)){
+      zs_dl_df$ID <- unique(shp$ID)
+    }
+  }
+
+  return(zs_dl_df)
+  }
 }
 
 zonalStats <- function(surface = "PfPR2-10", shp = NULL, GAUL_CODE = NULL,ISO = NULL, loc_name = NULL, file_path = tempdir()){
@@ -207,17 +230,22 @@ zonalStats <- function(surface = "PfPR2-10", shp = NULL, GAUL_CODE = NULL,ISO = 
   raster_code <- unlist(available_rasters$raster_code[match(surface, available_rasters$title)])
 
   if(is.null(shp)){
+
     if(length(GAUL_CODE$GAUL_CODE)>1){
-      x <- lapply(GAUL_CODE$GAUL_CODE, zonalStatDownload, surface = surface, shp = NULL)
+      zs_df_list <- lapply(GAUL_CODE$GAUL_CODE, zonalStatDownload, surface = surface, shp = NULL)
+      zs_df <- do.call(rbind, zs_df_list)
     }else{
-    x <- zonalStatDownload(GAUL_CODE = GAUL_CODE, shp = NULL, surface = surface)
+    zs_df <- zonalStatDownload(GAUL_CODE = GAUL_CODE$GAUL_CODE, shp = NULL, surface = surface)
   }
   }
 
   if(is.null(GAUL_CODE)){
     if(length(shp$GAUL_CODE)>1){
-      x <- lapply(shp$GAUL_CODE, function(x){shp_2 = shp[shp$GAUL_CODE==x,]
+      zs_df_list <- lapply(shp$GAUL_CODE, function(x){shp_2 = shp[shp$GAUL_CODE==x,]
       zonalStatDownload(GAUL_CODE = NULL, shp = shp_2, surface = surface)})
+      zs_df <- do.call(rbind, zs_df_list)
+    }else{
+      zs_df <- zonalStatDownload(GAUL_CODE = NULL, shp = shp, surface = surface)
     }
   }
 
