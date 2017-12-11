@@ -1,10 +1,40 @@
-#' Documentation
+#' Download Rasters produced by the Malaria Atlas Project
+#'
+#' \code{getRaster} downloads publicly available MAP rasters for a specified bounding box or shapefile.
+#'
+#' @param surface string containing code for desired raster(s), e.g. \code{c("rasterCode1", "rasterCode2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
+#' @param shp SpatialPolygon(s) object of the shapefile to which downloaded rasters will be clipped. (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).
+#' @param view_bbox  matrix containing bounding box for which rasters will be downloaded (as returned by sp::bbox()) (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).
+#' @param file_path string specifying the directory to which working files will be downloaded. Defaults to tempdir().
+#' @param year string specifying the desired year to be downloded for multi-year/dynamic rasters.
+#'
+#' @return \code{getRaster} returns a RasterLayer (if only a single raster is queried) or RasterStack (for multiple rasters) for the specified extent.
+#'
+#' @examples
+#' #Download PfPR2-10 Raster for Madagascar in 2016 and visualise this immediately.
+#' \dontrun{
+#' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+#' MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2016)
+#' autoplot_MAPraster(MDG_PfPR2_10)}
+#'
+#' #Download global raster of G6PD deficiency from Howes et al 2012.
+#' \dontrun{G6PDd_global <- getRaster(surface = "G6PDd_allele_freq")
+#' autoplot_MAPraster(G6PDd_global)}
+#'
+#' @seealso
+#' \code{autoplot_MAPraster} custom function for quick mapping of rasters downloaded directly from MAP (\code{\link{autoplot_MAPraster}}).
+#' \code{as.MAPraster} method to turn RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot and use with autoplot method below. (\code{\link{as.MAPraster}}).
+#' \code{autoplot} method for quick mapping of rasters downloaded from MAP and converted to MAPraster objects (\code{\link{autoplot.MAPraster}}).
 #'
 #'
 #' @export getRaster
 #'
 
-getRaster <- function(surface = "PfPR2-10", shp = NULL, view_bbox = NULL, file_path = tempdir(), format = "raster", year = NULL){
+getRaster <- function(surface = "PfPR2-10",
+                      shp = NULL,
+                      view_bbox = NULL,
+                      file_path = tempdir(),
+                      year = NULL){
 
   ## if bbox is not defined by user, use sp::bbox to define this from provided shapefile
   if(is.null(view_bbox)&!is.null(shp)){
