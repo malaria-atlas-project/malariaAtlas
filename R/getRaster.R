@@ -22,12 +22,17 @@
 #' autoplot_MAPraster(G6PDd_global)}
 #'
 #' @seealso
-#' \code{autoplot_MAPraster} custom function for quick mapping of rasters downloaded directly from MAP (\code{\link{autoplot_MAPraster}}).
+#' (\code{\link{autoplot_MAPraster}}:
 #'
-#' \code{as.MAPraster} method to turn RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot and use with autoplot method below. (\code{\link{as.MAPraster}}).
+#' to quickly visualise rasters downloded using /code{getRaster}.
 #'
-#' \code{autoplot} method for quick mapping of rasters downloaded from MAP and converted to MAPraster objects (\code{\link{autoplot.MAPraster}}).
+#' \code{\link{as.MAPraster}}:
 #'
+#' to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot.
+#'
+#' \code{\link{autoplot.MAPraster}}:
+#'
+#' to quickly visualise MAPraster objects created using /code{as.MAPraster}.
 #'
 #' @export getRaster
 #'
@@ -157,6 +162,6 @@ getRaster <- function(surface = "PfPR2-10",
   }
 
 
-## TEST_SHP <- getShp(ISO = "MDG")
-## TEST <- getRaster(shp = TEST_SHP)
-## TEST2 <- getRaster(shp = TEST_SHP, surface = c("Pv Endemicity","Pf Spatial Limits"))
+# TEST_SHP <- getShp(ISO = "MDG")
+# TEST <- getRaster(shp = TEST_SHP)
+# TEST2 <- getRaster(shp = TEST_SHP, surface = c("Pv Endemicity","Pf Spatial Limits"))

@@ -41,5 +41,5 @@ autoplot_MAPraster(G6PDd_global)}
 
 \code{as.MAPraster} method to turn RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot and use with autoplot method below. (\code{\link{as.MAPraster}}).
 
-\code{autoplot} method for quick mapping of rasters downloaded from MAP and converted to MAPraster objects (\code{\link{autoplot.MAPraster}}).
+\code{autoplot.MAPraster} method for quick mapping of rasters downloaded from MAP and converted to MAPraster objects (\code{\link{autoplot.MAPraster}}).
 }
