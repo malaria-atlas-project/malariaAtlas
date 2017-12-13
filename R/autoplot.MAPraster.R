@@ -36,7 +36,7 @@
 #'
 #' to quickly visualise MAPraster objects created using /code{as.MAPraster}.
 #'
-#'
+#' @importFrom ggplot2 autoplot
 #' @export autoplot.MAPraster
 
 autoplot.MAPraster <- function(object,
