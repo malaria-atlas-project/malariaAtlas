@@ -3,7 +3,7 @@
 #' \code{getRaster} downloads publicly available MAP rasters for a specified bounding box or shapefile.
 #'
 #' @param surface string containing code for desired raster(s), e.g. \code{c("rasterCode1", "rasterCode2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
-#' @param shp SpatialPolygon(s) object of the shapefile to which downloaded rasters will be clipped. (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).
+#' @param shp SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).
 #' @param view_bbox  matrix containing bounding box for which rasters will be downloaded (as returned by sp::bbox()) (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).
 #' @param file_path string specifying the directory to which working files will be downloaded. Defaults to tempdir().
 #' @param year string specifying the desired year to be downloded for multi-year/dynamic rasters.

@@ -8,29 +8,29 @@ autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_
     trans <- "identity"
   }
 
-  plot <- ggplot()+
-    geom_tile(data = object[object$raster_name == rastername,], aes(x=x, y=y, fill = z))+
-    coord_equal()+
-    scale_fill_distiller(name = paste(legend_title),
+  plot <- ggplot2::ggplot()+
+    ggplot2::geom_tile(data = object[object$raster_name == rastername,], aes_string(x="x", y="y", fill = "z"))+
+    ggplot2::coord_equal()+
+    ggplot2::scale_fill_distiller(name = paste(legend_title),
                          palette = "RdYlBu",
                          trans = trans,
                          na.value = grey(0.9))+
-  theme(plot.title = element_text(vjust=-1),
-        panel.background = element_rect(fill = "white"),
-        panel.grid = element_blank(),
-        axis.title = element_blank(),
-        panel.border = element_rect(colour = "grey50", fill=NA, size = 0.5))+
-    ggtitle(paste(rastername))
+    ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
+        panel.background = ggplot2::element_rect(fill = "white"),
+        panel.grid = ggplot2::element_blank(),
+        axis.title = ggplot2::element_blank(),
+        panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
+    ggplot2::ggtitle(paste(rastername))
 
   if(!is.null(shp_df)){
-    plot$layers <- c(geom_polygon(data = shp_df, aes(x=long, y=lat, group = group), fill = "grey65"),
+    plot$layers <- c(ggplot2::geom_polygon(data = shp_df, aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
                      plot$layers)
-    plot <- plot + geom_polygon(data = shp_df, aes(x=long, y=lat, group = group), alpha = 0, colour = "black")
+    plot <- plot + ggplot2::geom_polygon(data = shp_df, aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "black")
   } else if(!is.null(boundaries)){
     plot_shp <- getShp(country = boundaries, admin_level = "admin0", format = "df")
-    plot$layers <- c(geom_polygon(data = plot_shp, aes(x=long, y=lat, group = group), fill = "grey65"),
+    plot$layers <- c(ggplot2::geom_polygon(data = plot_shp, aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
                      plot$layers)
-    plot <- plot + geom_polygon(data = plot_shp, aes(x=long, y=lat, group = group), alpha = 0, colour = "black")
+    plot <- plot + ggplot2::geom_polygon(data = plot_shp, aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "black")
   }
 
   return(plot)

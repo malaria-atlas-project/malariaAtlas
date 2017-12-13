@@ -33,21 +33,21 @@ autoplot.pr.points <- function(object, col_both = "orchid3", col_confidential = 
 
   pr_shp <- getShp(ISO = unique(object$country_id), format = "df")
 
-pr_plot <-   ggplot()+
-  geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,], aes(x=long, y = lat, group = group), colour = "grey80", fill = "grey95")+
-  geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,], aes(x=long, y = lat, group = group), colour = "grey50", alpha = 0)+
-  geom_point(data = object, aes(x = longitude, y = latitude, colour = species), alpha = 0.7)+
-  coord_equal()+
-  ggtitle(paste(map_title))+
-  theme(plot.title = element_text(vjust=-1),
-        panel.background = element_rect(fill = "white"),
-        panel.grid = element_blank(),
-        axis.title = element_blank(),
-        panel.border = element_rect(colour = "grey50", fill=NA, size = 0.5))+
-  scale_color_manual(name = "Species tested:", values = c("Both Species" = col_both, "Confidential" = col_confidential, "P. falciparum only" = col_pf, "P. vivax only" = col_pv))
+pr_plot <-   ggplot2::ggplot()+
+  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,], aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")+
+  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,], aes_string(x="long", y = "lat", group = "group"), colour = "grey50", alpha = 0)+
+  ggplot2::geom_point(data = object, aes_string(x = "longitude", y = "latitude", colour = "species"), alpha = 0.7)+
+  ggplot2::coord_equal()+
+  ggplot2::ggtitle(paste(map_title))+
+  ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
+        panel.background = ggplot2::element_rect(fill = "white"),
+        panel.grid = ggplot2::element_blank(),
+        axis.title = ggplot2::element_blank(),
+        panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
+  ggplot2::scale_color_manual(name = "Species tested:", values = c("Both Species" = col_both, "Confidential" = col_confidential, "P. falciparum only" = col_pf, "P. vivax only" = col_pv))
 
 if(facet==TRUE){
-  pr_plot <- pr_plot + facet_wrap(~species)
+  pr_plot <- pr_plot + ggplot2::facet_wrap(~species)
 }
 
 print(pr_plot)
