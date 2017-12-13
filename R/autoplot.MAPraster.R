@@ -1,4 +1,63 @@
-autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_title = "", plot_title = "", log_scale = FALSE){
+#' Quickly visualise Rasters downloaded from MAP
+#'
+#' \code{autoplot.MAPraster} creates a quick map of all rasters in a MAPraster object and displays these in a grid.
+#'
+#' @param raster_object RasterLayer or Rasterstack object to convert into a MAPraster.
+#'
+#' @return \code{as.MAPraster} returns a MAPraster object (data.frame) containing the below columns.
+#'
+#' \enumerate{
+#' \item \code{x} - x coordinates of raster pixels
+#' \item \code{y} - y coordinates of raster pixels
+#' \item \code{z} - value of raster pixels
+#' \item \code{raster_name} - name of raster for which values are stored in z
+#' }
+#'
+#' @examples
+#' #Download PfPR2-10 Raster for Madagascar in 2016 and visualise this on a map.
+#' \dontrun{MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+#' MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2016)
+#' MDG_PfPR2_10 <- as.MAPraster(MDG_PfPR2_10)
+#' autoplot(MDG_PfPR2_10)}
+#'
+#' #Download global raster of G6PD deficiency from Howes et al 2012 and visualise this on a map.
+#' \dontrun{G6PDd_global <- getRaster(surface = "G6PDd_allele_freq")
+#' G6PDd_global <- as.MAPraster(G6PDd_global)
+#' autoplot(G6PDd_global)}
+#'
+#' @seealso
+#' \code{\link{getRaster}}:
+#'
+#' to download rasters directly from MAP.
+#'
+#' \code{\link{as.MAPraster}}:
+#'
+#' to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot.
+#'
+#' \code{\link{autoplot.MAPraster}}:
+#'
+#' to quickly visualise MAPraster objects created using /code{as.MAPraster}.
+#'
+#'
+#' @export as.MAPraster
+
+
+
+
+
+
+
+
+
+
+
+autoplot.MAPraster <- function(object,
+                               boundaries = NULL,
+                               shp_df = NULL,
+                               legend_title = "",
+                               plot_title = "",
+                               log_scale = FALSE,
+                               printed = TRUE){
 
   make_plot <- function(object, rastername, boundaries, shp_df, legend_title){
 
@@ -39,15 +98,22 @@ autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_
 plot_list <- lapply(X = unique(object$raster_name), FUN = make_plot, object = object, boundaries = boundaries, shp_df = shp_df, legend_title = legend_title)
 names(plot_list) <- unique(object$raster_name)
 
-if(length(plot_list)<=3){
-  ncol = length(plot_list)
-}else {
-  ncol = 2
+if(length(plot_list)>=4){
+  layout = matrix(c(1,2,3,4), nrow = 2, ncol = 2, byrow = TRUE)
+}else if(length(plot_list)>=2) {
+  layout = matrix(c(1,2), nrow = 1, ncol = 2, byrow = TRUE)
+}else{
+  layout = matrix(c(1), nrow = 1, ncol = 1, byrow = TRUE)
+  }
+
+split_list <- split(plot_list, (seq_along(plot_list)-1) %/% 4)
+
+if(printed == TRUE){
+  print(lapply(split_list, function(x) marrangeGrob(grobs = x,
+                                     layout_matrix = layout,
+                                     top = grid::textGrob(paste("\n",plot_title),
+                                                          gp = grid::gpar(fontsize = 15, font = 2)))))
 }
-
-gridExtra::grid.arrange(grobs = plot_list, ncol = ncol, top = grid::textGrob(paste("\n",plot_title),
-                                                                          gp = grid::gpar(fontsize = 15, font = 2)))
-
   return(invisible(plot_list))
 }
 
