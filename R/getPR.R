@@ -83,6 +83,10 @@ if(tolower(species) == "both"){
   }
 }
 
+if(any(grepl("dhs", df$permissions_info))){
+  message("NOTE: Downloaded data includes data points from DHS surveys. \nMAP cannot share DHS survey cluster coordinates, but these are available from www.measuredhs.com.")
+}
+
 class(df) <- c("pr.points",class(df))
 return(df)
 
