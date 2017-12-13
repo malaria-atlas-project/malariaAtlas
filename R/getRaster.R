@@ -18,7 +18,7 @@
 #' autoplot_MAPraster(MDG_PfPR2_10)}
 #'
 #' #Download global raster of G6PD deficiency from Howes et al 2012.
-#' \dontrun{G6PDd_global <- getRaster(surface = "G6PDd_allele_freq")
+#' \dontrun{G6PDd_global <- getRaster(surface = "G6PD Deficiency")
 #' autoplot_MAPraster(G6PDd_global)}
 #'
 #' @seealso
@@ -111,6 +111,7 @@ getRaster <- function(surface = "PfPR2-10",
   # If only one new raster is found, read this in
   }else if(length(newrst)==1){
     rst_dl <- raster::raster(file.path(rstdir, newrst))
+    raster::NAvalue(rst_dl) <- -9999
     rst_dl <- name_rst(rst_dl)
     if(!is.null(shp)){
       rst_dl <- raster::mask(rst_dl, shp)
@@ -130,6 +131,9 @@ getRaster <- function(surface = "PfPR2-10",
     #if only one resolution is present, create a raster stack of all downloaded rasters
     if(length(unique(rst_list_index$res_id))==1){
       rst_stk <- raster::stack(rst_list)
+
+      raster::NAvalue(rst_stk) <- -9999
+
       if(!is.null(shp)){
         rst_stk <- raster::mask(rst_stk, shp)
         rst_stk <- name_rst(rst_stk)
@@ -146,6 +150,12 @@ getRaster <- function(surface = "PfPR2-10",
       }
 
       stk_list <- lapply(X = unique(rst_list_index$res_id), FUN = stack_rst)
+
+      for(i in 1:length(stk_list)){
+          for(r in 1:length(names(stk_list[[i]]))){
+            raster::NAvalue(stk_list[[i]][[r]]) <- -9999
+          }
+        }
 
       # mask each stack by shapefile if this is provided
       if(!is.null(shp)){
