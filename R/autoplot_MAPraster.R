@@ -1,6 +1,6 @@
 autoplot_MAPraster <- function(object,...){
   object <- as.MAPraster(object)
 
-  autoplot.MAPraster(object, ...)
-
+  plot <- autoplot.MAPraster(object, ...)
+return(plot)
 }

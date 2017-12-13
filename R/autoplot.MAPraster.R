@@ -9,7 +9,7 @@ autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_
   }
 
   plot <- ggplot2::ggplot()+
-    ggplot2::geom_tile(data = object[object$raster_name == rastername,], aes_string(x="x", y="y", fill = "z"))+
+    ggplot2::geom_tile(data = object[object$raster_name == rastername,], ggplot2::aes_string(x="x", y="y", fill = "z"))+
     ggplot2::coord_equal()+
     ggplot2::scale_fill_distiller(name = paste(legend_title),
                          palette = "RdYlBu",
@@ -23,20 +23,21 @@ autoplot.MAPraster <- function(object, boundaries = NULL, shp_df = NULL, legend_
     ggplot2::ggtitle(paste(rastername))
 
   if(!is.null(shp_df)){
-    plot$layers <- c(ggplot2::geom_polygon(data = shp_df, aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
+    plot$layers <- c(ggplot2::geom_polygon(data = shp_df, ggplot2::aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
                      plot$layers)
-    plot <- plot + ggplot2::geom_polygon(data = shp_df, aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "black")
+    plot <- plot + ggplot2::geom_polygon(data = shp_df, ggplot2::aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "black")
   } else if(!is.null(boundaries)){
     plot_shp <- getShp(country = boundaries, admin_level = "admin0", format = "df")
-    plot$layers <- c(ggplot2::geom_polygon(data = plot_shp, aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
+    plot$layers <- c(ggplot2::geom_polygon(data = plot_shp, ggplot2::aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
                      plot$layers)
-    plot <- plot + ggplot2::geom_polygon(data = plot_shp, aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "black")
+    plot <- plot + ggplot2::geom_polygon(data = plot_shp, ggplot2::aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "black")
   }
 
   return(plot)
   }
 
 plot_list <- lapply(X = unique(object$raster_name), FUN = make_plot, object = object, boundaries = boundaries, shp_df = shp_df, legend_title = legend_title)
+names(plot_list) <- unique(object$raster_name)
 
 if(length(plot_list)<=3){
   ncol = length(plot_list)
@@ -47,10 +48,7 @@ if(length(plot_list)<=3){
 gridExtra::grid.arrange(grobs = plot_list, ncol = ncol, top = grid::textGrob(paste("\n",plot_title),
                                                                           gp = grid::gpar(fontsize = 15, font = 2)))
 
-
-
-
-  return(plot)
+  return(invisible(plot_list))
 }
 
 
