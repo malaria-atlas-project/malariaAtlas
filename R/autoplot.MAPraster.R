@@ -1,17 +1,15 @@
 #' Quickly visualise Rasters downloaded from MAP
 #'
-#' \code{autoplot.MAPraster} creates a quick map of all rasters in a MAPraster object and displays these in a grid.
+#' \code{autoplot.MAPraster} creates a map of all rasters in a MAPraster object and displays these in a grid.
 #'
-#' @param raster_object RasterLayer or Rasterstack object to convert into a MAPraster.
+#' @param object MAPraster object to be visualised.
+#' @param shp_df Shapefile(s) (data.frame) to plot with downloaded raster.
+#' @param legend_title String used as title for all colour scale legends.
+#' @param page_title String used as header for all plot pages.
+#' @param log_scale Logical vector indicating whether to use a log scale for legend colour scales.
+#' @param printed Logical vector indicating whether to print maps of supplied rasters.
 #'
-#' @return \code{as.MAPraster} returns a MAPraster object (data.frame) containing the below columns.
-#'
-#' \enumerate{
-#' \item \code{x} - x coordinates of raster pixels
-#' \item \code{y} - y coordinates of raster pixels
-#' \item \code{z} - value of raster pixels
-#' \item \code{raster_name} - name of raster for which values are stored in z
-#' }
+#' @return \code{autoplot.MAPraster} returns a list of plots (gg objects) for each supplied raster.
 #'
 #' @examples
 #' #Download PfPR2-10 Raster for Madagascar in 2016 and visualise this on a map.
@@ -21,7 +19,7 @@
 #' autoplot(MDG_PfPR2_10)}
 #'
 #' #Download global raster of G6PD deficiency from Howes et al 2012 and visualise this on a map.
-#' \dontrun{G6PDd_global <- getRaster(surface = "G6PDd_allele_freq")
+#' \dontrun{G6PDd_global <- getRaster(surface = "G6PD Deficiency")
 #' G6PDd_global <- as.MAPraster(G6PDd_global)
 #' autoplot(G6PDd_global)}
 #'
@@ -41,18 +39,7 @@
 #'
 #' @export as.MAPraster
 
-
-
-
-
-
-
-
-
-
-
 autoplot.MAPraster <- function(object,
-                               boundaries = NULL,
                                shp_df = NULL,
                                legend_title = "",
                                plot_title = "",
@@ -85,11 +72,6 @@ autoplot.MAPraster <- function(object,
     plot$layers <- c(ggplot2::geom_polygon(data = shp_df, ggplot2::aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
                      plot$layers)
     plot <- plot + ggplot2::geom_polygon(data = shp_df, ggplot2::aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "black")
-  } else if(!is.null(boundaries)){
-    plot_shp <- getShp(country = boundaries, admin_level = "admin0", format = "df")
-    plot$layers <- c(ggplot2::geom_polygon(data = plot_shp, ggplot2::aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
-                     plot$layers)
-    plot <- plot + ggplot2::geom_polygon(data = plot_shp, ggplot2::aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "black")
   }
 
   return(plot)

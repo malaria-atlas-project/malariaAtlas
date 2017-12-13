@@ -21,7 +21,7 @@
 #' autoplot(MDG_PfPR2_10)}
 #'
 #' #Download global raster of G6PD deficiency from Howes et al 2012 and visualise this on a map.
-#' \dontrun{G6PDd_global <- getRaster(surface = "G6PDd_allele_freq")
+#' \dontrun{G6PDd_global <- getRaster(surface = "G6PD Deficiency")
 #' G6PDd_global <- as.MAPraster(G6PDd_global)
 #' autoplot(G6PDd_global)}
 #'
