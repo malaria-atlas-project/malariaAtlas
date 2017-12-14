@@ -1,5 +1,40 @@
-### NOTE you can only currently use a sequence of years for the query, the URL only takes a min and a max. Making the user remove excess years at the end is probably easier than splitting up the query into multiples.
-
+#' Extract pixel values from MAP rasters using point coordinates.
+#'
+#' \code{extractRaster} extracts pixel values from MAP rasters at user-specified point locations.
+#'
+#' @param df data.frame containing coordinates of input point locations, must contain columns named 'latitude'/'lat'/'x'  & 'longitude'/'long'/'y')
+#'
+#' ADD MORE
+#'
+#' @param csv_path string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
+#' @param surface string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}
+#' @param year string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}
+#'
+#'
+#' @return \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
+#'
+#' \enumerate{
+#' \item \code{COLUMNNAME} description of contents
+#' \item \code{COLUMNNAME} description of contents
+#' \item \code{COLUMNNAME} description of contents
+#' }
+#'
+#' @examples
+#' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
+#' NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
+#' \dontrun{autoplot(NGA_CMR_PR)}
+#'
+#' #Download PfPR data for Madagascar and map the locations of these points using autoplot
+#' Madagascar_pr <- getPR(ISO = "MDG", species = "Pv")
+#' \dontrun{autoplot(Madagascar_pr)}
+#'
+#' \dontrun{getPR(country = "ALL", species = "BOTH")}
+#'
+#'
+#' @seealso \code{autoplot} method for quick mapping of PR point locations (\code{\link{autoplot.pr.points}}).
+#'
+#'
+#' @export getPR
 
 extractRaster <- function(df = NULL,
                           csv_path = NULL,

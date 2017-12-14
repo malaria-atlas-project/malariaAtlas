@@ -32,7 +32,7 @@ listAllRaster <- function(printed = TRUE){
 
   #query the geoserver to return xml containing a list of all available rasters & convert this to a list
     r <- httr::GET("https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities", httr::content_type_xml())
-    xml <- XML::xmlParse(content(r,as = "parsed", encoding = "UTF-8"))
+    xml <- XML::xmlParse(httr::content(r,as = "parsed", encoding = "UTF-8"))
     xml_data <- XML::xmlToList(xml)
 
   #subset this list to only include list of rasters
