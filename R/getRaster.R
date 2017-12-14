@@ -73,7 +73,7 @@ getRaster <- function(surface = "PfPR2-10",
       bbox_filter <- ""
     }
 
-    rst_URL <- paste("http://map-prod3.ndph.ox.ac.uk:8080/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code,bbox_filter, sep = "")
+    rst_URL <- paste("https://map-dev1.ndph.ox.ac.uk/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code,bbox_filter, sep = "")
 
     if(!is.null(year)){
       rst_URL <- paste(rst_URL, "&SUBSET=time(\"", year, "-01-01T00:00:00.000Z\")", sep = "")
@@ -96,10 +96,17 @@ getRaster <- function(surface = "PfPR2-10",
 
   name_rst <- function(rst){
 
-    raster_codes <- lapply(X = gsub(paste("_",gsub("-","\\.",file_tag), sep = ""),"",names(rst)),
+    raster_codes <- as.character(sapply(X = gsub(paste("_",gsub("-","\\.",file_tag), sep = ""),"",names(rst)),
                            FUN = agrep,
                            x = unique(available_rasters$raster_code),
-                           max.distance = 3, value = TRUE)
+                           max.distance = 3, value = TRUE))
+
+    if(length(raster_codes)!= length(names(rst))){
+    raster_codes <- as.character(sapply(X = paste0("^",gsub(paste("_",gsub("-","\\.",file_tag), sep = ""),"",names(rst))),
+                                          FUN = grep,
+                                          x = unique(available_rasters$raster_code),
+                                          value = TRUE))
+    }
 
     names(rst) <- available_rasters$title[available_rasters$raster_code %in% raster_codes]
     return(rst)

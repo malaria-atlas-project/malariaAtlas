@@ -9,8 +9,8 @@ listAdmin <- function(){
     return(invisible(available_admin))
   } else {
 
-  URL_admin1 <- "http://map-prod3.ndph.ox.ac.uk:8080/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=admin1_map_2013&PROPERTYNAME=GAUL_CODE,COUNTRY_ID,ADMN_LEVEL,PARENT_ID,NAME"
-  URL_admin0 <- "http://map-prod3.ndph.ox.ac.uk:8080/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=admin0_map_2013&PROPERTYNAME=GAUL_CODE,COUNTRY_ID,ADMN_LEVEL,PARENT_ID,NAME"
+  URL_admin1 <- "https://map-dev1.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=admin1_map_2013&PROPERTYNAME=GAUL_CODE,COUNTRY_ID,ADMN_LEVEL,PARENT_ID,NAME"
+  URL_admin0 <- "https://map-dev1.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=admin0_map_2013&PROPERTYNAME=GAUL_CODE,COUNTRY_ID,ADMN_LEVEL,PARENT_ID,NAME"
 
   available_admin <- rbind(read.csv(URL_admin0, encoding = "UTF-8"), read.csv(URL_admin1, encoding = "UTF-8"))
   .malariaAtlasHidden$available_admin_stored <- available_admin
@@ -190,7 +190,7 @@ zonalStatDownload <- function(GAUL_CODE = NULL,shp = NULL, surface = "PfPR2-10",
   dir.create(rstdir)
   temp_zs_dl <- tempfile(pattern = paste("test","_",sep = ""), tmpdir = rstdir, fileext = ".xml")
 
-  curl::curl_download(url = "http://map-prod3.ndph.ox.ac.uk/geoserver/wps", destfile = temp_zs_dl, handle = hdl)
+  curl::curl_download(url = "https://map-dev1.ndph.ox.ac.uk/geoserver/wps", destfile = temp_zs_dl, handle = hdl)
 
   zs_dl <- XML::xmlToList(temp_zs_dl)
 

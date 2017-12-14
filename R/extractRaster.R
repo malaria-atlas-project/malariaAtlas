@@ -21,7 +21,7 @@ extractRaster <- function(df = NULL,
   body = paste('{"name":','"',paste(temp_foldername),'"}',sep = "")
 
   #create folder on MAP server via POST request
-  r1 <- httr::POST("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers",
+  r1 <- httr::POST("https://map-dev1.ndph.ox.ac.uk/explorer-api/containers",
                   body = body,
                   httr::add_headers("content-type" = "application/json;charset=UTF-8"))
 
@@ -36,25 +36,25 @@ extractRaster <- function(df = NULL,
 
   file_name <- basename(csv_path)
 
-  r2 <- httr::POST(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/",temp_foldername,"/upload", sep = ""),
+  r2 <- httr::POST(paste("https://map-dev1.ndph.ox.ac.uk/explorer-api/containers/",temp_foldername,"/upload", sep = ""),
              body = list(data = httr::upload_file(csv_path, "text/csv")))
 
   if(r2$status_code != 200){
     error("Error uploading coords, could not upload file.")
   }
 
-  r3 <- httr::GET(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year, sep = ""))
+  r3 <- httr::GET(paste("https://map-dev1.ndph.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year, sep = ""))
 
   if(r3$status_code != 200){
     stop("Error performing extraction, check server status.")
   }
 
 
-  download.file(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/",temp_foldername,"/download/analysis_",file_name, sep = ""), file.path(working_dir, "extractRaster_results.csv"), mode = "wb")
+  download.file(paste("https://map-dev1.ndph.ox.ac.uk/explorer-api/containers/",temp_foldername,"/download/analysis_",file_name, sep = ""), file.path(working_dir, "extractRaster_results.csv"), mode = "wb")
 
   new_df <- read.csv(file.path(working_dir, "extractRaster_results.csv"))
 
-  r4 <- httr::DELETE(paste("http://map-prod3.ndph.ox.ac.uk/explorer-api/containers/", temp_foldername, sep = ""))
+  r4 <- httr::DELETE(paste("https://map-dev1.ndph.ox.ac.uk/explorer-api/containers/", temp_foldername, sep = ""))
 
   if(r4$status_code != 200){
     stop("Error deleting file, check deletion from server.")

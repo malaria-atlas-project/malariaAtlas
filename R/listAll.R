@@ -24,7 +24,7 @@ listAll <- function(printed = TRUE) {
 
   } else {
 
-  available_countries <- unique(read.csv("http://map-prod3.ndph.ox.ac.uk:8080/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr&PROPERTYNAME=country,country_id", encoding = "UTF-8")[,c("country", "country_id")])
+  available_countries <- unique(read.csv("https://map-dev1.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr&PROPERTYNAME=country,country_id", encoding = "UTF-8")[,c("country", "country_id")])
   available_countries$country_and_iso <- paste(available_countries$country," (",available_countries$country_id, ")", sep = "")
 
   if(printed == TRUE){

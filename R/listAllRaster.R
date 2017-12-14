@@ -31,8 +31,9 @@ listAllRaster <- function(printed = TRUE){
   }else{
 
   #query the geoserver to return xml containing a list of all available rasters & convert this to a list
-  xml <- XML::xmlParse("http://map-prod3.ndph.ox.ac.uk:8080/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities")
-  xml_data <- XML::xmlToList(xml)
+    r <- httr::GET("https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities", httr::content_type_xml())
+    xml <- XML::xmlParse(content(r,as = "parsed", encoding = "UTF-8"))
+    xml_data <- XML::xmlToList(xml)
 
   #subset this list to only include list of rasters
   layers <- xml_data$Capability$Layer[names(xml_data$Capability$Layer)=="Layer"]
@@ -44,12 +45,17 @@ listAllRaster <- function(printed = TRUE){
   }
 
   #extract raster metadata from layers list & turn this into dataframe
-  available_rasters <- data.frame(cbind("raster_code" = unname(lapply(layers, function(x){sub("^Explorer:", "", x[["Name"]])})),
-                                        "title"= sub(":.*$", "", html2text(unname(lapply(layers, function(x){x[["Title"]]})))),
-                                        "title_extended" = sub("^.*:", "", html2text(unname(lapply(layers, function(x){x[["Title"]]})))),
-                                        "abstract" = html2text(unname(lapply(layers, function(x){x[["Abstract"]]}))),
-                                        "citation"= unname(lapply(layers, function(x){x[["Attribution"]][["Title"]]})),
-                                        "pub_year" = unname(lapply(layers, function(x){sub("^category:","",grep("^category:",unname(unlist(x[["KeywordList"]])), value = TRUE))}))))
+  available_rasters <- data.frame(cbind("raster_code" = unname(sapply( X = sapply(layers, function(x){sub("^Explorer:", "", x[["Name"]])}), FUN = function (x) ifelse (is.null (x), NA, x))),
+                                        "title"= sub(":.*$", "", html2text(unname(sapply( X = sapply(layers, function(x){x[["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x))))),
+                                        "title_extended" = sub("^.*:", "", html2text(unname(sapply( X = sapply(layers, function(x){x[["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x))))),
+                                        "abstract" = html2text(unname(sapply( X = sapply(layers, function(x){x[["Abstract"]]}), FUN = function (x) ifelse (is.null (x), NA, x)))),
+                                        "citation"= unname(sapply( X = sapply(layers, function(x){x[["Attribution"]][["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x))),
+                                        "pub_year" = unname(sapply( X = sapply(layers, function(x){sub("^pub_year:","",grep("^pub_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x))),
+                                        "min_raster_year" = unname(sapply( X = sapply(layers, function(x){sub("^min_raster_year:","",grep("^min_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x))),
+                                        "max_raster_year" =  unname(sapply( X = sapply(layers, function(x){sub("^max_raster_year:","",grep("^max_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x))),
+                                        "category" = unname(sapply( X = sapply(layers, function(x){sub("^category:","",grep("^category:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))))
+
+  available_rasters <- available_rasters[available_rasters$category == "surfaces", !names(available_rasters) == "category"]
 
   #print out message of long raster names
   if(printed == TRUE){

@@ -35,7 +35,7 @@
 
 getPR <- function(country = NULL, ISO = NULL, species) {
 
-URL <- "http://map-prod3.ndph.ox.ac.uk:8080/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
+URL <- "https://map-dev1.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
 
 if(tolower(species) == "both") {
 
@@ -118,5 +118,3 @@ return(df)
 
 
 # to check columns
-
-# x <- read.csv("http://map-prod3.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr&cql_filter=country%20IN%20(%27Kenya%27)", encoding = "UTF-8")
