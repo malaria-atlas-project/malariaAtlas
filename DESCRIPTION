@@ -3,7 +3,7 @@ Title: Download publicly available Parasite Rate data and raster data from the
   'Malaria Atlas Project' geoserver
 Version: 0.0.1.9000
 Authors@R: c(
-    person("Daniel", "Pfeffer", email = "daniel.pfeffer@bdi.ox.ac.uk", role = c("aut", "cre")),
+    person("Daniel", "Pfeffer", email = "daniel.pfeffer@bdi.ox.ac.uk", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2204-3488")),
     person("Tim", "Lucas", email =  "timcdlucas@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0003-4694-8107")),
     )
 Description: malariaAtlas provides a suite of tools to allow you to download all 
