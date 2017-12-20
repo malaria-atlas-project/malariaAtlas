@@ -50,12 +50,20 @@ listAllRaster <- function(printed = TRUE){
                                         "title_extended" = sub("^.*:", "", html2text(unname(sapply( X = sapply(layers, function(x){x[["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x))))),
                                         "abstract" = html2text(unname(sapply( X = sapply(layers, function(x){x[["Abstract"]]}), FUN = function (x) ifelse (is.null (x), NA, x)))),
                                         "citation"= unname(sapply( X = sapply(layers, function(x){x[["Attribution"]][["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x))),
-                                        "pub_year" = unname(sapply( X = sapply(layers, function(x){sub("^pub_year:","",grep("^pub_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x))),
-                                        "min_raster_year" = unname(sapply( X = sapply(layers, function(x){sub("^min_raster_year:","",grep("^min_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x))),
-                                        "max_raster_year" =  unname(sapply( X = sapply(layers, function(x){sub("^max_raster_year:","",grep("^max_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x))),
+                                        "pub_year" = as.numeric(as.character(unname(sapply( X = sapply(layers, function(x){sub("^pub_year:","",grep("^pub_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x))))),
+                                        "min_raster_year" = unname(sapply( X = sapply(layers, function(x){sub("^min_raster_year:","",grep("^min_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}),
+                                                                           FUN = function (x) ifelse (is.null (x), NA, x))),
+                                        "max_raster_year" =  unname(sapply( X = sapply(layers,function(x){sub("^max_raster_year:","",grep("^max_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}),
+                                                                                                    FUN = function (x) ifelse (is.null (x), NA, x))),
                                         "category" = unname(sapply( X = sapply(layers, function(x){sub("^category:","",grep("^category:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))))
 
-  available_rasters <- available_rasters[available_rasters$category == "surfaces", !names(available_rasters) == "category"]
+  available_rasters$min_raster_year <- as.numeric(as.character(available_rasters$min_raster_year))
+  available_rasters$max_raster_year <- as.numeric(as.character(available_rasters$max_raster_year))
+  available_rasters$pub_year <- as.numeric(as.character(available_rasters$pub_year))
+
+
+  available_rasters <- dplyr::filter(available_rasters, category == "surfaces")
+  available_rasters <- dplyr::select(available_rasters,-category)
 
   #print out message of long raster names
   if(printed == TRUE){
@@ -63,7 +71,7 @@ listAllRaster <- function(printed = TRUE){
   }
 
   .malariaAtlasHidden$available_rasters_stored <- available_rasters
-  return(available_rasters)
+  return(invisible(available_rasters))
   }
 }
 
