@@ -61,7 +61,7 @@ extractRaster <- function(df = NULL,
                   httr::add_headers("content-type" = "application/json;charset=UTF-8"))
 
   if(r1$status_code != 200){
-    error("Error uploading coords, could not create temporary directory.")
+    stop("Error uploading coords, could not create temporary directory.")
   }
 
   if(!is.null(df)){
@@ -75,7 +75,7 @@ extractRaster <- function(df = NULL,
              body = list(data = httr::upload_file(csv_path, "text/csv")))
 
   if(r2$status_code != 200){
-    error("Error uploading coords, could not upload file.")
+    stop("Error uploading coords, could not upload file.")
   }
 
   r3 <- httr::GET(paste("https://map-dev1.ndph.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year, sep = ""))
