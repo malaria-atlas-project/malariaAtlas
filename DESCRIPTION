@@ -21,7 +21,7 @@ Imports:
   gridExtra, 
   httr,
   dplyr,
-  sringi,
+  stringi,
   tidyr
 Depends: ggplot2
 RoxygenNote: 6.0.1
