@@ -4,15 +4,30 @@
 \alias{autoplot.pr.points}
 \title{Create a basic plot showing locations of downloaded PR points}
 \usage{
-\method{autoplot}{pr.points}(object, col_both = "orchid3",
-  col_confidential = "grey", col_pf = "royalblue3", col_pv = "coral",
-  map_title = NULL, extent = "national_only", facet = FALSE,
-  hide_confidential = FALSE, ...)
+\method{autoplot}{pr.points}(object, point_colours = c("orchid3", "grey",
+  "royalblue3", "coral"), admin_level = "both", map_title = NULL,
+  facet = FALSE, hide_confidential = FALSE, ...)
+}
+\arguments{
+\item{object}{a pr.points object downloaded using /code{/link{getPR}}}
+
+\item{point_colours}{a vector of colours to use for plotted points}
+
+\item{admin_level}{the administrative level used for plotting administrative boundaries; either /code{"admin0"}; /code{"admin1"} OR /code{"both"}}
+
+\item{map_title}{custom title used for the plot}
+
+\item{facet}{if TRUE, splits map into a separate facet for each malaria species}
+
+\item{hide_confidential}{if TRUE, removes confidential points from the map}
+}
+\value{
+\code{autoplot.pr.points} returns a plots (gg object) for the supplied pr.points dataframe.
 }
 \description{
-\code{text} more text
+\code{autoplot.pr.points} creates a map of PR points downloaded from MAP.
 }
 \examples{
-\dontrun{object <- getPR(country = c("Nigeria"), species = "Pf")}
-\dontrun{autoplot(object)}
+\dontrun{PfPR_surveys_NGA <- getPR(country = c("Nigeria"), species = "Pf")}
+\dontrun{autoplot(PfPR_surveys_NGA)}
 }
