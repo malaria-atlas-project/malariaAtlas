@@ -11,7 +11,18 @@ Description: malariaAtlas provides a suite of tools to allow you to download all
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Imports: curl, rgdal, raster, sp, xml2, grid, gridExtra, httr
+Imports: 
+  curl, 
+  rgdal, 
+  raster, 
+  sp, 
+  xml2, 
+  grid, 
+  gridExtra, 
+  httr,
+  dplyr,
+  sringi,
+  tidyr
 Depends: ggplot2
 RoxygenNote: 6.0.1
 Suggests: testthat
