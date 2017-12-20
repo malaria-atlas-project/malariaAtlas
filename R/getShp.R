@@ -33,37 +33,6 @@
 #'
 
 
-#Define a few utility funcitons:
-
-#define function that downloads a shapefiles from map geoserver to tempdir and loads this into R
-downloadShp <- function(URL){
-  # create a temporary filepath & directory to download shapefiles from MAP geoserver
-  td <- tempdir()
-  shpdir <- file.path(td,"shp")
-  dir.create(shpdir)
-  temp <- tempfile(tmpdir = shpdir, fileext = ".zip")
-  # download shapefile to temp directory & extract shapefilepath & layername
-  download.file(URL, temp, mode = "wb")
-  unzip(temp, exdir = shpdir)
-  shp <- dir(shpdir, "*.shp$")
-  shp.path <- file.path(shpdir,shp)
-  lyr <- sub(".shp$", "", shp)
-
-  ## read shapefile into R
-  shapefile_dl <- rgdal::readOGR(dsn = shp.path, layer = lyr)
-
-  ## delete temporary directory and return shapefile object
-  on.exit(unlink(shpdir, recursive = TRUE))
-  return(shapefile_dl)
-}
-
-#define function to convert 'SpatialPolygon' to data.frame if needed later
-polygon2df <- function(polygon){
-  polygon@data$id <- rownames(polygon@data)
-  polygon_df <- ggplot2::fortify(polygon)
-  polygon_df <- merge(polygon_df, polygon@data, by = "id")
-  return(polygon_df)}
-
 
 getShp <- function(country = NULL,
                    ISO = NULL,
@@ -186,6 +155,37 @@ if("ALL" %in% ISO){
     return(Shp_df)
     }
 }
+
+#Define a few utility funcitons:
+
+#define function that downloads a shapefiles from map geoserver to tempdir and loads this into R
+downloadShp <- function(URL){
+  # create a temporary filepath & directory to download shapefiles from MAP geoserver
+  td <- tempdir()
+  shpdir <- file.path(td,"shp")
+  dir.create(shpdir)
+  temp <- tempfile(tmpdir = shpdir, fileext = ".zip")
+  # download shapefile to temp directory & extract shapefilepath & layername
+  download.file(URL, temp, mode = "wb")
+  unzip(temp, exdir = shpdir)
+  shp <- dir(shpdir, "*.shp$")
+  shp.path <- file.path(shpdir,shp)
+  lyr <- sub(".shp$", "", shp)
+
+  ## read shapefile into R
+  shapefile_dl <- rgdal::readOGR(dsn = shp.path, layer = lyr)
+
+  ## delete temporary directory and return shapefile object
+  on.exit(unlink(shpdir, recursive = TRUE))
+  return(shapefile_dl)
+}
+
+#define function to convert 'SpatialPolygon' to data.frame if needed later
+polygon2df <- function(polygon){
+  polygon@data$id <- rownames(polygon@data)
+  polygon_df <- ggplot2::fortify(polygon)
+  polygon_df <- merge(polygon_df, polygon@data, by = "id")
+  return(polygon_df)}
 
 
 # currently only uses stored polygons if ALL of the requested country/admin_levels are present - add version that uses some from stored polygons and adds some new ones?
