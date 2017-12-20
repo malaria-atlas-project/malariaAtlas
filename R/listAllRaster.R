@@ -17,9 +17,6 @@
 #' available_rasters <- listAllRaster()
 #' @export listAllRaster
 
-#temporarily here to sneakily install xml2
-install.packages("xml2", repos = "https://cran.ma.imperial.ac.uk/")
-
 listAllRaster <- function(printed = TRUE){
 
   if(exists('available_rasters_stored', envir = .malariaAtlasHidden)){

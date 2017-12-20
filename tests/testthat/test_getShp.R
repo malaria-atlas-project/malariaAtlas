@@ -1,7 +1,7 @@
 # getShp() tests
 
 # test downloadShp
-test_URL <- "http://map-prod3.ndph.ox.ac.uk:8080/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=admin0_map_2013&cql_filter=COUNTRY_ID%20IN%20(%27BDI%27)"
+test_URL <- "https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=admin0_map_2013&cql_filter=COUNTRY_ID%20IN%20(%27BDI%27)"
 test_dlshp <- downloadShp(test_URL)
 
 test_that("downloadShp downloads shapefiles and loads them correctly",{
