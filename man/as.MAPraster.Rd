@@ -30,7 +30,7 @@ MDG_PfPR2_10 <- as.MAPraster(MDG_PfPR2_10)
 autoplot(MDG_PfPR2_10)}
 
 #Download global raster of G6PD deficiency from Howes et al 2012 and visualise this on a map.
-\dontrun{G6PDd_global <- getRaster(surface = "G6PDd_allele_freq")
+\dontrun{G6PDd_global <- getRaster(surface = "G6PD Deficiency")
 G6PDd_global <- as.MAPraster(G6PDd_global)
 autoplot(G6PDd_global)}
 
@@ -42,9 +42,9 @@ to download rasters directly from MAP.
 
 \code{\link{as.MAPraster}}:
 
-method to turn RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot and use with autoplot method below.
+to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot.
 
 \code{\link{autoplot.MAPraster}}:
 
-method for quick mapping of rasters downloaded from MAP and converted to MAPraster objects.
+to quickly visualise MAPraster objects created using /code{as.MAPraster}.
 }
