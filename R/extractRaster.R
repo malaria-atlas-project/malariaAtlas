@@ -39,7 +39,7 @@
 extractRaster <- function(df = NULL,
                           csv_path = NULL,
                           surface = "PfPR2-10",
-                          year = NULL){
+                          year = rep(NA, length(surface))){
   min_year <- min(year)
   max_year <- max(year)
 
