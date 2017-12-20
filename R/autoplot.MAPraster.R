@@ -91,7 +91,7 @@ if(length(plot_list)>=4){
 split_list <- split(plot_list, (seq_along(plot_list)-1) %/% 4)
 
 if(printed == TRUE){
-  print(lapply(split_list, function(x) marrangeGrob(grobs = x,
+  print(lapply(split_list, function(x) gridExtra::marrangeGrob(grobs = x,
                                      layout_matrix = layout,
                                      top = grid::textGrob(paste("\n",plot_title),
                                                           gp = grid::gpar(fontsize = 15, font = 2)))))
