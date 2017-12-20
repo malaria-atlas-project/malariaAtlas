@@ -36,8 +36,8 @@ test_that("downloaded data.frame is in the correct format",{
   expect_true(inherits(available_rasters,"data.frame"))
 })
 
-test_that("downloaded dataframe contains has correct numer of columns",{
-  expect_equal(sort(names(available_rasters)),sort(c("raster_code","title","title_extended", "abstract","citation","pub_year")))
+test_that("downloaded dataframe contains has correct number of columns",{
+  expect_equal(sort(names(available_rasters)),sort(c("raster_code","title","title_extended", "abstract","citation","pub_year", "min_raster_year", "max_raster_year")))
 })
 
 test_that("available_countries_stored object is stored in hidden environment",{
