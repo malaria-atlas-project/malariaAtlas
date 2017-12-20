@@ -16,6 +16,10 @@
 #' @examples
 #' available_rasters <- listAllRaster()
 #' @export listAllRaster
+
+#temporarily here to sneakily install xml2
+install.packages("xml2")
+
 listAllRaster <- function(printed = TRUE){
 
   if(exists('available_rasters_stored', envir = .malariaAtlasHidden)){
@@ -31,9 +35,8 @@ listAllRaster <- function(printed = TRUE){
   }else{
 
   #query the geoserver to return xml containing a list of all available rasters & convert this to a list
-    r <- httr::GET("https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities", httr::content_type_xml())
-    xml <- XML::xmlParse(httr::content(r,as = "parsed", encoding = "UTF-8"))
-    xml_data <- XML::xmlToList(xml)
+    xml <- xml2::read_xml(httr::GET("https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities", httr::content_type_xml()))
+    xml_data <- xml2::as_list(xml)
 
   #subset this list to only include list of rasters
   layers <- xml_data$Capability$Layer[names(xml_data$Capability$Layer)=="Layer"]
