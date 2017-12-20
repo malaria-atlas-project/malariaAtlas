@@ -59,11 +59,11 @@ listAllRaster <- function(printed = TRUE){
 
   available_rasters$min_raster_year <- as.numeric(as.character(available_rasters$min_raster_year))
   available_rasters$max_raster_year <- as.numeric(as.character(available_rasters$max_raster_year))
-  available_rasters$pub_year <- as.numeric(as.character(available_rasters$pub_year))
+  available_rasters$pub_year <- suppressWarnings(as.numeric(as.character(available_rasters$pub_year)))
 
 
-  available_rasters <- dplyr::filter(available_rasters, category == "surfaces")
-  available_rasters <- dplyr::select(available_rasters,-category)
+  available_rasters <- available_rasters[available_rasters$category == "surfaces",-which(names(available_rasters)=="category")]
+
 
   #print out message of long raster names
   if(printed == TRUE){
