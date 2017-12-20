@@ -16,13 +16,13 @@ getRaster(surface = "PfPR2-10", shp = NULL, view_bbox = NULL,
 
 \item{file_path}{string specifying the directory to which working files will be downloaded. Defaults to tempdir().}
 
-\item{year}{string specifying the desired year to be downloded for multi-year/dynamic rasters.}
+\item{year}{default = \code{NULL} (use \code{NULL} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NULL} for static rasters.}
 }
 \value{
 \code{getRaster} returns a RasterLayer (if only a single raster is queried) or RasterStack (for multiple rasters) for the specified extent.
 }
 \description{
-\code{getRaster} downloads publicly available MAP rasters for a specified bounding box or shapefile.
+\code{getRaster} downloads publicly available MAP rasters for a specific surface & year, clipped to a provided bounding box or shapefile.
 }
 \examples{
 #Download PfPR2-10 Raster for Madagascar in 2016 and visualise this immediately.
@@ -32,14 +32,20 @@ MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2016)
 autoplot_MAPraster(MDG_PfPR2_10)}
 
 #Download global raster of G6PD deficiency from Howes et al 2012.
-\dontrun{G6PDd_global <- getRaster(surface = "G6PDd_allele_freq")
+\dontrun{G6PDd_global <- getRaster(surface = "G6PD Deficiency")
 autoplot_MAPraster(G6PDd_global)}
 
 }
 \seealso{
-\code{autoplot_MAPraster} custom function for quick mapping of rasters downloaded directly from MAP (\code{\link{autoplot_MAPraster}}).
+(\code{\link{autoplot_MAPraster}}:
 
-\code{as.MAPraster} method to turn RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot and use with autoplot method below. (\code{\link{as.MAPraster}}).
+to quickly visualise rasters downloded using /code{getRaster}.
 
-\code{autoplot.MAPraster} method for quick mapping of rasters downloaded from MAP and converted to MAPraster objects (\code{\link{autoplot.MAPraster}}).
+\code{\link{as.MAPraster}}:
+
+to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot.
+
+\code{\link{autoplot.MAPraster}}:
+
+to quickly visualise MAPraster objects created using /code{as.MAPraster}.
 }
