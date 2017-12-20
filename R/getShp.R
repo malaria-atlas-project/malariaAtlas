@@ -166,8 +166,8 @@ downloadShp <- function(URL){
   dir.create(shpdir)
   temp <- tempfile(tmpdir = shpdir, fileext = ".zip")
   # download shapefile to temp directory & extract shapefilepath & layername
-  download.file(URL, temp, mode = "wb")
-  unzip(temp, exdir = shpdir)
+  utils::download.file(URL, temp, mode = "wb")
+  utils::unzip(temp, exdir = shpdir)
   shp <- dir(shpdir, "*.shp$")
   shp.path <- file.path(shpdir,shp)
   lyr <- sub(".shp$", "", shp)
