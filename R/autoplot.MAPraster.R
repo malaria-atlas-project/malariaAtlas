@@ -60,7 +60,7 @@ autoplot.MAPraster <- function(object,
     ggplot2::scale_fill_distiller(name = paste(legend_title),
                          palette = "RdYlBu",
                          trans = trans,
-                         na.value = grey(0.9))+
+                         na.value = grDevices::grey(0.9))+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
         panel.background = ggplot2::element_rect(fill = "white"),
         panel.grid = ggplot2::element_blank(),

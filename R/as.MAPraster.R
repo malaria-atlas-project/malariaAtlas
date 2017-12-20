@@ -44,7 +44,7 @@
 as.MAPraster <- function(raster_object){
 
   rasterobj2df <- function(object){
-    raster_df <- as(object, "SpatialPixelsDataFrame")
+    raster_df <- methods::as(object, "SpatialPixelsDataFrame")
     raster_df <- as.data.frame(raster_df)
     raster_df <- tidyr::gather(raster_df, key = "raster_name", value = "z", -x,-y)
     return(raster_df)
