@@ -7,12 +7,6 @@
 #' @examples
 #' listAll()
 #' @export listAll
-#'
-#'
-#'
-
-install.packages("tidyverse", repos = "https://cran.ma.imperial.ac.uk/")
-
 
 listAll <- function(printed = TRUE) {
   message("Creating list of countries for which PR data is available, please wait...")
