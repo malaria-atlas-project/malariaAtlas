@@ -1,0 +1,1 @@
+pandoc -s /Users/danielpfeffer/Documents/MAP/malariaAtlas/paper_planning.docx -t markdown -o /Users/danielpfeffer/Documents/MAP/malariaAtlas/paper_plannind.md
