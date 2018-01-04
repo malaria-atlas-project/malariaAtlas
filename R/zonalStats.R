@@ -1,22 +1,6 @@
 ### add raster_code specification to zonalStats
 ### add a thing that changes the XML list to a dataframe.
 
-listAdmin <- function(){
-
-  if(exists('available_admin_stored', envir = .malariaAtlasHidden)){
-    available_admin <- .malariaAtlasHidden$available_admin_stored
-
-    return(invisible(available_admin))
-  } else {
-
-  URL_admin1 <- "https://map-dev1.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=admin1_map_2013&PROPERTYNAME=GAUL_CODE,COUNTRY_ID,ADMN_LEVEL,PARENT_ID,NAME"
-  URL_admin0 <- "https://map-dev1.ndph.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=admin0_map_2013&PROPERTYNAME=GAUL_CODE,COUNTRY_ID,ADMN_LEVEL,PARENT_ID,NAME"
-
-  available_admin <- rbind(utils::read.csv(URL_admin0, encoding = "UTF-8"), read.csv(URL_admin1, encoding = "UTF-8"))
-  .malariaAtlasHidden$available_admin_stored <- available_admin
-  }
-  return(available_admin)
-}
 
 getGAUL <- function(loc_name = NULL, ISO = NULL){
 
@@ -25,7 +9,7 @@ getGAUL <- function(loc_name = NULL, ISO = NULL){
     GAUL_CODE <- available_admin[available_admin$COUNTRY_ID %in% ISO & available_admin$ADMN_LEVEL==0, c("GAUL_CODE", "NAME")]
 
     if(length(GAUL_CODE$GAUL_CODE==0) | length(GAUL_CODE$GAUL_CODE)>length(ISO)){
-      stop("Could not match all specified ISO codes to a GAUL_CODE, double check specification, or check all available units using listAdmin().")
+      stop("Could not match all specified ISO codes to a GAUL_CODE, double check specification, or check all available units using listAllShp().")
     }else{
       return(GAUL_CODE)
     }
@@ -35,14 +19,14 @@ getGAUL <- function(loc_name = NULL, ISO = NULL){
     stop("If specifying a loc_name, must also specify an ISO3.")
   }
 
-  available_admin <- listAdmin()
+  available_admin <- listAllShp()
 
   ## if specifying loc_name, check if this directly matches admin_unit names we have.
   if(all(loc_name %in% available_admin$NAME)){
     GAUL_CODE <- available_admin[available_admin$COUNTRY_ID %in% ISO & available_admin$NAME %in% loc_name, c("GAUL_CODE", "NAME")]
 
     if(length(GAUL_CODE$GAUL_CODE)!=length(loc_name)){
-      stop("More matched GAUL_CODEs than specified loc_names, double check specification, or check all available units using listAdmin().")
+      stop("More matched GAUL_CODEs than specified loc_names, double check specification, or check all available units using listAllShp().")
     }else{
       return(GAUL_CODE)
     }
@@ -63,7 +47,7 @@ getGAUL <- function(loc_name = NULL, ISO = NULL){
 zonalStatDownload <- function(GAUL_CODE = NULL,shp = NULL, surface = "PfPR2-10", file_path = tempdir(), format = "df"){
   ##polygon specification
   if(is.null(shp)){
-    available_admin <- listAdmin()
+    available_admin <- listAllShp()
     admin_level <- available_admin$ADMN_LEVEL[available_admin$GAUL_CODE==GAUL_CODE]
 
     poly_xml <-  paste0('<p0:Input>',
