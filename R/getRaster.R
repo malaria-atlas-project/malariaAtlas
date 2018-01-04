@@ -51,12 +51,14 @@ if(length(surface)>1){
   if(length(year) != length(surface)){
     stop("If downloading multiple different surfaces, 'year' must be a list of the same length as 'surface'.")
   }
+}else if(length(surface) == 1){
+  if(!inherits(year, "list")){
+    year <- list(year)
+  }
 }
-
   ## download list of all available rasters and use this df to define raster codes for specifed 'surface's
   available_rasters <- listAllRaster(printed = FALSE)
   raster_code_list <- as.character(available_rasters$raster_code[match(surface, available_rasters$title)])
-
 
   message("Attempting to download the following rasters:")
   query_def <- data.frame()

@@ -25,6 +25,9 @@ getPR(country = NULL, ISO = NULL, species)
 \description{
 \code{getPR} downloads all publicly available PR points for a specified country (or countries) and returns this as a dataframe.
 }
+\details{
+\code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as Mayotte and Grench Guiana.
+}
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")

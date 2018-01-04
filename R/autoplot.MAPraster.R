@@ -14,7 +14,7 @@
 #' @examples
 #' #Download PfPR2-10 Raster for Madagascar in 2016 and visualise this on a map.
 #' \dontrun{MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-#' MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2016)
+#' MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = c(2010:2015))
 #' MDG_PfPR2_10 <- as.MAPraster(MDG_PfPR2_10)
 #' autoplot(MDG_PfPR2_10)}
 #'
@@ -92,9 +92,9 @@ split_list <- split(plot_list, (seq_along(plot_list)-1) %/% 4)
 
 if(printed == TRUE){
   print(lapply(split_list, function(x) gridExtra::marrangeGrob(grobs = x,
-                                     layout_matrix = layout,
-                                     top = grid::textGrob(paste("\n",plot_title),
-                                                          gp = grid::gpar(fontsize = 15, font = 2)))))
+                                                               layout_matrix = layout,
+                                                               top = grid::textGrob(paste("\n",plot_title),
+                                                                                    gp = grid::gpar(fontsize = 15, font = 2)))))
 }
   return(invisible(plot_list))
 }
