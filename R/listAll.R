@@ -8,7 +8,6 @@
 #' listAll()
 #' @export listAll
 
-install.packages("tidyverse", repos = "https://cran.ma.imperial.ac.uk/")
 
 
 listAll <- function(printed = TRUE) {

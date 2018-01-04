@@ -19,7 +19,10 @@ Imports:
   xml2, 
   grid, 
   gridExtra, 
-  httr
+  httr,
+  dplyr,
+  stringi,
+  tidyr
 Depends: ggplot2
 RoxygenNote: 6.0.1
 Suggests: testthat
