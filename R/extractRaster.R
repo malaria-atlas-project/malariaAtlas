@@ -1,6 +1,6 @@
 #' Extract pixel values from MAP rasters using point coordinates.
 #'
-#' \code{extractRaster} extracts pixel values from MAP rasters at user-specified point locations.
+#' \code{extractRaster} extracts pixel values from MAP rasters at user-specified point locations (without downloading the entire raster).
 #'
 #' @param df data.frame containing coordinates of input point locations, must contain columns named 'latitude'/'lat'/'x'  & 'longitude'/'long'/'y')
 #'
@@ -34,7 +34,7 @@
 #' @seealso \code{autoplot} method for quick mapping of PR point locations (\code{\link{autoplot.pr.points}}).
 #'
 #'
-#' @export getPR
+#' @export extractRaster
 
 extractRaster <- function(df = NULL,
                           csv_path = NULL,

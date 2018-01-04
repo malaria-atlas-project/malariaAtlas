@@ -40,7 +40,7 @@ getRaster <- function(surface = "PfPR2-10",
                       shp = NULL,
                       view_bbox = NULL,
                       file_path = tempdir(),
-                      year = NULL){
+                      year = rep(NA, length(surface))){
 
   ## if bbox is not defined by user, use sp::bbox to define this from provided shapefile
   if(is.null(view_bbox)&!is.null(shp)){
