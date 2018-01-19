@@ -61,6 +61,7 @@ if(length(surface)>1){
   raster_code_list <- as.character(available_rasters$raster_code[match(surface, available_rasters$title)])
 
   message("Attempting to download the following rasters:")
+  message(paste0("\n    ","RASTER CODE  ","YEAR "))
   query_def <- data.frame()
   for(i in raster_code_list){
     df_i <- data.frame("raster_code" = i, "year" = year[[which(raster_code_list==i)]])
@@ -76,9 +77,16 @@ if(length(surface)>1){
       }
     }
     query_def <- rbind(query_def, df_i)
-    message(paste0("  - ",available_rasters$title[available_rasters$raster_code==i], ": ", paste0(year[[which(raster_code_list==i)]], collapse = ", ")))
-  }
+    current_title <- available_rasters$title[available_rasters$raster_code==i]
+    current_year <- year[[which(raster_code_list==i)]]
 
+    if(all(is.na(current_year))){
+      message(paste0("  - ",current_title,":  DEFAULT "))
+    }else{
+      message(paste0("  - ",current_title, ":  ", paste0(current_year, collapse = ", ")))
+      }
+  }
+message("")
   # check whether specified years are available for specified rasters
  year_warnings = 0
   for(r in raster_code_list){
@@ -101,7 +109,7 @@ if(length(surface)>1){
 
   ## create directory to which rasters will be downloaded
   rstdir <- file.path(file_path,"getRaster")
-  file_tag <- paste(paste(substr(view_bbox,1,5),collapse = "_"),"_",Sys.Date(),sep="")
+  file_tag <- paste(paste(substr(view_bbox,1,5),collapse = "_"),"_",Sys.Date(),"_",stringi::stri_rand_strings(1, 5),sep="")
   dir.create(rstdir, showWarnings = FALSE)
 
 
@@ -116,7 +124,7 @@ if(length(surface)>1){
                                   file_tag = file_tag)}))
 
   #create vector of filenames for rasters downloaded in the current query
-  newrst <- sapply(1:length(query_def$raster_code), function(z) grep(pattern = paste(query_def$file_prefix[z]), x = dir(rstdir), value = TRUE))
+  newrst <- sapply(1:length(query_def$raster_code), function(z) grep(pattern = file_tag, x = dir(rstdir), value = TRUE))
 
   # Return error if new rasters are not found
   if(length(newrst)==0){
@@ -192,13 +200,17 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
   year_current <- yy
 
    if(is.na(available_rasters$min_raster_year[available_rasters$raster_code==raster_code])|is.na(available_rasters$max_raster_year[available_rasters$raster_code==raster_code])){
-     year_current <- NULL
+     year_current <- NA
    }
 
-  if(!is.null(year_current)){
+  if(is.na(year_current)){
+    year_current <- available_rasters$max_raster_year[available_rasters$raster_code==raster_code]
+  }
+
+  if(!is.na(year_current)){
   year_tag <- paste0(year_current,"_")
   }else{
-    year_tag <- ""
+    year_tag <- "latest"
   }
     rst_path <- file.path(target_path, paste(raster_code,"-",year_tag,file_tag,".tiff",sep = ""))
 
@@ -208,9 +220,9 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
       bbox_filter <- ""
     }
 
-    rst_URL <- paste("https://map-dev1.ndph.ox.ac.uk/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code,bbox_filter, sep = "")
+    rst_URL <- paste("https://map.ox.ac.uk/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code,bbox_filter, sep = "")
 
-    if(!is.null(year_current)){
+    if(!is.na(year_current)){
       rst_URL <- paste(rst_URL, "&SUBSET=time(\"", year_current, "-01-01T00:00:00.000Z\")", sep = "")
     }
 
@@ -222,9 +234,9 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
       message(rst_URL)
       download_warnings <- download_warnings+1
     }else{
-      if(!is.null(year_current)){
+      if(!is.na(year_current)){
       message("Downloaded ", raster_code, " for ", year_current,".")
-      }else if (is.null(year_current)){
+      }else if (is.na(year_current)){
         message("Downloaded ", raster_code,".")
       }
     }
