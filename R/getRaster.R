@@ -6,7 +6,7 @@
 #' @param shp SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).
 #' @param view_bbox  matrix containing bounding box for which rasters will be downloaded (as returned by sp::bbox()) (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).
 #' @param file_path string specifying the directory to which working files will be downloaded. Defaults to tempdir().
-#' @param year default = \code{NULL} (use \code{NULL} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NULL} for static rasters.
+#' @param year default = \code{rep(NA, length(surface))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.
 #'
 #' @return \code{getRaster} returns a RasterLayer (if only a single raster is queried) or RasterStack (for multiple rasters) for the specified extent.
 #'
