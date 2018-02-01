@@ -31,7 +31,7 @@ MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 
 Download PfPR2-10 Raster for 2013 & plot this
 MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
-p <- autoplot_MAPraster(MDG_PfPR2_10)
+p <- autoplot_MAPraster(MDG_PfPR2_10, shp_df = MDG_shp)
 
 Download raw PfPR survey points & plot these over the top of the raster
 pr <- getPR(country = c("Madagascar"), species = "Pf")

@@ -38,15 +38,15 @@ autoplot_MAPraster(G6PDd_global)}
 
 }
 \seealso{
-(\code{\link{autoplot_MAPraster}}:
+(\code{\link{autoplot_MAPraster}}
 
 to quickly visualise rasters downloded using /code{getRaster}.
 
-\code{\link{as.MAPraster}}:
+\code{\link{as.MAPraster}}
 
 to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot.
 
-\code{\link{autoplot.MAPraster}}:
+\code{\link{autoplot.MAPraster}}
 
 to quickly visualise MAPraster objects created using /code{as.MAPraster}.
 }

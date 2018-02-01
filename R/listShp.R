@@ -8,7 +8,7 @@
 #' @export listShp
 
 
-listShp <- function(printed = FALSE){
+listShp <- function(printed = TRUE){
 
   if(exists('available_admin_stored', envir = .malariaAtlasHidden)){
     available_admin <- .malariaAtlasHidden$available_admin_stored
@@ -26,5 +26,6 @@ listShp <- function(printed = FALSE){
     available_admin <- rbind(utils::read.csv(URL_admin0, encoding = "UTF-8"), read.csv(URL_admin1, encoding = "UTF-8"))
     .malariaAtlasHidden$available_admin_stored <- available_admin
   }
-  return(available_admin)
+
+  return(invisible(available_admin))
 }

@@ -19,7 +19,7 @@
 #'
 #' Download PfPR2-10 Raster for 2013 & plot this
 #' MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
-#' p <- autoplot_MAPraster(MDG_PfPR2_10)
+#' p <- autoplot_MAPraster(MDG_PfPR2_10, shp_df = MDG_shp)
 #'
 #' Download raw PfPR survey points & plot these over the top of the raster
 #' pr <- getPR(country = c("Madagascar"), species = "Pf")
@@ -57,7 +57,7 @@ autoplot.MAPraster <- function(object,
                                log_scale = FALSE,
                                printed = TRUE){
 
-  make_plot <- function(object, rastername, boundaries, shp_df, legend_title){
+  make_plot <- function(object, rastername, shp_df, legend_title){
 
   if(log_scale == TRUE){
     trans <- "log10"
@@ -88,7 +88,7 @@ autoplot.MAPraster <- function(object,
   return(plot)
   }
 
-plot_list <- lapply(X = unique(object$raster_name), FUN = make_plot, object = object, boundaries = boundaries, shp_df = shp_df, legend_title = legend_title)
+plot_list <- lapply(X = unique(object$raster_name), FUN = make_plot, object = object, shp_df = shp_df, legend_title = legend_title)
 names(plot_list) <- unique(object$raster_name)
 
 if(length(plot_list)>=4){
@@ -110,8 +110,5 @@ if(printed == TRUE){
   return(invisible(plot_list))
 }
 
-
-# CHN_pvpr_2010 <- getRaster(surface = "PvPR2010", shp = getShp(lat = CHN$latitude, long = CHN$longitude))
-# autoplot(as.MAPraster(CHN_pvpr_2010), boundaries = "China")
 
 

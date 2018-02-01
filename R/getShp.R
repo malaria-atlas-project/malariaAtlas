@@ -1,17 +1,25 @@
 #' Download MAPadmin2013 Administrative Boundary Shapefiles from the MAP geoserver
 #'
-#' \code{getShp} downloads shapefiles for a specified country (or countries) and returns this as a spatial
+#' \code{getShp} downloads a shapefile for a specified country (or countries) and returns this as either a spatialPolygon or data.frame object.
 #'
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "both" accepted)
+#' @param bbox bounding box specifying spatial extent for getShp query (see format as per sp::bbox; two-column matrix with minimum values in column 1 and maximum values in column 2).
+#' Note: getShp downloads the entire polygon for any polygons falling within the bbox.
+#' @param format string specifying the desired format for the downloaded shapefile: either "spatialpolygon" or "df"
+#' @param long longitude of a point location falling within the desired shapefile.
+#' @param lat latitude of a point location falling within the desired shapefile.
 #'
-#' @return \code{getShp} returns a list containing separate shapefile dataframes for each administrative level. The following attribute fields are included:
+#' @return \code{getShp} returns either a dataframe or spatialPolygon object for requested administrative unit polygons. The following attribute fields are included:
 #'
 #' \enumerate{
-#' \item \code{COLUMNNAME} description of contents
-#' \item \code{COLUMNNAME} description of contents
-#' \item \code{COLUMNNAME} description of contents
+#' \item \code{COUNTRY_ID} ISO-3 code of given administrative unit (or the ISO code of parent unit for administrative-level 1 units).
+#' \item \code{GAUL_CODE} GAUL code of given administrative unit.
+#' \item \code{ADMN_LEVEL} administrative level of the given administrative unit - either 0 (national) or 1 (first-level division)
+#' \item \code{PARENT_ID} GAUL code of parent administrative unit of a given polygon (for admin0 polygons, PARENT_ID = 0).
+#' \item \code{PARENT_ID} GAUL code of parent administrative unit of a given polygon (for admin0 polygons, PARENT_ID = 0).
+#' \item \code{country_level} composite \code{ISO3}_\code{ADMN_LEVEL} field.
 #' }
 #'
 #' @examples
@@ -79,7 +87,7 @@ getShp <- function(country = NULL,
       if(tolower(format)=="spatialpolygon"){
         return(Shp_polygon)
       }else if(tolower(format)=="df"){
-        Shp_df <- polygon2df(Shp_polygon)
+        Shp_df <- as.MAPshp(Shp_polygon)
         return(Shp_df)
       }
 
@@ -98,7 +106,7 @@ getShp <- function(country = NULL,
       if(tolower(format)=="spatialpolygon"){
         return(Shp_polygon)
         }else if(tolower(format)=="df"){
-          Shp_df <- polygon2df(Shp_polygon)
+          Shp_df <- as.MAPshp(Shp_polygon)
           return(Shp_df)
         }
       }
@@ -151,7 +159,7 @@ if("ALL" %in% ISO){
   if(tolower(format)=="spatialpolygon"){
     return(Shp_polygon)
     }else if(tolower(format)=="df"){
-      Shp_df <- polygon2df(Shp_polygon)
+      Shp_df <- as.MAPshp(Shp_polygon)
     return(Shp_df)
     }
 }
@@ -180,27 +188,3 @@ downloadShp <- function(URL){
   return(shapefile_dl)
 }
 
-#define function to convert 'SpatialPolygon' to data.frame if needed later
-polygon2df <- function(polygon){
-  polygon@data$id <- rownames(polygon@data)
-  polygon_df <- ggplot2::fortify(polygon)
-  polygon_df <- merge(polygon_df, polygon@data, by = "id")
-
-  return(polygon_df)}
-
-
-# currently only uses stored polygons if ALL of the requested country/admin_levels are present - add version that uses some from stored polygons and adds some new ones?
-
-
-## zz <- getShp(ISO = "CHN")
-## zz <- getShp(country = "Chad")
-
-# a <- ggplot()+geom_polygon(data = x$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
-# a <- ggplot()+geom_polygon(data = zz$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
-# a <- ggplot()+geom_polygon(data = MDG_shp$admin0, aes(x = long, y = lat, group = group), fill = "white", colour = "black")+coord_equal()
-#a
-
-
-
-#ggplot()+geom_polygon(data = polygon2df(test), aes(x= long, y = lat, group = group, fill = COUNTRY_ID), colour = "white")+coord_equal()
-#ggplot()+geom_polygon(data = polygon2df(MDG_shp), aes(x= long, y = lat, group = group, fill = COUNTRY_ID), colour = "white")+coord_equal()

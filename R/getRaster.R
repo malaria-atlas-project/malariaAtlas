@@ -12,10 +12,10 @@
 #' @return \code{getRaster} returns a RasterLayer (if only a single raster is queried) or RasterStack (for multiple rasters) for the specified extent.
 #'
 #' @examples
-#' #Download PfPR2-10 Raster for Madagascar in 2016 and visualise this immediately.
+#' #Download PfPR2-10 Raster for Madagascar in 2015 and visualise this immediately.
 #' \dontrun{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-#' MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2016)
+#' MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2015)
 #' autoplot_MAPraster(MDG_PfPR2_10)}
 #'
 #' #Download global raster of G6PD deficiency from Howes et al 2012.
@@ -23,15 +23,15 @@
 #' autoplot_MAPraster(G6PDd_global)}
 #'
 #' @seealso
-#' (\code{\link{autoplot_MAPraster}}:
+#' (\code{\link{autoplot_MAPraster}}
 #'
 #' to quickly visualise rasters downloded using /code{getRaster}.
 #'
-#' \code{\link{as.MAPraster}}:
+#' \code{\link{as.MAPraster}}
 #'
 #' to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot.
 #'
-#' \code{\link{autoplot.MAPraster}}:
+#' \code{\link{autoplot.MAPraster}}
 #'
 #' to quickly visualise MAPraster objects created using /code{as.MAPraster}.
 #'
@@ -235,7 +235,7 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
 
     if(any(grepl(paste0(raster_code, "-",year_tag,paste(substr(view_bbox,1,5),collapse = "_" )), dir(target_path)))){
       message("Pre-downloaded raster with identical query parameters loaded ('",
-              grep(paste0(raster_code, "-",year_tag,paste(substr(view_bbox,1,5),collapse = "_" )), dir(rstdir), value = T),
+              grep(paste0(raster_code, "-",year_tag,paste(substr(view_bbox,1,5),collapse = "_" )), dir(target_path), value = T),
               "')")
     } else {
 

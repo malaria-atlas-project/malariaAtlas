@@ -65,6 +65,9 @@ autoplot.pr.points <- function(object,
     object$species[!is.na(object$pf_pos)] <- "pf"
   }
 
+object$species <- factor(object$species)
+levels(object$species) <- c("Both Species", "Confidential", "P. falciparum only", "P. vivax only")
+
   pr_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level)
 
   if(admin_level == "admin0"){
@@ -85,19 +88,18 @@ autoplot.pr.points <- function(object,
     ggplot2::coord_equal()+
     ggplot2::ggtitle(paste(map_title))+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
+                   strip.text = ggplot2::element_text(face = "bold"),
+                   strip.background = element_blank(),
                    panel.background = ggplot2::element_rect(fill = "white"),
                    panel.grid = ggplot2::element_blank(),
                    axis.title = ggplot2::element_blank(),
                    panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
     ggplot2::scale_color_manual(name = "Species tested:",
-                                values = c("both" = point_colours[1], "conf" = point_colours[2], "pf" = point_colours[3], "pv" = point_colours[4]),
-                                labels = c("both" = "Both Species", "conf" = "Confidential", "pf" = "P. falciparum only", "pv" = "P. vivax only"))
+                                values = c(point_colours[1],point_colours[2],point_colours[3],point_colours[4]))
 
   if(facet==TRUE){
     pr_plot <- pr_plot + ggplot2::facet_wrap(~species)
   }
-
-
 
   print(pr_plot)
   return(invisible(pr_plot))
