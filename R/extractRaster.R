@@ -10,7 +10,7 @@
 #' @return \code{getPR} returns the input dataframe (\code{df}), with the following columns apprended, providing raster values for each surface, location and year.
 #'
 #' \enumerate{
-#' \item \code{layer} raster code corresponding to extracted raster values for a given row, check \code{\link{listAllRaster}} for raster metadata.
+#' \item \code{layer} raster code corresponding to extracted raster values for a given row, check \code{\link{listRaster}} for raster metadata.
 #' \item \code{year} the year for which raster values were extraced (time-varying rasters only; static rasters do not have this column).
 #' \item \code{value} the raster value for the pixel in which a given point location falls.
 #' }
@@ -75,7 +75,7 @@ extractLayerValues <- function(df = NULL,
 
   dir.create(working_dir, showWarnings = FALSE)
 
-  available_rasters <- suppressMessages(listAllRaster())
+  available_rasters <- suppressMessages(listRaster())
 
   surface_code <- unlist(available_rasters$raster_code[available_rasters$title %in% surface])
 

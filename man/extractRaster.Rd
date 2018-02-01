@@ -20,7 +20,7 @@ extractRaster(df = NULL, csv_path = NULL, surface = "PfPR2-10",
 \code{getPR} returns the input dataframe (\code{df}), with the following columns apprended, providing raster values for each surface, location and year.
 
 \enumerate{
-\item \code{layer} raster code corresponding to extracted raster values for a given row, check \code{\link{listAllRaster}} for raster metadata.
+\item \code{layer} raster code corresponding to extracted raster values for a given row, check \code{\link{listRaster}} for raster metadata.
 \item \code{year} the year for which raster values were extraced (time-varying rasters only; static rasters do not have this column).
 \item \code{value} the raster value for the pixel in which a given point location falls.
 }

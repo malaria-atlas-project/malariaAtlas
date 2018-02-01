@@ -1,15 +1,20 @@
-#' List administrative units for which shapefiles are stored on the MAP geoserver.
+#' List data available to download from the MAP geoserver.
 #'
-#' \code{listShp} lists all administrative units for which shapefiles are stored on the MAP geoserver.
+#' \code{listData} is a wrapper for listPoints; listRaster and listShp, listing data (PR survey point data; raster data; shapefiles) available to download from the MAP geoserver.
 #'
-#' @return \code{listShp} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
+#' @return \code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
+#'
 #' @examples
 #' available_admin_units <- listShp()
+#' available_pr_points<- listPoints()
+#' available_rasters <- listRaster()
+#'
+#' @seealso
+#' \code{link{listPoints}}
+#' \code{\link{listRaster}}
+#' \code{\link{listShp}}
+#'
 #' @export listData
-#'
-#'
-#' \code{\link{autoplot.MAPraster}}:
-#'
 
 listData <- function(datatype = NULL, printed = TRUE){
 
