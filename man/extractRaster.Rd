@@ -8,27 +8,25 @@ extractRaster(df = NULL, csv_path = NULL, surface = "PfPR2-10",
   year = rep(NA, length(surface)))
 }
 \arguments{
-\item{df}{data.frame containing coordinates of input point locations, must contain columns named 'latitude'/'lat'/'x'  & 'longitude'/'long'/'y')
+\item{df}{data.frame containing coordinates of input point locations, must contain columns named 'latitude'/'lat'/'x'  AND 'longitude'/'long'/'y')}
 
-ADD MORE}
+\item{csv_path}{(optional) user-specified path to which extractRaster coordinates and results are stored. If not specified, tempdir() is used instead.}
 
-\item{csv_path}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)}
+\item{surface}{string containing code for desired raster(s), e.g. \code{c("rasterCode1", "rasterCode2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.}
 
-\item{surface}{string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}}
-
-\item{year}{string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}}
+\item{year}{default = \code{rep(NA, length(surface))}; for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a vector specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.}
 }
 \value{
-\code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
+\code{getPR} returns the input dataframe (\code{df}), with the following columns apprended, providing raster values for each surface, location and year.
 
 \enumerate{
-\item \code{COLUMNNAME} description of contents
-\item \code{COLUMNNAME} description of contents
-\item \code{COLUMNNAME} description of contents
+\item \code{layer} raster code corresponding to extracted raster values for a given row, check \code{\link{listAllRaster}} for raster metadata.
+\item \code{year} the year for which raster values were extraced (time-varying rasters only; static rasters do not have this column).
+\item \code{value} the raster value for the pixel in which a given point location falls.
 }
 }
 \description{
-\code{extractRaster} extracts pixel values from MAP rasters at user-specified point locations.
+\code{extractRaster} extracts pixel values from MAP rasters at user-specified point locations (without downloading the entire raster).
 }
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot

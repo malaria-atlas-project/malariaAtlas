@@ -5,7 +5,7 @@
 \title{Download Rasters produced by the Malaria Atlas Project}
 \usage{
 getRaster(surface = "PfPR2-10", shp = NULL, view_bbox = NULL,
-  file_path = tempdir(), year = NULL)
+  file_path = tempdir(), year = rep(NA, length(surface)))
 }
 \arguments{
 \item{surface}{string containing code for desired raster(s), e.g. \code{c("rasterCode1", "rasterCode2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.}
@@ -16,7 +16,7 @@ getRaster(surface = "PfPR2-10", shp = NULL, view_bbox = NULL,
 
 \item{file_path}{string specifying the directory to which working files will be downloaded. Defaults to tempdir().}
 
-\item{year}{default = \code{NULL} (use \code{NULL} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NULL} for static rasters.}
+\item{year}{default = \code{rep(NA, length(surface))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.}
 }
 \value{
 \code{getRaster} returns a RasterLayer (if only a single raster is queried) or RasterStack (for multiple rasters) for the specified extent.
