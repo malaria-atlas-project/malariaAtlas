@@ -51,16 +51,18 @@ if(length(surface)>1){
   if(length(year) != length(surface)){
     stop("If downloading multiple different surfaces, 'year' must be a list of the same length as 'surface'.")
   }
+
 }else if(length(surface) == 1){
   if(!inherits(year, "list")){
     year <- list(year)
   }
 }
+
   ## download list of all available rasters and use this df to define raster codes for specifed 'surface's
   available_rasters <- listRaster(printed = FALSE)
   raster_code_list <- as.character(available_rasters$raster_code[match(surface, available_rasters$title)])
 
-  message("Attempting to download the following rasters:")
+  message("Checking if the following Surface-Year combinations are available to download:")
   message(paste0("\n    ","RASTER CODE  ","YEAR "))
   query_def <- data.frame()
   for(i in raster_code_list){
@@ -87,6 +89,13 @@ if(length(surface)>1){
       }
   }
 message("")
+
+if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
+  stop("The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':\n",
+       paste("  -",surface[which(raster_code_list=="NULL")], collapse = "\n"))
+
+}else("All specified surfaces are available to download.")
+
   # check whether specified years are available for specified rasters
  year_warnings = 0
   for(r in raster_code_list){
@@ -103,7 +112,7 @@ message("")
   }
 
  if(year_warnings>0){
-   stop(year_warnings, " error(s) regarding surface-year combination, see warnings() and either try downloading surfaces separately or check 'year' specification matches specified 'surface' using listRaster().")
+   stop("Specified surfaces are not available for all requested years, \n try downloading surfaces separately or double-check availability of 'surface'-'year' combinations using listRaster()\n see warnings() for more info.")
  }
 
 
@@ -123,8 +132,17 @@ message("")
                                   year = year_i,
                                   file_tag = file_tag)}))
 
+
+  newrst_tags <- sapply(1:nrow(query_def), function(x) {
+    if(is.na(query_def$year[x])){
+      paste0(query_def$raster_code[x], "-latest_",paste(substr(view_bbox,1,5),collapse = "_" ))
+    }else{
+      paste0(query_def$raster_code[x],"-",query_def$year[x],"_", paste(substr(view_bbox,1,5),collapse = "_" ))
+    }
+    })
+
   #create vector of filenames for rasters downloaded in the current query
-  newrst <- sapply(1:length(query_def$raster_code), function(z) grep(pattern = file_tag, x = dir(rstdir), value = TRUE))
+  newrst <- unlist(unname(sapply(newrst_tags, function(p) grep(pattern = p, x = dir(rstdir), value = TRUE))))
 
   # Return error if new rasters are not found
   if(length(newrst)==0){
@@ -194,24 +212,32 @@ message("")
 
 #Define a small function that downloads rasters from the MAP geoserver to a specifed location
 download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
+
   available_rasters <- listRaster(printed = FALSE)
   download_warnings <- 0
   for(yy in year){
-  year_current <- yy
+    year_current <- yy
 
-   if(is.na(available_rasters$min_raster_year[available_rasters$raster_code==raster_code])|is.na(available_rasters$max_raster_year[available_rasters$raster_code==raster_code])){
-     year_current <- NA
-   }
+    if(is.na(available_rasters$min_raster_year[available_rasters$raster_code==raster_code])|is.na(available_rasters$max_raster_year[available_rasters$raster_code==raster_code])){
+      year_current <- NA
+    }
 
-  if(is.na(year_current)){
-    year_current <- available_rasters$max_raster_year[available_rasters$raster_code==raster_code]
-  }
+    if(is.na(year_current)){
+      year_current <- available_rasters$max_raster_year[available_rasters$raster_code==raster_code]
+    }
 
-  if(!is.na(year_current)){
-  year_tag <- paste0(year_current,"_")
-  }else{
-    year_tag <- "latest"
-  }
+    if(!is.na(year_current)){
+      year_tag <- paste0(year_current,"_")
+    }else{
+      year_tag <- "latest_"
+    }
+
+    if(any(grepl(paste0(raster_code, "-",year_tag,paste(substr(view_bbox,1,5),collapse = "_" )), dir(target_path)))){
+      message("Pre-downloaded raster with identical query parameters loaded ('",
+              grep(paste0(raster_code, "-",year_tag,paste(substr(view_bbox,1,5),collapse = "_" )), dir(rstdir), value = T),
+              "')")
+    } else {
+
     rst_path <- file.path(target_path, paste(raster_code,"-",year_tag,file_tag,".tiff",sep = ""))
 
     if(!is.null(view_bbox)){
@@ -241,6 +267,7 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
       }
     }
 
+    }
   }
 
   if(download_warnings>0){

@@ -70,6 +70,7 @@ listRaster <- function(printed = TRUE){
                                   stringsAsFactors = FALSE)
 
   available_rasters <- available_rasters[available_rasters$category == "surfaces",-which(names(available_rasters)=="category")]
+  available_rasters <- available_rasters[!is.na(available_rasters$raster_code),]
 
   #print out message of long raster names
   if(printed == TRUE){
