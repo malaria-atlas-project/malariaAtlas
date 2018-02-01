@@ -44,9 +44,9 @@ listRaster <- function(printed = TRUE){
     return(gsub("<.*?>", "", htmlString))
   }
 
-  codes <- unname(sapply( X = sapply(layers, function(x){sub("^Explorer:", "", x[["Name"]])}), FUN = function (x) ifelse (is.null (x), NA, x)))
   titles <-  sub(":.*$", "", html2text(unname(sapply( X = sapply(layers, function(x){x[["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x)))))
   extended_titles <- sub("^.*:", "", html2text(unname(sapply( X = sapply(layers, function(x){x[["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x)))))
+  codes <- unname(sapply( X = sapply(layers, function(x){sub("^Explorer:", "", x[["Name"]])}), FUN = function (x) ifelse (is.null (x), NA, x)))
   abstracts <- html2text(unname(sapply( X = sapply(layers, function(x){x[["Abstract"]]}), FUN = function (x) ifelse (is.null (x), NA, x))))
   citations <- unlist(unname(sapply( X = sapply(layers, function(x){x[["Attribution"]][["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x))))
   min_raster_years <- as.numeric(unname(sapply( X = sapply(layers, function(x){sub("^min_raster_year:","",grep("^min_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}),
@@ -58,15 +58,15 @@ listRaster <- function(printed = TRUE){
 
 
   #extract raster metadata from layers list & turn this into dataframe
-  available_rasters <- data.frame("raster_code" = codes,
-                                        "title"= titles,
-                                        "title_extended" = extended_titles,
-                                        "abstract" = abstracts,
-                                        "citation"= citations,
-                                        # "pub_year" = pub_years,
-                                         "min_raster_year" = min_raster_years,
-                                         "max_raster_year" =  max_raster_years,
-                                        "category" = categories,
+  available_rasters <- data.frame("title"= titles,
+                                  "title_extended" = extended_titles,
+                                  "raster_code" = codes,
+                                  "abstract" = abstracts,
+                                  "citation"= citations,
+                                  # "pub_year" = pub_years,
+                                  "min_raster_year" = min_raster_years,
+                                  "max_raster_year" =  max_raster_years,
+                                  "category" = categories,
                                   stringsAsFactors = FALSE)
 
   available_rasters <- available_rasters[available_rasters$category == "surfaces",-which(names(available_rasters)=="category")]

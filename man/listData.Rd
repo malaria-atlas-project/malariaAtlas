@@ -19,7 +19,7 @@ available_rasters <- listRaster()
 
 }
 \seealso{
-\link{listPoints}
+\code{link{listPoints}}
 \code{\link{listRaster}}
 \code{\link{listShp}}
 }

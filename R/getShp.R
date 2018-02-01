@@ -128,8 +128,8 @@ Shp_polygon <- lapply(URL_input, downloadShp)
 
 if(admin_level!="both"){
   Shp_polygon <- Shp_polygon[[paste(admin_level)]]
-  if("sum" %in% names(Shp_polygon)|"mean" %in% names(Shp_polygon)){
-    Shp_polygon <- Shp_polygon[,!names(Shp_polygon)%in% c("sum", "mean")]
+  if("sum" %in% names(Shp_polygon)|"mean" %in% names(Shp_polygon)|"LSMS.agri" %in% names(Shp_polygon)){
+    Shp_polygon <- Shp_polygon[,!names(Shp_polygon)%in% c("sum", "mean","LSMS.agri")]
   }
 }else if (admin_level == "both"){
   Shp_polygon <- sp::rbind.SpatialPolygonsDataFrame(Shp_polygon$admin0[names(Shp_polygon$admin1)], Shp_polygon$admin1)
@@ -185,6 +185,7 @@ polygon2df <- function(polygon){
   polygon@data$id <- rownames(polygon@data)
   polygon_df <- ggplot2::fortify(polygon)
   polygon_df <- merge(polygon_df, polygon@data, by = "id")
+
   return(polygon_df)}
 
 

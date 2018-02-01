@@ -8,7 +8,8 @@ getRaster(surface = "PfPR2-10", shp = NULL, view_bbox = NULL,
   file_path = tempdir(), year = rep(NA, length(surface)))
 }
 \arguments{
-\item{surface}{string containing code for desired raster(s), e.g. \code{c("rasterCode1", "rasterCode2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.}
+\item{surface}{string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
+Check \code{\link{listRaster}} to find titles of available rasters.}
 
 \item{shp}{SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).}
 
