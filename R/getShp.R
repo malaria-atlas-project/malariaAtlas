@@ -47,14 +47,14 @@ getShp <- function(country = NULL,
  if(!is.null(ISO)){
     country_input <- toupper(ISO)
   }else if (!is.null(country)){
-      country_input <- as.character(suppressMessages(listAll())$country_id[suppressMessages(listAll())$country %in% country])
+      country_input <- as.character(suppressMessages(listShp())$COUNTRY_ID[suppressMessages(listShp())$NAME %in% country])
   }else{
     country_input <-  NULL
   }
 
   # return error if ISO or country are not correctly specified and bbox is unspecified
   if(length(country_input)==0 & is.null(c(bbox, lat, long))){
-    stop("Invalid country/ISO definition, use is_available() OR listAll() to confirm country spelling and/or ISO code.")
+    stop("Invalid country/ISO definition, use is_available() OR listShp() to confirm country spelling and/or ISO code.")
   }
 
   if(admin_level=="both"){
@@ -114,7 +114,7 @@ getShp <- function(country = NULL,
   }
 
   #define which admin levels are queried and return as a list full geoserver query URL
-  base_URL <- "https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
+  base_URL <- "https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
   if(tolower(admin_level) == "admin0"){
     URL_input <- list("admin0" = paste(base_URL,"&TypeName=admin0_map_2013",paste(URL_filter), sep = ""))
   } else if(tolower(admin_level) == "admin1"){

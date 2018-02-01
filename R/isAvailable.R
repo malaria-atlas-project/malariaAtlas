@@ -25,7 +25,7 @@ isAvailable <- function(country = NULL, ISO = NULL, full_results = FALSE) {
 
   if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
     available_countries <- .malariaAtlasHidden$available_countries_stored
-  }else{available_countries <- listAll(printed = FALSE)}
+  }else{available_countries <- listPoints(printed = FALSE)}
 
   capwords <- function(string) {
     cap <- function(s) {
@@ -77,7 +77,7 @@ isAvailable <- function(country = NULL, ISO = NULL, full_results = FALSE) {
   } else if(!(is.null(ISO))){
     country_input <- as.character(toupper(ISO))
     if(nchar(country_input)!= 3){
-      stop("Specifying by iso-code only works with ISO3, use listAll() to check available countries & their ISO3")
+      stop("Specifying by iso-code only works with ISO3, use listPoints() to check available countries & their ISO3")
     }
     available_countries <- available_countries$country_id
   }
@@ -113,7 +113,7 @@ isAvailable <- function(country = NULL, ISO = NULL, full_results = FALSE) {
       if(!(checked_availability$possible_match[checked_availability$is_available==0][i] %in% c("character(0)","",NA))) {
         error_message[i] <- paste("Data not found for '",checked_availability$country[checked_availability$is_available==0][i],"', did you mean ", checked_availability$possible_match[checked_availability$is_available==0][i], "?", sep = "")
       } else {
-        error_message[i] <- paste("Data not found for '",checked_availability$country[checked_availability$is_available==0][i],"', use listAll() to check data availability. ", sep = "")
+        error_message[i] <- paste("Data not found for '",checked_availability$country[checked_availability$is_available==0][i],"', use listPoints() to check data availability. ", sep = "")
       }
     }
 

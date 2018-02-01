@@ -57,7 +57,7 @@ if(length(surface)>1){
   }
 }
   ## download list of all available rasters and use this df to define raster codes for specifed 'surface's
-  available_rasters <- listAllRaster(printed = FALSE)
+  available_rasters <- listRaster(printed = FALSE)
   raster_code_list <- as.character(available_rasters$raster_code[match(surface, available_rasters$title)])
 
   message("Attempting to download the following rasters:")
@@ -95,7 +95,7 @@ message("")
       if(!y %in% seq(available_rasters$min_raster_year[available_rasters$raster_code==r&!is.na(available_rasters$min_raster_year)],
                      available_rasters$max_raster_year[available_rasters$raster_code==r&!is.na(available_rasters$max_raster_year)],
                      by = 1)){
-        warning(paste0("Raster: \"",available_rasters$title[available_rasters$raster_code==r],"\" not available for specified year: ", y, "\n  - check available raster years using listAllRaster()."))
+        warning(paste0("Raster: \"",available_rasters$title[available_rasters$raster_code==r],"\" not available for specified year: ", y, "\n  - check available raster years using listRaster()."))
       year_warnings = year_warnings+1
       }
         }
@@ -103,7 +103,7 @@ message("")
   }
 
  if(year_warnings>0){
-   stop(year_warnings, " error(s) regarding surface-year combination, see warnings() and either try downloading surfaces separately or check 'year' specification matches specified 'surface' using listAllRaster().")
+   stop(year_warnings, " error(s) regarding surface-year combination, see warnings() and either try downloading surfaces separately or check 'year' specification matches specified 'surface' using listRaster().")
  }
 
 
@@ -194,7 +194,7 @@ message("")
 
 #Define a small function that downloads rasters from the MAP geoserver to a specifed location
 download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
-  available_rasters <- listAllRaster(printed = FALSE)
+  available_rasters <- listRaster(printed = FALSE)
   download_warnings <- 0
   for(yy in year){
   year_current <- yy

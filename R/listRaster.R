@@ -32,7 +32,7 @@ listRaster <- function(printed = TRUE){
   }else{
 
   #query the geoserver to return xml containing a list of all available rasters & convert this to a list
-    xml <- xml2::read_xml(httr::GET("https://map.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities", httr::content_type_xml()))
+    xml <- xml2::read_xml(httr::GET("https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities", httr::content_type_xml()))
     xml_data <- xml2::as_list(xml)
 
   #subset this list to only include list of rasters
@@ -51,14 +51,14 @@ listRaster <- function(printed = TRUE){
                                         "abstract" = html2text(unname(sapply( X = sapply(layers, function(x){x[["Abstract"]]}), FUN = function (x) ifelse (is.null (x), NA, x)))),
                                         "citation"= unname(sapply( X = sapply(layers, function(x){x[["Attribution"]][["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x))),
                                         # "pub_year" = as.numeric(as.character(unname(sapply( X = sapply(layers, function(x){sub("^pub_year:","",grep("^pub_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x))))),
-                                        # "min_raster_year" = unname(sapply( X = sapply(layers, function(x){sub("^min_raster_year:","",grep("^min_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}),
-                                        #                                    FUN = function (x) ifelse (is.null (x), NA, x))),
-                                        # "max_raster_year" =  unname(sapply( X = sapply(layers,function(x){sub("^max_raster_year:","",grep("^max_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}),
-                                        #                                                           FUN = function (x) ifelse (is.null (x), NA, x))),
+                                         "min_raster_year" = unname(sapply( X = sapply(layers, function(x){sub("^min_raster_year:","",grep("^min_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}),
+                                                                            FUN = function (x) ifelse (is.null (x), NA, x))),
+                                         "max_raster_year" =  unname(sapply( X = sapply(layers,function(x){sub("^max_raster_year:","",grep("^max_raster_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}),
+                                                                                                   FUN = function (x) ifelse (is.null (x), NA, x))),
                                         "category" = unname(sapply( X = sapply(layers, function(x){sub("^category:","",grep("^category:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))))
 
-  #available_rasters$min_raster_year <- as.numeric(as.character(available_rasters$min_raster_year))
-  #available_rasters$max_raster_year <- as.numeric(as.character(available_rasters$max_raster_year))
+  available_rasters$min_raster_year <- as.numeric(as.character(available_rasters$min_raster_year))
+  available_rasters$max_raster_year <- as.numeric(as.character(available_rasters$max_raster_year))
   #available_rasters$pub_year <- suppressWarnings(as.numeric(as.character(available_rasters$pub_year)))
 
   available_rasters <- available_rasters[available_rasters$category == "surfaces",-which(names(available_rasters)=="category")]
