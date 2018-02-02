@@ -13,15 +13,22 @@ library(tibble)
 
 # Overview 
 
+_blurb re what the package is and what it does_
+
 ## Available Data: 
-### list* Functions
 _blurb re what the data is and where it comes from_
+
+### list* Functions
+
 
 `listData()` retrieves a list of available data to download. 
 
 Use: 
+
 * listData(datatype = "points") OR listPoints() to see for which countries PR survey point data can be downloaded.
+
 * use listData(datatype = "rasters") OR listRaster()to see rasters available to download. 
+
 * use listData(datatype = "shape") OR listShp() to see shapefiles available to download. 
 
 ```{r results = "hide", message = FALSE}
@@ -36,7 +43,7 @@ listData(datatype = "shape")
 
 ### is_available
 
-`isAvailable` confirms whether or not PR data is available to download for a specified country. 
+`isAvailable` confirms whether or not PR survey point data is available to download for a specified country. 
 
 Check whether PR data is available for Madagascar:
 ```{r highlight = TRUE}
@@ -94,7 +101,9 @@ tibble::glimpse(MDG_shp)
 MDG_shp <- as.MAPshp(MDG_shp)
 autoplot(MDG_shp)
 ```
+
 N.B. Facet-wrapped option is also available for species stratification. 
+
 ```{r message = FALSE, warning = FALSE, results = "hide"}
 autoplot(MDG_shp,
          facet = TRUE,
@@ -109,7 +118,7 @@ autoplot(MDG_shp,
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
 ```
-N.B. to use downloaded rasters and shapefiles directly with autoplot, use as.MAPraster() and as.MAPshp() to convert these to a data.frame. Alternatively autoplot_MAPraster() will work directly with RasterLayer, RasterStack or RasterBrick objects downloaded with getRaster().
+N.B. to use downloaded rasters and shapefiles directly with autoplot, use as.MAPraster() and as.MAPshp() to convert these to data.frames. Alternatively autoplot_MAPraster() will work directly with RasterLayer, RasterStack or RasterBrick objects downloaded with getRaster().
 
 `autoplot.MAPraster`&`autoplot_MAPraster`configures autoplot method to enable quick mapping of downloaded rasters.
 
@@ -124,13 +133,13 @@ p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
 
 By using the above tools along with ggplot, simple comparison figures can be easily produced. 
 
-```{r message = FALSE}
+```{r message = FALSE, warning = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_shp_df <- as.MAPshp(MDG_shp)
 MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
 MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
 
-p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
+p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df, printed = FALSE)
 
 pr <- getPR(country = c("Madagascar"), species = "Pf")
 p[[1]] +
@@ -141,10 +150,10 @@ scale_size_continuous(name = "Survey Size")+
 ```
 
 
-### Basic Spatial utility tools 
+## Basic Spatial utility tools 
 
-## extractRaster 
-## zonalStats
+### extractRaster 
+### zonalStats
 
 
 

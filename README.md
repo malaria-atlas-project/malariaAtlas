@@ -6,20 +6,29 @@ malariaAtlas
 Overview
 ========
 
+*blurb re what the package is and what it does*
+
 Available Data:
 ---------------
 
-### list\* Functions
-
 *blurb re what the data is and where it comes from*
+
+### list\* Functions
 
 `listData()` retrieves a list of available data to download.
 
-Use: \* listData(datatype = "points") OR listPoints() to see for which
-countries PR survey point data can be downloaded. \* use
-listData(datatype = "rasters") OR listRaster()to see rasters available
-to download. \* use listData(datatype = "shape") OR listShp() to see
-shapefiles available to download.
+Use:
+
+-   listData(datatype = "points") OR listPoints() to see for which
+    countries PR survey point data can be downloaded.
+
+-   use listData(datatype = "rasters") OR listRaster()to see rasters
+    available to download.
+
+-   use listData(datatype = "shape") OR listShp() to see shapefiles
+    available to download.
+
+<!-- -->
 
     listData(datatype = "points")
 
@@ -29,8 +38,8 @@ shapefiles available to download.
 
 ### is\_available
 
-`isAvailable` confirms whether or not PR data is available to download
-for a specified country.
+`isAvailable` confirms whether or not PR survey point data is available
+to download for a specified country.
 
 Check whether PR data is available for Madagascar:
 
@@ -160,8 +169,9 @@ downloaded shapefiles.
     MDG_shp <- as.MAPshp(MDG_shp)
     autoplot(MDG_shp)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-13-1.png) N.B.
-Facet-wrapped option is also available for species stratification.
+![](README_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+
+N.B. Facet-wrapped option is also available for species stratification.
 
     autoplot(MDG_shp,
              facet = TRUE,
@@ -178,7 +188,7 @@ surface & year, clipped to a given bounding box or shapefile
     MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
 
 N.B. to use downloaded rasters and shapefiles directly with autoplot,
-use as.MAPraster() and as.MAPshp() to convert these to a data.frame.
+use as.MAPraster() and as.MAPshp() to convert these to data.frames.
 Alternatively autoplot\_MAPraster() will work directly with RasterLayer,
 RasterStack or RasterBrick objects downloaded with getRaster().
 
@@ -203,11 +213,7 @@ can be easily produced.
     MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
     MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
 
-    p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
-
-    ## $`0`
-
-![](README_files/figure-markdown_strict/unnamed-chunk-17-1.png)
+    p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df, printed = FALSE)
 
     pr <- getPR(country = c("Madagascar"), species = "Pf")
     p[[1]] +
@@ -216,14 +222,11 @@ can be easily produced.
      scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
      ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
 
-    ## Warning: Removed 38 rows containing missing values (geom_point).
+![](README_files/figure-markdown_strict/unnamed-chunk-17-1.png)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-17-2.png)
+Basic Spatial utility tools
+---------------------------
 
-### Basic Spatial utility tools
+### extractRaster
 
-extractRaster
--------------
-
-zonalStats
-----------
+### zonalStats

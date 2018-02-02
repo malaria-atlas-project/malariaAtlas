@@ -82,7 +82,7 @@ autoplot.MAPraster <- function(object,
   if(!is.null(shp_df)){
     plot$layers <- c(ggplot2::geom_polygon(data = shp_df, ggplot2::aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
                      plot$layers)
-    plot <- plot + ggplot2::geom_polygon(data = shp_df, ggplot2::aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "black")
+    plot <- plot + ggplot2::geom_polygon(data = shp_df, ggplot2::aes_string(x="long", y="lat", group = "group"), alpha = 0, colour = "grey40")
   }
 
   return(plot)
