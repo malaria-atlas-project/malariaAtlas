@@ -12,19 +12,31 @@ getShp(country = NULL, ISO = NULL, bbox = NULL, admin_level = "both",
 
 \item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})}
 
+\item{bbox}{bounding box specifying spatial extent for getShp query (see format as per sp::bbox; two-column matrix with minimum values in column 1 and maximum values in column 2).
+Note: getShp downloads the entire polygon for any polygons falling within the bbox.}
+
 \item{admin_level}{string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "both" accepted)}
+
+\item{format}{string specifying the desired format for the downloaded shapefile: either "spatialpolygon" or "df"}
+
+\item{long}{longitude of a point location falling within the desired shapefile.}
+
+\item{lat}{latitude of a point location falling within the desired shapefile.}
 }
 \value{
-\code{getShp} returns a list containing separate shapefile dataframes for each administrative level. The following attribute fields are included:
+\code{getShp} returns either a dataframe or spatialPolygon object for requested administrative unit polygons. The following attribute fields are included:
 
 \enumerate{
-\item \code{COLUMNNAME} description of contents
-\item \code{COLUMNNAME} description of contents
-\item \code{COLUMNNAME} description of contents
+\item \code{COUNTRY_ID} ISO-3 code of given administrative unit (or the ISO code of parent unit for administrative-level 1 units).
+\item \code{GAUL_CODE} GAUL code of given administrative unit.
+\item \code{ADMN_LEVEL} administrative level of the given administrative unit - either 0 (national) or 1 (first-level division)
+\item \code{PARENT_ID} GAUL code of parent administrative unit of a given polygon (for admin0 polygons, PARENT_ID = 0).
+\item \code{PARENT_ID} GAUL code of parent administrative unit of a given polygon (for admin0 polygons, PARENT_ID = 0).
+\item \code{country_level} composite \code{ISO3}_\code{ADMN_LEVEL} field.
 }
 }
 \description{
-\code{getShp} downloads shapefiles for a specified country (or countries) and returns this as a spatial
+\code{getShp} downloads a shapefile for a specified country (or countries) and returns this as either a spatialPolygon or data.frame object.
 }
 \examples{
 #Download PfPR data & associated shapefiles for Nigeria and Cameroon

@@ -26,10 +26,10 @@ Check \code{\link{listRaster}} to find titles of available rasters.}
 \code{getRaster} downloads publicly available MAP rasters for a specific surface & year, clipped to a provided bounding box or shapefile.
 }
 \examples{
-#Download PfPR2-10 Raster for Madagascar in 2016 and visualise this immediately.
+#Download PfPR2-10 Raster for Madagascar in 2015 and visualise this immediately.
 \dontrun{
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2016)
+MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2015)
 autoplot_MAPraster(MDG_PfPR2_10)}
 
 #Download global raster of G6PD deficiency from Howes et al 2012.

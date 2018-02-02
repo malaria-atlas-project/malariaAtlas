@@ -3,62 +3,68 @@ output: md_document
 ---
 
 ```{r, echo = FALSE, message = FALSE, results = "hide"}
-library(MAPdata)
-library(ggmap)
+library(malariaAtlas)
 library(rgdal)
 library(tibble)
 ```
 
+# malariaAtlas 
+### An R interface to open-access malaria data, hosted by the Malaria Atlas Project. 
 
-# MAPdata 
+# Overview 
 
-A package that enables users to download publicly available Parasite Rate Data from the Malaria Atlas Project geoserver.
-
-## Overview 
-
-### PR Data Source
-
+## Available Data: 
+### list* Functions
 _blurb re what the data is and where it comes from_
 
-### listAll
+`listData()` retrieves a list of available data to download. 
 
-`listAll()` retrieves a list of countries for which Parasite Rate data is available to download. 
+Use: 
+* listData(datatype = "points") OR listPoints() to see for which countries PR survey point data can be downloaded.
+* use listData(datatype = "rasters") OR listRaster()to see rasters available to download. 
+* use listData(datatype = "shape") OR listShp() to see shapefiles available to download. 
 
-```{r}
-listAll()
+```{r results = "hide", message = FALSE}
+listData(datatype = "points")
 ```
-
+```{r results = "hide", message = FALSE}
+listData(datatype = "raster")
+```
+``` {r results = "hide", message = FALSE}
+listData(datatype = "shape")
+```
 
 ### is_available
 
-`is_available` confirms whether or not PR data is available to download for a specified country. 
+`isAvailable` confirms whether or not PR data is available to download for a specified country. 
 
 Check whether PR data is available for Madagascar:
 ```{r highlight = TRUE}
-MAPdata::is_available(country = "Madagascar")
+isAvailable(country = "Madagascar")
 ```
 
 Check whether PR data is available for the United States of America
 ```{r, error = TRUE, highlight = TRUE}
-is_available(ISO = "USA")
+isAvailable(ISO = "USA")
 ```
 
-### getPR
 
+## Downloading & Visualising Data: 
+### get* functions & autoplot methods
+
+### Parasite Rate Survey Points
 `getPR()` downloads all publicly available PR data points for a specified country and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format: 
 
 
 ```{r message = FALSE}
-MDG_pr_data <- MAPdata::getPR(country = "Madagascar", species = "Both")
+MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 ```
 ```{r echo = FALSE}
 tibble::glimpse(MDG_pr_data)
 ```
 
-###autoplot 
 
-`autoplot.pr.points` configures autoplot methods to enable quick mapping of the locations of downloaded PR points. 
-
+`autoplot.pr.points` configures autoplot method to enable quick mapping of the locations of downloaded PR points. 
 
 
 ```{r message = FALSE, warning = FALSE, results = "hide"}
@@ -71,5 +77,80 @@ autoplot(MDG_pr_data,
          facet = TRUE,
          map_title = "Example MAP of PR point locations,\nstratified by species")
 ```
+
+### Shapefiles
+`getShp()` downloads a shapefile for a specified country (or countries) and returns this as either a spatialPolygon or data.frame object.
+
+```{r message = FALSE}
+MDG_shp <- getShp(ISO = "MDG", admin_level = "both")
+```
+```{r echo = FALSE}
+tibble::glimpse(MDG_shp)
+```
+
+`autoplot.MAPshp` configures autoplot method to enable quick mapping of downloaded shapefiles.
+
+```{r message = FALSE}
+MDG_shp <- as.MAPshp(MDG_shp)
+autoplot(MDG_shp)
+```
+N.B. Facet-wrapped option is also available for species stratification. 
+```{r message = FALSE, warning = FALSE, results = "hide"}
+autoplot(MDG_shp,
+         facet = TRUE,
+         map_title = "Example of facetted shapefiles.")
+```
+
+### Modelled Rasters 
+
+`getRaster()`downloads publicly available MAP rasters for a specific surface & year, clipped to a given bounding box or shapefile
+
+```{r message = FALSE}
+MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
+```
+N.B. to use downloaded rasters and shapefiles directly with autoplot, use as.MAPraster() and as.MAPshp() to convert these to a data.frame. Alternatively autoplot_MAPraster() will work directly with RasterLayer, RasterStack or RasterBrick objects downloaded with getRaster().
+
+`autoplot.MAPraster`&`autoplot_MAPraster`configures autoplot method to enable quick mapping of downloaded rasters.
+
+```{r message = FALSE}
+MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
+MDG_shp_df <- as.MAPshp(MDG_shp)
+p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
+```
+
+
+### Combined visualisation 
+
+By using the above tools along with ggplot, simple comparison figures can be easily produced. 
+
+```{r message = FALSE}
+MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+MDG_shp_df <- as.MAPshp(MDG_shp)
+MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
+MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
+
+p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
+
+pr <- getPR(country = c("Madagascar"), species = "Pf")
+p[[1]] +
+geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = pf_pos / examined, size = examined), shape = 21)+
+scale_size_continuous(name = "Survey Size")+
+ scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
+ ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
+```
+
+
+### Basic Spatial utility tools 
+
+## extractRaster 
+## zonalStats
+
+
+
+
+
+
+
 
 

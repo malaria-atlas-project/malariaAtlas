@@ -4,7 +4,7 @@
 \alias{listShp}
 \title{List administrative units for which shapefiles are stored on the MAP geoserver.}
 \usage{
-listShp(printed = FALSE)
+listShp(printed = TRUE)
 }
 \value{
 \code{listShp} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
