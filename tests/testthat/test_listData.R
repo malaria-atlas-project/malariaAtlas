@@ -58,12 +58,12 @@ if(exists("available_admin_stored", envir = .malariaAtlasHidden)){
 available_admin <- listShp()
 
 test_that("downloaded data.frame is in the correct format",{
-  expect_true(length(available_admin$FID)>0)
+  expect_true(length(available_admin[,1])>0)
   expect_true(inherits(available_admin,"data.frame"))
 })
 
 test_that("downloaded dataframe contains has correct number of columns",{
-  expect_equal(sort(names(available_admin)),sort(c("FID","COUNTRY_ID","GAUL_CODE","ADMN_LEVEL","PARENT_ID","NAME")))
+  expect_equal(sort(names(available_admin)),sort(c("COUNTRY_ID","GAUL_CODE","ADMN_LEVEL","PARENT_ID","NAME")))
 })
 
 test_that("available_admin_stored object is stored in hidden environment",{

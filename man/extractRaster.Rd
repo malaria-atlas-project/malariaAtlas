@@ -12,7 +12,8 @@ extractRaster(df = NULL, csv_path = NULL, surface = "PfPR2-10",
 
 \item{csv_path}{(optional) user-specified path to which extractRaster coordinates and results are stored. If not specified, tempdir() is used instead.}
 
-\item{surface}{string containing code for desired raster(s), e.g. \code{c("rasterCode1", "rasterCode2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.}
+\item{surface}{string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
+Check \code{\link{listRaster}} to find titles of available rasters.}
 
 \item{year}{default = \code{rep(NA, length(surface))}; for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a vector specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.}
 }
