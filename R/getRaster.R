@@ -95,7 +95,7 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
   stop("The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':\n",
        paste("  -",surface[which(raster_code_list=="NULL")], collapse = "\n"))
 
-}else("All specified surfaces are available to download.")
+}else{("All specified surfaces are available to download.")}
 
   # check whether specified years are available for specified rasters
  year_warnings = 0

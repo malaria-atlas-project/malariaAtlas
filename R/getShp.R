@@ -18,7 +18,6 @@
 #' \item \code{GAUL_CODE} GAUL code of given administrative unit.
 #' \item \code{ADMN_LEVEL} administrative level of the given administrative unit - either 0 (national) or 1 (first-level division)
 #' \item \code{PARENT_ID} GAUL code of parent administrative unit of a given polygon (for admin0 polygons, PARENT_ID = 0).
-#' \item \code{PARENT_ID} GAUL code of parent administrative unit of a given polygon (for admin0 polygons, PARENT_ID = 0).
 #' \item \code{country_level} composite \code{ISO3}_\code{ADMN_LEVEL} field.
 #' }
 #'

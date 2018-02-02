@@ -3,7 +3,8 @@
 #' \code{extractRaster} extracts pixel values from MAP rasters at user-specified point locations (without downloading the entire raster).
 #'
 #' @param df data.frame containing coordinates of input point locations, must contain columns named 'latitude'/'lat'/'x'  AND 'longitude'/'long'/'y')
-#' @param surface string containing code for desired raster(s), e.g. \code{c("rasterCode1", "rasterCode2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
+#' @param surface string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
+#' Check \code{\link{listRaster}} to find titles of available rasters.
 #' @param year default = \code{rep(NA, length(surface))}; for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a vector specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.
 #' @param csv_path (optional) user-specified path to which extractRaster coordinates and results are stored. If not specified, tempdir() is used instead.
 #'

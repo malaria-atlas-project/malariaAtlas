@@ -27,5 +27,6 @@ listShp <- function(printed = TRUE){
     .malariaAtlasHidden$available_admin_stored <- available_admin
   }
 
+available_admin <- available_admin[,!names(available_admin)%in%"FID"]
   return(invisible(available_admin))
 }
