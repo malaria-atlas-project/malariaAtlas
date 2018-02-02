@@ -22,7 +22,7 @@ Use:
 -   listData(datatype = "points") OR listPoints() to see for which
     countries PR survey point data can be downloaded.
 
--   use listData(datatype = "rasters") OR listRaster()to see rasters
+-   use listData(datatype = "rasters") OR listRaster() to see rasters
     available to download.
 
 -   use listData(datatype = "shape") OR listShp() to see shapefiles

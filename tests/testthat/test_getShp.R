@@ -12,12 +12,13 @@ test_that("downloadShp downloads shapefiles and loads them correctly",{
   expect_true(unique(test_dlshp$COUNTRY_ID)=="BDI")
 })
 
-# test polygon2df
+# test as.MAPshp
 test_dlshp <- getShp(ISO = "BDI", admin_level = "admin0")
-test_dlshp_df <- polygon2df(test_dlshp)
+test_dlshp_df <- as.MAPshp(test_dlshp)
 
-test_that("polygon2df works as expected",{
+test_that("as.MAPshp works as expected",{
   expect_true(inherits(test_dlshp_df, "data.frame"))
+  expect_true(inherits(test_dlshp_df, "MAPshp"))
   expect_true(unique(test_dlshp_df$COUNTRY_ID)=="BDI")
   expect_equal(sort(names(test_dlshp_df)),sort(c("id","long","lat","order","hole","piece","group","COUNTRY_ID","GAUL_CODE","ADMN_LEVEL","PARENT_ID","NAME", "country_level")))
 })
