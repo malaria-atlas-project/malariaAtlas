@@ -72,7 +72,7 @@ if(length(surface)>1){
 
     for(y in 1:length(df_i$year)){
       if(is.na(df_i$year[y])){
-        df_i$file_prefix[y] <- paste(code_y)
+        df_i$file_prefix[y] <- paste0(code_y, "_latest_")
         df_i$raster_title[y] <- paste(available_rasters$title[available_rasters$raster_code==code_y])
       }else if(!is.na(y)){
         df_i$file_prefix[y] <- paste0(df_i$raster_code[y], "-", df_i$year[y])
@@ -116,34 +116,24 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
    stop("Specified surfaces are not available for all requested years, \n try downloading surfaces separately or double-check availability of 'surface'-'year' combinations using listRaster()\n see warnings() for more info.")
  }
 
-
   ## create directory to which rasters will be downloaded
   rstdir <- file.path(file_path,"getRaster")
-  file_tag <- paste(paste(substr(view_bbox,1,5),collapse = "_"),"_",Sys.Date(),"_",stringi::stri_rand_strings(1, 5),sep="")
+  file_tag <- paste(paste(substr(view_bbox,1,5),collapse = "_"),"_",gsub("-", "_", Sys.Date()),sep="")
   dir.create(rstdir, showWarnings = FALSE)
 
+  query_def$file_name <- gsub("-", ".", paste0(query_def$file_prefix, file_tag))
 
  #download rasters to designated file_path (tempdir as default)
-  invisible(sapply(X = raster_code_list,
+  invisible(sapply(X = 1:nrow(query_def),
                    FUN = function(x){
-                     year_i <- year[[which(raster_code_list==x)]]
-                     download_rst(raster_code = x,
+                     download_rst(raster_code = query_def$raster_code[x],
                                   view_bbox = view_bbox,
                                   target_path = rstdir,
-                                  year = year_i,
-                                  file_tag = file_tag)}))
-
-
-  newrst_tags <- sapply(1:nrow(query_def), function(x) {
-    if(is.na(query_def$year[x])){
-      paste0(query_def$raster_code[x], "-latest_",paste(substr(view_bbox,1,5),collapse = "_" ))
-    }else{
-      paste0(query_def$raster_code[x],"-",query_def$year[x],"_", paste(substr(view_bbox,1,5),collapse = "_" ))
-    }
-    })
+                                  year = query_def$year[x],
+                                  file_name = query_def$file_name[x])}))
 
   #create vector of filenames for rasters downloaded in the current query
-  newrst <- unlist(unname(sapply(newrst_tags, function(p) grep(pattern = p, x = dir(rstdir), value = TRUE))))
+  newrst <- unname(sapply(query_def$file_name, function(p) grep(pattern = p, x = dir(rstdir), value = TRUE)))
 
   # Return error if new rasters are not found
   if(length(newrst)==0){
@@ -152,7 +142,7 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
   }else if(length(newrst)==1){
     rst_dl <- raster::raster(file.path(rstdir, newrst))
     raster::NAvalue(rst_dl) <- -9999
-    rst_dl <- name_rst(rst_dl, query_def=query_def)
+    names(rst_dl) <- query_def$raster_title
     if(!is.null(shp)){
       rst_dl <- raster::mask(rst_dl, shp)
     }
@@ -176,14 +166,14 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
 
       if(!is.null(shp)){
         rst_stk <- raster::mask(rst_stk, shp)
-        rst_stk <- name_rst(rst_stk,query_def=query_def)
       }
+
+      names(rst_stk) <- query_def$raster_title
       return(rst_stk)
       #if not then we want to return a list of raster stacks - one for each resolution present in the index dataframe above.
     }else if (length(unique(rst_list_index$res_id))!=1){
-      #create empty list
 
-      #for each unique raster resolution create a raster stack and store this in stk_list
+    #for each unique raster resolution create a raster stack and store this in stk_list
 
       stack_rst <- function(res_id){
         return(raster::stack(rst_list[rst_list_index$res_id==res_id]))
@@ -203,8 +193,11 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
         }
 
       # tidy names of rasters within the stacks within this list.
-
-      stk_list <- lapply(X = stk_list, FUN = name_rst,query_def=query_def)
+      for(i in 1:length(stk_list)){
+        for (ii in 1:length(stk_list[i])) {
+          names(stk_list[i][[ii]]) <- query_def$raster_title[query_def$file_name==names(stk_list[i][[ii]])]
+        }
+      }
 
         return(stk_list)
         }
@@ -212,34 +205,26 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
   }
 
 #Define a small function that downloads rasters from the MAP geoserver to a specifed location
-download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
+download_rst <- function(raster_code, view_bbox, target_path, year, file_name){
 
   available_rasters <- listRaster(printed = FALSE)
   download_warnings <- 0
-  for(yy in year){
-    year_current <- yy
 
     if(is.na(available_rasters$min_raster_year[available_rasters$raster_code==raster_code])|is.na(available_rasters$max_raster_year[available_rasters$raster_code==raster_code])){
-      year_current <- NA
+      year <- NA
     }
 
-    if(is.na(year_current)){
-      year_current <- available_rasters$max_raster_year[available_rasters$raster_code==raster_code]
+    if(is.na(year)){
+      year <- available_rasters$max_raster_year[available_rasters$raster_code==raster_code]
     }
 
-    if(!is.na(year_current)){
-      year_tag <- paste0(year_current,"_")
-    }else{
-      year_tag <- "latest_"
-    }
-
-    if(any(grepl(paste0(raster_code, "-",year_tag,paste(substr(view_bbox,1,5),collapse = "_" )), dir(target_path)))){
+    if(any(grepl(file_name, dir(target_path)))){
       message("Pre-downloaded raster with identical query parameters loaded ('",
-              grep(paste0(raster_code, "-",year_tag,paste(substr(view_bbox,1,5),collapse = "_" )), dir(target_path), value = T),
+              grep(file_name, dir(target_path), value = T),
               "')")
     } else {
 
-    rst_path <- file.path(target_path, paste(raster_code,"-",year_tag,file_tag,".tiff",sep = ""))
+    rst_path <- file.path(target_path, paste0(file_name,".tiff"))
 
     if(!is.null(view_bbox)){
       bbox_filter <- paste("&SUBSET=Long(",paste(view_bbox[1,],collapse = ","),")&SUBSET=Lat(",paste(view_bbox[2,],collapse = ","),")", sep = "")
@@ -249,8 +234,8 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
 
     rst_URL <- paste("https://map.ox.ac.uk/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code,bbox_filter, sep = "")
 
-    if(!is.na(year_current)){
-      rst_URL <- paste(rst_URL, "&SUBSET=time(\"", year_current, "-01-01T00:00:00.000Z\")", sep = "")
+    if(!is.na(year)){
+      rst_URL <- paste(rst_URL, "&SUBSET=time(\"", year, "-01-01T00:00:00.000Z\")", sep = "")
     }
 
     r <- httr::GET(rst_URL, httr::write_disk(paste(rst_path), overwrite = TRUE))
@@ -261,15 +246,14 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
       message(rst_URL)
       download_warnings <- download_warnings+1
     }else{
-      if(!is.na(year_current)){
-      message("Downloaded ", raster_code, " for ", year_current,".")
-      }else if (is.na(year_current)){
+      if(!is.na(year)){
+      message("Downloaded ", raster_code, " for ", year,".")
+      }else if (is.na(year)){
         message("Downloaded ", raster_code,".")
       }
     }
 
     }
-  }
 
   if(download_warnings>0){
     stop(download_warnings, " Raster download error(s) check warnings() for details.")
@@ -277,13 +261,8 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_tag){
 
 }
 
-#Define a small function that renames a raster object with a more useful name
-name_rst <- function(rst, query_def){
 
-  names(rst) <- query_def$raster_title
-  return(rst)
-}
-
-# TEST_SHP <- getShp(ISO = "MDG")
-# TEST <- getRaster(shp = TEST_SHP)
-# TEST2 <- getRaster(shp = TEST_SHP, surface = c("Pv Endemicity","Pf Spatial Limits"))
+# TEST_SHP <- getShp(ISO = "MDG", admin_level = "admin0")
+# TEST_single_raster <- getRaster(shp = TEST_SHP)
+# TEST_same_res <- getRaster(shp = TEST_SHP, surface = c("Pv Endemicity", "PfPR2-10"))
+# TEST_different_res <- getRaster(shp = TEST_SHP, surface = c("Pv Endemicity","Pv Support"))
