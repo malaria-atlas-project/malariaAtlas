@@ -38,7 +38,7 @@
 
 autoplot.pr.points <- function(object,
                                point_colours = c("orchid3", "grey", "royalblue3", "coral"),
-                               admin_level = "both",
+                               admin_level = "admin0",
                                map_title = NULL,
                                facet =FALSE,
                                hide_confidential = FALSE,
