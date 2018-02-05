@@ -53,20 +53,19 @@ autoplot.pr.points <- function(object,
   }
 
   if(all(c("pv_pr", "pf_pr") %in% colnames(object))){
-    object$species[is.na(object$pv_pos)&is.na(object$pf_pos)] <- "conf"
-    object$species[is.na(object$pv_pos)&!is.na(object$pf_pos)] <- "pf"
-    object$species[!is.na(object$pv_pos)&is.na(object$pf_pos)] <- "pv"
-    object$species[!is.na(object$pv_pos)&!is.na(object$pf_pos)] <- "both"
+    object$species[is.na(object$pv_pos)&is.na(object$pf_pos)] <- "Confidential"
+    object$species[is.na(object$pv_pos)&!is.na(object$pf_pos)] <- "P. falciparum only"
+    object$species[!is.na(object$pv_pos)&is.na(object$pf_pos)] <- "P. vivax only"
+    object$species[!is.na(object$pv_pos)&!is.na(object$pf_pos)] <- "Both Species"
   }else if("pv_pr" %in% colnames(object) & !("pf_pr" %in% colnames(object))){
-    object$species[is.na(object$pv_pos)] <- "conf"
-    object$species[!is.na(object$pv_pos)] <- "pv"
+    object$species[is.na(object$pv_pos)] <- "Confidential"
+    object$species[!is.na(object$pv_pos)] <- "P. vivax only"
   }else if(!("pv_pr" %in% colnames(object)) & "pf_pr" %in% colnames(object)){
-    object$species[is.na(object$pf_pos)] <- "conf"
-    object$species[!is.na(object$pf_pos)] <- "pf"
+    object$species[is.na(object$pf_pos)] <- "Confidential"
+    object$species[!is.na(object$pf_pos)] <- "P. falciparum only"
   }
 
 object$species <- factor(object$species)
-levels(object$species) <- c("Both Species", "Confidential", "P. falciparum only", "P. vivax only")
 
   pr_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level)
 
@@ -95,7 +94,7 @@ levels(object$species) <- c("Both Species", "Confidential", "P. falciparum only"
                    axis.title = ggplot2::element_blank(),
                    panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
     ggplot2::scale_color_manual(name = "Species tested:",
-                                values = c(point_colours[1],point_colours[2],point_colours[3],point_colours[4]))
+                                values = c("Both Species" = point_colours[1],"Confidential" = point_colours[2], "P. falciparum only" = point_colours[3],"P. vivax only" = point_colours[4]))
 
   if(facet==TRUE){
     pr_plot <- pr_plot + ggplot2::facet_wrap(~species)
