@@ -36,7 +36,7 @@ listRaster <- function(printed = TRUE){
     xml_data <- xml2::as_list(xml)
 
   #subset this list to only include list of rasters
-  layers <- xml_data$Capability$Layer[names(xml_data$Capability$Layer)=="Layer"]
+  layers <- xml_data$WMS_Capabilities$Capability$Layer[names(xml_data$WMS_Capabilities$Capability$Layer)=="Layer"]
 
   #define small function to remove html tags from raster titles
   html2text <- function(htmlString) {
