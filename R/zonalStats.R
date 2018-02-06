@@ -127,12 +127,11 @@ zonalStats <- function(surface = "PfPR2-10",
 
 zonalStatDownload <- function(GAUL_CODE = NULL,shp = NULL, year = NA, raster_code = NULL, file_path = tempdir()){
   zs_y_list <- list()
-
+  available_rasters <- listRaster(printed = FALSE)
   for(y in year){
 
   if(is.null(shp)){
     available_admin <- listShp(printed = FALSE)
-    available_rasters <- listRaster(printed = FALSE)
     admin_level <- available_admin$ADMN_LEVEL[available_admin$GAUL_CODE==GAUL_CODE]
 
     poly_xml <-  paste0('<p0:Input>',
