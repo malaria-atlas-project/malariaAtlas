@@ -5,7 +5,7 @@
 \title{Create a basic plot showing locations of downloaded PR points}
 \usage{
 \method{autoplot}{pr.points}(object, point_colours = c("orchid3", "grey",
-  "royalblue3", "coral"), admin_level = "both", map_title = NULL,
+  "royalblue3", "coral"), admin_level = "admin0", map_title = NULL,
   facet = FALSE, hide_confidential = FALSE, ...)
 }
 \arguments{
