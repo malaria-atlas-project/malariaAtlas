@@ -52,6 +52,7 @@ plot(pr_standardised, pr)
 \references{
 Smith, D. L. et al. Standardizing estimates of the
   Plasmodium falciparum parasite rate. Malaria Journal 6, 131 (2007).
+
   Gething, Peter W., et al. "A long neglected world malaria map:
   Plasmodium vivax endemicity in 2010." PLoS neglected tropical
   diseases 6.9 (2012): e1814.
