@@ -34,8 +34,8 @@ listRaster <- function(printed = TRUE){
   #query the geoserver to return xml containing a list of all available rasters & convert this to a list
     xml <- xml2::read_xml("https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities")
 
-    layer_xml <-xml2::xml_find_first(xml2::xml_ns_strip(xml), ".//Layer") %>%
-      xml2::xml_find_all(".//Layer")
+    layer_xml <-xml2::xml_find_first(xml2::xml_ns_strip(xml), ".//Layer")
+    layer_xml <-  xml2::xml_find_all(layer_xml, ".//Layer")
 
     layers <- xml2::as_list(layer_xml)
     names(layers) <- xml2::xml_name(layer_xml)
