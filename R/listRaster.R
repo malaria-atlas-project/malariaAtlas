@@ -32,11 +32,13 @@ listRaster <- function(printed = TRUE){
   }else{
 
   #query the geoserver to return xml containing a list of all available rasters & convert this to a list
-    xml <- xml2::read_xml(httr::GET("https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities", httr::content_type_xml()))
-    xml_data <- xml2::as_list(xml)
+    xml <- xml2::read_xml("https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities")
 
-  #subset this list to only include list of rasters
-  layers <- xml_data$WMS_Capabilities$Capability$Layer[names(xml_data$WMS_Capabilities$Capability$Layer)=="Layer"]
+    layer_xml <-xml2::xml_find_first(xml2::xml_ns_strip(xml), ".//Layer") %>%
+      xml2::xml_find_all(".//Layer")
+
+    layers <- xml2::as_list(layer_xml)
+    names(layers) <- xml2::xml_name(layer_xml)
 
   #define small function to remove html tags from raster titles
   html2text <- function(htmlString) {
