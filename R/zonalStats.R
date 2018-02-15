@@ -27,7 +27,7 @@
 #' }
 #'
 #' @examples
-#' Download zonal statistics for PfPR2-10 for administrative level 1 units in Nigeria  in 2015 & visualise these on a map.
+#' #Download zonal statistics for PfPR2-10 for administrative level 1 units in Nigeria  in 2015 & visualise these on a map.
 #' \dontrun{
 #' NGA_admin1_shp <- getShp(ISO = "NGA", admin_level = "admin1")
 #' NGA_admin1_pfpr_zs <- zonalStats(surface = "PfPR2-10", shp = NGA_admin1_shp)
