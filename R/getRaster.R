@@ -16,16 +16,17 @@
 #' \dontrun{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #' MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2015)
-#' autoplot_MAPraster(MDG_PfPR2_10)}
+#' autoplot_MAPraster(MDG_PfPR2_10)
 #'
 #' #Download global raster of G6PD deficiency from Howes et al 2012.
-#' \dontrun{G6PDd_global <- getRaster(surface = "G6PD Deficiency")
-#' autoplot_MAPraster(G6PDd_global)}
+#' G6PDd_global <- getRaster(surface = "G6PD Deficiency")
+#' autoplot_MAPraster(G6PDd_global)
+#' }
 #'
 #' @seealso
-#' (\code{\link{autoplot_MAPraster}}
+#' \code{\link{autoplot_MAPraster}}
 #'
-#' to quickly visualise rasters downloded using /code{getRaster}.
+#' to quickly visualise rasters downloded using \code{\link{getRaster}}.
 #'
 #' \code{\link{as.MAPraster}}
 #'
