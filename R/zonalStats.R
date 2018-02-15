@@ -5,7 +5,7 @@
 #' @param surface string containing 'title' of desired raster(s). Only one surface can be specified at a time. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
 #' Check \code{\link{listRaster}} to find titles of available rasters.
 #' @param year vector containing the years for which zonal statistics are desired (for time-varying rasters) if raster is time-varying and no year is specified, zonalStats uses the most recent available year for the specifed surface; for static rasters use NA.
-#' @param shp SpatialPolygons or SpatialPolygonsDataFrame object for which zonal statistics are desired. See \link{\code{getShp}} to download polygons at administrative levels 0 or 1. Use one of \code{shp} OR \code{GAUL_CODE} OR \code{ISO}+\code{loc_name}.
+#' @param shp SpatialPolygons or SpatialPolygonsDataFrame object for which zonal statistics are desired. See \code{\link{getShp}} to download polygons at administrative levels 0 or 1. Use one of \code{shp} OR \code{GAUL_CODE} OR \code{ISO}+\code{loc_name}.
 #' @param GAUL_CODE GAUL_CODE of administrative unit for which zonal statistics are desired. Use one of \code{shp} OR \code{GAUL_CODE} OR \code{ISO}+\code{loc_name}.
 #' @param loc_name If not specifying shp or GAUL_CODE, you can specify administrative units by location_name + ISO3 combination (BOTH are required). See available admin units and spelling with listShp(). Use one of \code{shp} OR \code{GAUL_CODE} OR \code{ISO}+\code{loc_name}.
 #' @param ISO If not specifying shp or GAUL_CODE, you can specify administrative units by location_name + ISO3 combination (BOTH are required). See available admin units and spelling with listShp(). Use one of \code{shp} OR \code{GAUL_CODE} OR \code{ISO}+\code{loc_name}.
@@ -13,7 +13,7 @@
 #'
 #' @return \code{zonalStats} returns a dataframe with the below columns.
 #'
-#' N.B. If inputing a \code{SpatialPolygon} zonal stats are identifiable by POLYGON_ID (\code{ shp@polygons[[x]]@ID });
+#' N.B. If inputing a \code{SpatialPolygon} zonal stats are identifiable by POLYGON_ID (slot @@Polygon, slot @@ID));
 #' if inputing a \code{SpatialPolygonsDataFrame} zonal stats are appended to shp@data.
 #' if using \code{GAUL_CODE} or \code{ISO} + \code{loc_name} zonal stats are appended to columns returned by \code{listShp()}
 #'
@@ -27,16 +27,17 @@
 #' }
 #'
 #' @examples
-#' #Download zonal statistics for PfPR2-10 for administrative level 1 units in Nigeria  in 2015 & visualise these on a map.
+#' Download zonal statistics for PfPR2-10 for administrative level 1 units in Nigeria  in 2015 & visualise these on a map.
 #' \dontrun{
 #' NGA_admin1_shp <- getShp(ISO = "NGA", admin_level = "admin1")
 #' NGA_admin1_pfpr_zs <- zonalStats(surface = "PfPR2-10", shp = NGA_admin1_shp)
 #' NGA_admin1_pfpr_shp <- dplyr::left_join(as.MAPshp(NGA_admin1_shp), NGA_admin1_pfpr_zs, by = c("GAUL_CODE"))
 #'
 #' p <- autoplot(as.MAPshp(NGA_admin1_shp))
-#' p <- p + geom_polygon(data = NGA_admin1_pfpr_shp, aes(x = long, y = lat, group = group, fill = avg), colour = "grey20")+scale_fill_distiller(name = "Mean PfPR",palette = "RdYlBu")+ggtitle("Mean PfPR in Nigeria: ADMIN1")
-#' p
-#' }
+#' p <- p + geom_polygon(data = NGA_admin1_pfpr_shp, aes(x = long, y = lat, group = group, fill = avg), colour = "grey20")+
+#' scale_fill_distiller(name = "Mean PfPR",palette = "RdYlBu")+
+#' ggtitle("Mean PfPR in Nigeria: ADMIN1")
+#' p}
 #'
 #' #Download zonal statistics for mean travel time to cities for West Papua, Indonesia.
 #' \dontrun{
@@ -48,10 +49,10 @@
 #' #Download zonal statistics for predicted all-cause fever prevalence in Melaky, Madagascar in 2006, 2010 & 2014
 #' #' \dontrun{
 #' melaky_all_cause_fever_zs <- zonalStats(surface = "All-cause fever", loc_name = "Melaky", ISO = "MDG", year = c(2006, 2010, 2014))
-#'
-#' @seealso
-#' \code{autoplot} method for quick mapping of shapefiles (\code{\link{autoplot.MAPshp}}).
-#' \code{getRaster} to download full/clipped rasters from MAP (\code{\link{getRaster}}).
+#' }
+#'#' @seealso
+#' \code{autoplot} method for quick mapping of shapefiles \code{\link{autoplot.MAPshp}}.
+#' \code{getRaster} to download full/clipped rasters from MAP \code{\link{getRaster}}.
 #'
 #'
 #' @export

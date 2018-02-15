@@ -42,6 +42,7 @@ autoplot.pr.points <- function(object,
                                map_title = NULL,
                                facet =FALSE,
                                hide_confidential = FALSE,
+                               printed = TRUE,
                                ...){
 
   if(is.null(map_title)){
@@ -100,7 +101,10 @@ object$species <- factor(object$species)
     pr_plot <- pr_plot + ggplot2::facet_wrap(~species)
   }
 
+  if(printed == TRUE){
   print(pr_plot)
+  }
+
   return(invisible(pr_plot))
 }
 

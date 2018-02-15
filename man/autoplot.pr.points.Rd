@@ -6,7 +6,7 @@
 \usage{
 \method{autoplot}{pr.points}(object, point_colours = c("orchid3", "grey",
   "royalblue3", "coral"), admin_level = "admin0", map_title = NULL,
-  facet = FALSE, hide_confidential = FALSE, ...)
+  facet = FALSE, hide_confidential = FALSE, printed = TRUE, ...)
 }
 \arguments{
 \item{object}{a pr.points object downloaded using /code{/link{getPR}}}

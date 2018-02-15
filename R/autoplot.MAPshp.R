@@ -17,7 +17,10 @@
 #' @export
 
 
-autoplot.MAPshp <- function(object, map_title = NULL, facet = FALSE){
+autoplot.MAPshp <- function(object,
+                            map_title = NULL,
+                            facet = FALSE,
+                            printed = TRUE){
 
   if(is.null(map_title)){
     map_title <- paste0(unique(object$COUNTRY_ID),": ",paste0("admin", unique(object$ADMN_LEVEL), collapse = ", "))
@@ -42,6 +45,9 @@ autoplot.MAPshp <- function(object, map_title = NULL, facet = FALSE){
     }
   }
 
+  if(printed ==TRUE){
   print(plot)
+  }
+
   return(invisible(plot))
 }
