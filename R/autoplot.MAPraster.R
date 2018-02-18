@@ -66,7 +66,7 @@ autoplot.MAPraster <- function(object,
   }
 
   plot <- ggplot2::ggplot()+
-    ggplot2::geom_tile(data = object[object$raster_name == rastername,], ggplot2::aes_string(x="x", y="y", fill = "z"))+
+    ggplot2::geom_raster(data = object[object$raster_name == rastername,], ggplot2::aes_string(x="x", y="y", fill = "z"))+
     ggplot2::coord_equal()+
     ggplot2::scale_fill_distiller(name = paste(legend_title),
                          palette = "RdYlBu",
@@ -91,23 +91,29 @@ autoplot.MAPraster <- function(object,
 plot_list <- lapply(X = unique(object$raster_name), FUN = make_plot, object = object, shp_df = shp_df, legend_title = legend_title)
 names(plot_list) <- unique(object$raster_name)
 
-if(length(plot_list)>=4){
-  layout = matrix(c(1,2,3,4), nrow = 2, ncol = 2, byrow = TRUE)
-}else if(length(plot_list)>=2) {
-  layout = matrix(c(1,2), nrow = 1, ncol = 2, byrow = TRUE)
-}else{
-  layout = matrix(c(1), nrow = 1, ncol = 1, byrow = TRUE)
-  }
-
-split_list <- split(plot_list, (seq_along(plot_list)-1) %/% 4)
-
 if(printed == TRUE){
-  print(lapply(split_list, function(x) gridExtra::marrangeGrob(grobs = x,
-                                                               layout_matrix = layout,
-                                                               top = grid::textGrob(paste("\n",plot_title),
-                                                                                    gp = grid::gpar(fontsize = 15, font = 2)))))
+if(length(plot_list)==1){
+  message("Plotting:\n", paste("  -",names(plot_list), collapse = "\n"))
+gridExtra::grid.arrange(plot_list[[1]])
+  }else if(length(plot_list)>1) {
+    split_list <- base::split(plot_list, (seq_along(plot_list)-1) %/% 4)
+
+    if(length(plot_list)==2){
+      nrow = 1
+    }else{
+      nrow = 2
+    }
+
+    message("Plotting (over ",length(split_list)," page(s)):\n", paste("  -",names(plot_list), collapse = "\n"))
+
+    for(p in 1:length(split_list)){
+   do.call(gridExtra::grid.arrange, args = list(grobs = split_list[[p]], nrow = nrow, ncol = 2, top = paste("Page", p, "of", length(split_list))))
+      }
+    }
 }
+
   return(invisible(plot_list))
+
 }
 
 
