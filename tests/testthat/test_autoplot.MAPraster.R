@@ -2,6 +2,7 @@ context('Test Raster autoplotting is working.')
 
 # add more types of rasters to plot
 
+MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 
 test_that('Plotting works for 4 years of the same raster', {
 #time varying range
