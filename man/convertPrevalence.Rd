@@ -29,16 +29,10 @@ sample weights for each age category(the proportion of the
 population in that age category) . If `NULL`, The sample
 weights used in Smith et al. 2007 are used.}
 
-\item{age_max_in}{Vector maximum ages sampled}
+\item{age_max_in}{Vector maximum ages sampled.}
 }
 \description{
 convert prevalences from one age range to another
-}
-\details{
-Smith, D. L. et al. Standardizing estimates of the
-  Plasmodium falciparum parasite rate. Malaria Journal 6, 131 (2007).
-
-  Code written by Nick Golding and Dave Smith
 }
 \examples{
 # Convert from prevalence 2 to 5 to prevalence 2 to 10
@@ -54,4 +48,15 @@ pr_standardised <- convertPrevalence(pr, min_in, max_in,
                                      min_out, max_out)
 
 plot(pr_standardised, pr)
+}
+\references{
+Smith, D. L. et al. Standardizing estimates of the
+  Plasmodium falciparum parasite rate. Malaria Journal 6, 131 (2007).
+
+  Gething, Peter W., et al. "A long neglected world malaria map:
+  Plasmodium vivax endemicity in 2010." PLoS neglected tropical
+  diseases 6.9 (2012): e1814.
+
+
+  Code written by Nick Golding and Dave Smith
 }
