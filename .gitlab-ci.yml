@@ -16,5 +16,5 @@ check_coverage:
     stage: code_coverage
     tags: ['dev1-ssh-deploy']
     script:
-    - R CMD INSTALL
+    - R CMD INSTALL .
     - Rscript ./tests/.test_coverage.R
