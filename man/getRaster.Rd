@@ -5,7 +5,7 @@
 \title{Download Rasters produced by the Malaria Atlas Project}
 \usage{
 getRaster(surface = "PfPR2-10", shp = NULL, view_bbox = NULL,
-  file_path = tempdir(), year = rep(NA, length(surface)))
+  file_path = tempdir(), year = as.list(rep(NA, length(surface))))
 }
 \arguments{
 \item{surface}{string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
