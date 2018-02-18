@@ -41,7 +41,7 @@ getRaster <- function(surface = "PfPR2-10",
                       shp = NULL,
                       view_bbox = NULL,
                       file_path = tempdir(),
-                      year = rep(NA, length(surface))){
+                      year = as.list(rep(NA, length(surface)))){
 
   ## if bbox is not defined by user, use sp::bbox to define this from provided shapefile
   if(is.null(view_bbox)&!is.null(shp)){
@@ -195,7 +195,7 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
       # tidy names of rasters within the stacks within this list.
       for(i in 1:length(stk_list)){
         for (ii in 1:length(stk_list[i])) {
-          names(stk_list[i][[ii]]) <- query_def$raster_title[query_def$file_name==names(stk_list[i][[ii]])]
+          names(stk_list[i][[ii]]) <- query_def$raster_title[query_def$file_name%in%names(stk_list[i][[ii]])]
         }
       }
 
