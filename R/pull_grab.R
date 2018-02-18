@@ -5,14 +5,19 @@
 
 #' convert prevalences from one age range to another
 #'
-#' @details Smith, D. L. et al. Standardizing estimates of the
+#' @references Smith, D. L. et al. Standardizing estimates of the
 #'   Plasmodium falciparum parasite rate. Malaria Journal 6, 131 (2007).
+#'
+#'   Gething, Peter W., et al. "A long neglected world malaria map:
+#'   Plasmodium vivax endemicity in 2010." PLoS neglected tropical
+#'   diseases 6.9 (2012): e1814.
+#'
 #'
 #'   Code written by Nick Golding and Dave Smith
 #'
 #' @param prevalence Vector of prevalence values
 #' @param age_max_in Vector of minimum ages sampled
-#' @param age_max_in Vector maximum ages sampled
+#' @param age_max_in Vector maximum ages sampled.
 #' @param age_min_out Required minimum age range
 #' @param age_max_out Required maximum age range
 #' @param parameters Specifies the set of parameters to use in the
@@ -205,8 +210,7 @@ convertPrevalence <- function (prevalence,
 
       return (ans)
 
-    }
-
+   }
 }
 
 
