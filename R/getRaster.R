@@ -241,7 +241,9 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_name){
       bbox_filter <- ""
     }
 
-    rst_URL <- paste("https://map.ox.ac.uk/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code,bbox_filter, sep = "")
+
+    raster_code_URL <- curl::curl_escape(raster_code)
+    rst_URL <- paste("https://map.ox.ac.uk/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",raster_code_URL,bbox_filter, sep = "")
 
     if(!is.na(year)){
       rst_URL <- paste(rst_URL, "&SUBSET=time(\"", year, "-01-01T00:00:00.000Z\")", sep = "")
