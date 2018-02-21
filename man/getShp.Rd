@@ -4,7 +4,7 @@
 \alias{getShp}
 \title{Download MAPadmin2013 Administrative Boundary Shapefiles from the MAP geoserver}
 \usage{
-getShp(country = NULL, ISO = NULL, bbox = NULL, admin_level = "both",
+getShp(country = NULL, ISO = NULL, extent = NULL, admin_level = "both",
   format = "spatialpolygon", long = NULL, lat = NULL)
 }
 \arguments{
@@ -12,8 +12,8 @@ getShp(country = NULL, ISO = NULL, bbox = NULL, admin_level = "both",
 
 \item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})}
 
-\item{bbox}{bounding box specifying spatial extent for getShp query (see format as per sp::bbox; two-column matrix with minimum values in column 1 and maximum values in column 2).
-Note: getShp downloads the entire polygon for any polygons falling within the bbox.}
+\item{extent}{2x2 matrix specifying the spatial extent within which polygons are desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).
+Note: getShp downloads the entire polygon for any polygons falling within the extent.}
 
 \item{admin_level}{string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "both" accepted)}
 
@@ -46,7 +46,7 @@ Note: getShp downloads the entire polygon for any polygons falling within the bb
 \dontrun{Chad_PR <- getPR(ISO = "TCD", species = "both")}
 \dontrun{Chad_shp <- getShp(ISO = "TCD")}
 
-#' #Download PfPR data & associated shapefiles defined by bbox for Madagascar
+#' #Download PfPR data & associated shapefiles defined by extent for Madagascar
 \dontrun{MDG_PR <- getPR(country = "Madagascar", species = "Pv")}
 
 

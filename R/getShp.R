@@ -5,8 +5,8 @@
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "both" accepted)
-#' @param bbox bounding box specifying spatial extent for getShp query (see format as per sp::bbox; two-column matrix with minimum values in column 1 and maximum values in column 2).
-#' Note: getShp downloads the entire polygon for any polygons falling within the bbox.
+#' @param extent 2x2 matrix specifying the spatial extent within which polygons are desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).
+#' Note: getShp downloads the entire polygon for any polygons falling within the extent.
 #' @param format string specifying the desired format for the downloaded shapefile: either "spatialpolygon" or "df"
 #' @param long longitude of a point location falling within the desired shapefile.
 #' @param lat latitude of a point location falling within the desired shapefile.
@@ -30,7 +30,7 @@
 #' \dontrun{Chad_PR <- getPR(ISO = "TCD", species = "both")}
 #' \dontrun{Chad_shp <- getShp(ISO = "TCD")}
 #'
-#' #' #Download PfPR data & associated shapefiles defined by bbox for Madagascar
+#' #' #Download PfPR data & associated shapefiles defined by extent for Madagascar
 #' \dontrun{MDG_PR <- getPR(country = "Madagascar", species = "Pv")}
 #'
 #'
@@ -43,7 +43,7 @@
 
 getShp <- function(country = NULL,
                    ISO = NULL,
-                   bbox = NULL,
+                   extent = NULL,
                    admin_level = "both",
                    format = "spatialpolygon",
                    long = NULL,
@@ -59,8 +59,8 @@ getShp <- function(country = NULL,
     country_input <-  NULL
   }
 
-  # return error if ISO or country are not correctly specified and bbox is unspecified
-  if(length(country_input)==0 & is.null(c(bbox, lat, long))){
+  # return error if ISO or country are not correctly specified and extent is unspecified
+  if(length(country_input)==0 & is.null(c(extent, lat, long))){
     stop("Invalid country/ISO definition, use is_available() OR listShp() to confirm country spelling and/or ISO code.")
   }
 
@@ -72,10 +72,10 @@ getShp <- function(country = NULL,
   admin_num <- 0
   }
 
-  # if lat and long are provided, define bbox from lat-longs
+  # if lat and long are provided, define extent from lat-longs
 
   if(!is.null(lat)&!is.null(long)){
-    bbox <- sp::bbox(array(data.frame(long, lat)))
+    extent <- sp::bbox(array(data.frame(long, lat)))
   }
 
   #treat ISO = "ALL" separately - return stored polygon OR define big bounding box.
@@ -91,12 +91,12 @@ getShp <- function(country = NULL,
       }
 
     } else {
-    bbox <- matrix(c(-180,-60, 180,85), nrow = 2)
+    extent <- matrix(c(-180,-60, 180,85), nrow = 2)
     }
   }
 
-##if not using bbox - check to see if we have a previosuly stored version of the shapefile we can use.
-  if(is.null(bbox)){
+##if not using extent - check to see if we have a previosuly stored version of the shapefile we can use.
+  if(is.null(extent)){
     if(exists("stored_polygons", envir = .malariaAtlasHidden)){
 
       if(all(unlist(lapply(X = country_input, FUN = function(x) paste(x, admin_num, sep = "_"))) %in% unique(.malariaAtlasHidden$stored_polygons$country_level))){
@@ -112,9 +112,9 @@ getShp <- function(country = NULL,
     }
   }
 
-  # if bbox is specified, use this for geoserver query URL
- if(!is.null(bbox)){
-  URL_filter <- paste("&bbox=",paste(c(bbox[2,1],bbox[1,1],bbox[2,2],bbox[1,2]),collapse = ","), sep = "")
+  # if extent is specified, use this for geoserver query URL
+ if(!is.null(extent)){
+  URL_filter <- paste("&bbox=",paste(c(extent[2,1],extent[1,1],extent[2,2],extent[1,2]),collapse = ","), sep = "")
   #otherwise by default use object country names to download shapefiles for these countries only via cql_filter.
   }else{
   URL_filter <- paste("&cql_filter=COUNTRY_ID%20IN%20(",paste("%27",country_input,"%27",collapse = ",", sep = ""),")", sep = "")
@@ -146,7 +146,7 @@ Shp_polygon$country_level <- paste(Shp_polygon$COUNTRY_ID,"_",Shp_polygon$ADMN_L
 
 if("ALL" %in% ISO){
   .malariaAtlasHidden$all_polygons <- Shp_polygon
-  } else if(is.null(bbox)){
+  } else if(is.null(extent)){
     if(!exists("stored_polygons", envir = .malariaAtlasHidden)){
     .malariaAtlasHidden$stored_polygons <- Shp_polygon
     }else if(exists("stored_polygons", envir = .malariaAtlasHidden)){

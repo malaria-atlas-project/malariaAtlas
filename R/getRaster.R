@@ -4,8 +4,8 @@
 #'
 #' @param surface string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
 #' Check \code{\link{listRaster}} to find titles of available rasters.
-#' @param shp SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).
-#' @param view_bbox  matrix containing bounding box for which rasters will be downloaded (as returned by sp::bbox()) (use either \code{shp} OR \code{view_bbox}; if neither is specified global raster is returned).
+#' @param shp SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
+#' @param extent  2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
 #' @param file_path string specifying the directory to which working files will be downloaded. Defaults to tempdir().
 #' @param year default = \code{rep(NA, length(surface))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.
 #'
@@ -48,13 +48,13 @@
 
 getRaster <- function(surface = "PfPR2-10",
                       shp = NULL,
-                      view_bbox = NULL,
+                      extent = NULL,
                       file_path = tempdir(),
                       year = as.list(rep(NA, length(surface)))){
 
-  ## if bbox is not defined by user, use sp::bbox to define this from provided shapefile
-  if(is.null(view_bbox)&!is.null(shp)){
-  view_bbox <- sp::bbox(shp)
+  ## if extent is not defined by user, use sp::bbox to define this from provided shapefile
+  if(is.null(extent)&!is.null(shp)){
+  extent <- sp::bbox(shp)
   }
 
 if(length(surface)>1){
@@ -127,7 +127,7 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
 
   ## create directory to which rasters will be downloaded
   rstdir <- file.path(file_path,"getRaster")
-  file_tag <- paste(paste(substr(view_bbox,1,5),collapse = "_"),"_",gsub("-", "_", Sys.Date()),sep="")
+  file_tag <- paste(paste(substr(extent,1,5),collapse = "_"),"_",gsub("-", "_", Sys.Date()),sep="")
   dir.create(rstdir, showWarnings = FALSE)
 
   query_def$file_name <- gsub("-", ".", paste0(query_def$file_prefix, file_tag))
@@ -136,7 +136,7 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
   invisible(sapply(X = 1:nrow(query_def),
                    FUN = function(x){
                      download_rst(raster_code = query_def$raster_code[x],
-                                  view_bbox = view_bbox,
+                                  extent = extent,
                                   target_path = rstdir,
                                   year = query_def$year[x],
                                   file_name = query_def$file_name[x])}))
@@ -146,7 +146,7 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
 
   # Return error if new rasters are not found
   if(length(newrst)==0){
-    stop("Raster download error: check surface and/or view_bbox are specified correctly")
+    stop("Raster download error: check surface and/or extent are specified correctly")
   # If only one new raster is found, read this in
   }else if(length(newrst)==1){
     rst_dl <- raster::raster(file.path(rstdir, newrst))
@@ -214,7 +214,7 @@ if(length(raster_code_list[raster_code_list=="NULL"])!= 0){
   }
 
 #Define a small function that downloads rasters from the MAP geoserver to a specifed location
-download_rst <- function(raster_code, view_bbox, target_path, year, file_name){
+download_rst <- function(raster_code, extent, target_path, year, file_name){
 
   available_rasters <- listRaster(printed = FALSE)
   download_warnings <- 0
@@ -235,8 +235,8 @@ download_rst <- function(raster_code, view_bbox, target_path, year, file_name){
 
     rst_path <- file.path(target_path, paste0(file_name,".tiff"))
 
-    if(!is.null(view_bbox)){
-      bbox_filter <- paste("&SUBSET=Long(",paste(view_bbox[1,],collapse = ","),")&SUBSET=Lat(",paste(view_bbox[2,],collapse = ","),")", sep = "")
+    if(!is.null(extent)){
+      bbox_filter <- paste("&SUBSET=Long(",paste(extent[1,],collapse = ","),")&SUBSET=Lat(",paste(extent[2,],collapse = ","),")", sep = "")
     }else{
       bbox_filter <- ""
     }
