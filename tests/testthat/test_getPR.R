@@ -17,12 +17,12 @@ ALL_BOTH <- getPR(country = available_countries, species = "BOTH")
 
 test_that("data is downloaded as a data.frame", {
   #confirm that more than 0 rows are downloaded for Kenya
-  expect_true(length(kenya_pv$country)>0)
-  expect_true(length(kenya_pf$country)>0)
-  expect_true(length(kenya_BOTH$country)>0)
-  expect_true(length(ALL_pv$country)>0)
-  expect_true(length(ALL_pf$country)>0)
-  expect_true(length(ALL_BOTH$country)>0)
+  expect_true(nrow(kenya_pv)>0)
+  expect_true(nrow(kenya_pf)>0)
+  expect_true(nrow(kenya_BOTH)>0)
+  expect_true(nrow(ALL_pv)>0)
+  expect_true(nrow(ALL_pf)>0)
+  expect_true(nrow(ALL_BOTH)>0)
   #checking that getPR returns a data.frame
   expect_true(inherits(kenya_pv,"data.frame"))
   expect_true(inherits(kenya_pf,"data.frame"))

@@ -5,19 +5,21 @@ if(exists("available_countries_stored", envir = .malariaAtlasHidden)){
 rm(available_countries_stored, envir = .malariaAtlasHidden)
 }
 
-available_countries <- listPoints()
+available_countries <- listPoints(printed = FALSE)
 
 test_that("downloaded data.frame is in the correct format",{
-  expect_true(length(available_countries$country)>0)
+  expect_true(nrow(available_countries)>0)
   expect_true(inherits(available_countries,"data.frame"))
 })
 
 test_that("downloaded dataframe contains has correct content",{
-  expect_equal(sort(names(available_countries)),sort(c("country","country_id")))
+  expect_equal(sort(names(available_countries)),sort(c("country","country_id", "continent")))
   expect_true("Kenya" %in% available_countries$country)
   expect_true("KEN" %in% available_countries$country_id)
+  expect_true("Oceania" %in% available_countries$continent)
   expect_true(inherits(available_countries$country, "factor"))
   expect_true(inherits(available_countries$country_id, "factor"))
+  expect_true(inherits(available_countries$continent, "factor"))
 })
 
 test_that("available_countries_stored object is stored in hidden environment",{
@@ -35,7 +37,7 @@ rm(available_rasters_stored, envir = .malariaAtlasHidden)
 available_rasters <- listRaster()
 
 test_that("downloaded data.frame is in the correct format",{
-  expect_true(length(available_rasters$raster_code)>0)
+  expect_true(nrow(available_rasters)>0)
   expect_true(inherits(available_rasters,"data.frame"))
 })
 
@@ -58,7 +60,7 @@ if(exists("available_admin_stored", envir = .malariaAtlasHidden)){
 available_admin <- listShp()
 
 test_that("downloaded data.frame is in the correct format",{
-  expect_true(length(available_admin[,1])>0)
+  expect_true(nrow(available_admin)>0)
   expect_true(inherits(available_admin,"data.frame"))
 })
 
