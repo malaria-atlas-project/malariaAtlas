@@ -58,7 +58,6 @@ message("Downloading list of available rasters...")
   categories <- unname(sapply( X = sapply(layers, function(x){sub("^category:","",grep("^category:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))
 
 
-
   #extract raster metadata from layers list & turn this into dataframe
   available_rasters <- data.frame("title"= titles,
                                   "title_extended" = extended_titles,
@@ -73,6 +72,20 @@ message("Downloading list of available rasters...")
 
   available_rasters <- available_rasters[available_rasters$category == "surfaces",-which(names(available_rasters)=="category")]
   available_rasters <- available_rasters[!is.na(available_rasters$raster_code),]
+
+
+  available_rasters$title[x$title== "An. dirus species complex"&grepl("^Moyes", available_rasters$citation)] <- "An. dirus species complex (2016)"
+  available_rasters$title[x$title== "An. dirus species complex"&grepl("^Sinka", available_rasters$citation)] <- "An. dirus species complex (2011)"
+
+  available_rasters$title[x$title== "An. arabiensis Patton, 1905"&grepl("^Wiebe", available_rasters$citation)] <- "An. arabiensis Patton, 1905 (2017)"
+  available_rasters$title[x$title== "An. arabiensis Patton, 1905"&grepl("^Sinka", available_rasters$citation)] <- "An. arabiensis Patton, 1905 (2010)"
+
+  available_rasters$title[x$title== "An. melas Theobald, 1903"&grepl("^Wiebe", available_rasters$citation)] <- "An. melas Theobald, 1903 (2017)"
+  available_rasters$title[x$title== "An. melas Theobald, 1903"&grepl("^Sinka", available_rasters$citation)] <- "An. melas Theobald, 1903 (2010)"
+
+  available_rasters$title[x$title== "An. merus Dönitz, 1902"&grepl("^Wiebe", available_rasters$citation)] <- "An. merus Dönitz, 1902 (2017)"
+  available_rasters$title[x$title== "An. merus Dönitz, 1902"&grepl("^Sinka", available_rasters$citation)] <- "An. merus Dönitz, 1902 (2010)"
+
 
   #print out message of long raster names
   if(printed == TRUE){
