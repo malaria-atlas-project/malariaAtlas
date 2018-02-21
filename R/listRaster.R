@@ -70,9 +70,7 @@ message("Downloading list of available rasters...")
                                   "category" = categories,
                                   stringsAsFactors = FALSE)
 
-  available_rasters <- available_rasters[available_rasters$category == "surfaces",-which(names(available_rasters)=="category")]
-  available_rasters <- available_rasters[!is.na(available_rasters$raster_code),]
-
+  available_rasters <- available_rasters[available_rasters$category %in% "surfaces",-which(names(available_rasters)=="category")]
 
   available_rasters$title[available_rasters$title== "An. dirus species complex"&grepl("^Moyes", available_rasters$citation)] <- "An. dirus species complex (2016)"
   available_rasters$title[available_rasters$title== "An. dirus species complex"&grepl("^Sinka", available_rasters$citation)] <- "An. dirus species complex (2011)"
