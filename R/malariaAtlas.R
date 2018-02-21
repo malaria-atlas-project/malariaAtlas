@@ -1,4 +1,4 @@
-#' Download publicly available Parasite Rate Survey Points from the Malaria Atlas Project database.
+#' An R interface to open-access malaria data, hosted by the Malaria Atlas Project.
 #'
 #' \code{malariaAtlas} provides a suite of tools to allow you to
 #'  download all publicly available PR points for a specified country

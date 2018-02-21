@@ -4,7 +4,7 @@
 \alias{getPR}
 \title{Download PR points from the MAP database}
 \usage{
-getPR(country = NULL, ISO = NULL, species)
+getPR(country = NULL, ISO = NULL, continent = NULL, species)
 }
 \arguments{
 \item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)}

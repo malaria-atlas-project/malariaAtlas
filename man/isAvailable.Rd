@@ -2,31 +2,35 @@
 % Please edit documentation in R/isAvailable.R
 \name{isAvailable}
 \alias{isAvailable}
-\title{Check whether PR points are available for a given country}
+\title{Check whether PR points are available for a given location}
 \usage{
-isAvailable(country = NULL, ISO = NULL, full_results = FALSE)
+isAvailable(country = NULL, ISO = NULL, continent = NULL,
+  full_results = FALSE)
 }
 \arguments{
-\item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)}
+\item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
-\item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)}
+\item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
-\item{full_results}{By default this is FALSE meaning the function only gives a message outlining whether specified country is available, if \code{full_results == TRUE}, the function returns a data.frame outlining data availability.}
+\item{continent}{string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
+
+\item{full_results}{By default this is FALSE meaning the function only gives a message outlining whether specified country is available, if \code{full_results == TRUE}, the function returns a named list outlining data availability.}
 }
 \value{
-\code{isAvailable} returns a list of countries for which PR points are publicly available.
+\code{isAvailable} returns a named list of input locations with information regarding data availability.
 
-if \code{full_results == TRUE}, a dataframe is returned with the following columns:
+if \code{full_results == TRUE}, a named list is returned with the following elements:
 \enumerate{
-\item \code{available} - those of the specified countries for which PR data points are available
-\item \code{not_available}- those of the specified countries for which PR data points are not available
-\item \code{possible_match}- agrep-matched country names indicating potential mispellings of countries marked as'not available'
+\item \code{location} - specified input locations
+\item \code{is_available}- 1 or 0; indicating whether data is available for this location
+\item \code{possible_match}- agrep-matched country names indicating potential mispellings of countries where is_available == 0; NA if data is available for this location.
 }
 }
 \description{
-\code{isAvailable} checks whether the MAP database contains PR points for the specified country/countries.
+\code{isAvailable} checks whether the MAP database contains PR points for the specified country/location.
 }
 \examples{
 isAvailable(country = "Suriname")
 x <- isAvailable(ISO = "NGA", full_results = TRUE)
+x <- isAvailable(continent = "Oceania", full_results = TRUE)
 }

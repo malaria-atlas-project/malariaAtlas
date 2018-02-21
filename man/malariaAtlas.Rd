@@ -4,7 +4,7 @@
 \name{malariaAtlas}
 \alias{malariaAtlas}
 \alias{malariaAtlas-package}
-\title{Download publicly available Parasite Rate Survey Points from the Malaria Atlas Project database.}
+\title{An R interface to open-access malaria data, hosted by the Malaria Atlas Project.}
 \description{
 \code{malariaAtlas} provides a suite of tools to allow you to
  download all publicly available PR points for a specified country
