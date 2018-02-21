@@ -4,9 +4,11 @@
 #'
 #' \code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as Mayotte and Grench Guiana.
 #'
-#' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
-#' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)
+#' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
+#' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
+#' @param continent string containing continent for desired data, e.g. \code{c("continent1", "continent2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param species string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}
+#' @param extent 2x2 matrix specifying the spatial extent within which PR data is desired, format is as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
 #'
 #'
 #' @return \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
@@ -34,11 +36,16 @@
 #'
 #' @export getPR
 
-getPR <- function(country = NULL, ISO = NULL, continent = NULL, species) {
+getPR <- function(country = NULL, ISO = NULL, continent = NULL, species, extent = NULL) {
 
   if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
     available_countries <- .malariaAtlasHidden$available_countries_stored
   }else{available_countries <- listPoints(printed = FALSE)}
+
+  if(is.null(country)&is.null(ISO)&is.null(continent)&is.null(extent)){
+    stop("Must specify one of: 'country', 'ISO', 'continent', or 'extent'.")
+  }
+
 
 URL <- "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
 
@@ -63,33 +70,51 @@ df <-   utils::read.csv(paste(URL,columns,sep = ""), encoding = "UTF-8")[,-1]
 message("Data downloaded for all available locations.")
 }else{
 
+  if(any(c(!is.null(country), !is.null(ISO), !is.null(continent)))){
   if(!(is.null(country))){
     cql_filter <- "country"
-    column <- "country"
+    colname <- "country"
   } else if(!(is.null(ISO))){
     cql_filter <- "country_id"
-    column <- "country_id"
+    colname <- "country_id"
   }else if(!(is.null(continent))){
     cql_filter <- "continent_id"
-    column <- "continent"
+    colname <- "continent"
   }
 
 checked_availability <- isAvailable(country = country, ISO = ISO, continent = continent, full_results = TRUE)
-message(paste("Importing PR point data for", paste(available_countries$country[available_countries[,column] %in% checked_availability$location[checked_availability$is_available==1]], collapse = ", "), "..."))
+message(paste("Importing PR point data for", paste(available_countries$country[available_countries[,colname] %in% checked_availability$location[checked_availability$is_available==1]], collapse = ", "), "..."))
 country_URL <- paste("%27",curl::curl_escape(gsub("'", "''", checked_availability$location[checked_availability$is_available==1])), "%27", sep = "", collapse = "," )
-df <- utils::read.csv(paste(URL,
-                            columns,
-                            "&cql_filter=",cql_filter,"%20IN%20(",
-                            country_URL,")", sep = ""), encoding = "UTF-8")[,-1]
+full_URL <-paste(URL,
+                 columns,
+                 "&cql_filter=",cql_filter,"%20IN%20(",
+                 country_URL,")", sep = "")
+  }else if(!is.null(extent)){
 
+    bbox_filter <- paste0("&srsName=EPSG:4326&bbox=",extent[2,1],",",extent[1,1],",",extent[2,2],",",extent[1,2])
+    full_URL <- paste0(URL, columns, bbox_filter)
+  }
+
+
+df <- utils::read.csv(full_URL, encoding = "UTF-8")[,-1]
+
+if(!nrow(df)>0 & !is.null(extent)){
+  stop("Error in downloading data for extent: (", paste0(extent, collapse = ","),"),\n try query using country or continent name OR check data availability at map.ox.ac.uk/explorer.")
+}
+
+if(any(c(!is.null(country), !is.null(ISO), !is.null(continent)))){
 message("Data downloaded for ", paste(checked_availability$location[checked_availability$is_available==1], collapse = ", "), ".")
+}else if(!is.null(extent)){
+  message("Data downloaded for extent: ", paste0(extent, collapse = ","))
+}
+
 }
 
 if(tolower(species) == "both"){
   if(all(is.na(unique(df$pv_pos)))) {
-    message("NOTE: All available data was downloaded for both species, but there are no PR points for P. vivax in the MAP database. \nTo check endemicity patterns or to contribute data, visit map.ox.ac.uk OR email us at map@well.ox.ac.uk.")
+    message("NOTE: All available data for this query was downloaded for both species,\n but there are no PR points for P. vivax in this region in the MAP database. \nTo check endemicity patterns or to contribute data, visit map.ox.ac.uk OR email us at map@bdi.ox.ac.uk.")
   }else if(all(is.na(unique(df$pf_pos)))){
-    message("NOTE: All available data was downloaded for both species, but there are no PR points for P. falciparum in the MAP database. \nTo check endemicity patterns or to contribute data, visit map.ox.ac.uk OR email us at map@well.ox.ac.uk.")
+    message("NOTE: All available data for this query was downloaded for both species,\n but there are no PR points for P. falciparum in this region in the MAP database. \nTo check endemicity patterns or to contribute data, visit map.ox.ac.uk OR email us at map@bdi.ox.ac.uk.")
   }
 }
 

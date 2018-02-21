@@ -4,14 +4,19 @@
 \alias{getPR}
 \title{Download PR points from the MAP database}
 \usage{
-getPR(country = NULL, ISO = NULL, continent = NULL, species)
+getPR(country = NULL, ISO = NULL, continent = NULL, species,
+  extent = NULL)
 }
 \arguments{
-\item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)}
+\item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
-\item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{country} OR \code{ISO}, not both)}
+\item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
+
+\item{continent}{string containing continent for desired data, e.g. \code{c("continent1", "continent2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
 \item{species}{string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}}
+
+\item{extent}{2x2 matrix specifying the spatial extent within which PR data is desired, format is as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))}
 }
 \value{
 \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
