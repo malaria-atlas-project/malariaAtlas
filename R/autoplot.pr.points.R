@@ -46,7 +46,12 @@ autoplot.pr.points <- function(object,
                                ...){
 
   if(is.null(map_title)){
-    map_title <- paste("PR Survey Locations in", paste(unique(object$country), collapse = ", "))
+    if(length(unique(as.character(object$country)))>4){
+      title_loc <- unique(as.character(object$continent_id))
+    } else {
+    title_loc <- unique(object$country)
+    }
+    map_title <- paste("PR Survey Locations in", paste(title_loc, collapse = ", "))
   }
 
   if(hide_confidential==TRUE){

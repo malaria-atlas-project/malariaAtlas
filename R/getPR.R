@@ -34,7 +34,11 @@
 #'
 #' @export getPR
 
-getPR <- function(country = NULL, ISO = NULL, species) {
+getPR <- function(country = NULL, ISO = NULL, continent = NULL, species) {
+
+  if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
+    available_countries <- .malariaAtlasHidden$available_countries_stored
+  }else{available_countries <- listPoints(printed = FALSE)}
 
 URL <- "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr"
 
@@ -61,19 +65,24 @@ message("Data downloaded for all available locations.")
 
   if(!(is.null(country))){
     cql_filter <- "country"
+    column <- "country"
   } else if(!(is.null(ISO))){
     cql_filter <- "country_id"
+    column <- "country_id"
+  }else if(!(is.null(continent))){
+    cql_filter <- "continent_id"
+    column <- "continent"
   }
 
-checked_availability <- isAvailable(country = country, ISO = ISO, full_results = TRUE)
-message(paste("Importing PR point data for", paste(checked_availability$country[checked_availability$is_available==1], collapse = ", "), "..."))
-country_URL <- paste("%27",curl::curl_escape(gsub("'", "''", checked_availability$country[checked_availability$is_available==1])), "%27", sep = "", collapse = "," )
+checked_availability <- isAvailable(country = country, ISO = ISO, continent = continent, full_results = TRUE)
+message(paste("Importing PR point data for", paste(available_countries$country[available_countries[,column] %in% checked_availability$location[checked_availability$is_available==1]], collapse = ", "), "..."))
+country_URL <- paste("%27",curl::curl_escape(gsub("'", "''", checked_availability$location[checked_availability$is_available==1])), "%27", sep = "", collapse = "," )
 df <- utils::read.csv(paste(URL,
                             columns,
                             "&cql_filter=",cql_filter,"%20IN%20(",
                             country_URL,")", sep = ""), encoding = "UTF-8")[,-1]
 
-message("Data downloaded for ", paste(checked_availability$country[checked_availability$is_available==1], collapse = ", "), ".")
+message("Data downloaded for ", paste(checked_availability$location[checked_availability$is_available==1], collapse = ", "), ".")
 }
 
 if(tolower(species) == "both"){
@@ -93,29 +102,3 @@ return(df)
 
 }
 
-# pr_data <- getPR(country = c("Australia", "xxxx"), species = "Pf")
-# pr_data <- getPR(country = c("Nigeria", "Madagascar", "São Tomé and Príncipe"), species = "Pf")
-# pr_data <- getPR(country = c("Nigeria", "Madagascar", "Sao Tome and Principe"), species = "Pf")
-# pr_data <- getPR(country = c("Kenya", "Australia", "Ngeria"), species = "Pv")
-# pr_data <- getPR(country = c("Krnya"), species = "Pv")
-# pr_data <- getPR(country = c("Madagascar"), species = "BOTH")
-
-
-# all possible columns:
-#
-# names(PR_points_ALL)
-# [1] "FID"                 "id"                  "month_start"         "year_start"          "month_end"           "year_end"
-# [7] "lower_age"           "upper_age"           "examined"            "pf_pos"              "pv_pos"              "pf_pr"
-# [13] "pv_pr"               "pf_positive"         "pv_positive"         "dhs_id"              "admin1_paper"        "admin2_paper"
-# [19] "admin3_paper"        "method"              "rdt_type"            "survey_notes"        "pcr_type"            "site_id"
-# [25] "admin_id"            "latitude"            "longitude"           "name"                "latlong_source_id"   "site_notes"
-# [31] "forest"              "rice"                "country_id"          "area_type_id"        "rural_urban"         "country"
-# [37] "pf_endemic"          "pv_endemic"          "continent_id"        "area"                "eliminating"         "geo_region_id"
-# [43] "map_region_id"       "who_region_id"       "source_id1"          "year1"               "pdf_status_id1"      "title1"
-# [49] "citation1"           "source_type_id1"     "contact_id1"         "permission_type_id1" "cinfidential2"       "pdf_status_id2"
-# [55] "title2"              "citation2"           "source_id2"          "source_type_id2"     "contact_id2"         "year2"
-# [61] "permission_type_id2" "pdf_status_id3"      "title3"              "citation3"           "source_type_id3"     "contact_id3"
-# [67] "source_id3"          "year3"               "permission_type_id3"
-
-
-# to check columns
