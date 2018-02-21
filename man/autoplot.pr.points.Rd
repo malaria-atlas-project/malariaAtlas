@@ -4,12 +4,15 @@
 \alias{autoplot.pr.points}
 \title{Create a basic plot showing locations of downloaded PR points}
 \usage{
-\method{autoplot}{pr.points}(object, point_colours = c("orchid3", "grey",
-  "royalblue3", "coral"), admin_level = "admin0", map_title = NULL,
+\method{autoplot}{pr.points}(object, shp_df = NULL,
+  point_colours = c("orchid3", "grey", "royalblue3", "coral"),
+  admin_level = "admin0", map_title = "PR Survey Locations",
   facet = FALSE, hide_confidential = FALSE, printed = TRUE, ...)
 }
 \arguments{
 \item{object}{a pr.points object downloaded using /code{/link{getPR}}}
+
+\item{shp_df}{Shapefile(s) (data.frame) to plot with downloaded points. (If not specified automatically uses getShp() for all countries included in pr.points object).}
 
 \item{point_colours}{a vector of colours to use for plotted points}
 

@@ -3,6 +3,7 @@
 #' \code{autoplot.pr.points} creates a map of PR points downloaded from MAP.
 #'
 #' @param object a pr.points object downloaded using /code{/link{getPR}}
+#' @param shp_df Shapefile(s) (data.frame) to plot with downloaded points. (If not specified automatically uses getShp() for all countries included in pr.points object).
 #' @param point_colours a vector of colours to use for plotted points
 #' @param admin_level the administrative level used for plotting administrative boundaries; either /code{"admin0"}; /code{"admin1"} OR /code{"both"}
 #' @param map_title custom title used for the plot
@@ -37,15 +38,16 @@
 #' @export
 
 autoplot.pr.points <- function(object,
+                               shp_df = NULL,
                                point_colours = c("orchid3", "grey", "royalblue3", "coral"),
                                admin_level = "admin0",
-                               map_title = NULL,
+                               map_title = "PR Survey Locations",
                                facet =FALSE,
                                hide_confidential = FALSE,
                                printed = TRUE,
                                ...){
 
-  if(is.null(map_title)){
+  if(map_title=="PR Survey Locations" & is.null(shp_df)){
     if(length(unique(as.character(object$country)))>4){
       title_loc <- unique(as.character(object$continent_id))
     } else {
@@ -73,6 +75,7 @@ autoplot.pr.points <- function(object,
 
 object$species <- factor(object$species)
 
+if(is.null(shp_df)){
   pr_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level)
 
   if(admin_level == "admin0"){
@@ -87,6 +90,11 @@ object$species <- factor(object$species)
     pr_plot <-  ggplot2::ggplot()+ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,], aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")+
       ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,], aes_string(x="long", y = "lat", group = "group"), colour = "grey50", alpha = 0)
   }
+}else{
+  pr_plot <-  ggplot2::ggplot()+ggplot2::geom_polygon(data = shp_df, aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")
+  }
+
+
 
   pr_plot <-   pr_plot +
     ggplot2::geom_point(data = object, aes_string(x = "longitude", y = "latitude", colour = "species"), alpha = 0.7)+
