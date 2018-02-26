@@ -64,7 +64,7 @@ if(tolower(species) == "both") {
 } else {stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")}
 
 
-if("ALL" %in% c(country, ISO)){
+if("all" %in% tolower(c(country, ISO))){
 message(paste("Importing PR point data for all locations, please wait...", sep = ""))
 df <-   utils::read.csv(paste(URL,columns,sep = ""), encoding = "UTF-8")[,-1]
 message("Data downloaded for all available locations.")
@@ -123,6 +123,14 @@ if(any(grepl("dhs", df$permissions_info))){
 }
 
 class(df) <- c("pr.points",class(df))
+
+# removing points that are publicly available but are for the opposite species to what is currently queried.
+if(tolower(species) == "pf"){
+  df <- df[!(is.na(df$pf_pr)&df$permissions_info==""),]
+}else if(tolower(species) == "pv"){
+  df <- df[!(is.na(df$pv_pr)&df$permissions_info==""),]
+  }
+
 return(df)
 
 }
