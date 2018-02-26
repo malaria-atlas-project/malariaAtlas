@@ -79,7 +79,7 @@ getShp <- function(country = NULL,
   }
 
   #treat ISO = "ALL" separately - return stored polygon OR define big bounding box.
-  if("ALL" %in% ISO){
+  if("all" %in% tolower(ISO)){
     if(exists("all_polygons", envir = .malariaAtlasHidden)){
       Shp_polygon <- .malariaAtlasHidden$all_polygons
 
@@ -144,7 +144,7 @@ if(admin_level!="both"){
 
 Shp_polygon$country_level <- paste(Shp_polygon$COUNTRY_ID,"_",Shp_polygon$ADMN_LEVEL,sep = "")
 
-if("ALL" %in% ISO){
+if("all" %in% tolower(ISO)){
   .malariaAtlasHidden$all_polygons <- Shp_polygon
   } else if(is.null(extent)){
     if(!exists("stored_polygons", envir = .malariaAtlasHidden)){

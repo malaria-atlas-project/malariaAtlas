@@ -4,23 +4,20 @@
 \alias{autoplot.pr.points}
 \title{Create a basic plot showing locations of downloaded PR points}
 \usage{
-\method{autoplot}{pr.points}(object, shp_df = NULL,
-  point_colours = c("orchid3", "grey", "royalblue3", "coral"),
-  admin_level = "admin0", map_title = "PR Survey Locations",
-  facet = FALSE, hide_confidential = FALSE, printed = TRUE, ...)
+\method{autoplot}{pr.points}(object, shp_df = NULL, admin_level = "admin0",
+  map_title = "PR Survey Locations", facet = NULL,
+  hide_confidential = FALSE, printed = TRUE, ...)
 }
 \arguments{
 \item{object}{a pr.points object downloaded using /code{/link{getPR}}}
 
 \item{shp_df}{Shapefile(s) (data.frame) to plot with downloaded points. (If not specified automatically uses getShp() for all countries included in pr.points object).}
 
-\item{point_colours}{a vector of colours to use for plotted points}
-
 \item{admin_level}{the administrative level used for plotting administrative boundaries; either /code{"admin0"}; /code{"admin1"} OR /code{"both"}}
 
 \item{map_title}{custom title used for the plot}
 
-\item{facet}{if TRUE, splits map into a separate facet for each malaria species}
+\item{facet}{if TRUE, splits map into a separate facet for each malaria species; by default FALSE if only one species is present in object, TRUE if both P. falciparum and P. vivax data are present in object.}
 
 \item{hide_confidential}{if TRUE, removes confidential points from the map}
 }

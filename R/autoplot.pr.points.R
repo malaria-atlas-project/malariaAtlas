@@ -4,10 +4,9 @@
 #'
 #' @param object a pr.points object downloaded using /code{/link{getPR}}
 #' @param shp_df Shapefile(s) (data.frame) to plot with downloaded points. (If not specified automatically uses getShp() for all countries included in pr.points object).
-#' @param point_colours a vector of colours to use for plotted points
 #' @param admin_level the administrative level used for plotting administrative boundaries; either /code{"admin0"}; /code{"admin1"} OR /code{"both"}
 #' @param map_title custom title used for the plot
-#' @param facet if TRUE, splits map into a separate facet for each malaria species
+#' @param facet if TRUE, splits map into a separate facet for each malaria species; by default FALSE if only one species is present in object, TRUE if both P. falciparum and P. vivax data are present in object.
 #' @param hide_confidential if TRUE, removes confidential points from the map
 #'
 #' @return \code{autoplot.pr.points} returns a plots (gg object) for the supplied pr.points dataframe.
@@ -39,10 +38,9 @@
 
 autoplot.pr.points <- function(object,
                                shp_df = NULL,
-                               point_colours = c("orchid3", "grey", "royalblue3", "coral"),
                                admin_level = "admin0",
                                map_title = "PR Survey Locations",
-                               facet =FALSE,
+                               facet = NULL,
                                hide_confidential = FALSE,
                                printed = TRUE,
                                ...){
@@ -57,23 +55,8 @@ autoplot.pr.points <- function(object,
   }
 
   if(hide_confidential==TRUE){
-    object <- object[object$permissions_info=="",]
+    object <- object[!is.na(object$pr),]
   }
-
-  if(all(c("pv_pr", "pf_pr") %in% colnames(object))){
-    object$species[is.na(object$pv_pos)&is.na(object$pf_pos)] <- "Confidential"
-    object$species[is.na(object$pv_pos)&!is.na(object$pf_pos)] <- "P. falciparum only"
-    object$species[!is.na(object$pv_pos)&is.na(object$pf_pos)] <- "P. vivax only"
-    object$species[!is.na(object$pv_pos)&!is.na(object$pf_pos)] <- "Both Species"
-  }else if("pv_pr" %in% colnames(object) & !("pf_pr" %in% colnames(object))){
-    object$species[is.na(object$pv_pos)] <- "Confidential"
-    object$species[!is.na(object$pv_pos)] <- "P. vivax only"
-  }else if(!("pv_pr" %in% colnames(object)) & "pf_pr" %in% colnames(object)){
-    object$species[is.na(object$pf_pos)] <- "Confidential"
-    object$species[!is.na(object$pf_pos)] <- "P. falciparum only"
-  }
-
-object$species <- factor(object$species)
 
 if(is.null(shp_df)){
   pr_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level)
@@ -95,11 +78,17 @@ if(is.null(shp_df)){
   }
 
 
+  if(all(c("P. vivax", "P. falciparum") %in% unique(object$species))){
+    plot_species_n <- 2
+  } else {
+    plot_species_n <- 1
+  }
 
-  pr_plot <-   pr_plot +
-    ggplot2::geom_point(data = object, aes_string(x = "longitude", y = "latitude", colour = "species"), alpha = 0.7)+
+if(plot_species_n == 1){
+  pr_plot <- pr_plot +
     ggplot2::coord_equal()+
     ggplot2::ggtitle(paste(map_title))+
+    ggplot2::geom_point(data = object, aes_string(x = "longitude", y = "latitude", colour = "pr"), alpha = 0.8)+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
                    strip.text = ggplot2::element_text(face = "bold"),
                    strip.background = element_blank(),
@@ -107,19 +96,50 @@ if(is.null(shp_df)){
                    panel.grid = ggplot2::element_blank(),
                    axis.title = ggplot2::element_blank(),
                    panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
-    ggplot2::scale_color_manual(name = "Species tested:",
-                                values = c("Both Species" = point_colours[1],"Confidential" = point_colours[2], "P. falciparum only" = point_colours[3],"P. vivax only" = point_colours[4]))
+    ggplot2::scale_color_distiller(name = "Raw PR:", palette = "RdYlBu")+
+    ggplot2::scale_size(name = "Survey Size")
+  if(is.null(facet)){
+    facet <- FALSE
+    }
+} else if(plot_species_n == 2){
+  pr_plot <- pr_plot +
+    ggplot2::coord_equal()+
+    ggplot2::ggtitle(paste(map_title))+
+    ggplot2::geom_point(data = object, aes_string(x = "longitude", y = "latitude", colour = "pr"), alpha = 0.8)+
+    ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
+                   strip.text = ggplot2::element_text(face = "bold"),
+                   strip.background = element_blank(),
+                   panel.background = ggplot2::element_rect(fill = "white"),
+                   panel.grid = ggplot2::element_blank(),
+                   axis.title = ggplot2::element_blank(),
+                   panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
+    ggplot2::scale_color_distiller(name = "Raw PR:", palette = "RdYlBu")+
+    ggplot2::scale_size(name = "Survey Size")
+  if(is.null(facet)){
+    facet <- TRUE
+  }
+}
 
   if(facet==TRUE){
     pr_plot <- pr_plot + ggplot2::facet_wrap(~species)
   }
 
+  if("Confidential" %in% unique(object$species)){
+    pr_plot <- pr_plot + ggtitle(label = paste(map_title), subtitle = "(confidential data shown in grey)")
+  }
+
   if(printed == TRUE){
-  print(pr_plot)
+    print(pr_plot)
   }
 
   return(invisible(pr_plot))
 }
+
+
+
+
+
+
 
 
 # MDG_both <- getPR(country = "Madagascar", species = "BOTH")

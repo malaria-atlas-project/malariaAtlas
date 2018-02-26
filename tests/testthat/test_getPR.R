@@ -34,9 +34,9 @@ test_that("data is downloaded as a data.frame", {
 
 test_that("dataframe contains expected data", {
   #confirm column names are as expected
-  expect_equal(sort(names(kenya_pv)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","pv_pos","pv_pr","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
-  expect_equal(sort(names(kenya_pf)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","pf_pos","pf_pr","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
-  expect_equal(sort(names(kenya_BOTH)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","pv_pos","pv_pr","pf_pos","pf_pr","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
+  expect_equal(sort(names(kenya_pv)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species", "method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
+  expect_equal(sort(names(kenya_pf)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
+  expect_equal(sort(names(kenya_BOTH)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
   # checking country name specification works
   expect_equal(levels(kenya_pf$country), "Kenya")
   expect_equal(levels(kenya_pv$country), "Kenya")
@@ -62,12 +62,10 @@ test_that("dataframe contains expected data", {
 
 
 test_that("species specification works as desired",{
-  expect_true(any(tolower(names(kenya_pv)) == "pv_pos"))
-  expect_false(any(tolower(names(kenya_pv)) == "pf_pos"))
-  expect_true(any(tolower(names(kenya_pf)) == "pf_pos"))
-  expect_false(any(tolower(names(kenya_pf)) == "pv_pos"))
-  expect_true(any(tolower(names(kenya_BOTH)) == "pf_pos"))
-  expect_true(any(tolower(names(kenya_BOTH)) == "pv_pos"))
+
+  expect_true("P. vivax" %in% kenya_pv$species & ! "P. falciparum" %in% kenya_pv$species)
+  expect_true(!"P. vivax" %in% kenya_pf$species & "P. falciparum" %in% kenya_pf$species)
+  expect_true("P. vivax" %in% kenya_BOTH$species &  "P. falciparum" %in% kenya_BOTH$species)
 })
 
 

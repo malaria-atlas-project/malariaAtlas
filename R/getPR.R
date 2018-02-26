@@ -36,7 +36,11 @@
 #'
 #' @export getPR
 
-getPR <- function(country = NULL, ISO = NULL, continent = NULL, species, extent = NULL) {
+getPR <- function(country = NULL,
+                  ISO = NULL,
+                  continent = NULL,
+                  species,
+                  extent = NULL) {
 
   if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
     available_countries <- .malariaAtlasHidden$available_countries_stored
@@ -83,7 +87,7 @@ message("Data downloaded for all available locations.")
   }
 
 checked_availability <- isAvailable(country = country, ISO = ISO, continent = continent, full_results = TRUE)
-message(paste("Importing PR point data for", paste(available_countries$country[available_countries[,colname] %in% checked_availability$location[checked_availability$is_available==1]], collapse = ", "), "..."))
+message(paste("Attempting to download PR point data for", paste(available_countries$country[available_countries[,colname] %in% checked_availability$location[checked_availability$is_available==1]], collapse = ", "), "..."))
 country_URL <- paste("%27",curl::curl_escape(gsub("'", "''", checked_availability$location[checked_availability$is_available==1])), "%27", sep = "", collapse = "," )
 full_URL <-paste(URL,
                  columns,
@@ -98,8 +102,19 @@ full_URL <-paste(URL,
 
 df <- utils::read.csv(full_URL, encoding = "UTF-8")[,-1]
 
+# removing points that are publicly available but are for the opposite species to what is currently queried.
+if(tolower(species) == "pf"){
+  df <- dplyr::filter(df, !(is.na(pf_pr) & permissions_info %in% c("", NA)))
+}else if(tolower(species) == "pv"){
+  df <- dplyr::filter(df, !(is.na(pv_pr) & permissions_info %in% c("", NA)))
+}
+
 if(!nrow(df)>0 & !is.null(extent)){
   stop("Error in downloading data for extent: (", paste0(extent, collapse = ","),"),\n try query using country or continent name OR check data availability at map.ox.ac.uk/explorer.")
+}
+
+if(nrow(df) == 0){
+  stop("PR data points are not available for the specified species in requested countries; \n confirm species-specific data availability at map.ox.ac.uk/explorer.")
 }
 
 if(any(c(!is.null(country), !is.null(ISO), !is.null(continent)))){
@@ -124,14 +139,93 @@ if(any(grepl("dhs", df$permissions_info))){
 
 class(df) <- c("pr.points",class(df))
 
-# removing points that are publicly available but are for the opposite species to what is currently queried.
-if(tolower(species) == "pf"){
-  df <- df[!(is.na(df$pf_pr)&df$permissions_info==""),]
-}else if(tolower(species) == "pv"){
-  df <- df[!(is.na(df$pv_pr)&df$permissions_info==""),]
-  }
+df <- pr_wide2long(df)
 
 return(df)
 
 }
+
+
+pr_wide2long <- function(object){
+
+  object$species <- NA
+
+  if(all(c("pv_pr", "pf_pr") %in% colnames(object))){
+    pf <- rbind(object[is.na(object$pv_pos)&!is.na(object$pf_pos),-which(names(object)%in% grep("pv", names(object), value = T))],
+                object[!is.na(object$pv_pos)&!is.na(object$pf_pos),-which(names(object)%in% grep("pv", names(object), value = T))])
+    pv <- rbind(object[!is.na(object$pv_pos)&is.na(object$pf_pos),-which(names(object)%in% grep("pf", names(object), value = T))],
+                object[!is.na(object$pv_pos)&!is.na(object$pf_pos),-which(names(object)%in% grep("pf", names(object), value = T))])
+    conf <- object[is.na(object$pv_pos)&is.na(object$pf_pos),-which(names(object)%in% grep("pf", names(object), value = T))]
+
+    names(pf)[which(names(pf)%in% grep("pos", names(pf), value = T))] <- "positive"
+    names(pv)[which(names(pv)%in% grep("pos", names(pv), value = T))] <- "positive"
+    names(conf)[which(names(conf)%in% grep("pos", names(conf), value = T))] <- "positive"
+    names(pf)[which(names(pf)%in% grep("pr", names(pf), value = T))] <- "pr"
+    names(pv)[which(names(pv)%in% grep("pr", names(pv), value = T))] <- "pr"
+    names(conf)[which(names(conf)%in% grep("pr", names(conf), value = T))] <- "pr"
+
+    if(nrow(pf)!= 0){
+    pf$species <- "P. falciparum"
+    }
+    if(nrow(pv)!= 0){
+    pv$species <- "P. vivax"
+    }
+    if(nrow(conf)!= 0){
+    conf$species <- "Confidential"
+    }
+
+    object <- rbind(pf, pv, conf)
+    object <- dplyr::select(object, dhs_id, site_id, site_name, latitude, longitude, rural_urban, country, country_id, continent_id, month_start, year_start, month_end, year_end, lower_age, upper_age,
+                            examined, positive, pr, species, method, rdt_type, pcr_type, malaria_metrics_available, location_available, permissions_info, citation1, citation2, citation3)
+
+  }else if("pv_pr" %in% colnames(object) & !("pf_pr" %in% colnames(object))){
+    pv <- object[!is.na(object$pv_pos),]
+    conf <- object[is.na(object$pv_pos),]
+
+    names(pv)[which(names(pv)%in% grep("pos", names(pv), value = T))] <- "positive"
+    names(conf)[which(names(conf)%in% grep("pos", names(conf), value = T))] <- "positive"
+
+    names(pv)[which(names(pv)%in% grep("pr", names(pv), value = T))] <- "pr"
+    names(conf)[which(names(conf)%in% grep("pr", names(conf), value = T))] <- "pr"
+
+    if(nrow(pv)!= 0){
+      pv$species <- "P. vivax"
+    }
+    if(nrow(conf)!= 0){
+      conf$species <- "Confidential"
+    }
+
+    object <- rbind(pv, conf)
+    object <- dplyr::select(object, dhs_id, site_id, site_name, latitude, longitude, rural_urban, country, country_id, continent_id, month_start, year_start, month_end, year_end, lower_age, upper_age,
+                            examined, positive, pr, species, method, rdt_type, pcr_type, malaria_metrics_available, location_available, permissions_info, citation1, citation2, citation3)
+
+  }else if(!("pv_pr" %in% colnames(object)) & "pf_pr" %in% colnames(object)){
+
+    pf <- object[!is.na(object$pf_pos),]
+    conf <- object[is.na(object$pf_pos),]
+
+    names(pf)[which(names(pf)%in% grep("pos", names(pf), value = T))] <- "positive"
+    names(conf)[which(names(conf)%in% grep("pos", names(conf), value = T))] <- "positive"
+
+    names(pf)[which(names(pf)%in% grep("pr", names(pf), value = T))] <- "pr"
+    names(conf)[which(names(conf)%in% grep("pr", names(conf), value = T))] <- "pr"
+
+    if(nrow(pf)!= 0){
+      pf$species <- "P. falciparum"
+    }
+    if(nrow(conf)!= 0){
+      conf$species <- "Confidential"
+    }
+
+    object <- rbind(pf, conf)
+    object <- dplyr::select(object, dhs_id, site_id, site_name, latitude, longitude, rural_urban, country, country_id, continent_id, month_start, year_start, month_end, year_end, lower_age, upper_age,
+                            examined, positive, pr, species, method, rdt_type, pcr_type, malaria_metrics_available, location_available, permissions_info, citation1, citation2, citation3)
+
+  }
+
+return(object)
+  }
+
+
+
 

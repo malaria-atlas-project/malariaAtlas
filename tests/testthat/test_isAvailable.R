@@ -8,15 +8,15 @@ context("Using isAvailable to check whether there are PR points for specified lo
 
 test_that("correct error messages are returned for various combinations of countries", {
 #one right
-  expect_message(isAvailable(country = "Madagascar"), "Data is available for Madagascar")
+  expect_message(isAvailable(country = "Madagascar"), "PR points are available for Madagascar")
 #one right, one wrong
-  expect_message(isAvailable(country = c("Madagascar","Australia")), "Data is available for Madagascar")
+  expect_message(isAvailable(country = c("Madagascar","Australia")), "PR points are available for Madagascar")
   expect_warning(isAvailable(country = c("Madagascar","Australia")), "Data not found for 'Australia', use listPoints()")
 #one right, one mispelled
-  expect_message(isAvailable(country = c("Madagascar","Ngeria")), "Data is available for Madagascar")
+  expect_message(isAvailable(country = c("Madagascar","Ngeria")), "PR points are available for Madagascar")
   expect_warning(isAvailable(country = c("Madagascar","Ngeria")), "Data not found for 'Ngeria', did you mean Nigeria")
 #one right, one wrong, one mispelled
-  expect_message(isAvailable(country = c("Madagascar","Australia","Ngeria")), "Data is available for Madagascar")
+  expect_message(isAvailable(country = c("Madagascar","Australia","Ngeria")), "PR points are available for Madagascar")
   expect_warning(isAvailable(country = c("Madagascar","Australia","Ngeria")), "Data not found for 'Australia', use listPoints()")
   expect_warning(isAvailable(country = c("Madagascar","Australia","Ngeria")), "Data not found for 'Ngeria', did you mean Nigeria")
 #one wrong

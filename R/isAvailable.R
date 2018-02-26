@@ -107,7 +107,7 @@ isAvailable <- function(country = NULL, ISO = NULL, continent = NULL, full_resul
 
 
   if(1 %in% checked_availability$is_available) {
-    message("Data is available for ", paste(checked_availability$location[checked_availability$is_available==1], collapse = ", "), ".")
+    message("PR points are available for ", paste(checked_availability$location[checked_availability$is_available==1], collapse = ", "), ".")
   }
 
   error_message <- character()
