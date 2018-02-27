@@ -4,15 +4,19 @@
 \alias{autoplot.MAPshp}
 \title{Create a basic plot to visualise downloaded shapefiles}
 \usage{
-\method{autoplot}{MAPshp}(object, map_title = NULL, facet = FALSE,
+\method{autoplot}{MAPshp}(object, ..., map_title = NULL, facet = FALSE,
   printed = TRUE)
 }
 \arguments{
-\item{object}{a MAPShp object downloaded using /code{/link{getShp}} with format = "df" specified.}
+\item{object}{A MAPShp object downloaded using /code{/link{getShp}} with format = "df" specified.}
 
-\item{map_title}{custom title used for the plot}
+\item{...}{Other arguments passed to specific methods}
 
-\item{facet}{if TRUE, splits map into a separate facet for each malaria species}
+\item{map_title}{Custom title used for the plot.}
+
+\item{facet}{If TRUE, splits map into a separate facet for each malaria species.}
+
+\item{printed}{Should the plot print to graphics device.}
 }
 \value{
 \code{autoplot.MAPshp} returns a map (gg object) of the supplied MAPShp dataframe.
@@ -21,7 +25,9 @@
 \code{autoplot.MAPshp} creates a map of shapefiles downloaded using getShp.
 }
 \examples{
-\dontrun{MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")}
-\dontrun{autoplot(MDG_shp)}
+\dontrun{
+MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+autoplot(MDG_shp)
+}
 
 }

@@ -4,27 +4,33 @@
 \alias{autoplot.MAPraster}
 \title{Quickly visualise Rasters downloaded from MAP}
 \usage{
-\method{autoplot}{MAPraster}(object, shp_df = NULL, legend_title = "",
-  plot_title = "", log_scale = FALSE, printed = TRUE)
+\method{autoplot}{MAPraster}(object, ..., shp_df = NULL, legend_title = "",
+  plot_title = "", fill_scale_transform = "identity", printed = TRUE)
 }
 \arguments{
 \item{object}{MAPraster object to be visualised.}
+
+\item{...}{Other arguments passed to specific methods}
 
 \item{shp_df}{Shapefile(s) (data.frame) to plot with downloaded raster.}
 
 \item{legend_title}{String used as title for all colour scale legends.}
 
-\item{log_scale}{Logical vector indicating whether to use a log scale for legend colour scales.}
-
 \item{printed}{Logical vector indicating whether to print maps of supplied rasters.}
 
 \item{page_title}{String used as header for all plot pages.}
+
+\item{log_scale}{Logical vector indicating whether to use a log scale for legend colour scales.}
 }
 \value{
 \code{autoplot.MAPraster} returns a list of plots (gg objects) for each supplied raster.
-
-#' @examples
-\dontrun{#Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in 2013 and visualise these together on a map.
+}
+\description{
+\code{autoplot.MAPraster} creates a map of all rasters in a MAPraster object and displays these in a grid.
+}
+\examples{
+\dontrun{
+#Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in 2013 and visualise these together on a map.
 
 Download madagascar shapefile to use for raster download.
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
@@ -39,15 +45,14 @@ p[[1]] +
 geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = pf_pos / examined, size = examined), shape = 21)+
 scale_size_continuous(name = "Survey Size")+
 scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
-ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")}
+ggtitle("Raw PfPR Survey points\\n + Modelled PfPR 2-10 in Madagascar in 2013")
 
 
 #Download global raster of G6PD deficiency (Howes et al 2012) and visualise this on a map.
-\dontrun{G6PDd_global <- getRaster(surface = "G6PD Deficiency")
-autoplot_MAPraster(G6PDd_global)}
+G6PDd_global <- getRaster(surface = "G6PD Deficiency")
+autoplot_MAPraster(G6PDd_global)
 }
-\description{
-\code{autoplot.MAPraster} creates a map of all rasters in a MAPraster object and displays these in a grid.
+
 }
 \seealso{
 \code{\link{getRaster}}:

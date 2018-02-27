@@ -4,12 +4,15 @@
 \alias{autoplot.pr.points}
 \title{Create a basic plot showing locations of downloaded PR points}
 \usage{
-\method{autoplot}{pr.points}(object, shp_df = NULL, admin_level = "admin0",
-  map_title = "PR Survey Locations", facet = NULL,
-  hide_confidential = FALSE, printed = TRUE, ...)
+\method{autoplot}{pr.points}(object, ..., shp_df = NULL,
+  admin_level = "admin0", map_title = "PR Survey Locations",
+  fill_legend_title = "Raw PR", fill_scale_transform = "identity",
+  facet = NULL, hide_confidential = FALSE, printed = TRUE)
 }
 \arguments{
 \item{object}{a pr.points object downloaded using /code{/link{getPR}}}
+
+\item{...}{Other arguments passed to specific methods}
 
 \item{shp_df}{Shapefile(s) (data.frame) to plot with downloaded points. (If not specified automatically uses getShp() for all countries included in pr.points object).}
 
@@ -28,10 +31,11 @@
 \code{autoplot.pr.points} creates a map of PR points downloaded from MAP.
 }
 \examples{
-\dontrun{PfPR_surveys_NGA <- getPR(country = c("Nigeria"), species = "Pf")}
-\dontrun{autoplot(PfPR_surveys_NGA)}
+\dontrun{
+PfPR_surveys_NGA <- getPR(country = c("Nigeria"), species = "Pf")
+autoplot(PfPR_surveys_NGA)
 
-\dontrun{#Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in 2013 and visualise these together on a map.
+#Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in 2013 and visualise these together on a map.
 
 Download madagascar shapefile to use for raster download.
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
@@ -46,7 +50,7 @@ p[[1]] +
 geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = pf_pos / examined, size = examined), shape = 21)+
 scale_size_continuous(name = "Survey Size")+
 scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
-ggtitle("Raw PfPR Survey points\\n + Modelled PfPR 2-10 in Madagascar in 2013")}
-
+ggtitle("Raw PfPR Survey points\\n + Modelled PfPR 2-10 in Madagascar in 2013")
+}
 
 }

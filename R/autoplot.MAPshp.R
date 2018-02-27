@@ -2,22 +2,28 @@
 #'
 #' \code{autoplot.MAPshp} creates a map of shapefiles downloaded using getShp.
 #'
-#' @param object a MAPShp object downloaded using /code{/link{getShp}} with format = "df" specified.
-#' @param map_title custom title used for the plot
-#' @param facet if TRUE, splits map into a separate facet for each malaria species
+#' @param object A MAPShp object downloaded using /code{/link{getShp}} with format = "df" specified.
+#' @param map_title Custom title used for the plot.
+#' @param facet If TRUE, splits map into a separate facet for each malaria species.
+#' @param printed Should the plot print to graphics device.
+#' @param ... Other arguments passed to specific methods
 #'
 #' @return \code{autoplot.MAPshp} returns a map (gg object) of the supplied MAPShp dataframe.
 #'
 #'
 #' @examples
-#' \dontrun{MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")}
-#' \dontrun{autoplot(MDG_shp)}
+#' \dontrun{
+#' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+#' autoplot(MDG_shp)
+#' }
 #'
 #' @importFrom ggplot2 autoplot
+#' @method autoplot MAPshp
 #' @export
 
 
 autoplot.MAPshp <- function(object,
+                            ...,
                             map_title = NULL,
                             facet = FALSE,
                             printed = TRUE){

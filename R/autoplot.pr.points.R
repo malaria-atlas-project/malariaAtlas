@@ -8,14 +8,16 @@
 #' @param map_title custom title used for the plot
 #' @param facet if TRUE, splits map into a separate facet for each malaria species; by default FALSE if only one species is present in object, TRUE if both P. falciparum and P. vivax data are present in object.
 #' @param hide_confidential if TRUE, removes confidential points from the map
+#' @param ... Other arguments passed to specific methods
 #'
 #' @return \code{autoplot.pr.points} returns a plots (gg object) for the supplied pr.points dataframe.
 #'
 #' @examples
-#' \dontrun{PfPR_surveys_NGA <- getPR(country = c("Nigeria"), species = "Pf")}
-#' \dontrun{autoplot(PfPR_surveys_NGA)}
+#' \dontrun{
+#' PfPR_surveys_NGA <- getPR(country = c("Nigeria"), species = "Pf")
+#' autoplot(PfPR_surveys_NGA)
 #'
-#' \dontrun{#Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in 2013 and visualise these together on a map.
+#' #Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in 2013 and visualise these together on a map.
 #'
 #' Download madagascar shapefile to use for raster download.
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
@@ -30,13 +32,17 @@
 #' geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = pf_pos / examined, size = examined), shape = 21)+
 #' scale_size_continuous(name = "Survey Size")+
 #' scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
-#' ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")}
+#' ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
+#' }
 #'
-#'
-#' @importFrom ggplot2 autoplot
+#' @method autoplot pr.points
 #' @export
 
+# @importFrom ggplot2 autoplot
+
+
 autoplot.pr.points <- function(object,
+                               ...,
                                shp_df = NULL,
                                admin_level = "admin0",
                                map_title = "PR Survey Locations",
@@ -44,8 +50,7 @@ autoplot.pr.points <- function(object,
                                fill_scale_transform = "identity",
                                facet = NULL,
                                hide_confidential = FALSE,
-                               printed = TRUE,
-                               ...){
+                               printed = TRUE){
 
   if(map_title=="PR Survey Locations" & is.null(shp_df)){
     if(length(unique(as.character(object$country)))>4){

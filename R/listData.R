@@ -5,10 +5,11 @@
 #' @return \code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 #'
 #' @examples
+#' \dontrun{
 #' available_admin_units <- listShp()
 #' available_pr_points<- listPoints()
 #' available_rasters <- listRaster()
-#'
+#' }
 #' @seealso
 #' \code{link{listPoints}}
 #' \code{\link{listRaster}}
