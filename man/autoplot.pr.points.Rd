@@ -47,10 +47,12 @@ p <- autoplot_MAPraster(MDG_PfPR2_10)
 Download raw PfPR survey points & plot these over the top of the raster
 pr <- getPR(country = c("Madagascar"), species = "Pf")
 p[[1]] +
-geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = pf_pos / examined, size = examined), shape = 21)+
-scale_size_continuous(name = "Survey Size")+
-scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
-ggtitle("Raw PfPR Survey points\\n + Modelled PfPR 2-10 in Madagascar in 2013")
+geom_point(data = pr[pr$year_start==2013,],
+           aes(longitude, latitude, fill = pf_pos / examined,
+               size = examined), shape = 21) +
+  scale_size_continuous(name = "Survey Size") +
+  scale_fill_distiller(name = "PfPR", palette = "RdYlBu") +
+  ggtitle("Raw PfPR Survey points\\n + Modelled PfPR 2-10 in Madagascar in 2013")
 }
 
 }

@@ -40,7 +40,8 @@ autoplot_MAPraster(G6PDd_global)
 MDG_PfPR2_10_range <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2012:2015)
 
 # Download a mix of rasters
-MDG_rasters <- getRaster(surface = c("PfPR2-10", 'Pf Incidence', 'Pf Support'), shp = MDG_shp, year = list(2009:2012, 2005:2007, NA))
+MDG_rasters <- getRaster(surface = c("PfPR2-10", 'Pf Incidence', 'Pf Support'),
+                         shp = MDG_shp, year = list(2009:2012, 2005:2007, NA))
 p <- autoplot_MAPraster(MDG_tvr_tvr_s)
 
 }
@@ -53,7 +54,8 @@ to quickly visualise rasters downloded using \code{\link{getRaster}}.
 
 \code{\link{as.MAPraster}}
 
-to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for easy plotting with ggplot.
+to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for
+  easy plotting with ggplot.
 
 \code{\link{autoplot.MAPraster}}
 
