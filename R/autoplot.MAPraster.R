@@ -54,23 +54,18 @@ autoplot.MAPraster <- function(object,
                                shp_df = NULL,
                                legend_title = "",
                                plot_title = "",
-                               log_scale = FALSE,
+                               fill_scale_transform = "identity",
                                printed = TRUE){
 
   make_plot <- function(object, rastername, shp_df, legend_title){
 
-  if(log_scale == TRUE){
-    trans <- "log10"
-  }else{
-    trans <- "identity"
-  }
 
   plot <- ggplot2::ggplot()+
     ggplot2::geom_raster(data = object[object$raster_name == rastername,], ggplot2::aes_string(x="x", y="y", fill = "z"))+
     ggplot2::coord_equal()+
     ggplot2::scale_fill_distiller(name = paste(legend_title),
                          palette = "RdYlBu",
-                         trans = trans,
+                         trans = fill_scale_transform,
                          na.value = grDevices::grey(0.9))+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
         panel.background = ggplot2::element_rect(fill = "white"),

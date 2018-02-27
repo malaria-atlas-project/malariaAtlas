@@ -40,6 +40,8 @@ autoplot.pr.points <- function(object,
                                shp_df = NULL,
                                admin_level = "admin0",
                                map_title = "PR Survey Locations",
+                               fill_legend_title = "Raw PR",
+                               fill_scale_transform = "identity",
                                facet = NULL,
                                hide_confidential = FALSE,
                                printed = TRUE,
@@ -96,7 +98,7 @@ if(plot_species_n == 1){
                    panel.grid = ggplot2::element_blank(),
                    axis.title = ggplot2::element_blank(),
                    panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
-    ggplot2::scale_fill_distiller(name = "Raw PR:", palette = "RdYlBu")+
+    ggplot2::scale_fill_distiller(name = paste(fill_legend_title), palette = "RdYlBu", trans = fill_scale_transform)+
     ggplot2::scale_size(name = "Survey Size")
   if(is.null(facet)){
     facet <- FALSE
@@ -113,7 +115,7 @@ if(plot_species_n == 1){
                    panel.grid = ggplot2::element_blank(),
                    axis.title = ggplot2::element_blank(),
                    panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
-    ggplot2::scale_fill_distiller(name = "Raw PR:", palette = "RdYlBu")+
+    ggplot2::scale_fill_distiller(name = paste(fill_legend_title), palette = "RdYlBu", trans = fill_scale_transform)+
     ggplot2::scale_size(name = "Survey Size")
   if(is.null(facet)){
     facet <- TRUE
@@ -126,8 +128,8 @@ if(plot_species_n == 1){
 
   if("Confidential" %in% unique(object$species)){
     pr_plot <- pr_plot +
-      geom_point(data = object[object$species == "Confidential",], aes (x = longitude, y = latitude), fill = "grey40", size = 3, shape = 21, alpha = 0.6) +
-      ggtitle(label = paste(map_title), subtitle = "(confidential data shown in grey)")
+      geom_point(data = object[object$species == "Confidential",], aes (x = longitude, y = latitude), fill = "black", size = 3, shape = 21, alpha = 0.8) +
+      ggtitle(label = paste(map_title), subtitle = "(confidential data shown in black)")
   }
 
   if(printed == TRUE){
