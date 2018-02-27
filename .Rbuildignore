@@ -1,5 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-.gitlab-ci.ylm
+.gitlab-ci.yml
 tests/.test_coverage.R
-tests/.test_for_CI.R
+tests/.tests_for_CI.R
