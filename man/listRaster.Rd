@@ -6,6 +6,9 @@
 \usage{
 listRaster(printed = TRUE)
 }
+\arguments{
+\item{printed}{Should the list be printed to the console?}
+}
 \value{
 \code{listRaster} returns a data.frame detailing the following information for each raster available to download from the Malaria Atlas Project database.
 

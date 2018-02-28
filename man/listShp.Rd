@@ -6,6 +6,9 @@
 \usage{
 listShp(printed = TRUE)
 }
+\arguments{
+\item{printed}{Should the list be printed to the console?}
+}
 \value{
 \code{listShp} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 }

@@ -6,6 +6,11 @@
 \usage{
 listData(datatype = NULL, printed = TRUE)
 }
+\arguments{
+\item{datatype}{One of 'points', 'raster' or 'shape'}
+
+\item{printed}{Should the list be printed to the console?}
+}
 \value{
 \code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 }

@@ -6,10 +6,10 @@
 #' @param object MAPraster object to be visualised.
 #' @param shp_df Shapefile(s) (data.frame) to plot with downloaded raster.
 #' @param legend_title String used as title for all colour scale legends.
-#' @param page_title String used as header for all plot pages.
-#' @param log_scale Logical vector indicating whether to use a log scale for legend
-#'   colour scales.
+#' @param plot_title String used as header for all plot pages.
 #' @param printed Logical vector indicating whether to print maps of supplied rasters.
+#' @param fill_scale_transform String givning a transformation for the fill aesthetic.
+#'   See the trans argument in \code{\link{continuous_scale}} for possible values.
 #' @param ... Other arguments passed to specific methods
 #'
 #' @return \code{autoplot.MAPraster} returns a list of plots (gg objects) for each

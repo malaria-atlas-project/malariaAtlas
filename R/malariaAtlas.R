@@ -12,6 +12,8 @@
 #'  }
 #' @docType package
 #' @name malariaAtlas
+#' @import ggplot2
+
 NULL
 
 

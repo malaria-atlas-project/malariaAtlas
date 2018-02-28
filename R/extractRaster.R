@@ -104,7 +104,7 @@ extractLayerValues <- function(df = NULL,
   }
 
   if(!is.null(df)){
-    write.csv(df, file.path(working_dir, "extractRaster_coords.csv"))
+    utils::write.csv(df, file.path(working_dir, "extractRaster_coords.csv"))
     csv_path <- file.path(working_dir, "extractRaster_coords.csv")
   }
 
@@ -128,9 +128,9 @@ extractLayerValues <- function(df = NULL,
   }
 
 
-  download.file(paste("https://map.ox.ac.uk/explorer-api/containers/",temp_foldername,"/download/analysis_",file_name, sep = ""), file.path(working_dir, "extractRaster_results.csv"), mode = "wb")
+  utils::download.file(paste("https://map.ox.ac.uk/explorer-api/containers/",temp_foldername,"/download/analysis_",file_name, sep = ""), file.path(working_dir, "extractRaster_results.csv"), mode = "wb")
 
-  new_df <- read.csv(file.path(working_dir, "extractRaster_results.csv"))
+  new_df <- utils::read.csv(file.path(working_dir, "extractRaster_results.csv"))
 
   r4 <- httr::DELETE(paste("https://map.ox.ac.uk/explorer-api/containers/", temp_foldername, sep = ""))
 

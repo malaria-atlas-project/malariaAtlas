@@ -8,6 +8,10 @@
 #' @param map_title custom title used for the plot
 #' @param facet if TRUE, splits map into a separate facet for each malaria species; by default FALSE if only one species is present in object, TRUE if both P. falciparum and P. vivax data are present in object.
 #' @param hide_confidential if TRUE, removes confidential points from the map
+#' @param fill_legend_title Add a title to the legend.
+#' @param fill_scale_transform String givning a transformation for the fill aesthetic.
+#'   See the trans argument in \code{\link{continuous_scale}} for possible values.
+#' @param printed Should the plot be printed to the graphics device.
 #' @param ... Other arguments passed to specific methods
 #'
 #' @return \code{autoplot.pr.points} returns a plots (gg object) for the supplied pr.points dataframe.
@@ -17,7 +21,8 @@
 #' PfPR_surveys_NGA <- getPR(country = c("Nigeria"), species = "Pf")
 #' autoplot(PfPR_surveys_NGA)
 #'
-#' #Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in 2013 and visualise these together on a map.
+#' # Download PfPR2-10 Raster (Bhatt et al. 2015) and raw survey points for Madagascar in
+#' #   2013 and visualise these together on a map.
 #'
 #' Download madagascar shapefile to use for raster download.
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
@@ -71,19 +76,31 @@ if(is.null(shp_df)){
   pr_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level)
 
   if(admin_level == "admin0"){
-    pr_plot <-  ggplot2::ggplot()+ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,], aes_string(x="long", y = "lat", group = "group"), colour = "grey50", fill = "grey95")
+    pr_plot <-  ggplot2::ggplot()+
+                  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,],
+                                        aes_string(x="long", y = "lat", group = "group"), colour = "grey50", fill = "grey95")
   }
 
   if(admin_level == "admin1"){
-    pr_plot <-  ggplot2::ggplot()+ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,], aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")
+    pr_plot <-  ggplot2::ggplot() +
+                  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,],
+                                        aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")
   }
 
   if(admin_level == "both"){
-    pr_plot <-  ggplot2::ggplot()+ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,], aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")+
-      ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,], aes_string(x="long", y = "lat", group = "group"), colour = "grey50", alpha = 0)
+    pr_plot <-  ggplot2::ggplot() +
+                  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,],
+                                        aes_string(x="long", y = "lat", group = "group"),
+                                        colour = "grey80", fill = "grey95") +
+                  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,],
+                                        aes_string(x="long", y = "lat", group = "group"),
+                                        colour = "grey50", alpha = 0)
   }
 }else{
-  pr_plot <-  ggplot2::ggplot()+ggplot2::geom_polygon(data = shp_df, aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")
+  pr_plot <-  ggplot2::ggplot() +
+                ggplot2::geom_polygon(data = shp_df,
+                                      aes_string(x="long", y = "lat", group = "group"),
+                                      colour = "grey80", fill = "grey95")
   }
 
 
@@ -135,7 +152,9 @@ if(plot_species_n == 1){
 
   if("Confidential" %in% unique(object$species)){
     pr_plot <- pr_plot +
-      geom_point(data = object[object$species == "Confidential",], aes (x = longitude, y = latitude), fill = "black", size = 3, shape = 21, alpha = 0.8) +
+      geom_point(data = object[object$species == "Confidential",],
+                 aes_string(x = 'longitude', y = 'latitude'),
+                 fill = "black", size = 3, shape = 21, alpha = 0.8) +
       ggtitle(label = paste(map_title), subtitle = "(confidential data shown in black)")
   }
 

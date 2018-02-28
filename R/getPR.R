@@ -102,6 +102,9 @@ full_URL <-paste(URL,
 
 df <- utils::read.csv(full_URL, encoding = "UTF-8")[,-1]
 
+# Just to avoid visible binding notes
+pf_pr <- pv_pr <- permissions_info <- NULL
+
 # removing points that are publicly available but are for the opposite species to what is currently queried.
 if(tolower(species) == "pf"){
   df <- dplyr::filter(df, !(is.na(pf_pr) & permissions_info %in% c("", NA)))
@@ -174,9 +177,21 @@ pr_wide2long <- function(object){
     conf$species <- "Confidential"
     }
 
+    # To avoid no visible bindings. But maybe need to learn tidyeval.
+    object <- dhs_id <- site_id <- site_name <- latitude<-  longitude <- NULL
+    rural_urban <- country <- country_id <- continent_id <- month_start <- NULL
+    year_start <- month_end <- year_end <- lower_age <- upper_age <- examined <- NULL
+    positive <- pr <- species <- method <- rdt_type <- pcr_type <- NULL
+    malaria_metrics_available <- location_available <- permissions_info <- NULL
+    citation1 <- citation2 <- citation3 <- NULL
+
     object <- rbind(pf, pv, conf)
-    object <- dplyr::select(object, dhs_id, site_id, site_name, latitude, longitude, rural_urban, country, country_id, continent_id, month_start, year_start, month_end, year_end, lower_age, upper_age,
-                            examined, positive, pr, species, method, rdt_type, pcr_type, malaria_metrics_available, location_available, permissions_info, citation1, citation2, citation3)
+    object <- dplyr::select(object, dhs_id, site_id, site_name, latitude, longitude,
+                            rural_urban, country, country_id, continent_id, month_start,
+                            year_start, month_end, year_end, lower_age, upper_age,
+                            examined, positive, pr, species, method, rdt_type, pcr_type,
+                            malaria_metrics_available, location_available, permissions_info,
+                            citation1, citation2, citation3)
 
   }else if("pv_pr" %in% colnames(object) & !("pf_pr" %in% colnames(object))){
     pv <- object[!is.na(object$pv_pos),]

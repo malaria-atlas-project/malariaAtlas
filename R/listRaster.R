@@ -1,6 +1,7 @@
 #' List all MAP Rasters available to download.
 #'
 #' \code{listRaster} lists all rasters available to download from the Malaria Atlas Project database.
+#' @param printed Should the list be printed to the console?
 #' @return \code{listRaster} returns a data.frame detailing the following information for each raster available to download from the Malaria Atlas Project database.
 #'
 #' \enumerate{

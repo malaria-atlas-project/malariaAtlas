@@ -16,7 +16,7 @@
 #'   Code written by Nick Golding and Dave Smith
 #'
 #' @param prevalence Vector of prevalence values
-#' @param age_max_in Vector of minimum ages sampled
+#' @param age_min_in Vector of minimum ages sampled
 #' @param age_max_in Vector maximum ages sampled.
 #' @param age_min_out Required minimum age range
 #' @param age_max_out Required maximum age range
@@ -305,7 +305,7 @@ PFw <- function(P_prime,
   stopifnot(max(idx) <= length(sample_weights))
 
   # weight these prevalences
-  PF_Aw  <- weighted.mean(P,
+  PF_Aw  <- stats::weighted.mean(P,
                           sample_weights[idx])
 
   return(PF_Aw)
@@ -346,7 +346,7 @@ invertPF <- function(prevalence,
   }
 
   # find the optimal value of `P_prime`
-  PF_A <- optimize(f = loss,
+  PF_A <- stats::optimize(f = loss,
                    interval = c(0, 1),
                    sample_weights = sample_weights,
                    age_min = age_min,

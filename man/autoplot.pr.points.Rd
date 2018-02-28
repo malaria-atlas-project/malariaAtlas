@@ -20,9 +20,16 @@
 
 \item{map_title}{custom title used for the plot}
 
+\item{fill_legend_title}{Add a title to the legend.}
+
+\item{fill_scale_transform}{String givning a transformation for the fill aesthetic.
+See the trans argument in \code{\link{continuous_scale}} for possible values.}
+
 \item{facet}{if TRUE, splits map into a separate facet for each malaria species; by default FALSE if only one species is present in object, TRUE if both P. falciparum and P. vivax data are present in object.}
 
 \item{hide_confidential}{if TRUE, removes confidential points from the map}
+
+\item{printed}{Should the plot be printed to the graphics device.}
 }
 \value{
 \code{autoplot.pr.points} returns a plots (gg object) for the supplied pr.points dataframe.
@@ -35,7 +42,8 @@
 PfPR_surveys_NGA <- getPR(country = c("Nigeria"), species = "Pf")
 autoplot(PfPR_surveys_NGA)
 
-#Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in 2013 and visualise these together on a map.
+# Download PfPR2-10 Raster (Bhatt et al. 2015) and raw survey points for Madagascar in
+#   2013 and visualise these together on a map.
 
 Download madagascar shapefile to use for raster download.
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")

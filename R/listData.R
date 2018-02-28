@@ -4,6 +4,8 @@
 #'
 #' @return \code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 #'
+#' @param datatype One of 'points', 'raster' or 'shape'
+#' @param printed Should the list be printed to the console?
 #' @examples
 #' \dontrun{
 #' available_admin_units <- listShp()

@@ -16,12 +16,12 @@
 
 \item{legend_title}{String used as title for all colour scale legends.}
 
+\item{plot_title}{String used as header for all plot pages.}
+
+\item{fill_scale_transform}{String givning a transformation for the fill aesthetic.
+See the trans argument in \code{\link{continuous_scale}} for possible values.}
+
 \item{printed}{Logical vector indicating whether to print maps of supplied rasters.}
-
-\item{page_title}{String used as header for all plot pages.}
-
-\item{log_scale}{Logical vector indicating whether to use a log scale for legend
-colour scales.}
 }
 \value{
 \code{autoplot.MAPraster} returns a list of plots (gg objects) for each

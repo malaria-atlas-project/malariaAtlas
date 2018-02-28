@@ -1,7 +1,7 @@
 #' Quickly visualise Rasters downloaded from MAP
 #'
 #' \code{autoplot_MAPraster} is a wrapper for /code{/link{autoplot.MAPraster}} that calls
-#'   \code{\ink{as.MAPraster}} to allow automatic map creation for RasterLayer/RasterStack
+#'   \code{\link{as.MAPraster}} to allow automatic map creation for RasterLayer/RasterStack
 #'   objects downloaded from MAP.
 #'
 #' @param object RasterLayer/RasterStack object to be visualised.

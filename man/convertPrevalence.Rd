@@ -11,7 +11,9 @@ convertPrevalence(prevalence, age_min_in, age_max_in, age_min_out = rep(2,
 \arguments{
 \item{prevalence}{Vector of prevalence values}
 
-\item{age_max_in}{Vector of minimum ages sampled}
+\item{age_min_in}{Vector of minimum ages sampled}
+
+\item{age_max_in}{Vector maximum ages sampled.}
 
 \item{age_min_out}{Required minimum age range}
 
@@ -28,8 +30,6 @@ for *Plasmodium falciparum* defined in that paper,
 sample weights for each age category(the proportion of the
 population in that age category) . If `NULL`, The sample
 weights used in Smith et al. 2007 are used.}
-
-\item{age_max_in}{Vector maximum ages sampled.}
 }
 \description{
 convert prevalences from one age range to another
