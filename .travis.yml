@@ -1,0 +1,29 @@
+# Continuous integration with travis
+language: r
+sudo: required
+
+
+
+# cache packages to speed up builds
+#cache: packages
+
+r_packages:
+ - curl
+ - rgdal
+ - raster 
+ - sp
+ - xml2
+ - grid 
+ - gridExtra
+ - httr
+ - dplyr
+ - stringi
+ - tidyr
+
+
+
+after_success:
+ - Rscript -e 'library(covr);codecov()'
+
+
+
