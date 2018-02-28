@@ -6,6 +6,9 @@
 \usage{
 listPoints(printed = TRUE)
 }
+\arguments{
+\item{printed}{Should the list be printed to the console?}
+}
 \value{
 \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
 }

@@ -2,6 +2,8 @@
 #'
 #' \code{listPoints} lists all countries for which there are publicly visible PR datapoints in the MAP database.
 #'
+#' @param printed Should the list be printed to the console?
+#'
 #' @return \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
 #'
 #' @examples
