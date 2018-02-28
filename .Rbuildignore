@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 .gitlab-ci.yml
+.travis.yml
 tests/.test_coverage.R
 tests/.tests_for_CI.R
 README.Rmd
