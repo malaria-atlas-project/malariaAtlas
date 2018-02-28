@@ -28,3 +28,5 @@ Imports:
 Depends: ggplot2
 RoxygenNote: 6.0.1
 Suggests: testthat
+URL: https://github.com/malaria-atlas-project/malariaAtlas
+BugReports: https://github.com/malaria-atlas-project/malariaAtlas/issues
