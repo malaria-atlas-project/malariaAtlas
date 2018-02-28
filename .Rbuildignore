@@ -3,3 +3,5 @@
 .gitlab-ci.yml
 tests/.test_coverage.R
 tests/.tests_for_CI.R
+README.Rmd
+README_files*
