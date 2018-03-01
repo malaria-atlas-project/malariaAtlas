@@ -2,6 +2,10 @@
 output: md_document
 ---
 
+[![Build Status](https://travis-ci.org/malaria-atlas-project/malariaAtlas.svg)](https://travis-ci.org/malaria-atlas-project/malariaAtlas)
+[![codecov.io](https://codecov.io/gh/malaria-atlas-project/malariaAtlas/coverage.svg?branch=master)](https://codecov.io/gh/malaria-atlas-project/malariaAtlas?branch=master)
+
+
 ```{r, echo = FALSE, message = FALSE, results = "hide"}
 library(malariaAtlas)
 library(rgdal)
@@ -13,10 +17,12 @@ library(tibble)
 
 # Overview 
 
-_blurb re what the package is and what it does_
+This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*) and modelled raster outputs from the [Malaria Atlas Project](https://map.ox.ac.uk/).
 
 ## Available Data: 
-_blurb re what the data is and where it comes from_
+The data can be explored at [https://map.ox.ac.uk/explorer/#/explorer](https://map.ox.ac.uk/explorer/#/explorer).
+
+
 
 ### list* Functions
 
@@ -153,7 +159,7 @@ scale_size_continuous(name = "Survey Size")+
 ## Basic Spatial utility tools 
 
 ### extractRaster 
-### zonalStats
+
 
 
 
