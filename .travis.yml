@@ -34,5 +34,17 @@ r_packages:
 after_success:
  - Rscript -e 'library(covr);codecov()'
 
+matrix:
+  include:
+    - os: linux
+      r: release
+    - os: osx
+    - os: linux
+      r: devel
+
+
+
+
+
 
 
