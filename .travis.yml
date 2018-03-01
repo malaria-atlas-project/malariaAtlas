@@ -27,6 +27,7 @@ r_packages:
  - dplyr
  - stringi
  - tidyr
+ - covr
 
 
 
