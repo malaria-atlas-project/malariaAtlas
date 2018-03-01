@@ -39,8 +39,6 @@ matrix:
     - os: linux
       r: release
     - os: osx
-    - os: linux
-      r: devel
 
 
 
