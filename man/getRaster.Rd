@@ -4,8 +4,9 @@
 \alias{getRaster}
 \title{Download Rasters produced by the Malaria Atlas Project}
 \usage{
-getRaster(surface = "PfPR2-10", shp = NULL, extent = NULL,
-  file_path = tempdir(), year = as.list(rep(NA, length(surface))))
+getRaster(surface = "Plasmodium falciparum PR2-10", shp = NULL,
+  extent = NULL, file_path = tempdir(), year = as.list(rep(NA,
+  length(surface))))
 }
 \arguments{
 \item{surface}{string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
@@ -29,7 +30,7 @@ Check \code{\link{listRaster}} to find titles of available rasters.}
 # Download PfPR2-10 Raster for Madagascar in 2015 and visualise this immediately.
 \dontrun{
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2015)
+MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2015)
 autoplot_MAPraster(MDG_PfPR2_10)
 
 # Download global raster of G6PD deficiency from Howes et al 2012.
@@ -37,10 +38,10 @@ G6PDd_global <- getRaster(surface = "G6PD Deficiency")
 autoplot_MAPraster(G6PDd_global)
 
 # Download a temporal raster by range
-MDG_PfPR2_10_range <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2012:2015)
+MDG_PfPR2_10_range <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2012:2015)
 
 # Download a mix of rasters
-MDG_rasters <- getRaster(surface = c("PfPR2-10", 'Pf Incidence', 'Pf Support'),
+MDG_rasters <- getRaster(surface = c("Plasmodium falciparum PR2-10", 'Pf Incidence', 'Pf Support'),
                          shp = MDG_shp, year = list(2009:2012, 2005:2007, NA))
 p <- autoplot_MAPraster(MDG_tvr_tvr_s)
 
