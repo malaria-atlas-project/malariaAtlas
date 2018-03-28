@@ -67,6 +67,10 @@ test_that("getShp downloads the correct shapefiles and stores them",{
 
 
 
-
+test_that('Repeated getSHP works. That getting shapes from .malariaAtlasHidden does not break.', {
+  MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+  MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+  }
+)
 
 

@@ -6,7 +6,7 @@ MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 
 test_that('Plotting works for 4 years of the same raster', {
 #time varying range
-MDG_PfPR2_10_range <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2012:2015)
+MDG_PfPR2_10_range <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2012:2015)
 p <- autoplot_MAPraster(MDG_PfPR2_10_range, printed = FALSE) # this works
 pp <- autoplot(as.MAPraster(MDG_PfPR2_10_range), printed = FALSE) # This goes funky. Need invisible()
 expect_true(inherits(MDG_PfPR2_10_range, 'RasterBrick'))
