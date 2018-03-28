@@ -29,7 +29,7 @@ autoplot.MAPshp <- function(object,
                             printed = TRUE){
 
   if(is.null(map_title)){
-    map_title <- paste0(unique(object$COUNTRY_ID),": ",paste0("admin", unique(object$ADMN_LEVEL), collapse = ", "))
+    map_title <- paste0(unique(object$country_id),": ",paste0("admin", unique(object$admn_level), collapse = ", "))
   }
 
   plot <- ggplot2::ggplot()+
@@ -45,7 +45,7 @@ autoplot.MAPshp <- function(object,
     ggtitle(paste(map_title))
 
 
-  if(all(c(0,1) %in% unique(object$ADMN_LEVEL))){
+  if(all(c(0,1) %in% unique(object$admn_level))){
     if(facet == TRUE){
      plot <- plot + ggplot2::facet_wrap(~country_level)
     }

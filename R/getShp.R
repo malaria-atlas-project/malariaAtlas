@@ -49,23 +49,25 @@ getShp <- function(country = NULL,
                    long = NULL,
                    lat = NULL) {
   # Specifcy country_input (ISO3 code) for db query
-  
+
+  available_admin <- listShp(printed = FALSE)
+
   if (!is.null(ISO)) {
     country_input <- toupper(ISO)
   } else if (!is.null(country)) {
     country_input <-
-      as.character(suppressMessages(listShp())$COUNTRY_ID[suppressMessages(listShp())$NAME %in% country])
+      as.character(available_admin$country_id[available_admin$name %in% country])
   } else{
     country_input <-  NULL
   }
-  
+
   # return error if ISO or country are not correctly specified and extent is unspecified
   if (length(country_input) == 0 & is.null(c(extent, lat, long))) {
     stop(
       "Invalid country/ISO definition, use is_available() OR listShp() to confirm country spelling and/or ISO code."
     )
   }
-  
+
   if (admin_level == "both") {
     admin_num <- c(0, 1)
   } else if (admin_level == "admin1") {
@@ -73,30 +75,30 @@ getShp <- function(country = NULL,
   } else if (admin_level == "admin0") {
     admin_num <- 0
   }
-  
+
   # if lat and long are provided, define extent from lat-longs
-  
+
   if (!is.null(lat) & !is.null(long)) {
     extent <- sp::bbox(array(data.frame(long, lat)))
   }
-  
+
   #treat ISO = "ALL" separately - return stored polygon OR define big bounding box.
   if ("all" %in% tolower(ISO)) {
     if (exists("all_polygons", envir = .malariaAtlasHidden)) {
       Shp_polygon <- .malariaAtlasHidden$all_polygons
-      
+
       if (tolower(format) == "spatialpolygon") {
         return(Shp_polygon)
       } else if (tolower(format) == "df") {
         Shp_df <- as.MAPshp(Shp_polygon)
         return(Shp_df)
       }
-      
+
     } else {
       extent <- matrix(c(-180, -60, 180, 85), nrow = 2)
     }
   }
-  
+
   ##if not using extent - check to see if we have a previosuly stored version of the shapefile we can use.
   if (is.null(extent)) {
     if (exists("stored_polygons", envir = .malariaAtlasHidden)) {
@@ -113,7 +115,7 @@ getShp <- function(country = NULL,
             FUN = function(x)
               paste(x, admin_num, sep = "_")
           )), ]
-        
+
         if (tolower(format) == "spatialpolygon") {
           return(Shp_polygon)
         } else if (tolower(format) == "df") {
@@ -123,7 +125,7 @@ getShp <- function(country = NULL,
       }
     }
   }
-  
+
   # if extent is specified, use this for geoserver query URL
   if (!is.null(extent)) {
     URL_filter <-
@@ -144,7 +146,7 @@ getShp <- function(country = NULL,
         sep = ""
       )
   }
-  
+
   #define which admin levels are queried and return as a list full geoserver query URL
   base_URL <-
     "https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
@@ -181,24 +183,24 @@ getShp <- function(country = NULL,
         )
       )
   }
-  
+
   Shp_polygon <- lapply(URL_input, downloadShp)
-  
+
   if (admin_level != "both") {
     Shp_polygon <- Shp_polygon[[paste(admin_level)]]
     if ("sum" %in% names(Shp_polygon) |
-        "mean" %in% names(Shp_polygon) | "LSMS.agri" %in% names(Shp_polygon)) {
+        "mean" %in% names(Shp_polygon) | "lsms.agri" %in% names(Shp_polygon)) {
       Shp_polygon <-
-        Shp_polygon[, !names(Shp_polygon) %in% c("sum", "mean", "LSMS.agri")]
+        Shp_polygon[, !names(Shp_polygon) %in% c("sum", "mean", "lsms.agri")]
     }
   } else if (admin_level == "both") {
     Shp_polygon <-
       sp::rbind.SpatialPolygonsDataFrame(Shp_polygon$admin0[names(Shp_polygon$admin1)], Shp_polygon$admin1)
   }
-  
+
   Shp_polygon$country_level <-
-    paste(Shp_polygon$COUNTRY_ID, "_", Shp_polygon$ADMN_LEVEL, sep = "")
-  
+    paste(Shp_polygon$country_id, "_", Shp_polygon$admn_level, sep = "")
+
   if ("all" %in% tolower(ISO)) {
     .malariaAtlasHidden$all_polygons <- Shp_polygon
   } else if (is.null(extent)) {
@@ -211,7 +213,7 @@ getShp <- function(country = NULL,
         sp::rbind.SpatialPolygonsDataFrame(.malariaAtlasHidden$stored_polygons, new_shps[names(new_shps)[names(new_shps) %in% names(.malariaAtlasHidden$stored_polygons)]])
     }
   }
-  
+
   if (tolower(format) == "spatialpolygon") {
     return(Shp_polygon)
   } else if (tolower(format) == "df") {
@@ -235,10 +237,10 @@ downloadShp <- function(URL) {
   shp <- dir(shpdir, "*.shp$")
   shp.path <- file.path(shpdir, shp)
   lyr <- sub(".shp$", "", shp)
-  
+
   ## read shapefile into R
   shapefile_dl <- rgdal::readOGR(dsn = shp.path, layer = lyr)
-  
+
   ## delete temporary directory and return shapefile object
   on.exit(unlink(shpdir, recursive = TRUE))
   return(shapefile_dl)

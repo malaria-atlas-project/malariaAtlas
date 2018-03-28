@@ -1,7 +1,8 @@
 # getShp() tests
 
 # test downloadShp
-test_URL <- "https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=admin0_map_2013&cql_filter=COUNTRY_ID%20IN%20(%27BDI%27)"
+test_URL <- utils::URLencode("https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=mapadmin_0_2013&cql_filter=country_id%20IN%20(%27BDI%27)")
+
 test_dlshp <- downloadShp(test_URL)
 
 test_that("downloadShp downloads shapefiles and loads them correctly",{
@@ -9,7 +10,7 @@ test_that("downloadShp downloads shapefiles and loads them correctly",{
   expect_false("shp" %in% dir(tempdir()))
   # check that downloaded object is as expected
   expect_true(inherits(test_dlshp, "SpatialPolygonsDataFrame"))
-  expect_true(unique(test_dlshp$COUNTRY_ID)=="BDI")
+  expect_true(unique(test_dlshp$country_id)=="BDI")
 })
 
 # test as.MAPshp
@@ -19,8 +20,8 @@ test_dlshp_df <- as.MAPshp(test_dlshp)
 test_that("as.MAPshp works as expected",{
   expect_true(inherits(test_dlshp_df, "data.frame"))
   expect_true(inherits(test_dlshp_df, "MAPshp"))
-  expect_true(unique(test_dlshp_df$COUNTRY_ID)=="BDI")
-  expect_equal(sort(names(test_dlshp_df)),sort(c("id","long","lat","order","hole","piece","group","COUNTRY_ID","GAUL_CODE","ADMN_LEVEL","PARENT_ID","NAME", "country_level")))
+  expect_true(unique(test_dlshp_df$country_id)=="BDI")
+  expect_equal(sort(names(test_dlshp_df)),sort(c("gid","id","long","lat","order","hole","piece","group","country_id","gaul_code","admn_level","parent_id","name", "country_level")))
 })
 
 #test getShp
