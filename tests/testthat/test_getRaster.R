@@ -3,8 +3,7 @@ context('Test all raster combinations.')
 test_that('All combinations of spatially aligned requests work', {
   # Static
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-  MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-  
+
   skip_on_cran()
   # Time varying single
   MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2015)
@@ -35,7 +34,8 @@ test_that('All combinations of spatially aligned requests work', {
 
 
   # two static
-  MDG_stat_stat <- getRaster(surface = c("ACTs", 'G6PD Deficiency Allele Frequency'), shp = MDG_shp, year = c(NA, NA))
+  MDG_stat_stat <- getRaster(surface = c("Artemisinin-based combination therapy (ACT) coverage", 'G6PD Deficiency Allele Frequency'), 
+                             shp = MDG_shp, year = c(NA, NA))
   expect_true(inherits(MDG_stat_stat, 'RasterBrick'))
 
  # one time varying single plus one static

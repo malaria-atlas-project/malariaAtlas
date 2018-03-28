@@ -51,7 +51,7 @@ test_that("available_countries_stored object is stored in hidden environment",{
 
 # listShp() tests
 
-context("Using listRaster to check which Rasters are available for downlaod.")
+context("Using listShp to check which shapes are available for downlaod.")
 
 if(exists("available_admin_stored", envir = .malariaAtlasHidden)){
   rm(available_admin_stored, envir = .malariaAtlasHidden)
@@ -65,7 +65,7 @@ test_that("downloaded data.frame is in the correct format",{
 })
 
 test_that("downloaded dataframe contains has correct number of columns",{
-  expect_equal(sort(names(available_admin)),sort(c("COUNTRY_ID","GAUL_CODE","ADMN_LEVEL","PARENT_ID","NAME")))
+  expect_equal(sort(names(available_admin)),sort(c("country_id","gaul_code","admn_level","parent_id","name")))
 })
 
 test_that("available_admin_stored object is stored in hidden environment",{
