@@ -260,7 +260,7 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
       for (i in 1:length(stk_list)) {
         for (ii in 1:length(stk_list[i])) {
           names(stk_list[i][[ii]]) <-
-            query_def$raster_title[query_def$file_name %in% names(stk_list[i][[ii]])]
+            query_def$raster_title[paste0('X', query_def$file_name) %in% names(stk_list[i][[ii]])]
         }
       }
       
