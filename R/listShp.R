@@ -21,14 +21,14 @@ listShp <- function(printed = TRUE){
     return(invisible(available_admin))
   } else {
 
-    URL_admin1 <- "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=admin1_map_2013&PROPERTYNAME=GAUL_CODE,COUNTRY_ID,ADMN_LEVEL,PARENT_ID,NAME"
-    URL_admin0 <- "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=admin0_map_2013&PROPERTYNAME=GAUL_CODE,COUNTRY_ID,ADMN_LEVEL,PARENT_ID,NAME"
+    URL_admin1 <- utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_1_2013&PROPERTYNAME=gaul_code,country_id,admn_level,parent_id,name")
+    URL_admin0 <- utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_0_2013&PROPERTYNAME=gaul_code,country_id,admn_level,parent_id,name")
 
     available_admin <- rbind(utils::read.csv(URL_admin0, encoding = "UTF-8"),
                              utils::read.csv(URL_admin1, encoding = "UTF-8"))
     .malariaAtlasHidden$available_admin_stored <- available_admin
   }
 
-available_admin <- available_admin[,!names(available_admin)%in%"FID"]
+available_admin <- available_admin[,!names(available_admin)%in%c("FID","gid")]
   return(invisible(available_admin))
 }
