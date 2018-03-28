@@ -215,7 +215,7 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
         "resolution" = lapply(rst_list, raster::res),
         "raster_name" = lapply(rst_list, names),
         "res_id" = as.numeric(factor(as.character(
-          lapply(rst_list, raster::res)
+          lapply(rst_list, function(x) round(raster::res(x), 6))
         )))
       ))
     
