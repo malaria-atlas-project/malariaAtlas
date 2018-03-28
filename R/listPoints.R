@@ -28,7 +28,7 @@ listPoints <- function(printed = TRUE) {
 
   } else {
 
-  available_countries <- unique(utils::read.csv("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=surveys_pr&PROPERTYNAME=country,country_id,continent_id", encoding = "UTF-8")[,c("country", "country_id","continent_id")])
+  available_countries <- unique(utils::read.csv("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data&PROPERTYNAME=country,country_id,continent_id", encoding = "UTF-8")[,c("country", "country_id","continent_id")])
   available_countries <- available_countries[available_countries$continent_id!= "",]
   names(available_countries) <- c("country", "country_id", "continent")
 
