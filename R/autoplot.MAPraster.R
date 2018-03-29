@@ -6,8 +6,9 @@
 #' @param object MAPraster object to be visualised.
 #' @param shp_df Shapefile(s) (data.frame) to plot with downloaded raster.
 #' @param legend_title String used as title for all colour scale legends.
-#' @param plot_title String used as header for all plot pages.
+#' @param plot_titles Plot name of raster object as header for each individual raster plot?
 #' @param printed Logical vector indicating whether to print maps of supplied rasters.
+#' @param fill_colour_palette String referring to a colorbrewer palette to be used for raster colour scale.
 #' @param fill_scale_transform String givning a transformation for the fill aesthetic.
 #'   See the trans argument in \code{\link{continuous_scale}} for possible values.
 #' @param ... Other arguments passed to specific methods
@@ -66,8 +67,9 @@ autoplot.MAPraster <- function(object,
                                ...,
                                shp_df = NULL,
                                legend_title = "",
-                               plot_title = "",
+                               plot_titles = TRUE,
                                fill_scale_transform = "identity",
+                               fill_colour_palette = "RdYlBu",
                                printed = TRUE){
 
   make_plot <- function(object, rastername, shp_df, legend_title){
@@ -77,15 +79,18 @@ autoplot.MAPraster <- function(object,
     ggplot2::geom_raster(data = object[object$raster_name == rastername,], ggplot2::aes_string(x="x", y="y", fill = "z"))+
     ggplot2::coord_equal()+
     ggplot2::scale_fill_distiller(name = paste(legend_title),
-                         palette = "RdYlBu",
+                         palette = fill_colour_palette,
                          trans = fill_scale_transform,
                          na.value = grDevices::grey(0.9))+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
         panel.background = ggplot2::element_rect(fill = "white"),
         panel.grid = ggplot2::element_blank(),
         axis.title = ggplot2::element_blank(),
-        panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
-    ggplot2::ggtitle(paste(rastername))
+        panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))
+
+  if(plot_titles == TRUE){
+  plot <- plot +  ggplot2::ggtitle(paste(rastername))
+  }
 
   if(!is.null(shp_df)){
     plot$layers <- c(ggplot2::geom_polygon(data = shp_df, ggplot2::aes_string(x="long", y="lat", group = "group"), fill = "grey65"),
