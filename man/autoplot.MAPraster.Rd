@@ -5,7 +5,8 @@
 \title{Quickly visualise Rasters downloaded from MAP}
 \usage{
 \method{autoplot}{MAPraster}(object, ..., shp_df = NULL, legend_title = "",
-  plot_title = "", fill_scale_transform = "identity", printed = TRUE)
+  plot_titles = TRUE, fill_scale_transform = "identity",
+  fill_colour_palette = "RdYlBu", printed = TRUE)
 }
 \arguments{
 \item{object}{MAPraster object to be visualised.}
@@ -16,10 +17,12 @@
 
 \item{legend_title}{String used as title for all colour scale legends.}
 
-\item{plot_title}{String used as header for all plot pages.}
+\item{plot_titles}{Plot name of raster object as header for each individual raster plot?}
 
 \item{fill_scale_transform}{String givning a transformation for the fill aesthetic.
 See the trans argument in \code{\link{continuous_scale}} for possible values.}
+
+\item{fill_colour_palette}{String referring to a colorbrewer palette to be used for raster colour scale.}
 
 \item{printed}{Logical vector indicating whether to print maps of supplied rasters.}
 }
