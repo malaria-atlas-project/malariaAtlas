@@ -52,7 +52,7 @@ as.MAPraster <- function(raster_object){
     return(raster_df)
   }
 
-  if(inherits(raster_object, c("RasterLayer", "RasterBrick"))){
+  if(inherits(raster_object, c("RasterLayer", "RasterBrick", "RasterStack"))){
     raster_df <- rasterobj2df(raster_object)
     class(raster_df) <- c(class(raster_df), "MAPraster")
     return(raster_df)
