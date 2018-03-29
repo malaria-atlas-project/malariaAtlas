@@ -77,22 +77,22 @@ if(is.null(shp_df)){
 
   if(admin_level == "admin0"){
     pr_plot <-  ggplot2::ggplot()+
-                  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,],
+                  ggplot2::geom_polygon(data = pr_shp[pr_shp$admn_level == 0,],
                                         aes_string(x="long", y = "lat", group = "group"), colour = "grey50", fill = "grey95")
   }
 
   if(admin_level == "admin1"){
     pr_plot <-  ggplot2::ggplot() +
-                  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,],
+                  ggplot2::geom_polygon(data = pr_shp[pr_shp$admn_level == 1,],
                                         aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")
   }
 
   if(admin_level == "both"){
     pr_plot <-  ggplot2::ggplot() +
-                  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 1,],
+                  ggplot2::geom_polygon(data = pr_shp[pr_shp$admn_level == 1,],
                                         aes_string(x="long", y = "lat", group = "group"),
                                         colour = "grey80", fill = "grey95") +
-                  ggplot2::geom_polygon(data = pr_shp[pr_shp$ADMN_LEVEL == 0,],
+                  ggplot2::geom_polygon(data = pr_shp[pr_shp$admn_level == 0,],
                                         aes_string(x="long", y = "lat", group = "group"),
                                         colour = "grey50", alpha = 0)
   }
