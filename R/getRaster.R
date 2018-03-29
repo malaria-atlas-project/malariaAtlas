@@ -23,7 +23,8 @@
 #' autoplot_MAPraster(G6PDd_global)
 #'
 #' # Download a temporal raster by range
-#' MDG_PfPR2_10_range <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2012:2015)
+#' MDG_PfPR2_10_range <- getRaster(surface = "Plasmodium falciparum PR2-10", 
+#'                                 shp = MDG_shp, year = 2012:2015)
 #'
 #' # Download a mix of rasters
 #' MDG_rasters <- getRaster(surface = c("Plasmodium falciparum PR2-10", 
