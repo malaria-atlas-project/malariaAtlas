@@ -336,7 +336,7 @@ download_rst <-
       }
       
       r <-
-        httr::GET(URLencode(rst_URL), httr::write_disk(rst_path, overwrite = TRUE))
+        httr::GET(utils::URLencode(rst_URL), httr::write_disk(rst_path, overwrite = TRUE))
       
       if (!"image/geotiff" %in% r$headers$`content-type`) {
         file.remove(rst_path)

@@ -118,9 +118,9 @@ extractLayerValues <- function(df = NULL,
   }
 
   if(!is.na(min_year)&!is.na(max_year)){
-  r3 <- httr::GET(URLencode(paste0("https://map.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year)))
+  r3 <- httr::GET(utils::URLencode(paste0("https://map.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year)))
   }else{
-  r3 <- httr::GET(URLencode(paste0("https://map.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&file=",file_name,"&raster=",surface_code)))
+  r3 <- httr::GET(utils::URLencode(paste0("https://map.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&file=",file_name,"&raster=",surface_code)))
   }
 
   if(r3$status_code != 200){
