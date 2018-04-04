@@ -1,6 +1,6 @@
 ---
 title: "Basic malariaAtlas usage."
-author: "Dan Pfeffer"
+author: "Dan Pfeffer, Tim Lucas"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -131,11 +131,11 @@ autoplot(MDG_shp,
 
 ```{r message = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
+MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
 ```
 N.B. to use downloaded rasters and shapefiles directly with autoplot, use as.MAPraster() and as.MAPshp() to convert these to data.frames. Alternatively autoplot_MAPraster() will work directly with RasterLayer, RasterStack or RasterBrick objects downloaded with getRaster().
 
-`autoplot.MAPraster`&`autoplot_MAPraster`configures autoplot method to enable quick mapping of downloaded rasters.
+`autoplot.MAPraster` and `autoplot_MAPraster` are autoplot methods to enable quick mapping of downloaded rasters.
 
 ```{r message = FALSE}
 MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
@@ -151,14 +151,14 @@ By using the above tools along with ggplot, simple comparison figures can be eas
 ```{r message = FALSE, warning = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_shp_df <- as.MAPshp(MDG_shp)
-MDG_PfPR2_10 <- getRaster(surface = "PfPR2-10", shp = MDG_shp, year = 2013)
+MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
 MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
 
 p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df, printed = FALSE)
 
 pr <- getPR(country = c("Madagascar"), species = "Pf")
 p[[1]] +
-geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = pf_pos / examined, size = examined), shape = 21)+
+geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = positive / examined, size = examined), shape = 21)+
 scale_size_continuous(name = "Survey Size")+
  scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
  ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
