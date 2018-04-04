@@ -11,6 +11,10 @@ vignette: >
 
 
 
+```{r globalKnitrOptions, include = FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8)
+```
+
 # Overview 
 
 This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*) and modelled raster outputs from the [Malaria Atlas Project](https://map.ox.ac.uk/).
@@ -93,10 +97,10 @@ autoplot(MDG_pr_data,
 Furthermore, being ggplot2 plots, these plots can easily be added to or modified.
 
 ```{r message = FALSE, warning = FALSE, results = "hide"}
-p <- autoplot(MDG_pr_data)
-p + theme_classic()
+p <- autoplot(MDG_pr_data, printed = FALSE)
 p + 
-  palettetown::scale_colour_poke(pokemon = 'oddish', spread = 4)
+  scale_fill_gradientn(colours = rev(palettetown::pokepal('charmeleon', spread = 3))) +
+  theme_minimal()
 ```
 
 
@@ -115,14 +119,6 @@ tibble::glimpse(MDG_shp)
 ```{r message = FALSE}
 MDG_shp <- as.MAPshp(MDG_shp)
 autoplot(MDG_shp)
-```
-
-N.B. Facet-wrapped option is also available for species stratification. 
-
-```{r message = FALSE, warning = FALSE, results = "hide"}
-autoplot(MDG_shp,
-         facet = TRUE,
-         map_title = "Example of facetted shapefiles.")
 ```
 
 ### Modelled Rasters 
