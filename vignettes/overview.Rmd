@@ -86,13 +86,6 @@ tibble::glimpse(MDG_pr_data)
 autoplot(MDG_pr_data)
 ```
 
-A facet-wrapped option is also available for species stratification. 
-```{r message = FALSE, warning = FALSE, results = "hide"}
-autoplot(MDG_pr_data,
-         facet = TRUE,
-         map_title = "Example MAP of PR point locations,\nstratified by species")
-```
-
 
 Furthermore, being ggplot2 plots, these plots can easily be added to or modified.
 
