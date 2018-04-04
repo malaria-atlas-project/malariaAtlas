@@ -29,7 +29,8 @@ Depends: ggplot2
 RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    palettetown
 URL: https://github.com/malaria-atlas-project/malariaAtlas
 BugReports: https://github.com/malaria-atlas-project/malariaAtlas/issues
 VignetteBuilder: knitr
