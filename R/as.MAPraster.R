@@ -15,13 +15,15 @@
 #'
 #' @examples
 #' #Download PfPR2-10 Raster for Madagascar in 2016 and visualise this on a map.
-#' \dontrun{MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+#' \dontrun{
+#' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #' MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2016)
 #' MDG_PfPR2_10 <- as.MAPraster(MDG_PfPR2_10)
 #' autoplot(MDG_PfPR2_10)}
 #'
 #' #Download global raster of G6PD deficiency from Howes et al 2012 and visualise this on a map.
-#' \dontrun{G6PDd_global <- getRaster(surface = "G6PD Deficiency Allele Frequency")
+#' \dontrun{
+#' G6PDd_global <- getRaster(surface = "G6PD Deficiency Allele Frequency")
 #' G6PDd_global <- as.MAPraster(G6PDd_global)
 #' autoplot(G6PDd_global)}
 #'

@@ -23,15 +23,17 @@
 #'
 #' @examples
 #' #Download PfPR data & associated shapefiles for Nigeria and Cameroon
-#' \dontrun{NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")}
-#' \dontrun{NGA_CMR_shp <- getShp(country = c("Nigeria", "Cameroon"))}
+#' \dontrun{
+#' NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
+#' NGA_CMR_shp <- getShp(country = c("Nigeria", "Cameroon"))
 #'
-#'#' #Download PfPR data & associated shapefiles for Chad
-#' \dontrun{Chad_PR <- getPR(ISO = "TCD", species = "both")}
-#' \dontrun{Chad_shp <- getShp(ISO = "TCD")}
+#' #Download PfPR data & associated shapefiles for Chad
+#' Chad_PR <- getPR(ISO = "TCD", species = "both")
+#' Chad_shp <- getShp(ISO = "TCD")
 #'
 #' #' #Download PfPR data & associated shapefiles defined by extent for Madagascar
-#' \dontrun{MDG_PR <- getPR(country = "Madagascar", species = "Pv")}
+#' MDG_PR <- getPR(country = "Madagascar", species = "Pv")
+#' }
 #'
 #'
 #' @seealso \code{autoplot} method for quick mapping of PR point locations (\code{\link{autoplot.pr.points}}).
