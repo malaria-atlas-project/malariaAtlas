@@ -38,7 +38,10 @@ matrix:
   include:
     - os: linux
       r: release
+    - os: linux
+      r: devel
     - os: osx
+    
 
 
 
