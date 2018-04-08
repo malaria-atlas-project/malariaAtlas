@@ -78,7 +78,16 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   available_rasters <- listRaster(printed = FALSE)
   raster_code_list <-
     as.character(available_rasters$raster_code[match(surface, available_rasters$title)])
-  
+
+  if (anyNA(raster_code_list)) {
+    stop(
+      "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':\n",
+      paste("  -", surface[is.na(raster_code_list)], collapse = "\n")
+    )  
+  } else{
+    message("All specified surfaces are available to download.")
+  }
+
   message("Checking if the following Surface-Year combinations are available to download:")
   message(paste0("\n    ", "RASTER CODE  ", "YEAR "))
   query_def <- data.frame()
@@ -117,15 +126,8 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   }
   message("")
   
-  if (length(raster_code_list[raster_code_list == "NULL"]) != 0) {
-    stop(
-      "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':\n",
-      paste("  -", surface[which(raster_code_list == "NULL")], collapse = "\n")
-    )
+
     
-  } else{
-    message("All specified surfaces are available to download.")
-  }
   
   # check whether specified years are available for specified rasters
   year_warnings <- 0
