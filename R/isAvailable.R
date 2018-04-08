@@ -17,9 +17,11 @@
 #' }
 #'
 #' @examples
+#' \dontrun{
 #' isAvailable(country = "Suriname")
 #' x <- isAvailable(ISO = "NGA", full_results = TRUE)
 #' x <- isAvailable(continent = "Oceania", full_results = TRUE)
+#' }
 #' @export isAvailable
 
 isAvailable <- function(country = NULL, ISO = NULL, continent = NULL, full_results = FALSE) {

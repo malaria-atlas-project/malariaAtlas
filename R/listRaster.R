@@ -15,7 +15,9 @@
 #' \item \code{max_raster_year} latest year for which each raster is available
 #' }
 #' @examples
+#' \dontrun{
 #' available_rasters <- listRaster()
+#' }
 #' @export listRaster
 
 listRaster <- function(printed = TRUE){

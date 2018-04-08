@@ -27,5 +27,7 @@ listRaster(printed = TRUE)
 \code{listRaster} lists all rasters available to download from the Malaria Atlas Project database.
 }
 \examples{
+\dontrun{
 available_rasters <- listRaster()
+}
 }

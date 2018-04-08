@@ -7,3 +7,4 @@ tests/.tests_for_CI.R
 README.Rmd
 README_files*
 wfsrequest.txt
+cran_comments.md

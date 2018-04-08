@@ -1,10 +1,10 @@
 Package: malariaAtlas
-Title: An R interface to open-access malaria data, hosted by the Malaria Atlas Project
+Title: An R Interface to Open-Access Malaria Data, Hosted by the Malaria Atlas Project
 Version: 0.0.1.9005
 Authors@R: c(
     person("Daniel", "Pfeffer", email = "daniel.pfeffer@uqconnect.edu.au", role = c("aut"), comment = c(ORCID = "0000-0002-2204-3488")),
     person("Tim", "Lucas", email =  "timcdlucas@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-4694-8107")))
-Description: malariaAtlas provides a suite of tools to allow you to download all 
+Description: A suite of tools to allow you to download all 
   publicly available parasite rate survey points and raster surfaces from the 'Malaria Atlas 
   Project' servers as well as utility functions for plotting the downloaded data.
 License: MIT + file LICENSE
