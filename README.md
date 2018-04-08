@@ -78,7 +78,7 @@ this as a dataframe with the following format:
 
     MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 
-    ## Observations: 1,077
+    ## Observations: 1,793
     ## Variables: 28
     ## $ dhs_id                    <fct> , , , , , , , , , , , , , , , , , , ...
     ## $ site_id                   <int> 6221, 6021, 15070, 15795, 7374, 1309...
@@ -114,7 +114,7 @@ of the locations of downloaded PR points.
 
     autoplot(MDG_pr_data)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-9-1.png)
+![](man/figures/unnamed-chunk-9-1.png)
 
 N.B. Facet-wrapped option is also available for species stratification.
 
@@ -122,7 +122,7 @@ N.B. Facet-wrapped option is also available for species stratification.
              facet = TRUE,
              map_title = "Example MAP of PR point locations,\nstratified by species")
 
-![](README_files/figure-markdown_strict/unnamed-chunk-10-1.png)
+![](man/figures/unnamed-chunk-10-1.png)
 
 ### Shapefiles
 
@@ -132,13 +132,14 @@ and returns this as either a spatialPolygon or data.frame object.
     MDG_shp <- getShp(ISO = "MDG", admin_level = "both")
 
     ## Formal class 'SpatialPolygonsDataFrame' [package "sp"] with 5 slots
-    ##   ..@ data       :'data.frame':  23 obs. of  7 variables:
+    ##   ..@ data       :'data.frame':  23 obs. of  8 variables:
     ##   .. ..$ gid          : int [1:23] 138 2790 2791 2792 2793 2794 2795 2796 2797 2798 ...
     ##   .. ..$ country_id   : Factor w/ 1 level "MDG": 1 1 1 1 1 1 1 1 1 1 ...
     ##   .. ..$ gaul_code    : int [1:23] 150 41750 41751 41752 41753 41754 41755 41756 41757 41758 ...
     ##   .. ..$ admn_level   : Factor w/ 2 levels "0","1": 1 2 2 2 2 2 2 2 2 2 ...
     ##   .. ..$ parent_id    : int [1:23] 0 150 150 150 150 150 150 150 150 150 ...
     ##   .. ..$ name         : Factor w/ 23 levels "Madagascar","Alaotra Mangoro",..: 1 2 3 4 5 6 7 8 9 10 ...
+    ##   .. ..$ lsms_agri    : int [1:23] NA NA NA NA NA NA NA NA NA NA ...
     ##   .. ..$ country_level: chr [1:23] "MDG_0" "MDG_1" "MDG_1" "MDG_1" ...
     ##   ..@ polygons   :List of 23
     ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
@@ -175,7 +176,7 @@ downloaded shapefiles.
     MDG_shp <- as.MAPshp(MDG_shp)
     autoplot(MDG_shp)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+![](man/figures/unnamed-chunk-13-1.png)
 
 N.B. Facet-wrapped option is also available for species stratification.
 
@@ -183,7 +184,7 @@ N.B. Facet-wrapped option is also available for species stratification.
              facet = TRUE,
              map_title = "Example of facetted shapefiles.")
 
-![](README_files/figure-markdown_strict/unnamed-chunk-14-1.png)
+![](man/figures/unnamed-chunk-14-1.png)
 
 ### Modelled Rasters
 
@@ -205,7 +206,7 @@ enable quick mapping of downloaded rasters.
     MDG_shp_df <- as.MAPshp(MDG_shp)
     p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-16-1.png)
+![](man/figures/unnamed-chunk-16-1.png)
 
 ### Combined visualisation
 
@@ -226,7 +227,7 @@ can be easily produced.
      scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
      ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
 
-![](README_files/figure-markdown_strict/unnamed-chunk-17-1.png)
+![](man/figures/unnamed-chunk-17-1.png)
 
 Basic Spatial utility tools
 ---------------------------

@@ -10,6 +10,8 @@ output: md_document
 library(malariaAtlas)
 library(rgdal)
 library(tibble)
+
+knitr::opts_chunk$set(fig.path = 'man/figures/')
 ```
 
 # malariaAtlas 
