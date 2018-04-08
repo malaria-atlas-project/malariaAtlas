@@ -209,6 +209,7 @@ getShp <- function(country = NULL,
     } else if (exists("stored_polygons", envir = .malariaAtlasHidden)) {
       new_shps <-
         Shp_polygon[!Shp_polygon$country_level %in% unique(.malariaAtlasHidden$stored_polygons$country_level), ]
+      new_shps@data[, names(.malariaAtlasHidden$stored_polygons)[!names(.malariaAtlasHidden$stored_polygons) %in% names(new_shps)]] <- NA
       .malariaAtlasHidden$stored_polygons <-
         sp::rbind.SpatialPolygonsDataFrame(.malariaAtlasHidden$stored_polygons, new_shps[names(new_shps)[names(new_shps) %in% names(.malariaAtlasHidden$stored_polygons)]])
     }
