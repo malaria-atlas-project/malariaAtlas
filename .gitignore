@@ -3,3 +3,5 @@
 .RData
 .Rproj
 inst/doc
+.html
+vignettes/overview_files
