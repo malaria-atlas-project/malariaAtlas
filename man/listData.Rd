@@ -18,7 +18,7 @@ listData(datatype = NULL, printed = TRUE)
 \code{listData} is a wrapper for listPoints; listRaster and listShp, listing data (PR survey point data; raster data; shapefiles) available to download from the MAP geoserver.
 }
 \examples{
-\dontrun{
+\donttest{
 available_admin_units <- listShp()
 available_pr_points<- listPoints()
 available_rasters <- listRaster()

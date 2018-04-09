@@ -20,7 +20,7 @@ autoplot_MAPraster(object, ...)
   objects downloaded from MAP.
 }
 \examples{
-\dontrun{
+\donttest{
 #Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in
 #  2013 and visualise these together on a map.
 
@@ -42,8 +42,10 @@ geom_point(data = pr[pr$year_start==2013,],
 
 
 #Download global raster of G6PD deficiency (Howes et al 2012) and visualise this on a map.
-\dontrun{G6PDd_global <- getRaster(surface = "G6PD Deficiency")
-autoplot_MAPraster(G6PDd_global)}
+\donttest{
+G6PDd_global <- getRaster(surface = "G6PD Deficiency")
+autoplot_MAPraster(G6PDd_global)
+}
 
 }
 \seealso{

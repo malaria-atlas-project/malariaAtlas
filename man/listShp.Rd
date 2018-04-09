@@ -16,7 +16,7 @@ listShp(printed = TRUE)
 \code{listShp} lists all administrative units for which shapefiles are stored on the MAP geoserver.
 }
 \examples{
-\dontrun{
+\donttest{
 available_admin_units <- listShp()
 }
 }

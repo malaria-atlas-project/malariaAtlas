@@ -25,7 +25,7 @@
 \code{autoplot.MAPshp} creates a map of shapefiles downloaded using getShp.
 }
 \examples{
-\dontrun{
+\donttest{
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 autoplot(MDG_shp)
 }

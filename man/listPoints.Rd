@@ -16,7 +16,7 @@ listPoints(printed = TRUE)
 \code{listPoints} lists all countries for which there are publicly visible PR datapoints in the MAP database.
 }
 \examples{
-\dontrun{
+\donttest{
 listPoints()
 }
 }

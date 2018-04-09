@@ -38,7 +38,7 @@ See the trans argument in \code{\link{continuous_scale}} for possible values.}
 \code{autoplot.pr.points} creates a map of PR points downloaded from MAP.
 }
 \examples{
-\dontrun{
+\donttest{
 PfPR_surveys_NGA <- getPR(country = c("Nigeria"), species = "Pf")
 autoplot(PfPR_surveys_NGA)
 

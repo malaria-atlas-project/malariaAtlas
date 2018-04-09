@@ -31,7 +31,7 @@ Check \code{\link{listRaster}} to find titles of available rasters.}
 }
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-\dontrun{
+\donttest{
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 autoplot(NGA_CMR_PR)
 
