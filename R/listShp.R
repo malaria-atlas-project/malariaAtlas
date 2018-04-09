@@ -5,7 +5,7 @@
 #' @param printed Should the list be printed to the console?
 #' @return \code{listShp} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' available_admin_units <- listShp()
 #' }
 #' @export listShp

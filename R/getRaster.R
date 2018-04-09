@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' # Download PfPR2-10 Raster for Madagascar in 2015 and visualise this immediately.
-#' \dontrun{
+#' \donttest{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #' MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2015)
 #' autoplot_MAPraster(MDG_PfPR2_10)

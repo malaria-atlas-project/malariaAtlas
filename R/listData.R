@@ -7,7 +7,7 @@
 #' @param datatype One of 'points', 'raster' or 'shape'
 #' @param printed Should the list be printed to the console?
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' available_admin_units <- listShp()
 #' available_pr_points<- listPoints()
 #' available_rasters <- listRaster()

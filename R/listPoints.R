@@ -7,7 +7,7 @@
 #' @return \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' listPoints()
 #' }
 #' @export listPoints
