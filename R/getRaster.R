@@ -31,7 +31,7 @@
 #'                                      'Plasmodium falciparum Incidence', 
 #'                                      'Plasmodium falciparum Support'),
 #'                          shp = MDG_shp, year = list(2009:2012, 2005:2007, NA))
-#' p <- autoplot_MAPraster(MDG_tvr_tvr_s)
+#' p <- autoplot_MAPraster(MDG_rasters)
 #'
 #' }
 #'

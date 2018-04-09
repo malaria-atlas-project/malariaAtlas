@@ -27,7 +27,7 @@
 \examples{
 \donttest{
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-autoplot(MDG_shp)
+autoplot(as.MAPshp(MDG_shp))
 }
 
 }
