@@ -32,6 +32,7 @@ test_that('Plotting works for PR', {
 #time varying range
 skip_on_cran()
 
+MDG_shp <- getShp(ISO = "MDG", admin_level = "both")
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 p1 <- autoplot(NGA_CMR_PR)
 p2 <- autoplot(NGA_CMR_PR, hide_confidential = TRUE)
