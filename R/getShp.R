@@ -4,7 +4,7 @@
 #'
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
-#' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "both" accepted)
+#' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "all" accepted)
 #' @param extent 2x2 matrix specifying the spatial extent within which polygons are desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).
 #' Note: getShp downloads the entire polygon for any polygons falling within the extent.
 #' @param format string specifying the desired format for the downloaded shapefile: either "spatialpolygon" or "df"
@@ -41,12 +41,10 @@
 #' @export getShp
 #'
 
-
-
 getShp <- function(country = NULL,
                    ISO = NULL,
                    extent = NULL,
-                   admin_level = "both",
+                   admin_level = "all",
                    format = "spatialpolygon",
                    long = NULL,
                    lat = NULL) {
@@ -58,7 +56,7 @@ getShp <- function(country = NULL,
     country_input <- toupper(ISO)
   } else if (!is.null(country)) {
     country_input <-
-      as.character(available_admin$country_id[available_admin$name %in% country])
+      as.character(available_admin$iso[available_admin$name %in% country])
   } else{
     country_input <-  NULL
   }
@@ -70,10 +68,14 @@ getShp <- function(country = NULL,
     )
   }
 
-  if (admin_level == "both") {
-    admin_num <- c(0, 1)
+  if (admin_level == "all") {
+    admin_num <- c(0, 1, 2, 3)
   } else if (admin_level == "admin1") {
     admin_num <- 1
+  } else if (admin_level == "admin2") {
+    admin_num <- 2
+  } else if (admin_level == "admin3") {
+    admin_num <- 3
   } else if (admin_level == "admin0") {
     admin_num <- 0
   }
@@ -136,7 +138,7 @@ getShp <- function(country = NULL,
   } else{
     URL_filter <-
       paste(
-        "&cql_filter=country_id%20IN%20(",
+        "&cql_filter=iso%20IN%20(",
         paste(
           "%27",
           country_input,
@@ -151,12 +153,12 @@ getShp <- function(country = NULL,
 
   #define which admin levels are queried and return as a list full geoserver query URL
   base_URL <-
-    "https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
+    "https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
   if (tolower(admin_level) == "admin0") {
     URL_input <-
       list("admin0" = paste(
         base_URL,
-        "&TypeName=mapadmin_0_2013",
+        "&TypeName=Explorer:mapadmin_0_2018",
         paste(URL_filter),
         sep = ""
       ))
@@ -164,22 +166,50 @@ getShp <- function(country = NULL,
     URL_input <-
       list("admin1" = paste(
         base_URL,
-        "&TypeName=mapadmin_1_2013",
+        "&TypeName=Explorer:mapadmin_1_2018",
         paste(URL_filter),
         sep = ""
       ))
-  } else if (tolower(admin_level) == "both") {
+  } else if (tolower(admin_level) == "admin2") {
+    URL_input <-
+      list("admin2" = paste(
+        base_URL,
+        "&TypeName=Explorer:mapadmin_2_2018",
+        paste(URL_filter),
+        sep = ""
+      ))
+  } else if (tolower(admin_level) == "admin3") {
+    URL_input <-
+      list("admin3" = paste(
+        base_URL,
+        "&TypeName=Explorer:mapadmin_3_2018",
+        paste(URL_filter),
+        sep = ""
+      ))
+  } else if (tolower(admin_level) == "all") {
     URL_input <-
       list(
         "admin0" = paste(
           base_URL,
-          "&TypeName=mapadmin_0_2013",
+          "&TypeName=Explorer:mapadmin_0_2018",
           paste(URL_filter),
           sep = ""
         ),
         "admin1" = paste(
           base_URL,
-          "&TypeName=mapadmin_1_2013",
+          "&TypeName=Explorer:mapadmin_1_2018",
+          paste(URL_filter),
+          sep = ""
+        ),
+        "admin2" = paste(
+          base_URL,
+          "&TypeName=Explorer:mapadmin_2_2018",
+          paste(URL_filter),
+          sep = ""
+        ),
+        "admin3" = paste(
+          base_URL,
+          "&TypeName=Explorer:mapadmin_3_2018",
           paste(URL_filter),
           sep = ""
         )
@@ -187,21 +217,15 @@ getShp <- function(country = NULL,
   }
 
   Shp_polygon <- lapply(URL_input, downloadShp)
-
-  if (admin_level != "both") {
+  
+  if (admin_level != "all") {
     Shp_polygon <- Shp_polygon[[paste(admin_level)]]
-    if ("sum" %in% names(Shp_polygon) |
-        "mean" %in% names(Shp_polygon) | "lsms.agri" %in% names(Shp_polygon)) {
-      Shp_polygon <-
-        Shp_polygon[, !names(Shp_polygon) %in% c("sum", "mean", "lsms.agri")]
-    }
-  } else if (admin_level == "both") {
-    Shp_polygon <-
-      sp::rbind.SpatialPolygonsDataFrame(Shp_polygon$admin0[names(Shp_polygon$admin1)], Shp_polygon$admin1)
+  } else if (admin_level == "all") {
+    Shp_polygon <- sp::rbind.SpatialPolygonsDataFrame(Shp_polygon$admin0, Shp_polygon$admin1, Shp_polygon$admin2, Shp_polygon$admin3)
   }
 
   Shp_polygon$country_level <-
-    paste(Shp_polygon$country_id, "_", Shp_polygon$admn_level, sep = "")
+    paste(Shp_polygon$iso, "_", Shp_polygon$admn_level, sep = "")
 
   if ("all" %in% tolower(ISO)) {
     .malariaAtlasHidden$all_polygons <- Shp_polygon
@@ -211,9 +235,8 @@ getShp <- function(country = NULL,
     } else if (exists("stored_polygons", envir = .malariaAtlasHidden)) {
       new_shps <-
         Shp_polygon[!Shp_polygon$country_level %in% unique(.malariaAtlasHidden$stored_polygons$country_level), ]
-      new_shps@data[, names(.malariaAtlasHidden$stored_polygons)[!names(.malariaAtlasHidden$stored_polygons) %in% names(new_shps)]] <- NA
       .malariaAtlasHidden$stored_polygons <-
-        sp::rbind.SpatialPolygonsDataFrame(.malariaAtlasHidden$stored_polygons, new_shps[names(new_shps)[names(new_shps) %in% names(.malariaAtlasHidden$stored_polygons)]])
+        sp::rbind.SpatialPolygonsDataFrame(.malariaAtlasHidden$stored_polygons, new_shps)
     }
   }
 
@@ -232,19 +255,31 @@ downloadShp <- function(URL) {
   # create a temporary filepath & directory to download shapefiles from MAP geoserver
   td <- tempdir()
   shpdir <- file.path(td, "shp")
-  dir.create(shpdir)
-  temp <- tempfile(tmpdir = shpdir, fileext = ".zip")
+  dir.create(shpdir, showWarnings = FALSE)
+  temp <- tempfile(pattern = "shp", tmpdir = shpdir, fileext = ".zip")
+  uzipdir <- file.path(shpdir, sub("^([^.]*).*", "\\1", basename(temp)))
+  dir.create(uzipdir)
   # download shapefile to temp directory & extract shapefilepath & layername
-  utils::download.file(URL, temp, mode = "wb")
-  utils::unzip(temp, exdir = shpdir)
-  shp <- dir(shpdir, "*.shp$")
-  shp.path <- file.path(shpdir, shp)
+  
+  r <- httr::GET(utils::URLencode(URL), httr::write_disk(temp, overwrite = TRUE))
+  
+  utils::unzip(temp, exdir = uzipdir)
+  shp <- dir(uzipdir, "*.shp$")
+  shp.path <- file.path(uzipdir, shp)
   lyr <- sub(".shp$", "", shp)
 
   ## read shapefile into R
   shapefile_dl <- rgdal::readOGR(dsn = shp.path, layer = lyr)
 
+  extra_cols <- list("gid"=NA,"id"=NA,"name_1"=NA,"id_1"=NA,"code_1"=NA,"type_1"=NA,"name_2"=NA,"id_2"=NA,"code_2"=NA,"type_2"=NA,"name_3"=NA,"id_3"=NA,"code_3"=NA,"type_3"=NA)
+  shapefile_dl@data <- cbind(shapefile_dl@data, extra_cols[!names(extra_cols)%in%names(shapefile_dl)])
+  
   ## delete temporary directory and return shapefile object
   on.exit(unlink(shpdir, recursive = TRUE))
   return(shapefile_dl)
 }
+
+
+
+
+URL <- "https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=Explorer:mapadmin_0_2018&cql_filter=iso%20IN%20(%27NGA%27)"
