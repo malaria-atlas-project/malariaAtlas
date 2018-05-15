@@ -288,7 +288,7 @@ PFw <- function(P_prime,
   # check the age range is sensible
   stopifnot(age_min >= 0 && age_min <= 85)
   stopifnot(age_max >= 0 && age_max <= 85)
-  stopifnot(age_min < age_max)
+  stopifnot(age_min <= age_max)
 
   # get range of ages
   age <- (age_min:(age_max - 1)) + 0.5
