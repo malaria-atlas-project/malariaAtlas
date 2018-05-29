@@ -87,7 +87,7 @@ message("Downloading list of available rasters...")
   available_rasters$title[available_rasters$title== "An. merus D\u0246nitz, 1902"&grepl("^Wiebe", available_rasters$citation)] <- "An. merus D\0246nitz, 1902 (2017)"
   available_rasters$title[available_rasters$title== "An. merus D\u0246nitz, 1902"&grepl("^Sinka", available_rasters$citation)] <- "An. merus D\u0246nitz, 1902 (2010)"
 
-
+  available_rasters <- dplyr::arrange(available_rasters, title)
   #print out message of long raster names
   if(printed == TRUE){
     message("Rasters Available for Download: \n ",paste(available_rasters$title, collapse = " \n "))
