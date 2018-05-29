@@ -13,6 +13,8 @@
 #' @docType package
 #' @name malariaAtlas
 #' @import ggplot2
+#' @importFrom graphics title
+#' @import rlang
 
 NULL
 

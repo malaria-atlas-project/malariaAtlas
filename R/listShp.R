@@ -30,7 +30,7 @@ listShp <- function(printed = TRUE){
                              utils::read.csv(URL_admin1, encoding = "UTF-8"))
     
     # Sort by admin level first and region name second.
-    available_admin <- dplyr::arrange(available_admin, admn_level, name)
+    available_admin <- dplyr::arrange(available_admin, .data$admn_level, .data$name)
     
     .malariaAtlasHidden$available_admin_stored <- available_admin
   }

@@ -11,6 +11,7 @@
 #' listPoints()
 #' }
 #' @export listPoints
+#' @importFrom rlang .data
 
 
 listPoints <- function(printed = TRUE) {
@@ -34,7 +35,7 @@ listPoints <- function(printed = TRUE) {
   available_countries <- available_countries[available_countries$continent_id!= "",]
   names(available_countries) <- c("country", "country_id", "continent")
 
-  available_countries <- dplyr::arrange(available_countries, country)
+  available_countries <- dplyr::arrange(available_countries, .data$country)
   
   if(printed == TRUE){
     message("Countries with PR Data: \n ",paste(paste(available_countries$country," (",available_countries$country_id, ")", sep = ""), collapse = " \n "))

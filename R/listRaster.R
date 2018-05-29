@@ -77,7 +77,7 @@ message("Downloading list of available rasters...")
 
   available_rasters <- clean_mosquito_names(available_rasters)
   
-  available_rasters <- dplyr::arrange(available_rasters, title)
+  available_rasters <- dplyr::arrange(available_rasters, .data$title)
   #print out message of long raster names
   if(printed == TRUE){
     message("Rasters Available for Download: \n ",paste(available_rasters$title, collapse = " \n "))
