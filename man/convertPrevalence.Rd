@@ -15,9 +15,9 @@ convertPrevalence(prevalence, age_min_in, age_max_in, age_min_out = rep(2,
 
 \item{age_max_in}{Vector maximum ages sampled.}
 
-\item{age_min_out}{Required minimum age range}
+\item{age_min_out}{Length 1 numeric or vector of same length as prevalence given the required age range upper bound}
 
-\item{age_max_out}{Required maximum age range}
+\item{age_max_out}{Length 1 numeric or vector of same length as prevalence given the required age range lower bound}
 
 \item{parameters}{Specifies the set of parameters to use in the
 model. This can either be "Pf_Smith2007" to use the parameters
@@ -27,7 +27,7 @@ for *Plasmodium falciparum* defined in that paper,
   `s`, `c` and `alpha`, in that order. If specified,}
 
 \item{sample_weights}{Must be a vector of length 85 giving the
-sample weights for each age category(the proportion of the
+sample weights for each age category (the proportion of the
 population in that age category) . If `NULL`, The sample
 weights used in Smith et al. 2007 are used.}
 }
