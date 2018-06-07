@@ -28,6 +28,7 @@ r_packages:
  - stringi
  - tidyr
  - covr
+ - devtools
 
 
 
