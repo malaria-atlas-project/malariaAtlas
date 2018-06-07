@@ -8,7 +8,9 @@ sudo: required
 cache: packages
 
 addons:
-  apt:
+  apt: 
+    sources:
+      - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
     packages:
       - libgdal-dev
 
@@ -39,7 +41,8 @@ matrix:
   include:
     - os: linux
       r: release
-    - os: osx
+    - os: linux
+      r: devel
     
 
 
