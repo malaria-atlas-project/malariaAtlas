@@ -7,14 +7,15 @@ sudo: required
 # cache packages to speed up builds
 cache: packages
 
+
 addons:
   apt:
     packages:
       - libgdal-dev
-
+      - libproj-dev
+      
 r_binary_packages:
- - rgdal
-
+- rgdal
 
 r_packages:
  - curl
