@@ -8,13 +8,15 @@ sudo: required
 cache: packages
 
 addons:
-  apt:
+  apt: 
+    sources:
+      - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
     packages:
       - libgdal-dev
-      - libproj-dev
-      
+
 r_binary_packages:
-- rgdal
+ - rgdal
+
 
 r_packages:
  - curl
