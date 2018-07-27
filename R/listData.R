@@ -4,12 +4,13 @@
 #'
 #' @return \code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 #'
-#' @param datatype One of 'points', 'raster' or 'shape'
+#' @param datatype One of 'pr points', 'vector points', 'raster' or 'shape'
 #' @param printed Should the list be printed to the console?
 #' @examples
 #' \donttest{
 #' available_admin_units <- listShp()
-#' available_pr_points<- listPoints()
+#' available_pr_points <- listPoints()
+#' available_vector_points <- listPoints()
 #' available_rasters <- listRaster()
 #' }
 #' @seealso
@@ -22,11 +23,13 @@
 listData <- function(datatype = NULL, printed = TRUE){
 
   if(is.null(datatype)){
-    message("Choose a type of data using one of: \n datatype = \"points\" \n datatype = \"raster\" \n datatype = \"shape\"")
+    message("Choose a type of data using one of: \n datatype = \"pr points\"  \n datatype = \"vector points\" \n datatype = \"raster\" \n datatype = \"shape\"")
   }
 
-  if(datatype == "points"){
-    listPoints(printed = printed)
+  if(datatype == "pr points"){
+    listPoints(printed = printed, sourcedata = "pr points")      
+  }else if(datatype == "vector points"){
+   listPoints(printed = printed, sourcedata = "vector points")
   }else if(datatype == "raster"){
     listRaster(printed = printed)
   }else if(datatype == "shape"){
