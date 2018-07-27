@@ -47,7 +47,7 @@ getPR <- function(country = NULL,
     available_countries <-
       .malariaAtlasHidden$available_countries_stored
   } else{
-    available_countries <- listPoints4(printed = FALSE, sourcedata = "pr points")
+    available_countries <- listPoints(printed = FALSE)
   }
   
   if (is.null(country) &
@@ -99,7 +99,6 @@ getPR <- function(country = NULL,
       
       checked_availability <-
         isAvailable(
-          sourcedata = "pr points",
           country = country,
           ISO = ISO,
           continent = continent,
