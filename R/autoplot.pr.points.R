@@ -68,9 +68,9 @@ autoplot.pr.points <- function(object,
     map_title <- paste("PR Survey Locations in", paste(title_loc, collapse = ", "))
   }
 
-  if(hide_confidential==TRUE){
-    object <- object[!is.na(object$pr),]
-  }
+  # if(hide_confidential==TRUE){
+  #   object <- object[!is.na(object$pr),]
+  # }
 
 if(is.null(shp_df)){
   pr_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level)
@@ -114,7 +114,7 @@ if(plot_species_n == 1){
   pr_plot <- pr_plot +
     ggplot2::coord_equal()+
     ggplot2::ggtitle(paste(map_title))+
-    ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes_string(x = "longitude", y = "latitude", fill = "pr", size = "examined"), alpha = 0.8, shape = 21, na.rm = TRUE)+
+    ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes_string(x = "longitude", y = "latitude", fill = "species"), alpha = 0.8, shape = 21, na.rm = TRUE)+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
                    strip.text = ggplot2::element_text(face = "bold"),
                    strip.background = element_blank(),
@@ -122,7 +122,7 @@ if(plot_species_n == 1){
                    panel.grid = ggplot2::element_blank(),
                    axis.title = ggplot2::element_blank(),
                    panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
-    ggplot2::scale_fill_distiller(name = paste(fill_legend_title), palette = "RdYlBu", trans = fill_scale_transform)+
+    #ggplot2::scale_fill_distiller(name = paste(fill_legend_title), palette = "RdYlBu", trans = fill_scale_transform)+
     ggplot2::scale_size(name = "Survey Size")
   if(is.null(facet)){
     facet <- FALSE
@@ -131,7 +131,7 @@ if(plot_species_n == 1){
   pr_plot <- pr_plot +
     ggplot2::coord_equal()+
     ggplot2::ggtitle(paste(map_title))+
-    ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes_string(x = "longitude", y = "latitude", fill = "pr", size = "examined"), alpha = 0.8, shape = 21, na.rm = TRUE)+
+    ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes_string(x = "longitude", y = "latitude", fill = "species"), alpha = 0.8, shape = 21, na.rm = TRUE)+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
                    strip.text = ggplot2::element_text(face = "bold"),
                    strip.background = element_blank(),
@@ -139,7 +139,7 @@ if(plot_species_n == 1){
                    panel.grid = ggplot2::element_blank(),
                    axis.title = ggplot2::element_blank(),
                    panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))+
-    ggplot2::scale_fill_distiller(name = paste(fill_legend_title), palette = "RdYlBu", trans = fill_scale_transform)+
+    #ggplot2::scale_fill_distiller(name = paste(fill_legend_title), palette = "RdYlBu", trans = fill_scale_transform)+
     ggplot2::scale_size(name = "Survey Size")
   if(is.null(facet)){
     facet <- TRUE
