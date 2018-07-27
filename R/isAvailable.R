@@ -1,9 +1,10 @@
 #' Check whether points are available for a given location
 #'
-#' \code{isAvailable} checks whether the MAP database contains PR points for the specified country/location.
+#' \code{isAvailable} checks whether the MAP database contains points for the specified country/location within the specified dataset
 #'
 #' @return \code{isAvailable} returns a named list of input locations with information regarding data availability.
 #'
+#' @param sourcedata string containing name of desired dataset to be searched
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent  string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
@@ -18,9 +19,9 @@
 #'
 #' @examples
 #' \donttest{
-#' isAvailable(country = "Suriname")
-#' x <- isAvailable(ISO = "NGA", full_results = TRUE)
-#' x <- isAvailable(continent = "Oceania", full_results = TRUE)
+#' isAvailable(sourcedata = "pr points", country = "Suriname")
+#' x <- isAvailable(sourcedata = "pr points", ISO = "NGA", full_results = TRUE)
+#' x <- isAvailable(sourcedata = "vector points", continent = "Oceania", full_results = TRUE)
 #' }
 #' @export isAvailable
 
