@@ -137,7 +137,7 @@ if (sourcedata == "pr points"){
 }else if(sourcedata == "vector points"){
   if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
     available_countries <- .malariaAtlasHidden$available_countries_stored
-  }else{available_countries <- listPoints4(printed == FALSE, sourcedata)}
+  }else{available_countries <- listPoints4(printed == FALSE, sourcedata)}   ### once change listPoints4 to listPoints those in this function will need changed
   
   capwords <- function(string) {
     cap <- function(s) {
@@ -189,7 +189,7 @@ if (sourcedata == "pr points"){
   } else if(!(is.null(ISO))){
     location_input <- as.character(toupper(ISO))
     if(nchar(location_input)!= 3){
-      stop("Specifying by iso-code only works with ISO3, use listPoints4() to check available countries & their ISO3")
+      stop("Specifying by iso-code only works with ISO3, use listPoints() to check available countries & their ISO3")
     }
     available_locs <- available_countries$country_id
   } else if(!(is.null(continent))){
@@ -241,5 +241,4 @@ if (sourcedata == "pr points"){
   if(full_results == TRUE) {
     return(checked_availability)
   }
-}
-}
+}}
