@@ -8,13 +8,13 @@
   printed = TRUE)
 }
 \arguments{
-\item{object}{A MAPShp object downloaded using /code{/link{getShp}} with format = "df" specified.}
+\item{object}{A MAPshp object downloaded using /code{/link{getShp}} with format = "df" specified.}
 
 \item{...}{Other arguments passed to specific methods}
 
 \item{map_title}{Custom title used for the plot.}
 
-\item{facet}{If TRUE, splits map into a separate facet for each malaria species.}
+\item{facet}{If TRUE, splits map into a separate facet for each administrative level.}
 
 \item{printed}{Should the plot print to graphics device.}
 }
