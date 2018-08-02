@@ -30,7 +30,7 @@ isAvailable <- function(sourcedata, country = NULL, ISO = NULL, continent = NULL
 if (sourcedata == "pr points"){
   if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
     available_countries <- .malariaAtlasHidden$available_countries_stored
-  }else{available_countries <- listPoints4(printed == FALSE, sourcedata)}
+  }else{available_countries <- listPoints(printed == FALSE, sourcedata)}
 
   capwords <- function(string) {
     cap <- function(s) {
@@ -137,7 +137,7 @@ if (sourcedata == "pr points"){
 }else if(sourcedata == "vector points"){
   if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
     available_countries <- .malariaAtlasHidden$available_countries_stored
-  }else{available_countries <- listPoints4(printed == FALSE, sourcedata)}   ### once change listPoints4 to listPoints those in this function will need changed
+  }else{available_countries <- listPoints(printed == FALSE, sourcedata)}   ### once change listPoints4 to listPoints those in this function will need changed
   
   capwords <- function(string) {
     cap <- function(s) {
