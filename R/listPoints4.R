@@ -1,10 +1,10 @@
-#' List countries with available PR Point data.
+#' List countries with available Point data.
 #'
-#' \code{listPoints} lists all countries for which there are publicly visible PR datapoints in the MAP database.
+#' \code{listPoints} lists all countries for which there are publicly visible datapoints in the MAP database for a required dataset.
 #'
 #' @param printed Should the list be printed to the console?
 #'
-#' @return \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
+#' @return \code{listPoints} returns a data.frame detailing the countries for which data points are publicly available.
 #'
 #' @examples
 #' \donttest{
@@ -72,4 +72,4 @@ listPoints4 <- function(printed = TRUE, sourcedata) {
   }
 }
 #listPoints()
-#xx <-  listPoints(printed = FALSE)
+#xx <-  listPoints(printed = FALSE, sourcedata = "")
