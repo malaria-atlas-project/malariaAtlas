@@ -1,11 +1,10 @@
 #' List countries with available MAP data.
 #'
-#' \code{listPoints} lists all countries for which there are publicly visible datapoints for a specific dataset in the MAP database.
+#' \code{listPoints} lists all countries for which there are publicly visible datapoints in the MAP database for a required dataset.
 #'
 #' @param printed Should the list be printed to the console?
-#' @param sourcedata Data string containing the MAP dataset required
 #'
-#' @return \code{listPoints} returns a data.frame detailing the countries for which points are publicly available.
+#' @return \code{listPoints} returns a data.frame detailing the countries for which data points are publicly available.
 #'
 #' @examples
 #' \donttest{
