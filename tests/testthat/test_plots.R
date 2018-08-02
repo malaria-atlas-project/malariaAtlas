@@ -7,7 +7,7 @@ test_that('Plotting works for shapes', {
 #time varying range
 skip_on_cran()
 
-MDG_shp <- getShp(ISO = "MDG", admin_level = "both")
+MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 p1 <- autoplot(as.MAPshp(MDG_shp), map_title = 'a title')
 p2 <- autoplot(as.MAPshp(MDG_shp), map_title = 'a title', printed = T)
 p3 <- autoplot(as.MAPshp(MDG_shp), facet = TRUE)
@@ -32,7 +32,7 @@ test_that('Plotting works for PR', {
 #time varying range
 skip_on_cran()
 
-MDG_shp <- getShp(ISO = "MDG", admin_level = "both")
+MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 p1 <- autoplot(NGA_CMR_PR)
 p2 <- autoplot(NGA_CMR_PR, hide_confidential = TRUE)

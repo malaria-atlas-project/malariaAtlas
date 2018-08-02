@@ -4,8 +4,9 @@
 \alias{getShp}
 \title{Download MAPadmin2013 Administrative Boundary Shapefiles from the MAP geoserver}
 \usage{
-getShp(country = NULL, ISO = NULL, extent = NULL, admin_level = "both",
-  format = "spatialpolygon", long = NULL, lat = NULL)
+getShp(country = NULL, ISO = NULL, extent = NULL,
+  admin_level = c("admin0"), format = "spatialpolygon", long = NULL,
+  lat = NULL)
 }
 \arguments{
 \item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})}
@@ -15,7 +16,7 @@ getShp(country = NULL, ISO = NULL, extent = NULL, admin_level = "both",
 \item{extent}{2x2 matrix specifying the spatial extent within which polygons are desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).
 Note: getShp downloads the entire polygon for any polygons falling within the extent.}
 
-\item{admin_level}{string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "both" accepted)}
+\item{admin_level}{string specifying the administrative level for which shapefile are desired (only "admin0","admin1","admin2","admin3", or "all" accepted). N.B. Not all administrative levels are available for all countries. Use listShp to check which shapefiles are available. If an administrative level is requested that is not available, the closest available administrative level shapefiles will be returned.}
 
 \item{format}{string specifying the desired format for the downloaded shapefile: either "spatialpolygon" or "df"}
 
@@ -27,11 +28,23 @@ Note: getShp downloads the entire polygon for any polygons falling within the ex
 \code{getShp} returns either a dataframe or spatialPolygon object for requested administrative unit polygons. The following attribute fields are included:
 
 \enumerate{
-\item \code{COUNTRY_ID} ISO-3 code of given administrative unit (or the ISO code of parent unit for administrative-level 1 units).
-\item \code{GAUL_CODE} GAUL code of given administrative unit.
-\item \code{ADMN_LEVEL} administrative level of the given administrative unit - either 0 (national) or 1 (first-level division)
-\item \code{PARENT_ID} GAUL code of parent administrative unit of a given polygon (for admin0 polygons, PARENT_ID = 0).
-\item \code{country_level} composite \code{ISO3}_\code{ADMN_LEVEL} field.
+\item \code{id} unique identifier for any given polygon/administrative unit. 
+\item \code{iso} ISO-3 code of given administrative unit (or the ISO code of parent unit for administrative-level 1 units).
+\item \code{admn_level} administrative level of the given administrative unit - either 0 (national), 1 (first-level division), 2 (second-level division), 3 (third-level division). 
+\item \code{name_0} name of admin0 parent of a given administrative unit (or just shapefile name for admin0 units)
+\item \code{id_0} id code of admin0 parent of the current shapefile (or just shapefile id for admin0 units)
+\item \code{type_0} if applicable, type of administrative unit or admin0 parent
+\item \code{name_1} name of admin1 parent of a given administrative unit (or just shapefile name for admin1 units); NA for admin0 units
+\item \code{id_1} id code of admin1 parent of the current shapefile (or just shapefile id for admin1 units); NA for admin0 units
+\item \code{type_1} if applicable, type of administrative unit or admin1 parent
+\item \code{name_2} name of admin2 parent of a given administrative unit (or just shapefile name for admin2 units); NA for admin0, admin1 units
+\item \code{id_2} id code of admin2 parent of the current shapefile (or just shapefile id for admin2 units); NA for admin0, admin1 units
+\item \code{type_2} if applicable, type of administrative unit or admin2 parent
+\item \code{name_3} name of admin3 parent of a given administrative unit (or just shapefile name for admin3 units); NA for admin0, admin1, admin2 units
+\item \code{id_3} id code of admin3 parent of the current shapefile (or just shapefile id for admin3 units); NA for admin0, admin1, admin2 units
+\item \code{type_3} if applicable, type of administrative unit
+\item \code{source} source of administrative boundaries
+\item \code{country_level} composite \code{iso}_\code{admn_level} field.
 }
 }
 \description{

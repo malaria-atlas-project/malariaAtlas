@@ -4,7 +4,7 @@
 \alias{listShp}
 \title{List administrative units for which shapefiles are stored on the MAP geoserver.}
 \usage{
-listShp(printed = TRUE)
+listShp(printed = TRUE, admin_level = c("admin0", "admin1"))
 }
 \arguments{
 \item{printed}{Should the list be printed to the console?}
