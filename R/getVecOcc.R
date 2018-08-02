@@ -29,7 +29,6 @@
 #' Madagascar_vec <- getVecOcc(ISO = "MDG", species = "All")
 #' autoplot(Madagascar_vec)
 #
-#' getVecOcc(country = "ALL", species = "All")
 #' }
 #'
 #'
@@ -47,7 +46,7 @@ getVecOcc <- function(country = NULL,
     available_countries <- 
       .malariaAtlasHidden$available_countries_stored
   } else{
-    available_countries <- listPoints4(printed = FALSE, sourcedata = "vector points")     ##need to change listPoints4 to the required listPoints function. Would also have to update this in getPR function
+    available_countries <- listPoints(printed = FALSE, sourcedata = "vector points")     ##Is this updated in the getPR function?
   }
   
   if(is.null(country) & 
@@ -91,7 +90,7 @@ getVecOcc <- function(country = NULL,
         colname <-"country"
       } else if (!(is.null(ISO))) {
         cql_filter <- "country_id"
-        col_name <- "country_id"
+        colname <- "country_id"
       } else if (!(is.null(continent))) {
         cql_filter <- "continent_id"
         colname <- "continent"
