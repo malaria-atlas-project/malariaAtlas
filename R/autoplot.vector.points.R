@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' \donttest{
-#' Vector_surveys_NGA <- getVecOcc(country = c("Nigeria"))
+#' Vector_surveys_NGA_NG <- getVecOcc(country = c("Nigeria", "Niger"))
 #' autoplot(Vector_surveys_NGA)
 #'
 #'
@@ -25,8 +25,8 @@
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #'
 #'
-#' # Download raw PfPR survey points & plot these over the top of the raster
-#' pr <- getPR(country = c("Madagascar"), species = "Pf")
+#' # Download raw PfPR survey points & plot these over the top of the raster   NEED A DIFFERENT EXAMPLE HERE
+#' species <- getVecOcc(country = "Madagascar")
 #' p[[1]] +
 #' geom_point(data = pr[pr$year_start==2013,],
 #'            aes(longitude, latitude, fill = positive / examined,
