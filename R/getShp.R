@@ -4,7 +4,7 @@
 #'
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
-#' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin1", "admin0", or "all" accepted)
+#' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin0","admin1","admin2","admin3", or "all" accepted). N.B. Not all administrative levels are available for all countries. Use listShp to check which shapefiles are available. If an administrative level is requested that is not available, the closest available administrative level shapefiles will be returned.
 #' @param extent 2x2 matrix specifying the spatial extent within which polygons are desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).
 #' Note: getShp downloads the entire polygon for any polygons falling within the extent.
 #' @param format string specifying the desired format for the downloaded shapefile: either "spatialpolygon" or "df"
@@ -14,11 +14,23 @@
 #' @return \code{getShp} returns either a dataframe or spatialPolygon object for requested administrative unit polygons. The following attribute fields are included:
 #'
 #' \enumerate{
-#' \item \code{COUNTRY_ID} ISO-3 code of given administrative unit (or the ISO code of parent unit for administrative-level 1 units).
-#' \item \code{GAUL_CODE} GAUL code of given administrative unit.
-#' \item \code{ADMN_LEVEL} administrative level of the given administrative unit - either 0 (national) or 1 (first-level division)
-#' \item \code{PARENT_ID} GAUL code of parent administrative unit of a given polygon (for admin0 polygons, PARENT_ID = 0).
-#' \item \code{country_level} composite \code{ISO3}_\code{ADMN_LEVEL} field.
+#' \item \code{id} unique identifier for any given polygon/administrative unit. 
+#' \item \code{iso} ISO-3 code of given administrative unit (or the ISO code of parent unit for administrative-level 1 units).
+#' \item \code{admn_level} administrative level of the given administrative unit - either 0 (national), 1 (first-level division), 2 (second-level division), 3 (third-level division). 
+#' \item \code{name_0} name of admin0 parent of a given administrative unit (or just shapefile name for admin0 units)
+#' \item \code{id_0} id code of admin0 parent of the current shapefile (or just shapefile id for admin0 units)
+#' \item \code{type_0} if applicable, type of administrative unit or admin0 parent
+#' \item \code{name_1} name of admin1 parent of a given administrative unit (or just shapefile name for admin1 units); NA for admin0 units
+#' \item \code{id_1} id code of admin1 parent of the current shapefile (or just shapefile id for admin1 units); NA for admin0 units
+#' \item \code{type_1} if applicable, type of administrative unit or admin1 parent
+#' \item \code{name_2} name of admin2 parent of a given administrative unit (or just shapefile name for admin2 units); NA for admin0, admin1 units
+#' \item \code{id_2} id code of admin2 parent of the current shapefile (or just shapefile id for admin2 units); NA for admin0, admin1 units
+#' \item \code{type_2} if applicable, type of administrative unit or admin2 parent
+#' \item \code{name_3} name of admin3 parent of a given administrative unit (or just shapefile name for admin3 units); NA for admin0, admin1, admin2 units
+#' \item \code{id_3} id code of admin3 parent of the current shapefile (or just shapefile id for admin3 units); NA for admin0, admin1, admin2 units
+#' \item \code{type_3} if applicable, type of administrative unit
+#' \item \code{source} source of administrative boundaries
+#' \item \code{country_level} composite \code{iso}_\code{admn_level} field.
 #' }
 #'
 #' @examples
@@ -44,19 +56,19 @@
 getShp <- function(country = NULL,
                    ISO = NULL,
                    extent = NULL,
-                   admin_level = "all",
+                   admin_level = c("admin0"),
                    format = "spatialpolygon",
                    long = NULL,
                    lat = NULL) {
   # Specifcy country_input (ISO3 code) for db query
 
-  available_admin <- listShp(printed = FALSE)
+  available_admin <- listShp(printed = FALSE, admin_level= "admin0")
 
   if (!is.null(ISO)) {
     country_input <- toupper(ISO)
   } else if (!is.null(country)) {
     country_input <-
-      as.character(available_admin$iso[available_admin$name %in% country])
+      as.character(available_admin$iso[available_admin$name_0 %in% country])
   } else{
     country_input <-  NULL
   }
@@ -135,7 +147,7 @@ getShp <- function(country = NULL,
     URL_filter <-
       paste("&bbox=", paste(c(extent[2, 1], extent[1, 1], extent[2, 2], extent[1, 2]), collapse = ","), sep = "")
     #otherwise by default use object country names to download shapefiles for these countries only via cql_filter.
-  } else{
+  } else {
     URL_filter <-
       paste(
         "&cql_filter=iso%20IN%20(",
@@ -153,40 +165,10 @@ getShp <- function(country = NULL,
 
   #define which admin levels are queried and return as a list full geoserver query URL
   base_URL <-
-    "https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
-  if (tolower(admin_level) == "admin0") {
-    URL_input <-
-      list("admin0" = paste(
-        base_URL,
-        "&TypeName=Explorer:mapadmin_0_2018",
-        paste(URL_filter),
-        sep = ""
-      ))
-  } else if (tolower(admin_level) == "admin1") {
-    URL_input <-
-      list("admin1" = paste(
-        base_URL,
-        "&TypeName=Explorer:mapadmin_1_2018",
-        paste(URL_filter),
-        sep = ""
-      ))
-  } else if (tolower(admin_level) == "admin2") {
-    URL_input <-
-      list("admin2" = paste(
-        base_URL,
-        "&TypeName=Explorer:mapadmin_2_2018",
-        paste(URL_filter),
-        sep = ""
-      ))
-  } else if (tolower(admin_level) == "admin3") {
-    URL_input <-
-      list("admin3" = paste(
-        base_URL,
-        "&TypeName=Explorer:mapadmin_3_2018",
-        paste(URL_filter),
-        sep = ""
-      ))
-  } else if (tolower(admin_level) == "all") {
+    "https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
+  
+  
+  if (tolower(admin_level) == "all") {
     URL_input <-
       list(
         "admin0" = paste(
@@ -214,18 +196,63 @@ getShp <- function(country = NULL,
           sep = ""
         )
       )
+  } else {
+  
+  URL_input <- list()
+  
+  if ("admin0" %in% tolower(admin_level) ) {
+    URL_input <- c(URL_input, 
+      list("admin0" = paste(
+        base_URL,
+        "&TypeName=Explorer:mapadmin_0_2018",
+        paste(URL_filter),
+        sep = ""
+      )))
   }
+  
+  if ("admin1" %in% tolower(admin_level)) {
+    URL_input <- c(URL_input,
+      list("admin1" = paste(
+        base_URL,
+        "&TypeName=Explorer:mapadmin_1_2018",
+        paste(URL_filter),
+        sep = ""
+      )))
+  }
+  
+  if ("admin2" %in% tolower(admin_level)) {
+    URL_input <- c(URL_input,
+      list("admin2" = paste(
+        base_URL,
+        "&TypeName=Explorer:mapadmin_2_2018",
+        paste(URL_filter),
+        sep = ""
+      )))
+  }
+  
+  if ("admin3" %in% tolower(admin_level)) {
+    URL_input <- c(URL_input,
+      list("admin3" = paste(
+        base_URL,
+        "&TypeName=Explorer:mapadmin_3_2018",
+        paste(URL_filter),
+        sep = ""
+      )))
+  } 
+  
+}
 
   Shp_polygon <- lapply(URL_input, downloadShp)
   
-  if (admin_level != "all") {
+  if (length(admin_level) == 1 & admin_level != "all") {
     Shp_polygon <- Shp_polygon[[paste(admin_level)]]
-  } else if (admin_level == "all") {
-    Shp_polygon <- sp::rbind.SpatialPolygonsDataFrame(Shp_polygon$admin0, Shp_polygon$admin1, Shp_polygon$admin2, Shp_polygon$admin3)
-  }
+  } else {
+    Shp_polygon <- do.call(what = sp::rbind.SpatialPolygonsDataFrame, args = Shp_polygon)
+    }
 
   Shp_polygon$country_level <-
     paste(Shp_polygon$iso, "_", Shp_polygon$admn_level, sep = "")
+  
 
   if ("all" %in% tolower(ISO)) {
     .malariaAtlasHidden$all_polygons <- Shp_polygon
@@ -271,8 +298,15 @@ downloadShp <- function(URL) {
   ## read shapefile into R
   shapefile_dl <- rgdal::readOGR(dsn = shp.path, layer = lyr)
 
-  extra_cols <- list("gid"=NA,"id"=NA,"name_1"=NA,"id_1"=NA,"code_1"=NA,"type_1"=NA,"name_2"=NA,"id_2"=NA,"code_2"=NA,"type_2"=NA,"name_3"=NA,"id_3"=NA,"code_3"=NA,"type_3"=NA)
+  extra_cols <- list("id_0"=NA,"name_1"=NA,"id_1"=NA,"code_1"=NA,"type_1"=NA,"name_2"=NA,"id_2"=NA,"code_2"=NA,"type_2"=NA,"name_3"=NA,"id_3"=NA,"code_3"=NA,"type_3"=NA)
+  if(any(!names(extra_cols)%in%names(shapefile_dl))){
   shapefile_dl@data <- cbind(shapefile_dl@data, extra_cols[!names(extra_cols)%in%names(shapefile_dl)])
+}
+  shapefile_dl <-  shapefile_dl[,c("iso","admn_level",
+                                 "name_0","id_0","type_0","name_1",
+                                 "id_1","type_1","name_2","id_2",
+                                 "type_2","name_3","id_3",
+                                 "type_3","source")]
   
   ## delete temporary directory and return shapefile object
   on.exit(unlink(shpdir, recursive = TRUE))
@@ -281,5 +315,3 @@ downloadShp <- function(URL) {
 
 
 
-
-URL <- "https://map-dev1.ndph.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=Explorer:mapadmin_0_2018&cql_filter=iso%20IN%20(%27NGA%27)"

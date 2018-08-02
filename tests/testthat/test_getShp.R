@@ -1,7 +1,7 @@
 # getShp() tests
 
 # test downloadShp
-test_URL <- utils::URLencode("https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=mapadmin_0_2013&cql_filter=iso%20IN%20(%27BDI%27)")
+test_URL <- utils::URLencode("https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=mapadmin_0_2018&cql_filter=iso%20IN%20(%27BDI%27)")
 
 test_dlshp <- downloadShp(test_URL)
 
@@ -63,9 +63,6 @@ test_that("getShp downloads the correct shapefiles and stores them",{
 #test bbox
 #test lat, long
 #test ISO = "ALL"
-
-
-
 
 test_that('Repeated getSHP works. That getting shapes from .malariaAtlasHidden does not break.', {
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
