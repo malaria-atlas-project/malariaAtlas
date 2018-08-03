@@ -64,6 +64,10 @@ getShp <- function(country = NULL,
 
   available_admin <- listShp(printed = FALSE, admin_level= "admin0")
 
+  if(all(!admin_level%in%c("admin0", "admin1", "admin2", "admin3", "all"))){
+    stop('admin_level must be one or more of: c("admin0", "admin1", "admin2", "admin3", "all")')
+  }  
+  
   if (!is.null(ISO)) {
     country_input <- toupper(ISO)
   } else if (!is.null(country)) {
@@ -82,15 +86,9 @@ getShp <- function(country = NULL,
 
   if (admin_level == "all") {
     admin_num <- c(0, 1, 2, 3)
-  } else if (admin_level == "admin1") {
-    admin_num <- 1
-  } else if (admin_level == "admin2") {
-    admin_num <- 2
-  } else if (admin_level == "admin3") {
-    admin_num <- 3
-  } else if (admin_level == "admin0") {
-    admin_num <- 0
-  }
+  } else {
+    admin_num <- as.numeric(gsub("admin","", admin_level))
+  } 
 
   # if lat and long are provided, define extent from lat-longs
 
