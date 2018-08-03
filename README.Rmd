@@ -97,7 +97,7 @@ autoplot(MDG_pr_data,
 `getShp()` downloads a shapefile for a specified country (or countries) and returns this as either a spatialPolygon or data.frame object.
 
 ```{r message = FALSE}
-MDG_shp <- getShp(ISO = "MDG", admin_level = "both")
+MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 ```
 ```{r echo = FALSE}
 tibble::glimpse(MDG_shp)

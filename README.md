@@ -129,43 +129,44 @@ N.B. Facet-wrapped option is also available for species stratification.
 `getShp()` downloads a shapefile for a specified country (or countries)
 and returns this as either a spatialPolygon or data.frame object.
 
-    MDG_shp <- getShp(ISO = "MDG", admin_level = "both")
+    MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
+
+    ## Warning in if (admin_level == "all") {: the condition has length > 1 and
+    ## only the first element will be used
+
+    ## Warning in if (admin_level == "admin1") {: the condition has length > 1 and
+    ## only the first element will be used
+
+    ## Warning in if (admin_level == "admin2") {: the condition has length > 1 and
+    ## only the first element will be used
+
+    ## Warning in if (admin_level == "admin3") {: the condition has length > 1 and
+    ## only the first element will be used
+
+    ## Warning in if (admin_level == "admin0") {: the condition has length > 1 and
+    ## only the first element will be used
 
     ## Formal class 'SpatialPolygonsDataFrame' [package "sp"] with 5 slots
-    ##   ..@ data       :'data.frame':  23 obs. of  8 variables:
-    ##   .. ..$ gid          : int [1:23] 138 2790 2791 2792 2793 2794 2795 2796 2797 2798 ...
-    ##   .. ..$ country_id   : Factor w/ 1 level "MDG": 1 1 1 1 1 1 1 1 1 1 ...
-    ##   .. ..$ gaul_code    : int [1:23] 150 41750 41751 41752 41753 41754 41755 41756 41757 41758 ...
-    ##   .. ..$ admn_level   : Factor w/ 2 levels "0","1": 1 2 2 2 2 2 2 2 2 2 ...
-    ##   .. ..$ parent_id    : int [1:23] 0 150 150 150 150 150 150 150 150 150 ...
-    ##   .. ..$ name         : Factor w/ 23 levels "Madagascar","Alaotra Mangoro",..: 1 2 3 4 5 6 7 8 9 10 ...
-    ##   .. ..$ lsms_agri    : int [1:23] NA NA NA NA NA NA NA NA NA NA ...
-    ##   .. ..$ country_level: chr [1:23] "MDG_0" "MDG_1" "MDG_1" "MDG_1" ...
-    ##   ..@ polygons   :List of 23
+    ##   ..@ data       :'data.frame':  1 obs. of  16 variables:
+    ##   .. ..$ iso          : Factor w/ 1 level "MDG": 1
+    ##   .. ..$ admn_level   : num 0
+    ##   .. ..$ name_0       : Factor w/ 1 level "Madagascar": 1
+    ##   .. ..$ id_0         : num 1e+07
+    ##   .. ..$ type_0       : Factor w/ 1 level "Country": 1
+    ##   .. ..$ name_1       : logi NA
+    ##   .. ..$ id_1         : logi NA
+    ##   .. ..$ type_1       : logi NA
+    ##   .. ..$ name_2       : logi NA
+    ##   .. ..$ id_2         : logi NA
+    ##   .. ..$ type_2       : logi NA
+    ##   .. ..$ name_3       : logi NA
+    ##   .. ..$ id_3         : logi NA
+    ##   .. ..$ type_3       : logi NA
+    ##   .. ..$ source       : Factor w/ 1 level "Madagascar NMCP 2016": 1
+    ##   .. ..$ country_level: chr "MDG_0"
+    ##   ..@ polygons   :List of 1
     ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   .. ..$ :Formal class 'Polygons' [package "sp"] with 5 slots
-    ##   ..@ plotOrder  : int [1:23] 1 8 21 19 18 7 12 11 2 5 ...
+    ##   ..@ plotOrder  : int 1
     ##   ..@ bbox       : num [1:2, 1:2] 43.2 -25.6 50.5 -11.9
     ##   .. ..- attr(*, "dimnames")=List of 2
     ##   ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
