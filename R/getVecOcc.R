@@ -40,13 +40,19 @@
 getVecOcc <- function(country = NULL,
                       ISO = NULL,
                       continent = NULL,
-                      species = "All",
+                      species = NULL,
                       extent = NULL) {
-  if (exists('available_countries_stored', envir =  .malariaAtlasHidden)) {
-    available_countries <- 
-      .malariaAtlasHidden$available_countries_stored
+  if (exists('available_countries_vec_stored', envir =  .malariaAtlasHidden)) {
+    available_countries_vec <- .malariaAtlasHidden$available_countries_stored
   } else{
-    available_countries <- listPoints(printed = FALSE, sourcedata = "vector points")     ##Is this updated in the getPR function?
+    available_countries_vec <- listPoints_sk(printed = FALSE, sourcedata = "vector points")     ##New listPoints function, would have to be updated in other functions to
+  }
+  
+  
+  if (exists('available_species_stored', envir = .malariaAtlasHidden)) {
+    available_species <- .malariaAtlasHidden$available_species_stored
+  } else{
+    available_species <- listSpecies(printed = FALSE)
   }
   
   if(is.null(country) & 
@@ -55,24 +61,30 @@ getVecOcc <- function(country = NULL,
   }
   
   
-  URL <-
-    "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
-  
-  if(tolower(species) == "all") {
-    columns <- 
-      "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
-    
-  } else if (tolower(species) == "anopheles darlingi root, 1926") {
-    columns <-
-      "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
-     
-  } else if (tolower(species) == "anopheles nuneztovari species complex") {
-    columns <- 
-      "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
-    
-  } else {
-    stop("Species not recognised, use one of list of species names")     ##### this wont be right but this is the idea and would need to add in all species
+  if(exists('species', where = available_species)){
+    message("Compliling data please wait...")
+  }  else{
+    stop("Species not recognised, check species availaility with 'listSpecies()'")
   }
+
+  # if(is.element(species == species)) {
+  #  print("Importing vector occurrence data for species, please wait...")
+  #  } else{
+  #    stop("Species not recognised, format required 'Anopheles .....' ")
+  # }
+  
+  # if(tolower(species) == "all") {
+  #   columns <-
+  #     "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
+  # 
+  # } else if (tolower(species) == "anopheles darlingi root, 1926") {
+  #   columns <-
+  #     "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
+  # 
+  # } else if (tolower(species) == "anopheles nuneztovari species complex") {
+  #   columns <-
+  #     "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
+
   
   
   if("all" %in% tolower(c(country, ISO))) {
@@ -80,11 +92,18 @@ getVecOcc <- function(country = NULL,
       "Importing vector occurence data for all locations, please wait...",
       sep = ""
     ))
+    
+    URL <-
+      "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
+    
+    columns <-
+      "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,species_plain,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
+    
     df <- 
       utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,-1]
-    message("Data donwloaded for all available locations.")
+    message("Data downloaded for all available locations.")
   } else{
-    if (any(c(!is.null(country),!is.null(ISO),!is.null(continent)))) {
+    if (any(c(!is.null(country),!is.null(ISO),!is.null(continent),!is.null(species)))) {  ##added the species part
       if (!(is.null(country))) {
         cql_filter <- "country"
         colname <-"country"
@@ -94,6 +113,9 @@ getVecOcc <- function(country = NULL,
       } else if (!(is.null(continent))) {
         cql_filter <- "continent_id"
         colname <- "continent"
+      } else if (!(is.null(species))) {
+        cql_filter <- "species_plain"
+        colname <- "species_name"
       }
       
       checked_availability <- 
@@ -106,7 +128,7 @@ getVecOcc <- function(country = NULL,
         )
       message(paste(
         "Attempting to download vector occurence data for",
-        paste(available_countries$country[available_countries[, colname] %in% checked_availability$location[checked_availability$is_availalbe == 1]], collapse = ", "),
+        paste(available_countries_vec$country[available_countries_vec[, colname] %in% checked_availability$location[checked_availability$is_availalbe == 1]], collapse = ", "),
         "..."
       ))
       country_URL <-
@@ -122,9 +144,9 @@ getVecOcc <- function(country = NULL,
                         columns,
                         "&cql_filter=",
                         cql_filter,
-                        "%20IN%20(",
-                        country_URL,
-                        ")",
+                        "%20IN%20(", 
+                        country_URL,            #"&species%20IN%20"
+                        ") ",
                         sep = "")
     } else if (!is.null(extent)) {
       bbox_filter <-
@@ -167,13 +189,19 @@ getVecOcc <- function(country = NULL,
     } else if (!is.null(extent)) {
       message("Data downloaded for extent: ",
               paste0(extent, collapse = ", "))
+    
+    if (!is.null(species)){
+      message("Data downloaded for species: ",
+              paste(checked_availability$species[checked_availaiblity$is_available == 1], collapse = ", "),
+              ","
+      )
     }
     
     class(df) <- c("vector.points", class(df))
     
     return(df)
   }
-}
+}}
 
 
  
