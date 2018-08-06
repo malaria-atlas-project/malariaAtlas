@@ -28,9 +28,9 @@
 isAvailable <- function(sourcedata, country = NULL, ISO = NULL, continent = NULL, full_results = FALSE) {
 
 if (sourcedata == "pr points"){
-  if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
-    available_countries <- .malariaAtlasHidden$available_countries_stored
-  }else{available_countries <- listPoints(printed == FALSE, sourcedata)}
+  if(exists('available_countries_pr_stored', envir = .malariaAtlasHidden)){
+    available_countries_pr <- .malariaAtlasHidden$available_countries_pr_stored
+  }else{available_countries_pr <- listPoints_sk(printed = FALSE, sourcedata)}
 
   capwords <- function(string) {
     cap <- function(s) {
@@ -78,16 +78,16 @@ if (sourcedata == "pr points"){
 
   if(!(is.null(country))){
     location_input <- sapply(country, capwords)
-    available_locs <- available_countries$country
+    available_locs <- available_countries_pr$country
   } else if(!(is.null(ISO))){
     location_input <- as.character(toupper(ISO))
     if(nchar(location_input)!= 3){
       stop("Specifying by iso-code only works with ISO3, use listPoints() to check available countries & their ISO3")
     }
-    available_locs <- available_countries$country_id
+    available_locs <- available_countries_pr$country_id
   } else if(!(is.null(continent))){
     location_input <- sapply(continent, capwords)
-    available_locs <- unique(available_countries$continent)
+    available_locs <- unique(available_countries_pr$continent)
   }
 
   message("Confirming availability of PR data for: ", paste(location_input, collapse = ", "), "...")
@@ -135,9 +135,9 @@ if (sourcedata == "pr points"){
     return(checked_availability)
   }
 }else if(sourcedata == "vector points"){
-  if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
-    available_countries <- .malariaAtlasHidden$available_countries_stored
-  }else{available_countries <- listPoints(printed == FALSE, sourcedata)}   ### once change listPoints4 to listPoints those in this function will need changed
+  if(exists('available_countries_vec_stored', envir = .malariaAtlasHidden)){
+    available_countries_vec <- .malariaAtlasHidden$available_countries_vec_stored
+  }else{available_countries_vec <- listPoints_sk(printed = FALSE, sourcedata)}   ### once change listPoints4 to listPoints those in this function will need changed
   
   capwords <- function(string) {
     cap <- function(s) {
@@ -185,16 +185,16 @@ if (sourcedata == "pr points"){
   
   if(!(is.null(country))){
     location_input <- sapply(country, capwords)
-    available_locs <- available_countries$country
+    available_locs <- available_countries_vec$country
   } else if(!(is.null(ISO))){
     location_input <- as.character(toupper(ISO))
     if(nchar(location_input)!= 3){
       stop("Specifying by iso-code only works with ISO3, use listPoints() to check available countries & their ISO3")
     }
-    available_locs <- available_countries$country_id
+    available_locs <- available_countries_vec$country_id
   } else if(!(is.null(continent))){
     location_input <- sapply(continent, capwords)
-    available_locs <- unique(available_countries$continent)
+    available_locs <- unique(available_countries_vec$continent)
   }
   
   message("Confirming availability of Vector data for: ", paste(location_input, collapse = ", "), "...")
