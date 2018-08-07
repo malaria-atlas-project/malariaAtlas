@@ -17,10 +17,10 @@ listPoints_sk <- function(printed = TRUE, sourcedata) {
   message("Creating list of countries for which MAP data is available, please wait...")
 
 
-  if(printed == TRUE && sourcedata == "pr points"){
+  if(sourcedata == "pr points"){
 
-    if(exists('available_countries_pr_stored', envir = .malariaAtlasHidden)){
-    available_countries_pr <- .malariaAtlasHidden$available_countries_pr_stored
+    if(exists('available_countries_stored_pr', envir = .malariaAtlasHidden)){
+    available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
 
       if(printed == TRUE){
       message("Countries with PR Data: \n ",paste(paste(available_countries_pr$country," (",available_countries_pr$country_id, ")", sep = ""), collapse = " \n "))
@@ -38,14 +38,14 @@ listPoints_sk <- function(printed = TRUE, sourcedata) {
         message("Countries with PR Data: \n ",paste(paste(available_countries_pr$country," (",available_countries_pr$country_id, ")", sep = ""), collapse = " \n "))
       }
 
-      .malariaAtlasHidden$available_countries_pr_stored <- available_countries_pr
+      .malariaAtlasHidden$available_countries_stored_pr <- available_countries_pr
 
       return(invisible(available_countries_pr))
     }
 
-  }else if(printed == TRUE && sourcedata == "vector points"){
-    if(exists('available_countries_vec_stored', envir = .malariaAtlasHidden)){
-    available_countries_vec <- .malariaAtlasHidden$available_countries_vec_stored
+  }else if(sourcedata == "vector points"){
+    if(exists('available_countries_stored_vec', envir = .malariaAtlasHidden)){
+    available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
 
       if(printed == TRUE){
       message("Countries with vector occurrence data: \n ",paste(paste(available_countries_vec$country," (",available_countries_vec$country_id, ")", sep = ""), collapse = " \n "))
@@ -63,7 +63,7 @@ listPoints_sk <- function(printed = TRUE, sourcedata) {
       message("Countries with vector occurrence data: \n ",paste(paste(available_countries_vec$country," (",available_countries_vec$country_id, ")", sep = ""), collapse = " \n "))
       }
 
-      .malariaAtlasHidden$available_countries_vec_stored <- available_countries_vec
+      .malariaAtlasHidden$available_countries_stored_vec <- available_countries_vec
 
       return(invisible(available_countries_vec))
       }
