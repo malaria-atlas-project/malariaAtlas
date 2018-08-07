@@ -38,14 +38,14 @@ listSpecies <- function(printed = T){
     available_species <- dplyr::select(available_species, species, country)
 
     
-  if(printed == TRUE){
-    message("Species with availale data: \n ",paste(paste(available_species$species, " (",available_species$country, ")", sep = ""), collapse = " \n "))
-  }
+    if(printed == TRUE){
+     message("Species with availale data: \n ",paste(paste(available_species$species, " (",available_species$country, ")", sep = ""), collapse = " \n "))
+    }
   
-  .malariaAtlasHidden$available_species_stored <- available_species
+    .malariaAtlasHidden$available_species_stored <- available_species
   
   
-  return(invisible(available_species))
+    return(invisible(available_species))
   }
 }
 #listSpecies()
