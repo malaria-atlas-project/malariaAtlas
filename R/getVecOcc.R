@@ -42,10 +42,10 @@ getVecOcc <- function(country = NULL,
                       continent = NULL,
                       species = NULL,
                       extent = NULL) {
-  if (exists('available_countries_vec_stored', envir =  .malariaAtlasHidden)) {
-    available_countries_vec <- .malariaAtlasHidden$available_countries_stored
+  if (exists('available_countries_stored_vec', envir =  .malariaAtlasHidden)) {
+    available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
   } else{
-    available_countries_vec <- listPoints_sk(printed = FALSE, sourcedata = "vector points")     ##New listPoints function, would have to be updated in other functions to
+    available_countries_vec <- listPoints_vec(printed = FALSE)     ##New listPoints function, would have to be updated in other functions to
   }
   
   
@@ -54,38 +54,19 @@ getVecOcc <- function(country = NULL,
   } else{
     available_species <- listSpecies(printed = FALSE)
   }
-  
+
   if(is.null(country) & 
      is.null(ISO) & is.null(continent) & is.null(extent)) {
     stop("Must specify one of: 'country', 'ISO', 'continent' or 'extent'.")
   }
   
   
-  if(exists('species', where = available_species)){
-    message("Compliling data please wait...")
-  }  else{
-    stop("Species not recognised, check species availaility with 'listSpecies()'")
-  }
-
-  # if(is.element(species == species)) {
-  #  print("Importing vector occurrence data for species, please wait...")
-  #  } else{
-  #    stop("Species not recognised, format required 'Anopheles .....' ")
+  # if(exists('species', where = available_species)){
+  #   message("Compliling data please wait...")
+  # }  else{
+  #   stop("Species not recognised, check species availaility with 'listSpecies()'")
   # }
-  
-  # if(tolower(species) == "all") {
-  #   columns <-
-  #     "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
-  # 
-  # } else if (tolower(species) == "anopheles darlingi root, 1926") {
-  #   columns <-
-  #     "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
-  # 
-  # } else if (tolower(species) == "anopheles nuneztovari species complex") {
-  #   columns <-
-  #     "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
 
-  
   
   if("all" %in% tolower(c(country, ISO))) {
     message(paste(
@@ -115,26 +96,24 @@ getVecOcc <- function(country = NULL,
         colname <- "continent"
       } else if (!(is.null(species))) {
         cql_filter <- "species_plain"
-        colname <- "species_name"
+        colname <- "species_plain"
       }
       
       checked_availability <- 
-        isAvailable(
-          sourcedata = "vector points",
-          country= country,
+        isAvailable_vec(country= country,
           ISO = ISO,
           continent = continent,
           full_results = TRUE
         )
       message(paste(
         "Attempting to download vector occurence data for",
-        paste(available_countries_vec$country[available_countries_vec[, colname] %in% checked_availability$location[checked_availability$is_availalbe == 1]], collapse = ", "),
+        paste(available_countries_vec$country[available_countries_vec[, colname] %in% checked_availability_vec$location[checked_availability_vec$is_availalbe == 1]], collapse = ", "),
         "..."
       ))
       country_URL <-
         paste("%27",
               curl::curl_escape(gsub(
-                "'", "''", checked_availability$location[checked_availability$is_available ==
+                "'", "''", checked_availability_vec$location[checked_availability_vec$is_available ==
                                                            1]
               )),
               "%27",
@@ -145,7 +124,8 @@ getVecOcc <- function(country = NULL,
                         "&cql_filter=",
                         cql_filter,
                         "%20IN%20(", 
-                        country_URL,            #"&species%20IN%20"
+                        country_URL,
+                        "&species%20IN%20",
                         ") ",
                         sep = "")
     } else if (!is.null(extent)) {
@@ -182,7 +162,7 @@ getVecOcc <- function(country = NULL,
     if (any(c(!is.null(country),!is.null(ISO),!is.null(continent)))) {
       message(
         "Data donwloaded for ", 
-        paste(checked_availability$location[checked_availability$is_available == 
+        paste(checked_availability_vec$location[checked_availability_vec$is_available == 
                                               1], collapse = ", "),
         "."
       )
@@ -192,7 +172,7 @@ getVecOcc <- function(country = NULL,
     
     if (!is.null(species)){
       message("Data downloaded for species: ",
-              paste(checked_availability$species[checked_availaiblity$is_available == 1], collapse = ", "),
+              paste(checked_availability_vec$species[checked_availaiblity_vec$is_available == 1], collapse = ", "),
               ","
       )
     }
