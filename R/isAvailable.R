@@ -30,7 +30,7 @@ isAvailable <- function(sourcedata, country = NULL, ISO = NULL, continent = NULL
 if (sourcedata == "pr points"){
   if(exists('available_countries_stored_pr', envir = .malariaAtlasHidden)){
     available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
-  }else{available_countries_pr <- listPoints_sk(printed = FALSE, sourcedata = "pr points")}
+  }else{available_countries_pr <- listPoints4(printed = FALSE, sourcedata = "pr points")}
 
   capwords <- function(string) {
     cap <- function(s) {
@@ -134,12 +134,11 @@ if (sourcedata == "pr points"){
       if(full_results == TRUE) {
     return(checked_availability_pr)
   }
-}else
-  if(sourcedata == "vector points"){
+}else if(sourcedata == "vector points"){
   if(exists('available_countries_stored_vec', envir = .malariaAtlasHidden)){
-    available_countries_vec <- .malariaAtlasHidden$available_countries_vec_stored
+    available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
   }else{
-    available_countries_vec <- listPoints_sk(printed = FALSE, sourcedata = "vector points")
+    available_countries_vec <- listPoints4(printed = FALSE, sourcedata = "vector points")
     }   ### once change listPoints4 to listPoints those in this function will need changed
   
   capwords <- function(string) {
@@ -192,7 +191,7 @@ if (sourcedata == "pr points"){
   } else if(!(is.null(ISO))){
     location_input_vec <- as.character(toupper(ISO))
     if(nchar(location_input_vec)!= 3){
-      stop("Specifying by iso-code only works with ISO3, use listPoints() to check available countries & their ISO3")
+      stop("Specifying by iso-code only works with ISO3, use listPoints4() to check available countries & their ISO3")
     }
     available_locs_vec <- available_countries_vec$country_id
   } else if(!(is.null(continent))){
@@ -241,7 +240,9 @@ if (sourcedata == "pr points"){
   } else if (length(error_message) != 0) {
     warning(paste(error_message, collapse = " \n"),call. = FALSE)
   }
-  if(full_results == TRUE) {
+      if(full_results == TRUE) {
     return(checked_availability_vec)
   }
-}}
+}else
+  stop("sourcedata not available, please select one of: \n 'pr points', 'vector points'")
+  }
