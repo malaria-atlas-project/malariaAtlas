@@ -1,10 +1,10 @@
-#' List countries with available Point data.
+#' List countries with available MAP Point data.
 #'
-#' \code{listPoints} lists all countries for which there are publicly visible datapoints in the MAP database for a required dataset.
+#' \code{listPoints} lists all countries for which there are publicly visible datapoints in the MAP database required.
 #'
 #' @param printed Should the list be printed to the console?
 #'
-#' @return \code{listPoints} returns a data.frame detailing the countries for which data points are publicly available.
+#' @return \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
 #'
 #' @examples
 #' \donttest{
@@ -13,63 +13,61 @@
 #' @export listPoints
 
 
-
 listPoints4 <- function(printed = TRUE, sourcedata) {
+  message("Creating list of countries for which MAP data is available, please wait...")
+
   if(sourcedata == "pr points"){
-    message("Creating list of countries for which PR data is available, please wait...")
-  } else if (sourcedata == "vector points"){
-    message(" Creating list of countries for which vector occurrence data is available, please wait...")
-  } else{
-    stop("Source data not found, use one of: 'pr points' or 'vector points'.")
-  } 
-  
-  if(exists('available_countries_stored', envir = .malariaAtlasHidden)){
-    available_countries <- .malariaAtlasHidden$available_countries_stored
-  
-  #URL1 <- "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data"
-  #URL2 <- "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
-  
-    if(tolower(sourcedata) == "pr points" ){
-     URL <-
-      "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data"
-      columns <- 
-        "&PROPERTYNAME=country,country_id,continent_id"
-  }   else if(tolower(sourcedata) == "vector points"){
-      URL <-
-        "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
-      columns <- 
-        "&PROPERTYNAME=country,country_id,continent_id"
-  }   else {
-      stop("source data not detected, use one of: 'pr points' or 'vector points'.")
-  }
-  
-    
-    if((printed == TRUE) & (sourcedata ==  "pr points")){
-      message("Countries with PR Data: \n ",paste(paste(available_countries$country," (",available_countries$country_id, ")", sep = ""), collapse = " \n "))
-    }   else if ((printed == TRUE) & (sourcedata == "vector points")){
-      message("Countries with Vector Occurrence data: \n ",paste(paste(available_countries$country," (",available_countries$country_id, ")", sep = ""), collapse = " \n "))
+
+    if(exists('available_countries_stored_pr', envir = .malariaAtlasHidden)){
+    available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
+
+      if(printed == TRUE){
+      message("Countries with PR Data: \n ",paste(paste(available_countries_pr$country," (",available_countries_pr$country_id, ")", sep = ""), collapse = " \n "))
+     }
+
+      return(invisible(available_countries_pr))
+
+    } else {
+
+    available_countries_pr <- unique(utils::read.csv("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data&PROPERTYNAME=country,country_id,continent_id", encoding = "UTF-8")[,c("country", "country_id","continent_id")])
+    available_countries_pr <- available_countries_pr[available_countries_pr$continent_id!= "",]
+    names(available_countries_pr) <- c("country", "country_id", "continent")
+
+    if(printed == TRUE){
+        message("Countries with PR Data: \n ",paste(paste(available_countries_pr$country," (",available_countries_pr$country_id, ")", sep = ""), collapse = " \n "))
     }
-  
-    return(invisible(available_countries))
-    
-  } else {
-    
-    available_countries <- unique(utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,-1])
-    available_countries <- available_countries[available_countries$continent_id!= "",]
-    names(available_countries) <- c("country", "country_id", "continent")
-  
-    
-    
-    if((printed == TRUE) & (sourcedata == "pr points")){
-      message("Countries with PR Data: \n ",paste(paste(available_countries$country," (",available_countries$country_id, ")", sep = ""), collapse = " \n "))
-    } else if ((printed == TRUE) & (sourcedata == "vector points")){
-      message("Countries with Vector Occurrence data: \n ",paste(paste(available_countries$country," (",available_countries$country_id, ")", sep = ""), collapse = " \n "))
+
+    .malariaAtlasHidden$available_countries_stored_pr <- available_countries_pr
+
+    return(invisible(available_countries_pr))
     }
-    
-    .malariaAtlasHidden$available_countries_stored <- available_countries
-    
-    return(invisible(available_countries))
-  }
+
+  }else if(sourcedata == "vector points"){
+    if(exists('available_countries_stored_vec', envir = .malariaAtlasHidden)){
+    available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
+
+      if(printed == TRUE){
+      message("Countries with vector occurrence data: \n ",paste(paste(available_countries_vec$country," (",available_countries_vec$country_id, ")", sep = ""), collapse = " \n "))
+      }
+
+      return(invisible(available_countries_vec))
+
+    } else {
+
+    available_countries_vec <- unique(utils::read.csv("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data&PROPERTYNAME=country,country_id,continent_id", encoding = "UTF-8")[,c("country", "country_id","continent_id")])
+    available_countries_vec <- available_countries_vec[available_countries_vec$continent_id!= "",]
+    names(available_countries_vec) <- c("country", "country_id", "continent")
+
+    if(printed == TRUE){
+      message("Countries with vector occurrence data: \n ",paste(paste(available_countries_vec$country," (",available_countries_vec$country_id, ")", sep = ""), collapse = " \n "))
+    }
+
+    .malariaAtlasHidden$available_countries_stored_vec <- available_countries_vec
+
+    return(invisible(available_countries_vec))
+    } 
+  }  
 }
+
 #listPoints()
-#xx <-  listPoints(printed = FALSE, sourcedata = "")
+#xx <-  listPoints(printed = FALSE)
