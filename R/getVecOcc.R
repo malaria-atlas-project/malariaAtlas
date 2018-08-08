@@ -40,12 +40,12 @@
 getVecOcc <- function(country = NULL,
                       ISO = NULL,
                       continent = NULL,
-                      species = NULL,
+                      species = "All",   #would this make a difference with NULL?
                       extent = NULL) {
   if (exists('available_countries_stored_vec', envir =  .malariaAtlasHidden)) {
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
   } else{
-    available_countries_vec <- listPoints_vec(printed = FALSE)     ##New listPoints function, would have to be updated in other functions to
+    available_countries_vec <- listPoints4(printed = FALSE, sourcedata = "vector points")     ##New listPoints function, would have to be updated in other functions to
   }
   
   
@@ -60,13 +60,17 @@ getVecOcc <- function(country = NULL,
     stop("Must specify one of: 'country', 'ISO', 'continent' or 'extent'.")
   }
   
-  
   # if(exists('species', where = available_species)){
   #   message("Compliling data please wait...")
   # }  else{
   #   stop("Species not recognised, check species availaility with 'listSpecies()'")
   # }
-
+  URL <-
+    "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
+  
+  columns <-
+    "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,species_plain,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
+  
   
   if("all" %in% tolower(c(country, ISO))) {
     message(paste(
@@ -74,12 +78,7 @@ getVecOcc <- function(country = NULL,
       sep = ""
     ))
     
-    URL <-
-      "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
-    
-    columns <-
-      "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,species_plain,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
-    
+
     df <- 
       utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,-1]
     message("Data downloaded for all available locations.")
@@ -100,11 +99,11 @@ getVecOcc <- function(country = NULL,
       }
       
       checked_availability <- 
-        isAvailable_vec(country= country,
-          ISO = ISO,
-          continent = continent,
-          full_results = TRUE
-        )
+        isAvailable_vec(sourcedata = "vector points",
+                    country = country,
+                    ISO = ISO,
+                    continent = continent,
+                    full_results = TRUE)
       message(paste(
         "Attempting to download vector occurence data for",
         paste(available_countries_vec$country[available_countries_vec[, colname] %in% checked_availability_vec$location[checked_availability_vec$is_availalbe == 1]], collapse = ", "),
@@ -160,8 +159,7 @@ getVecOcc <- function(country = NULL,
     }
     
     if (any(c(!is.null(country),!is.null(ISO),!is.null(continent)))) {
-      message(
-        "Data donwloaded for ", 
+      message("Data donwloaded for ", 
         paste(checked_availability_vec$location[checked_availability_vec$is_available == 
                                               1], collapse = ", "),
         "."
