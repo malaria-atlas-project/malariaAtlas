@@ -69,5 +69,5 @@ listPoints4 <- function(printed = TRUE, sourcedata) {
   }  
 }
 
-#listPoints()
-#xx <-  listPoints(printed = FALSE)
+#listPoints4()
+#xx <-  listPoints4(printed = FALSE, sourcedata = "vector points")
