@@ -1,9 +1,10 @@
-#' Check whether PR points are available for a given location
+#' Check whether Vector Occurrence points are available for a given location
 #'
-#' \code{isAvailable} checks whether the MAP database contains PR points for the specified country/location.
+#' \code{isAvailable_vec} checks whether the MAP database contains Vector Occurrence points for the specified country/location.
 #'
-#' @return \code{isAvailable} returns a named list of input locations with information regarding data availability.
+#' @return \code{isAvailable_Vec} returns a named list of input locations with information regarding data availability.
 #'
+#' @param sourcedata by default this is "vector points", highlighting the dataset to be searched
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent  string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
@@ -18,18 +19,17 @@
 #'
 #' @examples
 #' \donttest{
-#' isAvailable(country = "Suriname")
-#' x <- isAvailable(ISO = "NGA", full_results = TRUE)
-#' x <- isAvailable(continent = "Oceania", full_results = TRUE)
+#' isAvailable_vec(country = "Suriname")
+#' x <- isAvailable_vec(ISO = "NGA", full_results = TRUE)
+#' x <- isAvailable_vec(continent = "Oceania", full_results = TRUE)
 #' }
-#' @export isAvailable
+#' @export isAvailable_vec
 
 isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = NULL, continent = NULL, full_results = FALSE) {
   
-  
   if(exists('available_countries_stored_vec', envir = .malariaAtlasHidden)){
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
-  }else{available_countries_vec <- listPoints4(printed = FALSE, sourcedata = "vector points")}
+  }else{available_countries_vec <- listPoints4(printed = FALSE, sourcedata = "vector points")}  ##listPoints4 - change to listPoints
   
   capwords <- function(string) {
     cap <- function(s) {
