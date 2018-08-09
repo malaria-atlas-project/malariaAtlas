@@ -40,19 +40,24 @@
 getVecOcc <- function(country = NULL,
                       ISO = NULL,
                       continent = NULL,
-                      species = "All",   #would this make a difference with NULL?
+                      species = "all",  
                       extent = NULL) {
   if (exists('available_countries_stored_vec', envir =  .malariaAtlasHidden)) {
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
   } else{
-    available_countries_vec <- listPoints4(printed = FALSE, sourcedata = "vector points")     ##New listPoints function, would have to be updated in other functions to
+    available_countries_vec <- listPoints4(printed = FALSE, sourcedata = "vector points")     ##change back to listPoints name of this function
   }
   
   
   if (exists('available_species_stored', envir = .malariaAtlasHidden)) {
     available_species <- .malariaAtlasHidden$available_species_stored
-  } else{
+  } else {
     available_species <- listSpecies(printed = FALSE)
+  }
+  
+  
+  if(tolower(species) %in% available_species){
+    stop("Species not recognised check species availability with listSpecies()")
   }
 
   if(is.null(country) & 
@@ -60,16 +65,23 @@ getVecOcc <- function(country = NULL,
     stop("Must specify one of: 'country', 'ISO', 'continent' or 'extent'.")
   }
   
-  # if(exists('species', where = available_species)){
-  #   message("Compliling data please wait...")
-  # }  else{
-  #   stop("Species not recognised, check species availaility with 'listSpecies()'")
-  # }
+  
+  if(tolower(species) %in% c("all")){
+    species_URL <- ""  
+  } else {
+    species_names <-  paste("%27",
+                            curl::curl_escape(gsub("'", "''", species)),
+                            "%27",
+                            sep = "",
+                            collapse = ",")
+    species_URL <- paste0("%20AND%20species_plain%20IN%20(",species_names, ")")
+  }
+  
   URL <-
     "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
   
   columns <-
-    "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,assi,species_plain,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
+    "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,species_plain,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
   
   
   if("all" %in% tolower(c(country, ISO))) {
@@ -82,6 +94,10 @@ getVecOcc <- function(country = NULL,
     df <- 
       utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,-1]
     message("Data downloaded for all available locations.")
+    
+    return(df)
+    
+    
   } else{
     if (any(c(!is.null(country),!is.null(ISO),!is.null(continent),!is.null(species)))) {  ##added the species part
       if (!(is.null(country))) {
@@ -93,12 +109,10 @@ getVecOcc <- function(country = NULL,
       } else if (!(is.null(continent))) {
         cql_filter <- "continent_id"
         colname <- "continent"
-      } else if (!(is.null(species))) {
-        cql_filter <- "species_plain"
-        colname <- "species_plain"
       }
       
-      checked_availability <- 
+      
+      checked_availability_vec <- 
         isAvailable_vec(sourcedata = "vector points",
                     country = country,
                     ISO = ISO,
@@ -106,7 +120,7 @@ getVecOcc <- function(country = NULL,
                     full_results = TRUE)
       message(paste(
         "Attempting to download vector occurence data for",
-        paste(available_countries_vec$country[available_countries_vec[, colname] %in% checked_availability_vec$location[checked_availability_vec$is_availalbe == 1]], collapse = ", "),
+        paste(available_countries_vec$country[available_countries_vec[, colname] %in% checked_availability_vec$location[checked_availability_vec$is_available == 1]], collapse = ", "),
         "..."
       ))
       country_URL <-
@@ -118,14 +132,26 @@ getVecOcc <- function(country = NULL,
               "%27",
               sep = "",
               collapse = ",")
+      
+      # if(tolower(species) %in% c("all")){
+      #   species_URL <- ""  
+      # } else {
+      #   species_names <-  paste("%27",
+      #                           curl::curl_escape(gsub("'", "''", species)),
+      #                           "%27",
+      #                           sep = "",
+      #                           collapse = ",")
+      #   species_URL <- paste0("%20AND%20species_plain%20IN%20(",species_names, ")")
+      # }
+      
       full_URL <- paste(URL,
                         columns,
                         "&cql_filter=",
                         cql_filter,
                         "%20IN%20(", 
                         country_URL,
-                        "&species%20IN%20",
-                        ") ",
+                        ")",
+                        species_URL,
                         sep = "")
     } else if (!is.null(extent)) {
       bbox_filter <-
@@ -159,7 +185,7 @@ getVecOcc <- function(country = NULL,
     }
     
     if (any(c(!is.null(country),!is.null(ISO),!is.null(continent)))) {
-      message("Data donwloaded for ", 
+      message("Data downloaded for ", 
         paste(checked_availability_vec$location[checked_availability_vec$is_available == 
                                               1], collapse = ", "),
         "."
@@ -167,10 +193,12 @@ getVecOcc <- function(country = NULL,
     } else if (!is.null(extent)) {
       message("Data downloaded for extent: ",
               paste0(extent, collapse = ", "))
+    }
     
-    if (!is.null(species)){
+    if (!species %in% "all"){
       message("Data downloaded for species: ",
-              paste(checked_availability_vec$species[checked_availaiblity_vec$is_available == 1], collapse = ", "),
+              paste0(species),   
+              #paste(checked_availability_vec$species[checked_availability_vec$is_available == 1], collapse = ", "), ##doesn't refer to species.
               ","
       )
     }
@@ -178,8 +206,9 @@ getVecOcc <- function(country = NULL,
     class(df) <- c("vector.points", class(df))
     
     return(df)
+  
   }
-}}
+  }
 
 
  
