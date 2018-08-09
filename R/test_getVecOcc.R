@@ -47,5 +47,7 @@
  
  
 test_that("error messages are appropriate to given error", {
-  
+  expect_error(getVecOcc(country = "madgascar"), regexp = "did you mean Madagascar?")
+  expect_error(getVecOcc(country = "xxxx"), regexp = "'xxxx', use listPoints4()")
+  expect_error(getVecOcc(country = "Australia"), regexp = "'xxxx', use listPoints4()")
 })
