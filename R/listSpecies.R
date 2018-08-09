@@ -32,10 +32,10 @@ listSpecies <- function(printed = T){
       "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
     
     columns <- 
-      "&PROPERTYNAME=species,country"
+      "&PROPERTYNAME=species_plain,country"
     
-    available_species <- unique(utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,c("species", "country")]) 
-    available_species <- dplyr::select(available_species, species, country)
+    available_species <- unique(utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,c("species_plain", "country")]) 
+    available_species <- dplyr::select(available_species, species_plain, country)
 
     
     if(printed == TRUE){
