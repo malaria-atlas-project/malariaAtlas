@@ -82,7 +82,7 @@ if (sourcedata == "pr points"){
   } else if(!(is.null(ISO))){
     location_input_pr <- as.character(toupper(ISO))
     if(nchar(location_input_pr)!= 3){
-      stop("Specifying by iso-code only works with ISO3, use listPoints_sk() to check available countries & their ISO3")
+      stop("Specifying by iso-code only works with ISO3, use listPoints4() to check available countries & their ISO3")
     }
     available_locs_pr <- available_countries_pr$country_id
   } else if(!(is.null(continent))){
