@@ -45,7 +45,7 @@ getVecOcc <- function(country = NULL,
   if (exists('available_countries_stored_vec', envir =  .malariaAtlasHidden)) {
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
   } else{
-    available_countries_vec <- listPoints4(printed = FALSE, sourcedata = "vector points")     ##change back to listPoints name of this function
+    available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")     
   }
   
   
