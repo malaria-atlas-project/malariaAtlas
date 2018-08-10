@@ -13,7 +13,7 @@
 #' @export listPoints
 
 
-listPoints4 <- function(printed = TRUE, sourcedata) {
+listPoints <- function(printed = TRUE, sourcedata) {
   message("Creating list of countries for which MAP data is available, please wait...")
 
   if(sourcedata == "pr points"){
@@ -69,5 +69,5 @@ listPoints4 <- function(printed = TRUE, sourcedata) {
   }  
 }
 
-#listPoints4()
-#xx <-  listPoints4(printed = FALSE, sourcedata = "vector points")
+#listPoints()
+#xx <-  listPoints(printed = FALSE, sourcedata = "vector points")
