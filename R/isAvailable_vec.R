@@ -29,7 +29,7 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
   
   if(exists('available_countries_stored_vec', envir = .malariaAtlasHidden)){
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
-  }else{available_countries_vec <- listPoints4(printed = FALSE, sourcedata = "vector points")}  ##listPoints4 - change to listPoints
+  }else{available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")}  ##listPoints - change to listPoints
   
   capwords <- function(string) {
     cap <- function(s) {
@@ -120,7 +120,7 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
       if(!(checked_availability_vec$possible_match[checked_availability_vec$is_available==0][i] %in% c("character(0)","",NA))) {
         error_message[i] <- paste("Data not found for '",checked_availability_vec$location[checked_availability_vec$is_available==0][i],"', did you mean ", checked_availability_vec$possible_match[checked_availability_vec$is_available==0][i], "?", sep = "")
       } else {
-        error_message[i] <- paste("Data not found for '",checked_availability_vec$location[checked_availability_vec$is_available==0][i],"', use listPoints_vec() to check data availability. ", sep = "")
+        error_message[i] <- paste("Data not found for '",checked_availability_vec$location[checked_availability_vec$is_available==0][i],"', use listPoints() to check data availability. ", sep = "")
       }
     }
     
