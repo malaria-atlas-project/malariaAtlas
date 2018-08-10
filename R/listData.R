@@ -27,9 +27,9 @@ listData <- function(datatype = NULL, printed = TRUE){
   }
 
   if(datatype == "pr points"){
-    listPoints(printed = printed)      
+    listPoints(printed = printed, sourcedata = "pr points")      
   }else if(datatype == "vector points"){
-   listPoints(printed = printed)
+   listPoints(printed = printed, sourcedata = "vector points")
   }else if(datatype == "raster"){
     listRaster(printed = printed)
   }else if(datatype == "shape"){
