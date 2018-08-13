@@ -32,7 +32,9 @@ This is also useful for finding information on the raster data available and che
 
 Use: 
 
-* listData(datatype = "points") OR listPoints() to see for which countries PR survey point data can be downloaded.
+* listData(datatype = "pr points") OR listPoints(sourcedata = "pr points") to see for which countries PR survey point data can be downloaded.
+
+* use listData(datatype = "vector points") or listPoints(sourcedata = "vector points") to see for which countries Vector Occurrence data can be downloaded.
 
 * use listData(datatype = "rasters") OR listRaster() to see rasters available to download. 
 
@@ -40,7 +42,10 @@ Use:
 
 ```{r listd, results = "hide", message = FALSE}
 library(malariaAtlas)
-listData(datatype = "points")
+listData(datatype = "pr points")
+```
+```{r results = "hide", message = FALSE}
+listData(datatype = "vector points")
 ```
 ```{r results = "hide", message = FALSE}
 listData(datatype = "raster")
@@ -51,18 +56,29 @@ listData(datatype = "shape")
 
 ### is_available
 
-`isAvailable` confirms whether or not PR survey point data is available to download for a specified country. 
+`isAvailable_pr` confirms whether or not PR survey point data is available to download for a specified country. 
 
 Check whether PR data is available for Madagascar:
 ```{r highlight = TRUE}
-isAvailable(country = "Madagascar")
+isAvailable_pr(country = "Madagascar")
 ```
 
 Check whether PR data is available for the United States of America
 ```{r, error = TRUE, highlight = TRUE}
-isAvailable(ISO = "USA")
+isAvailable_pr(ISO = "USA")
 ```
 
+`isAvailable_vec` confirms whether or not Vector occurrence point data is available to download for a specified country. 
+
+Check whether Vector occurrence data is available for Myanmar:
+```{r highlight = TRUE}
+isAvailable_vec(country = "Myanmar")
+```
+
+Check whether Vector occcurrence data is available for the Brazil
+```{r, error = TRUE, highlight = TRUE}
+isAvailable_vec(ISO = "BRA")
+```
 
 ## Downloading & Visualising Data: 
 ### get* functions & autoplot methods
@@ -78,6 +94,16 @@ MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 tibble::glimpse(MDG_pr_data)
 ```
 
+### Vector Occurrnece points
+`getVecOcc()` downloads all publicly available Vector Occurrence data points for a specified country and mosquito species (if required) and returns this as a dataframe with the following format: 
+
+
+```{r message = FALSE}
+MMR_vec_data <- getVecOcc(country = "Myanmar")
+```
+```{r echo = FALSE}
+tibble::glimpse(MMR_vec_data)
+```
 
 `autoplot.pr.points` is an autoplot method to enable quick mapping of the locations of downloaded PR points. 
 
@@ -86,6 +112,12 @@ tibble::glimpse(MDG_pr_data)
 autoplot(MDG_pr_data)
 ```
 
+`autoplot.vector.points` is an autoplot method to enable quick mapping of the locations of downloaded vector occurrence points. 
+
+
+```{r message = FALSE, warning = FALSE, results = "hide"}
+autoplot(MMR_vec_data)
+```
 
 Furthermore, being ggplot2 plots, these plots can easily be added to or modified.
 
@@ -151,5 +183,21 @@ geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = posi
 scale_size_continuous(name = "Survey Size")+
  scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
  ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
+```
+
+```{r message = FALSE, warning = FALSE}
+MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
+MMR_shp_df <- as.MAPshp(MMR_shp)
+MMR_vivax_endem <- getRaster(surface = "Plasmodium vivax Endemicity", shp = MMR_shp)
+MMR_vivax_endem_df <- as.MAPraster(MMR_vivax_endem)
+
+p <- autoplot(MMR_vivax_endem_df, shp_df = MMR_shp_df, printed = FALSE)
+
+vec <- getVecOcc(country = c("Myanmar"))
+p[[1]] +
+geom_point(data = vec, aes(longitude, latitude, col = species))+
+  scale_shape_discrete(solid = TRUE, name = "Species")+
+  scale_fill_distiller(name = "Vivax endemicity", palette = "RdYlBu")+
+  ggtitle("Raw Vector Survey points\n + Plasmodium vivax Endemicity, 2010")
 ```
 
