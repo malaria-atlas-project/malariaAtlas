@@ -7,13 +7,13 @@
 #' \enumerate{
 #' \item \code{species} string detailing species
 #' }
-#' #' @examples
+#' @examples
 #' \donttest{
 #' available_species <- listSpecies()
 #' }
 #' @export listSpecies
 #' 
-listSpecies <- function(printed = T){
+listSpecies <- function(printed = TRUE){
   message("Downloading list of available species, please wait...")
   
   if(exists('available_species_stored', envir = .malariaAtlasHidden)){
