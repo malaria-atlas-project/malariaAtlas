@@ -133,17 +133,6 @@ getVecOcc <- function(country = NULL,
               sep = "",
               collapse = ",")
       
-      # if(tolower(species) %in% c("all")){
-      #   species_URL <- ""  
-      # } else {
-      #   species_names <-  paste("%27",
-      #                           curl::curl_escape(gsub("'", "''", species)),
-      #                           "%27",
-      #                           sep = "",
-      #                           collapse = ",")
-      #   species_URL <- paste0("%20AND%20species_plain%20IN%20(",species_names, ")")
-      # }
-      
       full_URL <- paste(URL,
                         columns,
                         "&cql_filter=",
@@ -169,6 +158,9 @@ getVecOcc <- function(country = NULL,
     
     
     df <- utils::read.csv(full_URL, encoding = "UTF-8")[, -1]
+    
+    #Just to avoid visible binding notes
+    species_plain <- species_plain <- permissions_info <- NULL #### check this is right, any others needed?
     
     if (!nrow(df) > 0 & !is.null(extent)) {
       stop(
