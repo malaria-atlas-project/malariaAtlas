@@ -4,8 +4,9 @@
 \alias{getShp}
 \title{Download MAPadmin2013 Administrative Boundary Shapefiles from the MAP geoserver}
 \usage{
-getShp(country = NULL, ISO = NULL, extent = NULL, admin_level = "both",
-  format = "spatialpolygon", long = NULL, lat = NULL)
+getShp(country = NULL, ISO = NULL, extent = NULL,
+  admin_level = "both", format = "spatialpolygon", long = NULL,
+  lat = NULL)
 }
 \arguments{
 \item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})}

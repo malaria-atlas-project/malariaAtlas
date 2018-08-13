@@ -7,7 +7,7 @@
 listData(datatype = NULL, printed = TRUE)
 }
 \arguments{
-\item{datatype}{One of 'points', 'raster' or 'shape'}
+\item{datatype}{One of 'pr points', 'vector points', 'raster' or 'shape'}
 
 \item{printed}{Should the list be printed to the console?}
 }
@@ -20,7 +20,8 @@ listData(datatype = NULL, printed = TRUE)
 \examples{
 \donttest{
 available_admin_units <- listShp()
-available_pr_points<- listPoints()
+available_pr_points <- listPoints()
+available_vector_points <- listPoints()
 available_rasters <- listRaster()
 }
 }

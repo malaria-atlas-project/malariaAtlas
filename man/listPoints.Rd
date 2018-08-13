@@ -2,9 +2,9 @@
 % Please edit documentation in R/listPoints.R
 \name{listPoints}
 \alias{listPoints}
-\title{List countries with available PR Point data.}
+\title{List countries with available MAP Point data.}
 \usage{
-listPoints(printed = TRUE)
+listPoints(printed = TRUE, sourcedata)
 }
 \arguments{
 \item{printed}{Should the list be printed to the console?}
@@ -13,7 +13,7 @@ listPoints(printed = TRUE)
 \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
 }
 \description{
-\code{listPoints} lists all countries for which there are publicly visible PR datapoints in the MAP database.
+\code{listPoints} lists all countries for which there are publicly visible datapoints in the MAP database required.
 }
 \examples{
 \donttest{
