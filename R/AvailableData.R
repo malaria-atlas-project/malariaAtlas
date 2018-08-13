@@ -1,8 +1,8 @@
 #' Available data to download from the MAP geoserver.
 #'
-#' \code{availableData} is a wrapper for isAvailable_pr and isAvailable_vec, listing data (PR survey point location data and vector occurrence locations available to download from the MAP geoserver.
+#' \code{isAvaiable} is a wrapper for isAvailable_pr and isAvailable_vec, listing data (PR survey point location data and vector occurrence locations available to download from the MAP geoserver.
 #'
-#' @return \code{availableData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
+#' @return \code{isAvailable} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 #'
 #' @param sourcedata One of 'pr points' or 'vector points'
 #' @param full_results Should the list be printed to the console?
@@ -15,9 +15,9 @@
 #' \code{link{isAvailable_pr}}
 #' \code{\link{isAvailable_vec}}
 #'
-#' @export AvailableData
+#' @export isAvailable
 
-availableData <- function(sourcedata = NULL, full_results = FALSE, country = NULL, ISO = NULL, continent = NULL){
+isAvailable <- function(sourcedata = NULL, full_results = FALSE, country = NULL, ISO = NULL, continent = NULL){
   
   if(is.null(sourcedata)){
     message("Choose a type of data using one of: \n sourcedata = \"pr points\"  \n sourcedata = \"vector points\"")
