@@ -22,8 +22,8 @@
 
 listData <- function(datatype = NULL, printed = TRUE){
 
-  if(is.null(datatype)){
-    message("Choose a type of data using one of: \n datatype = \"pr points\"  \n datatype = \"vector points\" \n datatype = \"raster\" \n datatype = \"shape\"")
+  if(!datatype %in% c('pr points', 'vector points', 'raster', 'shape')){
+    stop("Please choose  one of: \n datatype = \"pr points\"  \n datatype = \"vector points\" \n datatype = \"raster\" \n datatype = \"shape\"")
   }
 
   if(datatype == "pr points"){
