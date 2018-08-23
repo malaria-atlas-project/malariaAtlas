@@ -18,6 +18,8 @@ isAvailable(sourcedata = NULL, full_results = FALSE, country = NULL,
 \item{sourcedata}{One of 'pr points' or 'vector points'}
 
 \item{full_results}{Should the list be printed to the console?}
+
+\item{...}{Other arguments to be passed to \code{isAvailable*} functions. (e.g. \code{continent})}
 }
 \value{
 \code{isAvailable} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
