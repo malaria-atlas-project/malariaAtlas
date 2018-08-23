@@ -5,9 +5,9 @@ Authors@R: c(
     person("Daniel", "Pfeffer", email = "daniel.pfeffer@uqconnect.edu.au", role = c("aut"), comment = c(ORCID = "0000-0002-2204-3488")),
     person("Tim", "Lucas", email =  "timcdlucas@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-4694-8107")),
     person("Daniel", "May", role = c("aut"), comment = c(ORCID = "0000-0003-0005-2452")),
+    person("Suzanne", "Keddie", role = c("aut"), comment = c(ORCID = "0000-0003-1254-7794")),
     person("Jen", "Rozier", role = c("aut"), comment = c(ORCID = "0000-0002-2610-7557")),
     person("Harry", "Gibson", role = c("aut"), comment = c(ORCID = "0000-0001-6779-3250")),
-    person("Suzanne", "Keddie", role = c("aut"), comment = c(ORCID = "0000-0003-1254-7794")),
     person("Nick", "Golding", role = c("ctb")),
     person("David", "Smith", role = c("ctb")))
 Description: A suite of tools to allow you to download all 
