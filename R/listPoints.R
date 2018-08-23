@@ -3,6 +3,7 @@
 #' \code{listPoints} lists all countries for which there are publicly visible datapoints in the MAP database required.
 #'
 #' @param printed Should the list be printed to the console?
+#' @param sourcedata String contining desired dataset within the Malaria Atlas database to be searched, e.g \code{"pr points"} OR \code{"vector points"}
 #'
 #' @return \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
 #'
