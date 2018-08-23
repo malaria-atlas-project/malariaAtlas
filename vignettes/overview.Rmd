@@ -188,16 +188,15 @@ scale_size_continuous(name = "Survey Size")+
 ```{r message = FALSE, warning = FALSE}
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 MMR_shp_df <- as.MAPshp(MMR_shp)
-MMR_vivax_endem <- getRaster(surface = "Plasmodium vivax Endemicity", shp = MMR_shp)
-MMR_vivax_endem_df <- as.MAPraster(MMR_vivax_endem)
+MMR_an_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)
+MMR_an_dirus_df <- as.MAPraster(MMR_an_dirus)
 
-p <- autoplot(MMR_vivax_endem_df, shp_df = MMR_shp_df, printed = FALSE)
+p <- autoplot(MMR_an_dirus_df, shp_df = MMR_shp_df, printed = FALSE)
 
-vec <- getVecOcc(country = c("Myanmar"))
+vec <- getVecOcc(country = c("Myanmar"), species = "Anopheles dirus")
 p[[1]] +
-geom_point(data = vec, aes(longitude, latitude, col = species))+
-  scale_shape_discrete(solid = TRUE, name = "Species")+
-  scale_fill_distiller(name = "Vivax endemicity", palette = "RdYlBu")+
-  ggtitle("Raw Vector Survey points\n + Plasmodium vivax Endemicity, 2010")
+geom_point(data = vec, aes(longitude, latitude), shape = 21,  show.legend = TRUE)+
+  scale_fill_distiller(name = "Predicted distribution of Anopheles dirus species complex", palette = "RdYlBu")+
+  ggtitle("Raw Vector Survey points\n + The predicted distribution of Anohpeles dirus species complex")
 ```
 
