@@ -64,6 +64,9 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
       if(grepl("and",s, ignore.case = TRUE)){
         s <- gsub("and", "and",s, ignore.case = TRUE)
       }
+      if(grepl("Former",s, ignore.case = TRUE)){
+        s <- gsub("Former", "former",s, ignore.case = TRUE)
+      }
       return(s)
     }
     
