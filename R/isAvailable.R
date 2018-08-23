@@ -6,7 +6,9 @@
 #'
 #' @param sourcedata One of 'pr points' or 'vector points'
 #' @param full_results Should the list be printed to the console?
-#' @param ... Other arguments to be passed to \code{isAvailable*} functions. (e.g. \code{continent})
+#' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
+#' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
+#' @param continent string containing continent for desired data, e.g. \code{c("continent1", "continent2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @examples
 #' \donttest{
 #' available_pr_locations <- isAvailable_pr()
