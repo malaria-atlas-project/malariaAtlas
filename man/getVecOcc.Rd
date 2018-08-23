@@ -34,12 +34,12 @@ Download Vector Occurrence points from the MAP database
 \code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as French Guiana.
 }
 \examples{
-#Download vector occurrence data for Brazil and map the locations of these points using autoplot.vector.points
+# Download vector occurrence data for Brazil and map the locations using autoplot.vector.points
 \donttest{
-brazil_vec <- getVecOcc(country = "Brazil")
-autoplot(brazil_vec)
+Brazil_vec <- getVecOcc(country = "Brazil")
+autoplot(Brazil_vec)
 
-Download vector occurrence data for Madagascar and map the locations of these points using autoplot
+# Download vector data for Madagascar and map the locations using autoplot
 Madagascar_vec <- getVecOcc(ISO = "MDG", species = "All")
 autoplot(Madagascar_vec)
 }
@@ -47,5 +47,5 @@ autoplot(Madagascar_vec)
 
 }
 \seealso{
-\code{autoplot} method for quick mapping of Vector occurrence point locations (\code{\link{autoplot.pr.points}}).    ##### NEED TO CHECK THIS!!! ######
+\code{autoplot} method for quick mapping of Vector occurrence point locations (\code{\link{autoplot.vector.points}}).
 }
