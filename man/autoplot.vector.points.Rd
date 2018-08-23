@@ -49,8 +49,8 @@ MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 species <- getVecOcc(country = "Myanmar", species = "Anopheles dirus")
 p[[1]] +
 geom_point(data = vec, aes(longitude, latitude), shape = 21,  show.legend = TRUE)+
-scale_fill_distiller(name = "Predicted distribution of Anopheles dirus species complex", palette = "RdYlBu")+
-  ggtitle("Raw Vector Survey points\\n + The predicted distribution of Anohpeles dirus species complex")
+scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "RdYlBu")+
+  ggtitle("Vector Survey points\\n + The predicted distribution of An. dirus complex")
 }
 
 }
