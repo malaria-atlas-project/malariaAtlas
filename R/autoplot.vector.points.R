@@ -21,19 +21,16 @@
 #' autoplot(Vector_surveys_NGA)
 #'
 #'
-#' # Download madagascar shapefile to use for raster download.
-#' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+#' # Download Myanmar shapefile to use for raster download.
+#' MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 #'
 #'
-#' # Download raw PfPR survey points & plot these over the top of the raster   NEED A DIFFERENT EXAMPLE HERE
-#' species <- getVecOcc(country = "Madagascar")
+#' # Download raw occurrence points & plot these over the top of the raster   
+#' species <- getVecOcc(country = "Myanmar", species = "Anopheles dirus")
 #' p[[1]] +
-#' geom_point(data = pr[pr$year_start==2013,],
-#'            aes(longitude, latitude, fill = positive / examined,
-#'                size = examined), shape = 21) +
-#'   scale_size_continuous(name = "Survey Size") +
-#'   scale_fill_distiller(name = "PfPR", palette = "RdYlBu") +
-#'   ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
+#' geom_point(data = vec, aes(longitude, latitude), shape = 21,  show.legend = TRUE)+
+#' scale_fill_distiller(name = "Predicted distribution of Anopheles dirus species complex", palette = "RdYlBu")+
+#'   ggtitle("Raw Vector Survey points\n + The predicted distribution of Anohpeles dirus species complex")
 #' }
 #'
 #' @method autoplot vector.points
