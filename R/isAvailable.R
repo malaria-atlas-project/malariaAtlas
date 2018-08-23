@@ -6,6 +6,7 @@
 #'
 #' @param sourcedata One of 'pr points' or 'vector points'
 #' @param full_results Should the list be printed to the console?
+#' @param ... Other arguments to be passed to \code{isAvailable*} functions. (e.g. \code{continent})
 #' @examples
 #' \donttest{
 #' available_pr_locations <- isAvailable_pr()
@@ -24,9 +25,9 @@ isAvailable <- function(sourcedata = NULL, full_results = FALSE, country = NULL,
   }
   
   if(sourcedata == "pr points"){
-   isAvailable_pr(sourcedata = "pr points", country = country, ISO = ISO, continent = continent, full_results = full_results)      
+   isAvailable_pr(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results)      
   }else if(sourcedata == "vector points"){
-    isAvailable_vec(sourcedata = "vector points", country = country, ISO = ISO, continent = continent, full_results = full_results)
+    isAvailable_vec(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results)
   }
   
 }
