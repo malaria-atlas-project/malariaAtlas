@@ -8,6 +8,8 @@ listPoints(printed = TRUE, sourcedata)
 }
 \arguments{
 \item{printed}{Should the list be printed to the console?}
+
+\item{sourcedata}{String contining desired dataset within the Malaria Atlas database to be searched, e.g \code{"pr points"} OR \code{"vector points"}}
 }
 \value{
 \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
