@@ -117,7 +117,7 @@ tibble::glimpse(MMR_vec_data)
 `autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points. 
 
 ```{r message = FALSE, warning = FALSE, results = "hide"}
-autoplot(MMR_vec_data)
+autoplot.vector.points(MMR_vec_data)
 ```
 
 N.B. Facet-wrapped option is also available for species stratification. 
@@ -190,12 +190,12 @@ scale_size_continuous(name = "Survey Size")+
  ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
 ```
 
-Similarly for the vector data
+Similarly for vector survey data
 
 ```{r message = FALSE, warning = FALSE}
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 MMR_shp_df <- as.MAPshp(MMR_shp)
-MMR_An_dirus <- getRaster(surface = "Anohpeles dirus species complex", shp = MMR_shp)
+MMR_An_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)
 MMR_An_dirus_df <- as.MAPraster(MMR_An_dirus)
 
 p <- autoplot(MMR_An_dirus_df, shp_df = MMR_shp_df, printed = FALSE)
