@@ -2,9 +2,9 @@
 #'
 #' \code{autoplot.MAPshp} creates a map of shapefiles downloaded using getShp.
 #'
-#' @param object A MAPShp object downloaded using /code{/link{getShp}} with format = "df" specified.
+#' @param object A MAPshp object downloaded using /code{/link{getShp}} with format = "df" specified.
 #' @param map_title Custom title used for the plot.
-#' @param facet If TRUE, splits map into a separate facet for each malaria species.
+#' @param facet If TRUE, splits map into a separate facet for each administrative level.
 #' @param printed Should the plot print to graphics device.
 #' @param ... Other arguments passed to specific methods
 #'
@@ -29,7 +29,7 @@ autoplot.MAPshp <- function(object,
                             printed = TRUE){
 
   if(is.null(map_title)){
-    map_title <- paste0(unique(object$country_id),": ",paste0("admin", unique(object$admn_level), collapse = ", "))
+    map_title <- paste0(paste0(unique(object$name_0), collapse = ", "),": ",paste0("admin", unique(object$admn_level), collapse = ", "))
   }
 
   plot <- ggplot2::ggplot()+

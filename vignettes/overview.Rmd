@@ -133,7 +133,7 @@ p +
 `getShp()` downloads a shapefile for a specified country (or countries) and returns this as either a spatialPolygon or data.frame object.
 
 ```{r message = FALSE}
-MDG_shp <- getShp(ISO = "MDG", admin_level = "both")
+MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin1", "admin2"))
 ```
 ```{r echo = FALSE}
 tibble::glimpse(MDG_shp)

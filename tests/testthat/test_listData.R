@@ -93,7 +93,7 @@ test_that("downloaded data.frame is in the correct format",{
 })
 
 test_that("downloaded dataframe contains has correct number of columns",{
-  expect_equal(sort(names(available_admin)),sort(c("country_id","gaul_code","admn_level","parent_id","name")))
+  expect_equal(sort(names(available_admin)),sort(c("iso","admn_level","name_0","id_0","type_0","source","name_1","id_1","type_1")))
 })
 
 test_that("available_admin_stored object is stored in hidden environment",{
