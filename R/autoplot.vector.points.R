@@ -40,7 +40,9 @@
 #'   latitude,
 #'   colour = species))+
 #'   scale_colour_manual(values = "black", name = "Vector suvery locations")+
-#' scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "PuBuGn", direction = 1)+
+#' scale_fill_distiller(name = "Predicted distribution of An. dirus complex",
+#'  palette = "PuBuGn",
+#'   direction = 1)+
 #'   ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 #' }
 #'
