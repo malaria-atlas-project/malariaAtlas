@@ -20,8 +20,8 @@
 #' Vector_surveys_NGA_NG <- getVecOcc(country = c("Nigeria", "Niger"))
 #' autoplot(Vector_surveys_NGA)
 #' 
-#' # Download the predicted distribution of Anohpeles dirus species complex Raster and raw vector survey points for Myanmar in
-#' #  and visualise these together on a map.
+#' # Download the predicted distribution of An. dirus species complex Raster and  
+#' #  vector points for Myanmar and visualise these together on a map.
 #'
 #' # Download Myanmar shapefile to use for raster download.
 #' MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
