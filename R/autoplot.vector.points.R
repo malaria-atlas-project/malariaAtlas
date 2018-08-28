@@ -116,9 +116,15 @@ autoplot.vector.points <- function(object,
     facet <- FALSE
   }
     
-    if(facet==TRUE){
+  if(facet==TRUE){
       vector_plot <- vector_plot + ggplot2::facet_wrap(~species)
-    }
+  }
+  
+  if(printed == TRUE){
+    print(vector_plot)
+  }
+  
+  return(invisible(vector_plot))  
     
-    return(invisible(vector_plot))
 }
+
