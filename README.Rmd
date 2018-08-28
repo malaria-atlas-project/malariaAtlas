@@ -202,8 +202,9 @@ p <- autoplot(MMR_An_dirus_df, shp_df = MMR_shp_df, printed = FALSE)
 
 vec <- getVecOcc(country = c("Myanmar"), species = "Anopheles dirus")
 p[[1]] +
-geom_point(data = vec, aes(longitude, latitude), shape = 21)+
- scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "RdYlBu")+
+geom_point(data = vec, aes(longitude, latitude, colour = species))+
+  scale_colour_manual(values = "black", name = "Vector survey locations")+
+ scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "PuBuGn", direction = 1)+
  ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 ```
 
