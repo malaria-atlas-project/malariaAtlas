@@ -43,7 +43,7 @@
 #' scale_fill_distiller(name = "Predicted distribution of An. dirus complex",
 #'  palette = "PuBuGn",
 #'   direction = 1)+
-#'   ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex\n in Myanmar")
+#'   ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 #' }
 #'
 #' @method autoplot vector.points

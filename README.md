@@ -363,7 +363,7 @@ p[[1]] +
 geom_point(data = vec, aes(longitude, latitude, colour = species))+
   scale_colour_manual(values = "black", name = "Vector survey locations")+
  scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "PuBuGn", direction = 1)+
- ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex\n in Myanmar")
+ ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 ```
 
 ![plot of chunk unnamed-chunk-24](man/figures/unnamed-chunk-24-1.png)
