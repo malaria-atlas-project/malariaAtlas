@@ -19,16 +19,24 @@
 #' \donttest{
 #' Vector_surveys_NGA_NG <- getVecOcc(country = c("Nigeria", "Niger"))
 #' autoplot(Vector_surveys_NGA)
-#'
+#' 
+#' # Download the predicted distribution of Anohpeles dirus species complex Raster and raw vector survey points for Myanmar in
+#' #  and visualise these together on a map.
 #'
 #' # Download Myanmar shapefile to use for raster download.
 #' MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 #'
+#' # Download An. dirus predicted distribution Raster & plot this
+#' MMR_An_dirus <- getRaster(surface = "Anohpeles dirus species complex", shp = MMR_shp)
+#' p <- autoplot_MAPraster(MMR_An_dirus)
 #'
 #' # Download raw occurrence points & plot these over the top of the raster   
 #' species <- getVecOcc(country = "Myanmar", species = "Anopheles dirus")
 #' p[[1]] +
-#' geom_point(data = vec, aes(longitude, latitude), shape = 21,  show.legend = TRUE)+
+#' geom_point(data = species,
+#'  aes(longitude,
+#'   latitude),
+#'   shape = 21)+
 #' scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "RdYlBu")+
 #'   ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 #' }
