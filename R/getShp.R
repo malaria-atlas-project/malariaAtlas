@@ -241,8 +241,7 @@ getShp <- function(country = NULL,
 }
 
   Shp_polygon <- lapply(URL_input, downloadShp)
-  
-  if (length(admin_level) == 1 & admin_level != "all") {
+  if (length(admin_level) == 1 & !("all" %in% admin_level)){
     Shp_polygon <- Shp_polygon[[paste(admin_level)]]
   } else {
     Shp_polygon <- do.call(what = sp::rbind.SpatialPolygonsDataFrame, args = Shp_polygon)
