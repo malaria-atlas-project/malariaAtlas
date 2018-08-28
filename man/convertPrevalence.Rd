@@ -4,9 +4,10 @@
 \alias{convertPrevalence}
 \title{convert prevalences from one age range to another}
 \usage{
-convertPrevalence(prevalence, age_min_in, age_max_in, age_min_out = rep(2,
-  length(prevalence)), age_max_out = rep(9, length(prevalence)),
-  parameters = "Pf_Smith2007", sample_weights = NULL)
+convertPrevalence(prevalence, age_min_in, age_max_in,
+  age_min_out = rep(2, length(prevalence)), age_max_out = rep(9,
+  length(prevalence)), parameters = "Pf_Smith2007",
+  sample_weights = NULL)
 }
 \arguments{
 \item{prevalence}{Vector of prevalence values}

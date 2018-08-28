@@ -2,37 +2,35 @@
 % Please edit documentation in R/isAvailable.R
 \name{isAvailable}
 \alias{isAvailable}
-\title{Check whether PR points are available for a given location}
+\title{Available data to download from the MAP geoserver.}
 \usage{
-isAvailable(country = NULL, ISO = NULL, continent = NULL,
-  full_results = FALSE)
+isAvailable(sourcedata = NULL, full_results = FALSE, country = NULL,
+  ISO = NULL, continent = NULL)
 }
 \arguments{
-\item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
+\item{sourcedata}{One of 'pr points' or 'vector points'}
 
-\item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
+\item{full_results}{Should the list be printed to the console?}
 
-\item{continent}{string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
+\item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
-\item{full_results}{By default this is FALSE meaning the function only gives a message outlining whether specified country is available, if \code{full_results == TRUE}, the function returns a named list outlining data availability.}
+\item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
+
+\item{continent}{string containing continent for desired data, e.g. \code{c("continent1", "continent2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 }
 \value{
-\code{isAvailable} returns a named list of input locations with information regarding data availability.
-
-if \code{full_results == TRUE}, a named list is returned with the following elements:
-\enumerate{
-\item \code{location} - specified input locations
-\item \code{is_available}- 1 or 0; indicating whether data is available for this location
-\item \code{possible_match}- agrep-matched country names indicating potential mispellings of countries where is_available == 0; NA if data is available for this location.
-}
+\code{isAvailable} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 }
 \description{
-\code{isAvailable} checks whether the MAP database contains PR points for the specified country/location.
+\code{isAvaiable} is a wrapper for isAvailable_pr and isAvailable_vec, listing data (PR survey point location data and vector occurrence locations available to download from the MAP geoserver.
 }
 \examples{
 \donttest{
-isAvailable(country = "Suriname")
-x <- isAvailable(ISO = "NGA", full_results = TRUE)
-x <- isAvailable(continent = "Oceania", full_results = TRUE)
+available_pr_locations <- isAvailable_pr()
+available_vector_locations <- isAvailable_vec()
 }
+}
+\seealso{
+\code{link{isAvailable_pr}}
+\code{\link{isAvailable_vec}}
 }

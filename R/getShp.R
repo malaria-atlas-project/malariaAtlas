@@ -80,11 +80,11 @@ getShp <- function(country = NULL,
   # return error if ISO or country are not correctly specified and extent is unspecified
   if (length(country_input) == 0 & is.null(c(extent, lat, long))) {
     stop(
-      "Invalid country/ISO definition, use is_available() OR listShp() to confirm country spelling and/or ISO code."
+      "Invalid country/ISO definition, use isAvailable() OR listShp() to confirm country spelling and/or ISO code."
     )
   }
 
-  if (admin_level == "all") {
+  if ("all"%in% tolower(admin_level)){
     admin_num <- c(0, 1, 2, 3)
   } else {
     admin_num <- as.numeric(gsub("admin","", admin_level))
@@ -166,7 +166,7 @@ getShp <- function(country = NULL,
     "https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
   
   
-  if (tolower(admin_level) == "all") {
+  if ("all" %in% tolower(admin_level) ) {
     URL_input <-
       list(
         "admin0" = paste(
@@ -241,8 +241,7 @@ getShp <- function(country = NULL,
 }
 
   Shp_polygon <- lapply(URL_input, downloadShp)
-  
-  if (length(admin_level) == 1 & admin_level != "all") {
+  if (length(admin_level) == 1 & !("all" %in% admin_level)){
     Shp_polygon <- Shp_polygon[[paste(admin_level)]]
   } else {
     Shp_polygon <- do.call(what = sp::rbind.SpatialPolygonsDataFrame, args = Shp_polygon)
