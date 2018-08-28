@@ -19,6 +19,9 @@ listPoints <- function(printed = TRUE, sourcedata) {
 
   if(sourcedata == "pr points"){
 
+    # If we've already downloaded a list of available countries, print that.
+    # Otherwise download a list from the geoserver
+    
     if(exists('available_countries_stored_pr', envir = .malariaAtlasHidden)){
     available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
 
@@ -68,7 +71,6 @@ listPoints <- function(printed = TRUE, sourcedata) {
     return(invisible(available_countries_vec))
     } 
   }  
+
 }
 
-#listPoints()
-#xx <-  listPoints(printed = FALSE, sourcedata = "vector points")
