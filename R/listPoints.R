@@ -27,8 +27,8 @@ listPoints <- function(printed = TRUE, sourcedata) {
     available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
 
       if(printed == TRUE){
-      message("Countries with PR Data: \n ",paste(paste(available_countries_pr$country," (",available_countries_pr$country_id, ")", sep = ""), collapse = " \n "))
-     }
+        message("Countries with PR Data: \n ",paste(paste(available_countries_pr$country," (",available_countries_pr$country_id, ")", sep = ""), collapse = " \n "))
+      }
 
       return(invisible(available_countries_pr))
 

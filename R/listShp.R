@@ -18,7 +18,7 @@ listShp <- function(printed = TRUE, admin_level = c("admin0", "admin1")){
     available_admin <- .malariaAtlasHidden$available_admin_stored
 
     if(printed == TRUE){
-      message("Shapefiles Available to Download for: \n ",paste(sort(unique(available_admin$name[available_admin$admn_level==0])), collapse = " \n "))
+      message("Shapefiles Available to Download for: \n ",paste(sort(unique(available_admin$name_0[available_admin$admn_level==0])), collapse = " \n "))
     }
 
     return(invisible(available_admin))
