@@ -97,11 +97,10 @@ tibble::glimpse(MDG_pr_data)
 autoplot(MDG_pr_data)
 ```
 
-N.B. Facet-wrapped option is also available for species stratification. 
+A version without facetting is also available.
 ```{r message = FALSE, warning = FALSE, results = "hide"}
 autoplot(MDG_pr_data,
-         facet = TRUE,
-         map_title = "Example MAP of PR point locations,\nstratified by species")
+         facet = FALSE)
 ```
 
 ### Vector Survey Points
