@@ -31,7 +31,7 @@ getPR(country = NULL, ISO = NULL, continent = NULL, species,
 \code{getPR} downloads all publicly available PR points for a specified country (or countries) and returns this as a dataframe.
 }
 \details{
-\code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as Mayotte and Grench Guiana.
+\code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as Mayotte and French Guiana.
 }
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
