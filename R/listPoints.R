@@ -51,11 +51,9 @@ listPoints <- function(printed = TRUE, sourcedata) {
     if(exists('available_countries_stored_vec', envir = .malariaAtlasHidden)){
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
 
-  available_countries <- dplyr::arrange(available_countries, .data$country)
-  
-  if(printed == TRUE){
-    message("Countries with PR Data: \n ",paste(paste(available_countries$country," (",available_countries$country_id, ")", sep = ""), collapse = " \n "))
-  }
+      if(printed == TRUE){
+      message("Countries with vector occurrence data: \n ",paste(paste(available_countries_vec$country," (",available_countries_vec$country_id, ")", sep = ""), collapse = " \n "))
+      }
 
       return(invisible(available_countries_vec))
 

@@ -23,25 +23,18 @@ listShp <- function(printed = TRUE, admin_level = c("admin0", "admin1")){
 
     return(invisible(available_admin))
   } else {
-
     URL_list <- c("admin0" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_0_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,source"),
-    "admin1" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_1_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,source"),
-    "admin2" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_2_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,source" ),
-    "admin3" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_3_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,name_3,id_3,type_3,source"))
-
+                  "admin1" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_1_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,source"),
+                  "admin2" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_2_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,source" ),
+                  "admin3" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_3_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,name_3,id_3,type_3,source"))
+    
     available_admin <- lapply(X = URL_list[names(URL_list) %in% admin_level], FUN = utils::read.csv, encoding = "UTF-8")
     
     available_admin <- suppressWarnings(dplyr::bind_rows(available_admin))
     
     available_admin <- dplyr::select(available_admin, names(available_admin)[names(available_admin) %in% c("iso","admn_level","name_0","id_0",
-                                     "type_0","name_1","id_1","type_1","name_2","id_2","type_2",
-                                     "name_3","id_3","type_3","source")])
-
-    available_admin <- rbind(utils::read.csv(URL_admin0, encoding = "UTF-8"),
-                             utils::read.csv(URL_admin1, encoding = "UTF-8"))
-    
-    # Sort by admin level first and region name second.
-    available_admin <- dplyr::arrange(available_admin, .data$admn_level, .data$name)
+                                                                                                           "type_0","name_1","id_1","type_1","name_2","id_2","type_2",
+                                                                                                           "name_3","id_3","type_3","source")])
     
     .malariaAtlasHidden$available_admin_stored <- available_admin
   }
