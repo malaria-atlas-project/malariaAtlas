@@ -95,6 +95,8 @@ getVecOcc <- function(country = NULL,
       utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,-1]
     message("Data downloaded for all available locations.")
     
+    class(df) <- c("vector.points", class(df))
+    
     return(df)
     
     
