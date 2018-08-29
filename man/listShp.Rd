@@ -8,6 +8,8 @@ listShp(printed = TRUE, admin_level = c("admin0", "admin1"))
 }
 \arguments{
 \item{printed}{Should the list be printed to the console?}
+
+\item{admin_level}{Specifies which administrative unit level for which to return available polygon shapefiles. A string vector including one or more of\code{"admin0"}, \code{"admin1"}, \code{"admin2"} OR \code{"admin3"}. Default: \code{c("admin0", "admin1")}}
 }
 \value{
 \code{listShp} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.

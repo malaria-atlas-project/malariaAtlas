@@ -3,6 +3,7 @@
 #' \code{listShp} lists all administrative units for which shapefiles are stored on the MAP geoserver.
 #'
 #' @param printed Should the list be printed to the console?
+#' @param admin_level Specifies which administrative unit level for which to return available polygon shapefiles. A string vector including one or more of\code{"admin0"}, \code{"admin1"}, \code{"admin2"} OR \code{"admin3"}. Default: \code{c("admin0", "admin1")} 
 #' @return \code{listShp} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 #' @examples
 #' \donttest{
@@ -28,7 +29,7 @@ listShp <- function(printed = TRUE, admin_level = c("admin0", "admin1")){
     "admin2" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_2_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,source" ),
     "admin3" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_3_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,name_3,id_3,type_3,source"))
 
-    available_admin <- lapply(X = URL_list[names(URL_list) %in% admin_level], FUN = read.csv, encoding = "UTF-8")
+    available_admin <- lapply(X = URL_list[names(URL_list) %in% admin_level], FUN = utils::read.csv, encoding = "UTF-8")
     
     available_admin <- suppressWarnings(dplyr::bind_rows(available_admin))
     

@@ -4,12 +4,14 @@
 \alias{listData}
 \title{List data available to download from the MAP geoserver.}
 \usage{
-listData(datatype = NULL, printed = TRUE)
+listData(datatype = NULL, printed = TRUE, ...)
 }
 \arguments{
-\item{datatype}{One of 'points', 'raster' or 'shape'}
+\item{datatype}{One of 'pr points', 'vector points', 'raster' or 'shape'}
 
 \item{printed}{Should the list be printed to the console?}
+
+\item{...}{Other arguments to be passed to \code{list*} functions. (e.g. \code{admin_level} for \code{listShp})}
 }
 \value{
 \code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
@@ -20,7 +22,8 @@ listData(datatype = NULL, printed = TRUE)
 \examples{
 \donttest{
 available_admin_units <- listShp()
-available_pr_points<- listPoints()
+available_pr_points <- listPoints()
+available_vector_points <- listPoints()
 available_rasters <- listRaster()
 }
 }

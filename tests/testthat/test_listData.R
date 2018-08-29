@@ -1,29 +1,57 @@
-# listPoints() tests
+# listPoints(sourcedata = "pr points") tests
 
 context("Using listPoints to check which countries have available PR data.")
-if(exists("available_countries_stored", envir = .malariaAtlasHidden)){
-rm(available_countries_stored, envir = .malariaAtlasHidden)
+if(exists("available_countries_stored_pr", envir = .malariaAtlasHidden)){
+rm(available_countries_stored_pr, envir = .malariaAtlasHidden)
 }
 
-available_countries <- listPoints(printed = FALSE)
+available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
 
 test_that("downloaded data.frame is in the correct format",{
-  expect_true(nrow(available_countries)>0)
-  expect_true(inherits(available_countries,"data.frame"))
+  expect_true(nrow(available_countries_pr)>0)
+  expect_true(inherits(available_countries_pr,"data.frame"))
 })
 
 test_that("downloaded dataframe contains has correct content",{
-  expect_equal(sort(names(available_countries)),sort(c("country","country_id", "continent")))
-  expect_true("Kenya" %in% available_countries$country)
-  expect_true("KEN" %in% available_countries$country_id)
-  expect_true("Oceania" %in% available_countries$continent)
-  expect_true(inherits(available_countries$country, "factor"))
-  expect_true(inherits(available_countries$country_id, "factor"))
-  expect_true(inherits(available_countries$continent, "factor"))
+  expect_equal(sort(names(available_countries_pr)),sort(c("country","country_id", "continent")))
+  expect_true("Kenya" %in% available_countries_pr$country)
+  expect_true("KEN" %in% available_countries_pr$country_id)
+  expect_true("Oceania" %in% available_countries_pr$continent)
+  expect_true(inherits(available_countries_pr$country, "factor"))
+  expect_true(inherits(available_countries_pr$country_id, "factor"))
+  expect_true(inherits(available_countries_pr$continent, "factor"))
 })
 
-test_that("available_countries_stored object is stored in hidden environment",{
-  expect_true(exists("available_countries_stored", envir = .malariaAtlasHidden))
+test_that("available_countries_stored_pr object is stored in hidden environment",{
+  expect_true(exists("available_countries_stored_pr", envir = .malariaAtlasHidden))
+})
+
+# listPoints(sourcedata = "vector points") tests
+
+context("Using listPoints to check which countries have available Vector Occurrence data.")
+if(exists("available_countries_stored_vec", envir = .malariaAtlasHidden)){
+  rm(available_countries_stored_vec, envir = .malariaAtlasHidden)
+}
+
+available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")
+
+test_that("downloaded data.frame is in the correct format",{
+  expect_true(nrow(available_countries_vec)>0)
+  expect_true(inherits(available_countries_vec,"data.frame"))
+})
+
+test_that("downloaded dataframe contains has correct content",{
+  expect_equal(sort(names(available_countries_vec)),sort(c("country","country_id", "continent")))
+  expect_true("Kenya" %in% available_countries_vec$country)
+  expect_true("KEN" %in% available_countries_vec$country_id)
+  expect_true("Oceania" %in% available_countries_vec$continent)
+  expect_true(inherits(available_countries_vec$country, "factor"))
+  expect_true(inherits(available_countries_vec$country_id, "factor"))
+  expect_true(inherits(available_countries_vec$continent, "factor"))
+})
+
+test_that("available_countries_stored_vec object is stored in hidden environment",{
+  expect_true(exists("available_countries_stored_vec", envir = .malariaAtlasHidden))
 })
 
 # listRaster() tests

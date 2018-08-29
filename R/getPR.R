@@ -43,11 +43,11 @@ getPR <- function(country = NULL,
                   continent = NULL,
                   species,
                   extent = NULL) {
-  if (exists('available_countries_stored', envir = .malariaAtlasHidden)) {
-    available_countries <-
-      .malariaAtlasHidden$available_countries_stored
+  if (exists('available_countries_stored_pr', envir = .malariaAtlasHidden)) {
+    available_countries_pr <-
+      .malariaAtlasHidden$available_countries_stored_pr
   } else{
-    available_countries <- listPoints(printed = FALSE)
+    available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
   }
   
   if (is.null(country) &
@@ -97,8 +97,10 @@ getPR <- function(country = NULL,
         colname <- "continent"
       }
       
-      checked_availability <-
-        isAvailable(
+
+      checked_availability_pr <-
+        isAvailable_pr(
+          sourcedata = "pr points",
           country = country,
           ISO = ISO,
           continent = continent,
@@ -106,14 +108,14 @@ getPR <- function(country = NULL,
         )
       message(paste(
         "Attempting to download PR point data for",
-        paste(available_countries$country[available_countries[, colname] %in% checked_availability$location[checked_availability$is_available ==
+        paste(available_countries_pr$country[available_countries_pr[, colname] %in% checked_availability_pr$location[checked_availability_pr$is_available ==
                                                                                                               1]], collapse = ", "),
         "..."
       ))
       country_URL <-
         paste("%27",
               curl::curl_escape(gsub(
-                "'", "''", checked_availability$location[checked_availability$is_available ==
+                "'", "''", checked_availability_pr$location[checked_availability_pr$is_available ==
                                                            1]
               )),
               "%27",
@@ -172,7 +174,7 @@ getPR <- function(country = NULL,
     if (any(c(!is.null(country),!is.null(ISO),!is.null(continent)))) {
       message(
         "Data downloaded for ",
-        paste(checked_availability$location[checked_availability$is_available ==
+        paste(checked_availability_pr$location[checked_availability_pr$is_available ==
                                               1], collapse = ", "),
         "."
       )
