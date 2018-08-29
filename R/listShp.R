@@ -37,8 +37,16 @@ listShp <- function(printed = TRUE, admin_level = c("admin0", "admin1")){
                                      "type_0","name_1","id_1","type_1","name_2","id_2","type_2",
                                      "name_3","id_3","type_3","source")])
 
+    available_admin <- rbind(utils::read.csv(URL_admin0, encoding = "UTF-8"),
+                             utils::read.csv(URL_admin1, encoding = "UTF-8"))
+    
+    # Sort by admin level first and region name second.
+    available_admin <- dplyr::arrange(available_admin, .data$admn_level, .data$name)
+    
     .malariaAtlasHidden$available_admin_stored <- available_admin
   }
+
+  available_admin <- available_admin[,!names(available_admin)%in%c("FID","gid")]
 
   return(invisible(available_admin))
 }

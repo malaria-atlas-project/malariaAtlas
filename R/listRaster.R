@@ -75,19 +75,9 @@ message("Downloading list of available rasters...")
 
   available_rasters <- available_rasters[available_rasters$category %in% "surfaces",-which(names(available_rasters)=="category")]
 
-  available_rasters$title[available_rasters$title== "An. dirus species complex"&grepl("^Moyes", available_rasters$citation)] <- "An. dirus species complex (2016)"
-  available_rasters$title[available_rasters$title== "An. dirus species complex"&grepl("^Sinka", available_rasters$citation)] <- "An. dirus species complex (2011)"
-
-  available_rasters$title[available_rasters$title== "An. arabiensis Patton, 1905"&grepl("^Wiebe", available_rasters$citation)] <- "An. arabiensis Patton, 1905 (2017)"
-  available_rasters$title[available_rasters$title== "An. arabiensis Patton, 1905"&grepl("^Sinka", available_rasters$citation)] <- "An. arabiensis Patton, 1905 (2010)"
-
-  available_rasters$title[available_rasters$title== "An. melas Theobald, 1903"&grepl("^Wiebe", available_rasters$citation)] <- "An. melas Theobald, 1903 (2017)"
-  available_rasters$title[available_rasters$title== "An. melas Theobald, 1903"&grepl("^Sinka", available_rasters$citation)] <- "An. melas Theobald, 1903 (2010)"
-
-  available_rasters$title[available_rasters$title== "An. merus D\u0246nitz, 1902"&grepl("^Wiebe", available_rasters$citation)] <- "An. merus D\0246nitz, 1902 (2017)"
-  available_rasters$title[available_rasters$title== "An. merus D\u0246nitz, 1902"&grepl("^Sinka", available_rasters$citation)] <- "An. merus D\u0246nitz, 1902 (2010)"
-
-
+  available_rasters <- clean_mosquito_names(available_rasters)
+  
+  available_rasters <- dplyr::arrange(available_rasters, .data$title)
   #print out message of long raster names
   if(printed == TRUE){
     message("Rasters Available for Download: \n ",paste(available_rasters$title, collapse = " \n "))
@@ -99,4 +89,20 @@ message("Downloading list of available rasters...")
 }
 
 ## z <- listRaster()
+
+# Function to clean up a bunch of mess in the mosquito names.
+clean_mosquito_names <- function(available_rasters){
+  available_rasters$title[available_rasters$title== "An. dirus species complex"&grepl("^Moyes", available_rasters$citation)] <- "An. dirus species complex (2016)"
+  available_rasters$title[available_rasters$title== "An. dirus species complex"&grepl("^Sinka", available_rasters$citation)] <- "An. dirus species complex (2011)"
+  
+  available_rasters$title[available_rasters$title== "An. arabiensis Patton, 1905"&grepl("^Wiebe", available_rasters$citation)] <- "An. arabiensis Patton, 1905 (2017)"
+  available_rasters$title[available_rasters$title== "An. arabiensis Patton, 1905"&grepl("^Sinka", available_rasters$citation)] <- "An. arabiensis Patton, 1905 (2010)"
+  
+  available_rasters$title[available_rasters$title== "An. melas Theobald, 1903"&grepl("^Wiebe", available_rasters$citation)] <- "An. melas Theobald, 1903 (2017)"
+  available_rasters$title[available_rasters$title== "An. melas Theobald, 1903"&grepl("^Sinka", available_rasters$citation)] <- "An. melas Theobald, 1903 (2010)"
+  
+  available_rasters$title[available_rasters$title== "An. merus D\u0246nitz, 1902"&grepl("^Wiebe", available_rasters$citation)] <- "An. merus D\0246nitz, 1902 (2017)"
+  available_rasters$title[available_rasters$title== "An. merus D\u0246nitz, 1902"&grepl("^Sinka", available_rasters$citation)] <- "An. merus D\u0246nitz, 1902 (2010)"
+  return(available_rasters)
+}
 

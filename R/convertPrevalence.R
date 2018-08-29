@@ -18,8 +18,8 @@
 #' @param prevalence Vector of prevalence values
 #' @param age_min_in Vector of minimum ages sampled
 #' @param age_max_in Vector maximum ages sampled.
-#' @param age_min_out Required minimum age range
-#' @param age_max_out Required maximum age range
+#' @param age_min_out Length 1 numeric or vector of same length as prevalence given the required age range upper bound
+#' @param age_max_out Length 1 numeric or vector of same length as prevalence given the required age range lower bound
 #' @param parameters Specifies the set of parameters to use in the
 #'   model. This can either be "Pf_Smith2007" to use the parameters
 #'   for *Plasmodium falciparum* defined in that paper,
@@ -27,7 +27,7 @@
 #'    or a user-specified vector givng the values of parameters `b`,
 #'     `s`, `c` and `alpha`, in that order. If specified,
 #' @param sample_weights Must be a vector of length 85 giving the
-#'     sample weights for each age category(the proportion of the
+#'     sample weights for each age category (the proportion of the
 #'     population in that age category) . If `NULL`, The sample
 #'     weights used in Smith et al. 2007 are used.
 #' @export
@@ -116,11 +116,14 @@ convertPrevalence <- function (prevalence,
   N <- length(prevalence)
 
   # check the vectors all have the same length
-  stopifnot(length(age_min_in) == length(prevalence))
+  stopifnot(length(age_min_in) == length(prevalence) )
   stopifnot(length(age_max_in) == length(prevalence))
-  stopifnot(length(age_min_out) == length(prevalence))
-  stopifnot(length(age_max_out) == length(prevalence))
+  stopifnot(length(age_min_out) %in% c(length(prevalence), 1))
+  stopifnot(length(age_max_out) %in% c(length(prevalence), 1))
 
+  if(length(age_min_out) == 1) age_min_out <- rep(age_min_out, length(prevalence))
+  if(length(age_max_out) == 1) age_max_out <- rep(age_max_out, length(prevalence))
+  
   # set ages greater than 85 to 85
   age_min_in <- pmin(age_min_in, 85)
   age_max_in <- pmin(age_max_in, 85)
@@ -288,7 +291,7 @@ PFw <- function(P_prime,
   # check the age range is sensible
   stopifnot(age_min >= 0 && age_min <= 85)
   stopifnot(age_max >= 0 && age_max <= 85)
-  stopifnot(age_min < age_max)
+  stopifnot(age_min <= age_max)
 
   # get range of ages
   age <- (age_min:(age_max - 1)) + 0.5

@@ -30,7 +30,8 @@ Imports:
   tidyr,
   methods,
   stats,
-  utils
+  utils,
+  rlang
 Depends: ggplot2
 RoxygenNote: 6.1.0
 Suggests: testthat,

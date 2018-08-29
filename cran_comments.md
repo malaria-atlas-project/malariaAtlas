@@ -4,7 +4,7 @@ Remove final slow test.
 Switch to donttest instead of dontrun in examples.
 Fix many broken examples.
 Fix authorship to include contributors (David Smith and Nick Golding) and 
-  lab members that were left off the previous submission.
+  some other authors that were left off the previous submission.
 
 ## Test environments
 

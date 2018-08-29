@@ -2,7 +2,7 @@
 #'
 #' \code{getPR} downloads all publicly available PR points for a specified country (or countries) and returns this as a dataframe.
 #'
-#' \code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as Mayotte and Grench Guiana.
+#' \code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as Mayotte and French Guiana.
 #'
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
