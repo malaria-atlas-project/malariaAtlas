@@ -8,6 +8,7 @@
 #' @param extent  2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
 #' @param file_path string specifying the directory to which working files will be downloaded. Defaults to tempdir().
 #' @param year default = \code{rep(NA, length(surface))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.
+#' @param vector_year default = \code{NULL} for vector occurence rasters, the desired version as prefixed in raster_code returned using available_rasters. By default (\code{NULL}) returns the most recent raster version )
 #'
 #' @return \code{getRaster} returns a RasterLayer (if only a single raster is queried) or RasterStack (for multiple rasters) for the specified extent.
 #'
@@ -55,7 +56,8 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
                       shp = NULL,
                       extent = NULL,
                       file_path = tempdir(),
-                      year = as.list(rep(NA, length(surface)))) {
+                      year = as.list(rep(NA, length(surface))), 
+                      vector_year= NULL) {
   ## if extent is not defined by user, use sp::bbox to define this from provided shapefile
   if (is.null(extent) & !is.null(shp)) {
     extent <- sp::bbox(shp)
@@ -77,7 +79,27 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   ## download list of all available rasters and use this df to define raster codes for specifed 'surface's
   available_rasters <- listRaster(printed = FALSE)
   raster_code_list <-
-    as.character(available_rasters$raster_code[match(surface, available_rasters$title)])
+    as.character(available_rasters$raster_code[available_rasters$title%in%surface])
+  
+  if(length(raster_code_list)!=length(surface)&any(grepl("anoph", raster_code_list, ignore.case = T))){
+    
+  for(i in surface){
+    if(length(as.character(available_rasters$raster_code[available_rasters$title%in%i]))>1){
+      raster_code_list_i <- as.character(available_rasters$raster_code[available_rasters$title%in%i])
+      
+      idx <- raster_code_list %in% raster_code_list_i
+      
+      if(is.null(vector_year)){
+      vector_year <- max(as.numeric(substr(raster_code_list_i, 1, 4)))
+      }
+      
+       raster_code_list <- c(raster_code_list[!idx], grep(vector_year, raster_code_list, value = TRUE))
+      
+    }
+    
+  }
+    
+  }
 
   if (anyNA(raster_code_list)) {
     stop(
