@@ -156,7 +156,7 @@ MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 autoplot(MDG_pr_data)
 ```
 
-![plot of chunk unnamed-chunk-15](man/figures/unnamed-chunk-15-1.png)
+![plot of chunk unnamed-chunk-11](man/figures/unnamed-chunk-11-1.png)
 
 A version without facetting is also available.
 
@@ -165,7 +165,7 @@ autoplot(MDG_pr_data,
          facet = FALSE)
 ```
 
-![plot of chunk unnamed-chunk-16](man/figures/unnamed-chunk-16-1.png)
+![plot of chunk unnamed-chunk-12](man/figures/unnamed-chunk-12-1.png)
 
 ### Vector Survey Points
 `getVecOcc()` downloads all publicly available Vector survey points for a specified country and  and returns this as a dataframe with the following format: 
@@ -211,7 +211,7 @@ MMR_vec_data <- getVecOcc(country = "Myanmar")
 autoplot.vector.points(MMR_vec_data)
 ```
 
-![plot of chunk unnamed-chunk-19](man/figures/unnamed-chunk-19-1.png)
+![plot of chunk unnamed-chunk-15](man/figures/unnamed-chunk-15-1.png)
 
 N.B. Facet-wrapped option is also available for species stratification. 
 
@@ -220,7 +220,7 @@ autoplot(MMR_vec_data,
          facet = TRUE)
 ```
 
-![plot of chunk unnamed-chunk-20](man/figures/unnamed-chunk-20-1.png)
+![plot of chunk unnamed-chunk-16](man/figures/unnamed-chunk-16-1.png)
 
 ### Shapefiles
 `getShp()` downloads a shapefile for a specified country (or countries) and returns this as either a spatialPolygon or data.frame object.
@@ -232,11 +232,11 @@ MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 
 ```
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpoLF9ms/shp/shpbdd6afb1f82/mapadmin_0_2018.shp", layer: "mapadmin_0_2018"
+## Source: "C:\Users\whgu0734\AppData\Local\Temp\RtmpkhqjpA/shp/shp1a64711977c4/mapadmin_0_2018.shp", layer: "mapadmin_0_2018"
 ## with 1 features
 ## It has 8 fields
 ## OGR data source with driver: ESRI Shapefile 
-## Source: "/tmp/RtmpoLF9ms/shp/shpbdd4fc72d28/mapadmin_1_2018.shp", layer: "mapadmin_1_2018"
+## Source: "C:\Users\whgu0734\AppData\Local\Temp\RtmpkhqjpA/shp/shp1a6412ff2b1c/mapadmin_1_2018.shp", layer: "mapadmin_1_2018"
 ## with 22 features
 ## It has 12 fields
 ```
@@ -298,7 +298,7 @@ MDG_shp <- as.MAPshp(MDG_shp)
 autoplot(MDG_shp)
 ```
 
-![plot of chunk unnamed-chunk-23](man/figures/unnamed-chunk-23-1.png)
+![plot of chunk unnamed-chunk-19](man/figures/unnamed-chunk-19-1.png)
 
 N.B. Facet-wrapped option is also available for species stratification. 
 
@@ -309,7 +309,7 @@ autoplot(MDG_shp,
          map_title = "Example of facetted shapefiles.")
 ```
 
-![plot of chunk unnamed-chunk-24](man/figures/unnamed-chunk-24-1.png)
+![plot of chunk unnamed-chunk-20](man/figures/unnamed-chunk-20-1.png)
 
 ### Modelled Rasters 
 
@@ -331,7 +331,7 @@ MDG_shp_df <- as.MAPshp(MDG_shp)
 p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
 ```
 
-![plot of chunk unnamed-chunk-26](man/figures/unnamed-chunk-26-1.png)
+![plot of chunk unnamed-chunk-22](man/figures/unnamed-chunk-22-1.png)
 
 
 ### Combined visualisation 
@@ -355,7 +355,7 @@ scale_size_continuous(name = "Survey Size")+
  ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
 ```
 
-![plot of chunk unnamed-chunk-27](man/figures/unnamed-chunk-27-1.png)
+![plot of chunk unnamed-chunk-23](man/figures/unnamed-chunk-23-1.png)
 
 Similarly for vector survey data
 
@@ -376,7 +376,7 @@ geom_point(data = vec, aes(longitude, latitude, colour = species))+
  ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 ```
 
-![plot of chunk unnamed-chunk-28](man/figures/unnamed-chunk-28-1.png)
+![plot of chunk unnamed-chunk-24](man/figures/unnamed-chunk-24-1.png)
 
 ## Basic Spatial utility tools 
 
