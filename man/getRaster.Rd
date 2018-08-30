@@ -6,7 +6,7 @@
 \usage{
 getRaster(surface = "Plasmodium falciparum PR2-10", shp = NULL,
   extent = NULL, file_path = tempdir(), year = as.list(rep(NA,
-  length(surface))))
+  length(surface))), vector_year = NULL)
 }
 \arguments{
 \item{surface}{string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
@@ -19,6 +19,8 @@ Check \code{\link{listRaster}} to find titles of available rasters.}
 \item{file_path}{string specifying the directory to which working files will be downloaded. Defaults to tempdir().}
 
 \item{year}{default = \code{rep(NA, length(surface))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.}
+
+\item{vector_year}{default = \code{NULL} for vector occurence rasters, the desired version as prefixed in raster_code returned using available_rasters. By default (\code{NULL}) returns the most recent raster version )}
 }
 \value{
 \code{getRaster} returns a RasterLayer (if only a single raster is queried) or RasterStack (for multiple rasters) for the specified extent.
