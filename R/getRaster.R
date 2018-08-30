@@ -78,8 +78,12 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   
   ## download list of all available rasters and use this df to define raster codes for specifed 'surface's
   available_rasters <- listRaster(printed = FALSE)
-  raster_code_list <-
-    as.character(available_rasters$raster_code[available_rasters$title%in%surface])
+  
+  raster_code_list <- character()
+  for(s in surface){
+    raster_code_list <- c(raster_code_list, as.character(available_rasters$raster_code[available_rasters$title%in%s]))
+  }
+  
   
   if(length(raster_code_list)!=length(surface)&any(grepl("anoph", raster_code_list, ignore.case = T))){
     
