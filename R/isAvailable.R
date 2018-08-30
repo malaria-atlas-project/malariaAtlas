@@ -22,8 +22,8 @@
 
 isAvailable <- function(sourcedata = NULL, full_results = FALSE, country = NULL, ISO = NULL, continent = NULL){
   
-  if(is.null(sourcedata)){
-    message("Choose a type of data using one of: \n sourcedata = \"pr points\"  \n sourcedata = \"vector points\"")
+  if(!sourcedata %in% c("vector points", "pr points")){
+    stop("Please choose one of:\n sourcedata = \"pr points\"  \n sourcedata = \"vector points\"")
   }
   
   if(sourcedata == "pr points"){
