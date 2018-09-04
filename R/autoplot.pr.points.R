@@ -73,7 +73,16 @@ autoplot.pr.points <- function(object,
   }
 
 if(is.null(shp_df)){
-  pr_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level)
+  if(!(admin_level %in% c('admin0', 'admin1', 'both'))){ 
+    stop('admin level must be one of admin0, admin1 or both')
+  }
+  if(admin_level == 'both'){
+    admin_level_request <- c('admin0', 'admin1')
+  } else {
+    admin_level_request <- admin_level
+  }
+  
+  pr_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level_request)
 
   if(admin_level == "admin0"){
     pr_plot <-  ggplot2::ggplot()+
