@@ -48,6 +48,11 @@ getVecOcc <- function(country = NULL,
     available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")     
   }
   
+  if(is.null(country) & 
+     is.null(ISO) & is.null(continent) & is.null(extent)) {
+    stop("Must specify one of: 'country', 'ISO', 'continent' or 'extent'.")
+  }
+  
   
   if (exists('available_species_stored', envir = .malariaAtlasHidden)) {
     available_species <- .malariaAtlasHidden$available_species_stored
@@ -56,17 +61,7 @@ getVecOcc <- function(country = NULL,
   }
   
   
-  if(tolower(species) %in% available_species){
-    stop("Species not recognised check species availability with listSpecies()")
-  }
-
-  if(is.null(country) & 
-     is.null(ISO) & is.null(continent) & is.null(extent)) {
-    stop("Must specify one of: 'country', 'ISO', 'continent' or 'extent'.")
-  }
-  
-  
-  if(tolower(species) %in% c("all")){
+  if("all" %in% tolower(species)){
     species_URL <- ""  
   } else {
     species_names <-  paste("%27",
@@ -75,6 +70,16 @@ getVecOcc <- function(country = NULL,
                             sep = "",
                             collapse = ",")
     species_URL <- paste0("%20AND%20species_plain%20IN%20(",species_names, ")")
+  }
+  
+  if(!("all" %in% species)){ 
+    if(all(!(species %in% available_species$species_plain))){
+      message("Species not recognised check species availability with listSpecies()")
+    } else if(any(!(species %in% available_species$species_plain))){
+     message(paste("No data was avilable to download for species'",species[!species %in% available_species$species_plain],"'please check spelling or species availablility with listSpecies()"))
+    } else {
+     message("All species have available data to download")
+    }
   }
   
   URL <-
@@ -90,7 +95,7 @@ getVecOcc <- function(country = NULL,
       sep = ""
     ))
     
-
+    
     df <- 
       utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,-1]
     message("Data downloaded for all available locations.")
@@ -162,7 +167,7 @@ getVecOcc <- function(country = NULL,
     df <- utils::read.csv(full_URL, encoding = "UTF-8")[, -1]
     
     #Just to avoid visible binding notes
-    species_plain <- species_plain <- permissions_info <- NULL #### check this is right, any others needed?
+    species_plain <- species_plain <- permissions_info <- NULL 
     
     if (!nrow(df) > 0 & !is.null(extent)) {
       stop(
@@ -189,11 +194,9 @@ getVecOcc <- function(country = NULL,
               paste0(extent, collapse = ", "))
     }
     
-    if (!species %in% "all"){
-      message("Data downloaded for species: ",
-              paste0(species),   
-              #paste(checked_availability_vec$species[checked_availability_vec$is_available == 1], collapse = ", "), ##doesn't refer to species.
-              ","
+    if (!("all" %in% species)){   
+      message("Data downloaded for species:",
+              paste0(unique(df$species_plain))
       )
     }
     
