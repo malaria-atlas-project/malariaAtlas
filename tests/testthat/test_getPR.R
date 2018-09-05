@@ -87,6 +87,19 @@ test_that("data is downloaded as a data.frame", {
   expect_warning(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "did you mean Nigeria")
   expect_warning(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "'Australia', use listPoints()")
   expect_message(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "Data downloaded for Kenya")
+  
+  
+  
+})
+
+test_that('Extent works', {
+  d <- getPR(species = 'both', extent = matrix(c(0, -30, 40, 10), nrow = 2))
+  expect_true(inherits(d, 'pr.points'))
+  expect_true(nrow(d) > 0)
+  
+  expect_true(all(d$latitude > -30 & d$latitude < 10))
+  expect_true(all(d$longitude > -0 & d$longitude < 40))
+  
 })
 
 
