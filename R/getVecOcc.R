@@ -104,7 +104,7 @@ getVecOcc <- function(country = NULL,
     
     
   } else{
-    if (any(c(!is.null(country),!is.null(ISO),!is.null(continent),!is.null(species)))) {  ##added the species part
+    if (any(c(!is.null(country),!is.null(ISO),!is.null(continent), !("all" %in% species)))) {  ##added the species part, needed, ,!is.null(species) ,, won't work as isn't NULL anymore, would also have to add another else for species
       if (!(is.null(country))) {
         cql_filter <- "country"
         colname <-"country"
@@ -114,6 +114,9 @@ getVecOcc <- function(country = NULL,
       } else if (!(is.null(continent))) {
         cql_filter <- "continent_id"
         colname <- "continent"
+      } else if (!("all" %in% species)) {
+        cql_filter <- "species_plain"
+        colname <- "species_plain"
       }
       
       

@@ -78,6 +78,14 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
     return(string_return)
   }
   
+  # if("all" %in% tolower(country)){
+  #   all_countries <- as.character(available_countries_vec)
+  #   location_input_vec <- sapply(all_countries, capwords)
+  #   available_locs_vec <- avilable_countries_vec$country
+  # }
+  # 
+  
+  
   if(!(is.null(country))){
     location_input_vec <- sapply(country, capwords)
     available_locs_vec <- available_countries_vec$country
@@ -128,6 +136,11 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
     }
     
   }
+  
+  
+  
+  
+  
   if(identical(checked_availability_vec$location[checked_availability_vec$is_available==0], location_input_vec)) {
     stop("Specified location not found, see below comments: \n \n",
          paste(error_message, collapse = " \n"))
