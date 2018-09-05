@@ -76,7 +76,9 @@ getVecOcc <- function(country = NULL,
     if(all(!(species %in% available_species$species_plain))){
       message("Species not recognised check species availability with listSpecies()")
     } else if(any(!(species %in% available_species$species_plain))){
-     message(paste("No data was avilable to download for species'",species[!species %in% available_species$species_plain],"'please check spelling or species availablility with listSpecies()"))
+     message(paste("No data was avilable to download for species'",
+                   species[!species %in% available_species$species_plain],
+                   "'please check spelling or species availablility with listSpecies()"))
     } else {
      message("All species have available data to download")
     }
@@ -106,7 +108,8 @@ getVecOcc <- function(country = NULL,
     
     
   } else{
-    if (any(c(!is.null(country),!is.null(ISO),!is.null(continent),!is.null(species)))) {  ##added the species part
+    ##added the species part
+    if (any(c(!is.null(country),!is.null(ISO),!is.null(continent),!is.null(species)))) {  
       if (!(is.null(country))) {
         cql_filter <- "country"
         colname <-"country"
@@ -127,7 +130,9 @@ getVecOcc <- function(country = NULL,
                     full_results = TRUE)
       message(paste(
         "Attempting to download vector occurence data for",
-        paste(available_countries_vec$country[available_countries_vec[, colname] %in% checked_availability_vec$location[checked_availability_vec$is_available == 1]], collapse = ", "),
+        paste(available_countries_vec$country[available_countries_vec[, colname] %in% 
+                checked_availability_vec$location[checked_availability_vec$is_available == 1]], 
+              collapse = ", "),
         "..."
       ))
       country_URL <-
@@ -206,6 +211,55 @@ getVecOcc <- function(country = NULL,
   
   }
   }
+
+
+
+
+
+#' Convert data.frames to vector.points objects.
+#' 
+#' Will create empty columns for any missing columns expected in a vector.points data.frame.
+#' This function is particularly useful for use with packages like dplyr that strip 
+#' objects of their classes.
+#' 
+#' @param x A data.frame
+#' 
+#' 
+#' @export
+#' 
+#' @examples
+#' \donttest{
+#' Brazil_vec <- getVecOcc(country = "Brazil")
+#' 
+#' # Filter data.frame then readd vector points class so autoplot can be used. 
+#' Brazil_vec %>% 
+#'   filter(sample_method1 == 'larval collection') %>% 
+#'   as.vector.points %>% 
+#'   autoplot
+#' }
+
+as.vector.points <- function(x){
+  
+  expected_col_names <- c("site_id", "latitude", "longitude", "country", "country_id", 
+                          "continent_id", "month_start", "year_start", "month_end", "year_end", 
+                          "anopheline_id", "species", "species_plain", "id_method1", "id_method2", 
+                          "sample_method1", "sample_method2", "sample_method3", "sample_method4", 
+                          "assi", "citation", "geom", "time_start", "time_end")
+  
+  missing_columns <- expected_col_names[!(expected_col_names %in% names(x))]
+  
+  stopifnot(inherits(x, 'data.frame'))
+  
+  if(length(missing_columns < 0)){
+    warning('Creating columns of NAs: ', paste0(missing_columns, collapse = ', '))
+    newcols <- data.frame(matrix(NA, ncol = length(missing_columns), nrow = nrow(x)))
+    names(newcols) <- missing_columns
+    x <- cbind(x, newcols)
+  }
+  
+  class(x) <- c('vector.points', class(x))
+  return(x)
+}
 
 
  
