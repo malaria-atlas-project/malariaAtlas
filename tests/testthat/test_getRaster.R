@@ -1,6 +1,8 @@
 context('Test all raster combinations.')
 
 test_that('All combinations of spatially aligned requests work', {
+  
+  skip_on_cran()
   # Static
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 
