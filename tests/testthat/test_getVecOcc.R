@@ -25,6 +25,11 @@
    expect_true(inherits(Brazil_darlingi,"data.frame"))
    expect_true(inherits(africa_all,"data.frame"))
    expect_true(inherits(americas_multiple,"data.frame"))
+   
+   expect_true(length(unique(Brazil_darlingi$species)) == 1)
+   
+   
+   
 # })
 
 # test_that("dataframe contains expected data", {
@@ -46,6 +51,16 @@
    expect_true(unique(Brazil_all$month_end[!is.na(Brazil_all$month_end)] %in% c(1:12)))
    expect_true(unique(Brazil_darlingi$month_start[!is.na(Brazil_darlingi$month_start)] %in% c(1:12)))
    expect_true(unique(Brazil_darlingi$month_end[!is.na(Brazil_darlingi$month_end)] %in% c(1:12)))
+   
+   
+   
+   
+   # Test two species.
+   two_sp <- getVecOcc(country = "Brazil", species = c("Anopheles darlingi", "Anopheles albitarsis"))
+   
+   expect_true(length(unique(two_sp$species)) == 2)
+   
+   
  })
 
 
@@ -54,5 +69,34 @@ test_that("error messages are appropriate to given error", {
   skip_on_cran()
   expect_error(getVecOcc(country = "madgascar"), regexp = "did you mean Madagascar?")
   expect_error(getVecOcc(country = "xxxx"), regexp = "Data not found for 'Xxxx', use listPoints()")
+})
+
+
+
+test_that("all option works", {
+  
+  skip_on_cran()
+  d <- getVecOcc(country = 'all', species = 'Anopheles darlingi')
+  expect_true(inherits(d, 'vector.points'))
+  expect_true(nrow(d) > 0)
+  expect_true(length(unique(d$country)) > 1)
+  
+  expect_true(length(unique(d$species)) == 1)
+  
+  
+})
+
+
+
+test_that("extent argument works", {
+  
+  skip_on_cran()
+  d <- getVecOcc(extent = c(), species = 'Anopheles darlingi')
+  expect_true(inherits(d, 'vector.points'))
+  expect_true(nrow(d) > 0)
+  expect_true(length(unique(d$country)) > 1)
+  
+  
+  
 })
 
