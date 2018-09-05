@@ -46,7 +46,7 @@
    expect_true(unique(Brazil_all$month_end[!is.na(Brazil_all$month_end)] %in% c(1:12)))
    expect_true(unique(Brazil_darlingi$month_start[!is.na(Brazil_darlingi$month_start)] %in% c(1:12)))
    expect_true(unique(Brazil_darlingi$month_end[!is.na(Brazil_darlingi$month_end)] %in% c(1:12)))
-# })
+ })
 
 
 test_that("error messages are appropriate to given error", {

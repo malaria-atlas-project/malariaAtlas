@@ -27,7 +27,7 @@ test_that('as.pr.points function works.', {
   
   skip_on_cran()
   
-  d <- as.vector.points(mtcars)
+  d <- as.vectorpoints(mtcars)
   expect_true(inherits(d, 'vector.points'))
   expect_true(inherits(d, 'data.frame'))
   
