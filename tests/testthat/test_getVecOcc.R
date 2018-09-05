@@ -2,18 +2,21 @@
 
  context("Using getVecOcc to download vector occurrence points")
 
- Brazil_all <- getVecOcc(country = "Brazil")
- Brazil_darlingi <- getVecOcc(country = "Brazil", species = "Anopheles darlingi")
-
- americas_multiple <- getVecOcc(country = c("Brazil", "Argentina", "Bolivia", "Paraguay"))
- americas_multiple_albitarsis <- getVecOcc(country = c("Brazil", "Argentina", "Bolivia", "Paraguay"), species = "Anopheles albitarsis")
- africa_all <- getVecOcc(continent = "Africa")
- america_all <- getVecOcc(continent = "Americas")
-
- available_countries <- paste(listPoints(printed = FALSE, sourcedata = "vector points")$country)
- ALL <- getVecOcc(country = available_countries)    
- 
  test_that("data is downloaded as a data.frame", {
+   
+   skip_on_cran()
+   
+   Brazil_all <- getVecOcc(country = "Brazil")
+   Brazil_darlingi <- getVecOcc(country = "Brazil", species = "Anopheles darlingi")
+   
+   americas_multiple <- getVecOcc(country = c("Brazil", "Argentina", "Bolivia", "Paraguay"))
+   americas_multiple_albitarsis <- getVecOcc(country = c("Brazil", "Argentina", "Bolivia", "Paraguay"), species = "Anopheles albitarsis")
+   africa_all <- getVecOcc(continent = "Africa")
+   america_all <- getVecOcc(continent = "Americas")
+   
+   available_countries <- paste(listPoints(printed = FALSE, sourcedata = "vector points")$country)
+   ALL <- getVecOcc(country = available_countries)    
+   
    #confirm that more than 0 rows are downloaded for brazil
    expect_true(nrow(Brazil_all)>0)
    expect_true(nrow(america_all)>0)
@@ -22,9 +25,9 @@
    expect_true(inherits(Brazil_darlingi,"data.frame"))
    expect_true(inherits(africa_all,"data.frame"))
    expect_true(inherits(americas_multiple,"data.frame"))
- })
+# })
 
- test_that("dataframe contains expected data", {
+# test_that("dataframe contains expected data", {
    #confirm column names are as expected
    expect_equal(sort(names(Brazil_all)),sort(c("site_id","latitude","longitude","country","country_id","continent_id","month_start","year_start","month_end","year_end","anopheline_id","species","species_plain","id_method1","id_method2","sample_method1","sample_method2","sample_method3","sample_method4","assi","citation","geom","time_start","time_end")))
    expect_equal(sort(names(Brazil_darlingi)),sort(c("site_id","latitude","longitude","country","country_id","continent_id","month_start","year_start","month_end","year_end","anopheline_id","species","species_plain","id_method1","id_method2","sample_method1","sample_method2","sample_method3","sample_method4","assi","citation","geom","time_start","time_end")))
@@ -43,10 +46,12 @@
    expect_true(unique(Brazil_all$month_end[!is.na(Brazil_all$month_end)] %in% c(1:12)))
    expect_true(unique(Brazil_darlingi$month_start[!is.na(Brazil_darlingi$month_start)] %in% c(1:12)))
    expect_true(unique(Brazil_darlingi$month_end[!is.na(Brazil_darlingi$month_end)] %in% c(1:12)))
- })
+# })
 
 
 test_that("error messages are appropriate to given error", {
+  
+  skip_on_cran()
   expect_error(getVecOcc(country = "madgascar"), regexp = "did you mean Madagascar?")
   expect_error(getVecOcc(country = "xxxx"), regexp = "Data not found for 'Xxxx', use listPoints()")
 })
