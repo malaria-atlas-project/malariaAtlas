@@ -234,11 +234,11 @@ getVecOcc <- function(country = NULL,
 #' # Filter data.frame then readd vector points class so autoplot can be used. 
 #' Brazil_vec %>% 
 #'   filter(sample_method1 == 'larval collection') %>% 
-#'   as.vector.points %>% 
+#'   as.vectorpoints %>% 
 #'   autoplot
 #' }
 
-as.vector.points <- function(x){
+as.vectorpoints <- function(x){
   
   expected_col_names <- c("site_id", "latitude", "longitude", "country", "country_id", 
                           "continent_id", "month_start", "year_start", "month_end", "year_end", 
