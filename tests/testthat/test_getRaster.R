@@ -77,6 +77,8 @@ test_that('All combinations of spatially aligned requests work', {
 
 
 test_that('arg length mismatched work', {
+  skip_on_cran()
+  
   expect_error(
     MDG_rasters <- getRaster(surface = c("Plasmodium falciparum PR2-10",
                                          'Plasmodium falciparum Incidence',
@@ -88,6 +90,7 @@ test_that('arg length mismatched work', {
 
 
 test_that('Wrong name errors correctly', {
+  skip_on_cran()
   expect_error(
     MDG_rasters <- getRaster(surface = "Plasmodium falciparum PR2",
                              year = NA),
@@ -98,6 +101,8 @@ test_that('Wrong name errors correctly', {
 
 
 test_that('Wrong year errors correctly', {
+  skip_on_cran()
+  
   expect_error(
     MDG_rasters <- getRaster(surface = "Plasmodium falciparum PR2-10",
                              year = 1902),
@@ -107,6 +112,8 @@ test_that('Wrong year errors correctly', {
 
 
 test_that('Mosquito layers work correctly', {
+  skip_on_cran()
+  
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
   MDG_anoph1 <- getRaster(surface = "Anopheles arabiensis Patton, 1905", shp = MDG_shp, vector_year = 2010)
   MDG_anoph2 <- getRaster(surface = "Anopheles arabiensis Patton, 1905", shp = MDG_shp, vector_year = 2017)
@@ -117,7 +124,3 @@ test_that('Mosquito layers work correctly', {
 
 
 
-test_that('arg length mismatched work', {
-  expect_error(get
-               
-})
