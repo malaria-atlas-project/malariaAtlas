@@ -116,3 +116,11 @@ test_that('DL all works', {
 })
 
 
+test_that('No location errors properly', {
+  skip_on_cran()
+  expect_error(
+    d <- getPR(species = 'Pf', country = NULL),
+    regexp = 'Must specify one of'
+  )
+
+})
