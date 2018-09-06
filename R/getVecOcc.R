@@ -72,7 +72,7 @@ getVecOcc <- function(country = NULL,
     species_URL <- paste0("%20AND%20species_plain%20IN%20(",species_names, ")")
   }
   
-  if(!("all" %in% species)){ 
+  if(!("all" %in% tolower(species))){ 
     if(all(!(species %in% available_species$species_plain))){
       message("Species not recognised check species availability with listSpecies()")
     } else if(any(!(species %in% available_species$species_plain))){
@@ -96,18 +96,17 @@ getVecOcc <- function(country = NULL,
       "Importing vector occurence data for all locations, please wait...",
       sep = ""
     ))
-    
-    
+
+    full_URL <- paste(URL,
+                      columns,
+                      species_URL,
+                      sep = "")
+
     df <- 
-      utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,-1]
+      utils::read.csv(full_URL, encoding = "UTF-8")[,-1]
     message("Data downloaded for all available locations.")
     
-    class(df) <- c("vector.points", class(df))
-    
-    return(df)
-    
-    
-  } else{
+  } else {
     ##added the species part
     if (any(c(!is.null(country),!is.null(ISO),!is.null(continent),!is.null(species)))) {  
       if (!(is.null(country))) {
@@ -204,13 +203,13 @@ getVecOcc <- function(country = NULL,
               paste0(unique(df$species_plain))
       )
     }
-    
-    class(df) <- c("vector.points", class(df))
-    
-    return(df)
+  }
   
-  }
-  }
+  class(df) <- c("vector.points", class(df))
+  
+  return(df)
+  
+}
 
 
 

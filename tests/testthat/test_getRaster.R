@@ -59,3 +59,11 @@ test_that('All combinations of spatially aligned requests work', {
   expect_true(inherits(MDG_tvr_tvr_s, 'RasterBrick'))
   # p <- autoplot_MAPraster(MDG_tvr_tvr_s)
 })
+
+
+
+
+test_that('arg length mismatched work', {
+  expect_error(get
+               
+})

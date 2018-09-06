@@ -96,6 +96,10 @@ test_that("extent argument works", {
   expect_true(nrow(d) > 0)
   expect_true(length(unique(d$country)) > 1)
   
+  d2 <- getVecOcc(extent = matrix(c(-100, -30, -40, -10), nrow = 2), species = 'Anopheles gambiae')
+  expect_true(inherits(d, 'vector.points'))
+  expect_true(nrow(d) > 0)
+  expect_true(length(unique(d$country)) > 1)
   
   
 })
