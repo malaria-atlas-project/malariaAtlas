@@ -115,7 +115,51 @@ test_that("downloaded data.frame is in the correct format",{
 
 #test_that("available_admin_stored object is stored in hidden environment",{
   expect_true(exists("available_admin_stored", envir = .malariaAtlasHidden))
+  
+  
+  # Test that admin level works.
+  
+  dd1 <- listShp(printed = FALSE, admin_level = 'admin0')
+  dd2 <- listShp(printed = FALSE, admin_level = 'admin1')
+  
+  expect_true(nrow(dd1) < nrow(dd2))
+  
 })
+
+
+context("Test listData wrapper.")
+
+test_that('All options for list data work.', {
+    
+  skip_on_cran()
+  d1 <- listData(datatype = 'pr points', printed = FALSE)
+  d2 <- listData(datatype = 'vector points', printed = FALSE)
+  d3 <- listData(datatype = 'raster', printed = FALSE)
+  d4 <- listData(datatype = 'shape', printed = FALSE)
+  expect_true(inherits(d1, 'data.frame'))
+  expect_true(inherits(d2, 'data.frame'))
+  expect_true(inherits(d3, 'data.frame'))
+  expect_true(inherits(d4, 'data.frame'))
+  
+  expect_error(
+    de <- listData(datatype = 'awdd'),
+    regexp = 'Please choose one of'
+  )
+    
+  # Defaults to NULL. Maybe this is not a useful default but not terrible
+  expect_error(
+    de <- listData()
+  )
+  
+  # Check that dots work
+  d5 <- listData(datatype = 'shape', printed = FALSE, admin_level = 'admin0')
+
+  expect_true(inherits(d5, 'data.frame'))
+  expect_true(nrow(d4) > nrow(d5))
+  
+            
+  }
+)
 
 
 
