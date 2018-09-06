@@ -93,6 +93,7 @@ test_that("data is downloaded as a data.frame", {
 })
 
 test_that('Extent works', {
+  skip_on_cran()
   d <- getPR(species = 'both', extent = matrix(c(0, -30, 40, 10), nrow = 2))
   expect_true(inherits(d, 'pr.points'))
   expect_true(nrow(d) > 0)
@@ -102,5 +103,16 @@ test_that('Extent works', {
   
 })
 
+
+test_that('DL all works', {
+  skip_on_cran()
+  expect_message(
+    d <- getPR(species = 'Pf', country = 'all'),
+    regexp = 'Importing PR point data for all'
+  )
+  expect_true(inherits(d, 'pr.points'))
+  expect_true(nrow(d) > 0)
+  
+})
 
 
