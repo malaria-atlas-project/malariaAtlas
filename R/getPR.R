@@ -416,3 +416,55 @@ pr_wide2long <- function(object) {
   
   return(object)
 }
+
+#' Convert data.frames to pr.points objects.
+#' 
+#' Will create empty columns for any missing columns expected in a pr.points data.frame.
+#' This function is particularly useful for use with packages like dplyr that strip 
+#' objects of their classes.
+#' 
+#' @param x A data.frame
+#' 
+#' 
+#' @export
+#' 
+#' @examples
+#' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
+#' \donttest{
+#' NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
+#' 
+#' # Filter the data frame then readd pr.points class so that autoplot can be used.
+#' NGA_CMR_PR %>% 
+#'   filter(year_start > 2010) %>% 
+#'   as.pr.points %>% 
+#'   autoplot
+#'
+#' }
+
+as.pr.points <- function(x){
+  
+  expected_col_names <- c("dhs_id", "site_id", "site_name", "latitude", "longitude", 
+                          "rural_urban", "country", "country_id", "continent_id", "month_start", 
+                          "year_start", "month_end", "year_end", "lower_age", "upper_age", 
+                          "examined", "positive", "pr", "species", "method", "rdt_type", 
+                          "pcr_type", "malaria_metrics_available", "location_available", 
+                          "permissions_info", "citation1", "citation2", "citation3")
+  
+  missing_columns <- expected_col_names[!(expected_col_names %in% names(x))]
+  
+  stopifnot(inherits(x, 'data.frame'))
+  
+  if(length(missing_columns < 0)){
+    warning('Creating columns of NAs: ', paste0(missing_columns, collapse = ', '))
+    newcols <- data.frame(matrix(NA, ncol = length(missing_columns), nrow = nrow(x)))
+    names(newcols) <- missing_columns
+    x <- cbind(x, newcols)
+  }
+  
+  class(x) <- c('pr.points', class(x))
+  return(x)
+}
+
+
+
+

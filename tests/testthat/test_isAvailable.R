@@ -7,6 +7,8 @@ context("Using isAvailable to check whether there are PR and Vector points for s
 
 
 test_that("correct error messages are returned for various combinations of countries and sourcedata", {
+  
+  skip_on_cran()
 #one right
   expect_message(isAvailable(country = "Madagascar", sourcedata = "pr points"), "PR points are available for Madagascar")
   expect_message(isAvailable(country = "Myanmar", sourcedata = "vector points"), "Vector points are available for Myanmar")
@@ -53,11 +55,4 @@ test_that("correct error messages are returned for various combinations of count
   
   })
 
-test_that("isAvailable returnes the proper data frame if full_results is specified", {
-  #available column contains the right things
-  #not_available column contains the right things
-  #possible match column contains the right things
-
-
-})
 

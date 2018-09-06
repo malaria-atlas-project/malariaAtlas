@@ -1,6 +1,8 @@
 context('Test all raster combinations.')
 
 test_that('All combinations of spatially aligned requests work', {
+  
+  skip_on_cran()
   # Static
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 
@@ -110,4 +112,12 @@ test_that('Mosquito layers work correctly', {
   MDG_anoph2 <- getRaster(surface = "Anopheles arabiensis Patton, 1905", shp = MDG_shp, vector_year = 2017)
   
   expect_true(getValues(MDG_anoph1)[845] != getValues(MDG_anoph2)[845])
+})
+
+
+
+
+test_that('arg length mismatched work', {
+  expect_error(get
+               
 })
