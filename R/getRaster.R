@@ -110,7 +110,13 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
       "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':\n",
       paste("  -", surface[is.na(raster_code_list)], collapse = "\n")
     )  
-  } else{
+  } else if( length(raster_code_list) == 0 ) {
+    stop(
+      "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':\n",
+      paste("  -", surface, collapse = "\n")
+    )  
+    
+  } else {
     message("All specified surfaces are available to download.")
   }
 
