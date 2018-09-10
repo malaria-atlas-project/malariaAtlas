@@ -134,7 +134,7 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
   } else if (length(error_message) != 0) {
     warning(paste(error_message, collapse = " \n"),call. = FALSE)
   }
-      if(full_results == TRUE) {
+  if(full_results == TRUE) {
     return(checked_availability_vec)
   }
 }

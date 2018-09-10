@@ -73,15 +73,18 @@ test_that("error messages are appropriate to given error", {
 
 
 
+
 test_that("all option works", {
   
   skip_on_cran()
+
   d <- getVecOcc(country = 'all', species = 'Anopheles darlingi')
   expect_true(inherits(d, 'vector.points'))
   expect_true(nrow(d) > 0)
   expect_true(length(unique(d$country)) > 1)
   
   expect_true(length(unique(d$species)) == 1)
+
   
   
 })
