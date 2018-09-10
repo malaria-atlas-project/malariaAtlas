@@ -51,3 +51,20 @@ test_that("error messages are appropriate to given error", {
   expect_error(getVecOcc(country = "xxxx"), regexp = "Data not found for 'Xxxx', use listPoints()")
 })
 
+
+test_that("all option works", {
+  d <- getVecOcc(country = 'all', species = 'Anopheles darlingi')
+  expect_true(inherits(d, 'vector.points'))
+  expect_true(nrow(d) > 0)
+  expect_true(length(unique(d$country)) > 1)
+  
+  expect_true(length(unique(d$species)) == 1)
+})
+
+test_that("extent argument works", {
+  
+  d1 <- getVecOcc(extent = matrix(c(-100, -30, -40, -10), nrow = 2), species = 'all')
+  expect_true(inherits(d1, 'vector.points'))
+  expect_true(nrow(d1) > 0)
+  expect_true(length(unique(d1$country)) > 1)
+})
