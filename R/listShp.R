@@ -14,6 +14,9 @@
 
 listShp <- function(printed = TRUE, admin_level = c("admin0", "admin1")){
 
+  # Avoid viible bindings.
+  admn_level <- NULL
+
   if(exists('available_admin_stored', envir = .malariaAtlasHidden)){
     available_admin <- .malariaAtlasHidden$available_admin_stored
 
