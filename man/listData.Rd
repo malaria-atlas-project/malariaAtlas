@@ -4,7 +4,7 @@
 \alias{listData}
 \title{List data available to download from the MAP geoserver.}
 \usage{
-listData(datatype = NULL, printed = TRUE, ...)
+listData(datatype, printed = TRUE, ...)
 }
 \arguments{
 \item{datatype}{One of 'pr points', 'vector points', 'raster' or 'shape'}
