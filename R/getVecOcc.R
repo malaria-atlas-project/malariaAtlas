@@ -42,6 +42,7 @@ getVecOcc <- function(country = NULL,
                       continent = NULL,
                       species = "all",  
                       extent = NULL) {
+
   if (exists('available_countries_stored_vec', envir =  .malariaAtlasHidden)) {
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
   } else{
@@ -190,6 +191,7 @@ getVecOcc <- function(country = NULL,
                extent[2, 2],
                ",",
                extent[1, 2])
+
       full_URL <- paste0(URL, columns, species_URL, bbox_filter)
     }
   
