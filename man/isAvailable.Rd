@@ -26,8 +26,8 @@ isAvailable(sourcedata = NULL, full_results = FALSE, country = NULL,
 }
 \examples{
 \donttest{
-available_pr_locations <- isAvailable_pr()
-available_vector_locations <- isAvailable_vec()
+available_pr_locations <- isAvailable_pr(ISO = 'IDN')
+available_vector_locations <- isAvailable_vec(ISO = 'IDN')
 }
 }
 \seealso{

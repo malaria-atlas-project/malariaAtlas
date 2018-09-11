@@ -29,7 +29,13 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
   
   if(exists('available_countries_stored_pr', envir = .malariaAtlasHidden)){
     available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
-  }else{available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")}  
+  }else{
+    available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
+  }  
+  
+  if(is.null(country) & is.null(ISO) & is.null(continent)){
+    stop('Must specify one of country, ISO or continent.')
+  }
   
   capwords <- function(string) {
     cap <- function(s) {
