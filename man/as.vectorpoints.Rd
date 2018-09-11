@@ -16,6 +16,7 @@ objects of their classes.
 }
 \examples{
 \donttest{
+library(magrittr)
 Brazil_vec <- getVecOcc(country = "Brazil")
 
 # Filter data.frame then readd vector points class so autoplot can be used. 

@@ -39,6 +39,7 @@ Suggests: testthat,
     knitr,
     rmarkdown,
     palettetown,
+    magrittr,
     tibble
 URL: https://github.com/malaria-atlas-project/malariaAtlas
 BugReports: https://github.com/malaria-atlas-project/malariaAtlas/issues
