@@ -28,6 +28,9 @@
 #' # Download vector data for Madagascar and map the locations using autoplot
 #' Madagascar_vec <- getVecOcc(ISO = "MDG", species = "All")
 #' autoplot(Madagascar_vec)
+#' 
+#' # Subset by extent.
+#' extent_vec <- getVecOcc(extent = matrix(c(100,13,110,18), nrow = 2), species = 'all')
 #
 #' }
 #'
@@ -182,17 +185,32 @@ getVecOcc <- function(country = NULL,
                         species_URL,
                         sep = "")
     } else if(!is.null(extent)) {
-      bbox_filter <-
-        paste0("&srsName=EPSG:4326&bbox=",
-               extent[2, 1],
-               ",",
-               extent[1, 1],
-               ",",
-               extent[2, 2],
-               ",",
-               extent[1, 2])
-
-      full_URL <- paste0(URL, columns, species_URL, bbox_filter)
+      if(species == 'all'){
+        bbox_filter <-
+          paste0("&srsName=EPSG:4326&bbox=",
+                 extent[2, 1],
+                 ",",
+                 extent[1, 1],
+                 ",",
+                 extent[2, 2],
+                 ",",
+                 extent[1, 2])
+      
+        full_URL <- paste0(URL, columns, bbox_filter)
+      } else {
+        bbox_filter <-
+          paste0("BBOX(geom,",
+                 extent[2, 1],
+                 ",",
+                 extent[1, 1],
+                 ",",
+                 extent[2, 2],
+                 ",",
+                 extent[1, 2],
+                 ')&srsName=EPSG:4326')
+        species_URL <- gsub('%20AND%20', '', species_URL)
+        full_URL <- paste0(URL, columns,  "&cql_filter=", species_URL, '%20AND%20', bbox_filter)
+      }
     }
   
     

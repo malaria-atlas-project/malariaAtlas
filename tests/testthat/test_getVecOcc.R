@@ -94,15 +94,15 @@ test_that("all option works", {
 test_that("extent argument works", {
   
   skip_on_cran()
-  d1 <- getVecOcc(extent = matrix(c(-100, -30, -40, -10), nrow = 2), species = 'all')
+  d1 <- getVecOcc(extent = matrix(c(100,13,110,18), nrow = 2), species = 'all')
   expect_true(inherits(d1, 'vector.points'))
   expect_true(nrow(d1) > 0)
   expect_true(length(unique(d1$country)) > 1)
   
-  #d2 <- getVecOcc(extent = matrix(c(-100, -30, -40, -10), nrow = 2), species = 'Anopheles gambiae')
-  #expect_true(inherits(d2, 'vector.points'))
-  #expect_true(nrow(d2) > 0)
-  #expect_true(length(unique(d2$country)) > 1)
+  d2 <- getVecOcc(extent = matrix(c(100,13,110,18), nrow = 2), species = 'Anopheles dirus')
+  expect_true(inherits(d2, 'vector.points'))
+  expect_true(nrow(d2) > 0)
+  expect_true(length(unique(d2$country)) > 1)
   
   
 })
