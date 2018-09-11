@@ -42,6 +42,9 @@ autoplot(Brazil_vec)
 # Download vector data for Madagascar and map the locations using autoplot
 Madagascar_vec <- getVecOcc(ISO = "MDG", species = "All")
 autoplot(Madagascar_vec)
+
+# Subset by extent.
+extent_vec <- getVecOcc(extent = matrix(c(100,13,110,18), nrow = 2), species = 'all')
 }
 
 
