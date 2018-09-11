@@ -121,13 +121,13 @@ test_that("downloaded data.frame is in the correct format",{
   
   expect_true(exists("available_admin_stored", envir = .malariaAtlasHidden))
   returned_rows1 <- nrow(dd1)
-  stored_rows1 <- nrow(.malariaAtlasHidden$available_admin_stored)
+  stored_rows1 <- nrow(malariaAtlas:::.malariaAtlasHidden$available_admin_stored)
   
   dd2 <- listShp(printed = FALSE, admin_level = 'admin1')
   expect_true(all(dd2$admn_level == 1))
   
   returned_rows2 <- nrow(dd2)
-  stored_rows2 <- nrow(.malariaAtlasHidden$available_admin_stored)
+  stored_rows2 <- nrow(malariaAtlas:::.malariaAtlasHidden$available_admin_stored)
   
   expect_true(returned_rows1 < returned_rows2)
   expect_true(returned_rows1 == stored_rows1)
