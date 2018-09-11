@@ -38,7 +38,7 @@ See the trans argument in \code{\link{continuous_scale}} for possible values.}
 \examples{
 \donttest{
 Vector_surveys_NGA_NG <- getVecOcc(country = c("Nigeria", "Niger"))
-autoplot(Vector_surveys_NGA)
+autoplot(Vector_surveys_NGA_NG)
 
 # Download the predicted distribution of An. dirus species complex Raster and  
 #  vector points for Myanmar and visualise these together on a map.
