@@ -109,9 +109,6 @@ test_that("downloaded data.frame is in the correct format",{
   expect_true(inherits(available_admin,"data.frame"))
 #})
 
-#test_that("downloaded dataframe contains has correct number of columns",{
-  expect_equal(sort(names(available_admin)),sort(c("iso","admn_level","name_0","id_0","type_0","source","name_1","id_1","type_1")))
-#})
 
 #test_that("available_admin_stored object is stored in hidden environment",{
   expect_true(exists("available_admin_stored", envir = .malariaAtlasHidden))
