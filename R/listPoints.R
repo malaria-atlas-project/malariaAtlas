@@ -9,7 +9,8 @@
 #'
 #' @examples
 #' \donttest{
-#' listPoints()
+#' listPoints(sourcedata = "pr points")
+#' listPoints(sourcedata = "vector points")
 #' }
 #' @export listPoints
 #' @importFrom rlang .data

@@ -19,6 +19,7 @@ listPoints(printed = TRUE, sourcedata)
 }
 \examples{
 \donttest{
-listPoints()
+listPoints(sourcedata = "pr points")
+listPoints(sourcedata = "vector points")
 }
 }

@@ -22,8 +22,8 @@ listData(datatype, printed = TRUE, ...)
 \examples{
 \donttest{
 available_admin_units <- listShp()
-available_pr_points <- listPoints()
-available_vector_points <- listPoints()
+available_pr_points <- listPoints(sourcedata = "pr points")
+available_vector_points <- listPoints(sourcedata = "vector points")
 available_rasters <- listRaster()
 }
 }
