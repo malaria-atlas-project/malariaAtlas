@@ -16,7 +16,7 @@ output: md_document
 This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*), suvery occurrence data of the 41 dominant malaria vector species, and modelled raster outputs from the [Malaria Atlas Project](https://map.ox.ac.uk/).
 
 
-More details and example analyses can be found in the [https://malariajournal.biomedcentral.com/articles/10.1186/s12936-018-2500-5](published paper).
+More details and example analyses can be found in the [published paper](https://malariajournal.biomedcentral.com/articles/10.1186/s12936-018-2500-5).
 
 
 ## Available Data: 
