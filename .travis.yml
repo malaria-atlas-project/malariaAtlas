@@ -7,6 +7,7 @@ sudo: required
 # cache packages to speed up builds
 cache: packages
 
+
 addons:
   apt:
     packages:
@@ -41,6 +42,8 @@ matrix:
       r: release
     - os: linux
       r: devel
+   # - os: osx
+   #r: release
     
 
 
