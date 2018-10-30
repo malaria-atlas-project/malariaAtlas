@@ -1,0 +1,31 @@
+citHeader("To cite malariaAtlas in publications, please use following citation. However, this citation should only be used to indicate how the data was accessed. Citations for the datasets themselves can be found within the downloaded data.")
+
+citEntry(entry = "Article",
+         author = as.person(c(
+           "Daniel Pfeffer",
+           "Tim Lucas", 
+           "Daniel May",
+           "Joseph Harris",
+           "Jennifer Rozier",
+           "Katherine Twohig",
+           "Ursula Dalrymple",
+           "Carlos Guerra",
+           "Catherine Moyes",
+           "Mike Thorn",
+           "Michele Nguyen", 
+           "Samir Bhatt", 
+           "Ewan Cameron", 
+           "Daniel Weiss", 
+           "Rosalind Howes", 
+           "Katherine Battle", 
+           "Harry Gibson", 
+           "Peter Gething"
+         )),
+         journal="Malaria journal",
+  volume="17",
+  number="1",
+  pages="352",
+  year="2018", doi="https://doi.org/10.1186/s12936-018-2500-5",
+  publisher="BioMed",
+  textVersion="Pfeffer, Daniel A., Timothy CD Lucas, Daniel May, Joseph Harris, Jennifer Rozier, Katherine A. Twohig, Ursula Dalrymple et al. "malariaAtlas: an R interface to global malariometric data hosted by the Malaria Atlas Project." Malaria journal 17, no. 1 (2018): 352."
+  )
