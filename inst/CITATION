@@ -26,7 +26,8 @@ citEntry(entry = "Article",
   number="1",
   title="malariaAtlas: an R interface to global malariometric data hosted by the Malaria Atlas Project.",
   pages="352",
-  year="2018", doi="https://doi.org/10.1186/s12936-018-2500-5",
+  year="2018", 
+  doi="10.1186/s12936-018-2500-5",
   publisher="BioMed",
   textVersion="Pfeffer, D.A., Lucas, T.C., May, D., Harris, J., Rozier, J., Twohig, K.A., Dalrymple, U., Guerra, C.A., Moyes, C.L., Thorn, M., Nguyen, M., et al. 2018. malariaAtlas: an R interface to global malariometric data hosted by the Malaria Atlas Project. Malaria Journal, 17(1), p.352.
 "
