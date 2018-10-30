@@ -1,5 +1,7 @@
 ## Changes
 
+Fixed DOI as requested.
+
 Small update adding new citation info.
 
 ## Test environments
@@ -13,17 +15,7 @@ Winbuilder R version Devel (2018-10-30 r75516)
 
 ## R CMD check results
 
-No warnings, no errors.
-
-One note:
-
-Found the following (possibly) invalid DOIs:
-  DOI: https://doi.org/10.1186/s12936-018-2500-5
-    From: inst/CITATION
-    Message: Invalid DOI
-
-
-Bt this DOI is valid.
+No warnings, no errors, no notes.
 
 
 
