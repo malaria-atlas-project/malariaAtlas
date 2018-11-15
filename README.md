@@ -2,14 +2,6 @@
 Status](https://travis-ci.org/malaria-atlas-project/malariaAtlas.svg)](https://travis-ci.org/malaria-atlas-project/malariaAtlas)
 [![codecov.io](https://codecov.io/gh/malaria-atlas-project/malariaAtlas/coverage.svg?branch=master)](https://codecov.io/gh/malaria-atlas-project/malariaAtlas?branch=master)
 
-    ## Warning: package 'malariaAtlas' was built under R version 3.4.4
-
-    ## Warning: package 'rgdal' was built under R version 3.4.3
-
-    ## Warning: package 'sp' was built under R version 3.4.4
-
-    ## Warning: package 'tibble' was built under R version 3.4.3
-
 malariaAtlas
 ============
 
@@ -212,11 +204,11 @@ and returns this as either a spatialPolygon or data.frame object.
     MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 
     ## OGR data source with driver: ESRI Shapefile 
-    ## Source: "/var/folders/y7/9cklsrvj5xv607jf59znfd2c0000gn/T//RtmpUVyKTi/shp/shp6150631342cc/mapadmin_0_2018.shp", layer: "mapadmin_0_2018"
+    ## Source: "/var/folders/y7/9cklsrvj5xv607jf59znfd2c0000gn/T//Rtmp3B1JQW/shp/shp74b548b1fcef/mapadmin_0_2018.shp", layer: "mapadmin_0_2018"
     ## with 1 features
     ## It has 8 fields
     ## OGR data source with driver: ESRI Shapefile 
-    ## Source: "/var/folders/y7/9cklsrvj5xv607jf59znfd2c0000gn/T//RtmpUVyKTi/shp/shp615058691e5/mapadmin_1_2018.shp", layer: "mapadmin_1_2018"
+    ## Source: "/var/folders/y7/9cklsrvj5xv607jf59znfd2c0000gn/T//Rtmp3B1JQW/shp/shp74b51d54d432/mapadmin_1_2018.shp", layer: "mapadmin_1_2018"
     ## with 22 features
     ## It has 12 fields
 

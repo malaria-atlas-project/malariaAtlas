@@ -8,7 +8,7 @@ output:
 [![codecov.io](https://codecov.io/gh/malaria-atlas-project/malariaAtlas/coverage.svg?branch=master)](https://codecov.io/gh/malaria-atlas-project/malariaAtlas?branch=master)
 
 
-```{r, echo = FALSE, message = FALSE, results = "hide"}
+```{r, echo = FALSE, message = FALSE, results = "hide", warning = FALSE}
 library(malariaAtlas)
 library(rgdal)
 library(tibble)
