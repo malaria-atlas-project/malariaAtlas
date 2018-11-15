@@ -1,5 +1,7 @@
 ---
-output: md_document
+output: 
+  md_document:
+    preserve_yaml: false
 ---
 
 [![Build Status](https://travis-ci.org/malaria-atlas-project/malariaAtlas.svg)](https://travis-ci.org/malaria-atlas-project/malariaAtlas)
@@ -118,7 +120,7 @@ tibble::glimpse(MMR_vec_data)
 `autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points. 
 
 ```{r message = FALSE, warning = FALSE, results = "hide"}
-autoplot.vector.points(MMR_vec_data)
+autoplot(MMR_vec_data)
 ```
 
 N.B. Facet-wrapped option is also available for species stratification. 
