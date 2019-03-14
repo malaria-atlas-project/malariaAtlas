@@ -58,7 +58,7 @@ convertPrevalence <- function (prevalence,
 
   # if it's one of the existing parameter sets
   if (class(parameters) == "character" &&
-      length(parameters == 1) &&
+      length(parameters) == 1 &&
       parameters %in% c("Pf_Smith2007",
                         "Pv_Gething2012")) {
 
@@ -225,7 +225,7 @@ P <- function(A,
               b) {
 
   # check the age is sensible
-  stopifnot(A >= 0 && A <= 85)
+  stopifnot(all(A >= 0) && all(A <= 85))
 
   # check P_prime is sensible
   stopifnot(P_prime >= 0 && P_prime <= 1)
@@ -245,7 +245,7 @@ F <- function(A,
               alpha) {
 
   # check the age is sensible
-  stopifnot(A >= 0 && A <=85 )
+  stopifnot(all(A >= 0) && all(A <= 85) )
 
   # calculate expected true test sensitivity
   ans <- 1 - s * (1 - pmin(1, exp(-c * (A - alpha))))
