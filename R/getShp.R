@@ -68,11 +68,11 @@ getShp <- function(country = NULL,
     stop('admin_level must be one or more of: c("admin0", "admin1", "admin2", "admin3", "all")')
   }  
 
-  if(all(!ISO %in% c(available_admin$iso)) & !is.null(ISO)){
+  if(any(!ISO %in% available_admin$iso) & !is.null(ISO)){
     stop('One or more ISO codes are wrong')
   }  
 
-  if(all(!country %in% c(available_admin$name_0)) & !is.null(country)){
+  if(any(!country %in% available_admin$name_0) & !is.null(country)){
     stop('One or more country names are wrong')
   }  
   
