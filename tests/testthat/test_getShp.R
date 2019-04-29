@@ -76,3 +76,18 @@ test_that('Repeated getSHP works. That getting shapes from .malariaAtlasHidden d
 )
 
 
+test_that('Broken arguments get handled nicely.', {
+
+  expect_error(DRC <- getShp(ISO = "DRC"), "One or more ISO codes are wrong")
+
+  expect_error(DRC <- getShp(ISO = c("DRC", "BTN")), "One or more ISO codes are wrong")
+
+
+  expect_error(x1 <- getShp(country = "hshshs"), "One or more country names are wrong")
+
+  expect_error(x2 <- getShp(country = c("hshshs", "China")), "One or more country names are wrong")
+})
+
+
+
+
