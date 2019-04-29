@@ -72,7 +72,7 @@ getShp <- function(country = NULL,
     stop('One or more ISO codes are wrong')
   }  
 
-  if(all(!country %in% c(available_admin$name_0)) & !is.null(ISO)){
+  if(all(!country %in% c(available_admin$name_0)) & !is.null(country)){
     stop('One or more country names are wrong')
   }  
   
