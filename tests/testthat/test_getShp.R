@@ -86,8 +86,7 @@ test_that('Broken arguments get handled nicely.', {
   expect_error(x1 <- getShp(country = "hshshs"), "One or more country names are wrong")
 
   expect_error(x2 <- getShp(country = c("hshshs", "China")), "One or more country names are wrong")
-}
-
+})
 
 
 
