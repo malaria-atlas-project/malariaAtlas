@@ -1,7 +1,7 @@
 # Continuous integration with travis
 language: r
 sudo: required
-
+dist: trusty
 
 
 # cache packages to speed up builds
