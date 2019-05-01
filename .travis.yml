@@ -6,6 +6,8 @@ sudo: required
 # cache packages to speed up builds
 cache: packages
 
+before_install:
+  sudo apt-get install texinfo
 
 addons:
   apt:
