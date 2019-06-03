@@ -59,6 +59,7 @@ message("Downloading list of available rasters...")
   max_raster_years <- suppressWarnings(as.numeric(unname(sapply(X = gsub(".*/(.*?)/.*$","\\1", dims),FUN = substr, 1,4))))
   #pub_years <- as.numeric(as.character(unname(sapply( X = sapply(layers, function(x){sub("^pub_year:","",grep("^pub_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))))
   categories <- unname(sapply( X = sapply(layers, function(x){sub("^category:","",grep("^category:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))
+  downloadable <- unname(sapply( X = sapply(layers, function(x){sub("^download:","",grep("^download:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))
 
 
   # extract raster metadata from layers list & turn this into dataframe
@@ -71,9 +72,11 @@ message("Downloading list of available rasters...")
                                   "min_raster_year" = min_raster_years,
                                   "max_raster_year" =  max_raster_years,
                                   "category" = categories,
+                                  "downloadable" = downloadable,
                                   stringsAsFactors = FALSE)
 
   available_rasters <- available_rasters[available_rasters$category %in% "surfaces",-which(names(available_rasters)=="category")]
+  available_rasters <- available_rasters[!available_rasters$downloadable %in% "false",-which(names(available_rasters)=="downloadable")]
 
   available_rasters <- clean_mosquito_names(available_rasters)
   
