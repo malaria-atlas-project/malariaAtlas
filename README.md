@@ -7,6 +7,11 @@ malariaAtlas
 
 ### An R interface to open-access malaria data, hosted by the Malaria Atlas Project.
 
+### NB. The new global incidence and prevalence rasters on the data explorer are not yet available for download. They will be when the papers are published (soon).
+
+
+
+
 Overview
 ========
 
