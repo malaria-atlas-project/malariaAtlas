@@ -4,11 +4,12 @@
 #' @inheritParams rdhs::as_factor
 #' @param data Data to add DHS coordinates to
 #' @examples 
-#' 
+#' \dontrun{
 #' pf <- malariaAtlas::getPR("all",species = "pf")
 #' pf <- fillDHSCoordinates(pf, 
-#' email = "rdhs.tester@gmail.com",
-#' project = "Testing Malaria Investigations")
+#' email = "pretend_email@gmail.com",
+#' project = "pretend project name")
+#' }
 
 fillDHSCoordinates <- function(data,
                                email = NULL, project = NULL, 
@@ -29,11 +30,7 @@ fillDHSCoordinates <- function(data,
   dhs_id_stems <- dhs_id_stems[nchar(dhs_id_stems)==6]
   
   # then there are some odd dhs ids I noticed
-  dhs_id_stems[dhs_id_stems=="MDG201"] <- "MD2011"
-  
-  # I couldn't find the following ids in the datasets
-  # dhs_id_stems[dhs_id_stems=="BI2012"] <- "BU2012"
-  # dhs_id_stems[dhs_id_stems=="MZ2014"] <- "MZ2014"
+  dhs_id_stems[dhs_id_stems=="MDG201"] <- "MDG2011"
   
   # find the necessary geographic data files from the DHS API
   dats <- rdhs::dhs_datasets(countryIds = unique(substr(dhs_id_stems, 1, 2)),
