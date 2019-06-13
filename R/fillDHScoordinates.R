@@ -1,8 +1,18 @@
 #' Add DHS locations to malaria data
 #'
+#' We cannot directly share DHS data. WE can share coordinates,
+#'   but not the data values. This function attempted to fill
+#'   the data gaps directly from the DHS server using the package
+#'   rdhs. To use the function you will need to setup an 
+#'   account on the DHS website and request any datasets you wish
+#'   to use (including requesting the GPS data). Once this has 
+#'   been verified, you should be able to use this function.
+#'  
+#' 
 #'
 #' @inheritParams rdhs::as_factor
 #' @param data Data to add DHS coordinates to
+#' @author OJ Watson
 #' @examples 
 #' \dontrun{
 #' pf <- malariaAtlas::getPR("all",species = "pf")
@@ -19,8 +29,12 @@ fillDHSCoordinates <- function(data,
                                timeout = 30, password_prompt = FALSE, 
                                prompt = TRUE) {
   
+  if(!require('rdhs')){
+    stop('The function fillDHSCoordinates needs the package rdhs')
+  }
+  
   # set up a config for rdhs
-  set_rdhs_config(email = email, project = project, cache_path = cache_path, config_path = config_path, 
+  rdhs::set_rdhs_config(email = email, project = project, cache_path = cache_path, config_path = config_path, 
                   global = global, verbose_download = verbose_download, verbose_setup = verbose_setup, 
                   data_frame = data_frame, timeout = timeout, password_prompt = password_prompt, 
                   prompt = prompt)
@@ -39,7 +53,7 @@ fillDHSCoordinates <- function(data,
   dats <- dats[which(substr(dats$SurveyId, 1, 6) %in% dhs_id_stems),]
   
   # download the datasets
-  geo <- get_datasets(dats)
+  geo <- rdhs::get_datasets(dats)
   no_permission <- "Dataset is not available with your DHS login credentials"
   geo <- geo[-which(unlist(geo) == no_permission)]
   
