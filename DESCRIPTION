@@ -35,8 +35,6 @@ Imports:
   stats,
   utils,
   rlang
-Suggests:
-  rdhs
 Remotes: cran/rgdal@1.3-9
 Depends: ggplot2
 RoxygenNote: 6.1.0
@@ -45,7 +43,8 @@ Suggests: testthat,
     rmarkdown,
     palettetown,
     magrittr,
-    tibble
+    tibble,
+    rdhs
 URL: https://github.com/malaria-atlas-project/malariaAtlas
 BugReports: https://github.com/malaria-atlas-project/malariaAtlas/issues
 VignetteBuilder: knitr
