@@ -9,7 +9,7 @@ malariaAtlas
 
 This now includes our new global rasters for Plasmodium falciparum and P. vivax.
 
-Please note that the new global rasters for PfPR is named "Plasmodium falciparum PR2 - 10" while the older, Africa only rasters are called "Plasmodium falciparum PR2-10". We're going to work out a better naming convention soon!
+Please note that the new global rasters for PfPR is named "Plasmodium falciparum PR2 - 10" while the older, Africa only rasters are called "Plasmodium falciparum PR2-10". Similarly the new P. falciparum incidence rasters are called "Plasmodium  falciparum  Incidence." with double spaces and a full stop. We're going to work out a better naming convention soon!
 
 Overview
 ========
