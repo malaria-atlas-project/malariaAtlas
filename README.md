@@ -7,10 +7,9 @@ malariaAtlas
 
 ### An R interface to open-access malaria data, hosted by the Malaria Atlas Project.
 
-### NB. The new global incidence and prevalence rasters on the data explorer are not yet available for download. They will be when the papers are published (soon).
+This now includes our new global rasters for Plasmodium falciparum and P. vivax.
 
-
-
+Please note that the new global rasters for PfPR is named "Plasmodium falciparum PR2 - 10" while the older, Africa only rasters are called "Plasmodium falciparum PR2-10". We're going to work out a better naming convention soon!
 
 Overview
 ========
