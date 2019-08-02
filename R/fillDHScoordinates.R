@@ -9,6 +9,10 @@
 #'   can take a few days. Once this has been verified, you should be 
 #'   able to use this function.
 #'
+#' This function requires the package \code{rdhs} which is currently
+#'   only suggested by the package (not a dependency). So you will
+#'   need to install it. 
+#'
 #' Note that the \code{project} has to be the exact name in your
 #'   DHS project.
 #'  
@@ -62,7 +66,7 @@ fillDHSCoordinates <- function(data,
                                prompt = TRUE) {
   
   if(!require('rdhs')){
-    stop('The function fillDHSCoordinates needs the package rdhs')
+    stop('The function fillDHSCoordinates needs the package rdhs. Please install it with install.packages("rdhs")')
   }
   
   # set up a config for rdhs
