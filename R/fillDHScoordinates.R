@@ -17,7 +17,7 @@
 #'   DHS project.
 #'  
 #' 
-#'
+#' @export
 #' @param data Data to add DHS coordinates to
 #' @param email Character for email used to login to the DHS website.
 #' @param project Character for the name of the DHS project from which

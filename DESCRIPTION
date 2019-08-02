@@ -1,6 +1,6 @@
 Package: malariaAtlas
 Title: An R Interface to Open-Access Malaria Data, Hosted by the 'Malaria Atlas Project'
-Version: 0.0.3
+Version: 0.0.4
 Date: 2018-10-30
 Authors@R: c(
     person("Daniel", "Pfeffer", email = "daniel.pfeffer@uqconnect.edu.au", role = c("aut"), comment = c(ORCID = "0000-0002-2204-3488")),
