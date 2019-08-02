@@ -82,7 +82,9 @@ if(is.null(shp_df)){
     admin_level_request <- admin_level
   }
   
-  pr_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level_request)
+  unique_iso <- unique(object$country_id)
+  unique_iso <- unique_iso[unique_iso != '']
+  pr_shp <- getShp(ISO = unique_iso, format = "df", admin_level = admin_level_request)
 
   if(admin_level == "admin0"){
     pr_plot <-  ggplot2::ggplot()+
