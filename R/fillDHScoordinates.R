@@ -65,7 +65,7 @@ fillDHSCoordinates <- function(data,
                                timeout = 30, password_prompt = FALSE, 
                                prompt = TRUE) {
   
-  if(!require('rdhs')){
+  if(!requireNamespace('rdhs')){
     stop('The function fillDHSCoordinates needs the package rdhs. Please install it with install.packages("rdhs")')
   }
   
@@ -112,7 +112,7 @@ fillDHSCoordinates <- function(data,
       shp <- readRDS(geo[[file_name]])@data
       matches <- match(shp$DHSID,data$dhs_id)
       
-      data[na.omit(matches), mis_info] <- shp[which(!is.na(matches)), dhs_info]
+      data[stats::na.omit(matches), mis_info] <- shp[which(!is.na(matches)), dhs_info]
       
     } 
   }
