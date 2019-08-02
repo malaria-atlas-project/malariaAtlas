@@ -22,9 +22,9 @@ getPR(country = NULL, ISO = NULL, continent = NULL, species,
 \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 
 \enumerate{
-\item \code{COLUMNNAME} description of contents
-\item \code{COLUMNNAME} description of contents
-\item \code{COLUMNNAME} description of contents
+\item \code{dhs_id} The dhs survey id if appropriate.
+\item \code{site_id} Unique site identifier
+\item \code{site_name} Name of site.
 }
 }
 \description{
@@ -32,6 +32,8 @@ getPR(country = NULL, ISO = NULL, continent = NULL, species,
 }
 \details{
 \code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as Mayotte and French Guiana.
+While we cannot direectly distribute DHS coordinates, we can distribute the number of examined and positive. If the coordinates
+are needed they can be downloaded from www.measuredhs.com, via the rdhs package or using malariaAtlas:fillDHSCoordinates().
 }
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
