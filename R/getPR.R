@@ -3,6 +3,8 @@
 #' \code{getPR} downloads all publicly available PR points for a specified country (or countries) and returns this as a dataframe.
 #'
 #' \code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as Mayotte and French Guiana.
+#' While we cannot direectly distribute DHS coordinates, we can distribute the number of examined and positive. If the coordinates
+#' are needed they can be downloaded from www.measuredhs.com, via the rdhs package or using malariaAtlas:fillDHSCoordinates().
 #'
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
@@ -14,9 +16,9 @@
 #' @return \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 #'
 #' \enumerate{
-#' \item \code{COLUMNNAME} description of contents
-#' \item \code{COLUMNNAME} description of contents
-#' \item \code{COLUMNNAME} description of contents
+#' \item \code{dhs_id} The dhs survey id if appropriate.
+#' \item \code{site_id} Unique site identifier
+#' \item \code{site_name} Name of site.
 #' }
 #'
 #' @examples
@@ -199,7 +201,7 @@ getPR <- function(country = NULL,
   
   if (any(grepl("dhs", df$permissions_info))) {
     message(
-      "NOTE: Downloaded data includes data points from DHS surveys. \nMAP cannot share DHS survey cluster coordinates, but these are available from www.measuredhs.com."
+      "NOTE: Downloaded data includes data points from DHS surveys. \nMAP cannot share DHS survey cluster coordinates, but these are available from www.measuredhs.com, via the rdhs package or using malariaAtlas:fillDHSCoordinates()."
     )
   }
   
