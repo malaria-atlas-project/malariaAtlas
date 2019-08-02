@@ -34,7 +34,6 @@ Imports:
   stats,
   utils,
   rlang
-Remotes: cran/rgdal@1.3-9
 Depends: ggplot2
 RoxygenNote: 6.1.0
 Suggests: testthat,
