@@ -89,6 +89,7 @@ fillDHSCoordinates <- function(data,
   dats <- dats[which(substr(dats$SurveyId, 1, 6) %in% dhs_id_stems),]
   
   # download the datasets
+  message('Downloading DHS data.')
   geo <- rdhs::get_datasets(dats)
   no_permission <- "Dataset is not available with your DHS login credentials"
   geo <- geo[-which(unlist(geo) == no_permission)]
