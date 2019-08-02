@@ -53,7 +53,7 @@
 #' \dontrun{
 #' pf <- malariaAtlas::getPR("all",species = "pf")
 #' pf <- fillDHSCoordinates(pf, 
-#' email = "pretend_email@gmail.com",
+#' email = "pretend_email@emaildomain.com",
 #' project = "pretend project name")
 #' }
 

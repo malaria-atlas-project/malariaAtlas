@@ -11,21 +11,70 @@ fillDHSCoordinates(data, email = NULL, project = NULL, cache_path = NULL,
 }
 \arguments{
 \item{data}{Data to add DHS coordinates to}
+
+\item{email}{Character for email used to login to the DHS website.}
+
+\item{project}{Character for the name of the DHS project from which
+datasets should be downloaded.}
+
+\item{cache_path}{Character for directory path where datasets and API calls
+will be cached. If left bank, a suitable directory will be created within
+your user cache directory for your operating system (permission granting).}
+
+\item{config_path}{Character for where the config file should be saved.
+For a global configuration, `config_path` must be '~/.rdhs.json'.
+For a local configuration, `config_path` must be 'rdhs.json'.
+If left bank, the config file will be stored within
+your user cache directory for your operating system (permission granting).}
+
+\item{global}{Logical for the config_path to be interpreted as a global
+config path or a local one. Default = TRUE.}
+
+\item{verbose_download}{Logical for dataset download progress bars to be
+shown. Default = FALSE.}
+
+\item{verbose_setup}{Logical for rdhs setup and messages to be printed.
+Default = TRUE.}
+
+\item{data_frame}{Function with which to convert API calls into. If left
+blank \code{data_frame} objects are returned. Must be passed as a
+character. Examples could be:
+\code{data.table::as.data.table}
+\code{tibble::as.tibble}}
+
+\item{timeout}{Numeric for how long in seconds to wait for the DHS API to
+respond. Default = 30.}
+
+\item{password_prompt}{Logical whether user is asked to type their password,
+even if they have previously set it. Default = FALSE. Set to TRUE if you
+have mistyped your password when using \code{set_rdhs_config}.}
+
+\item{prompt}{Logical for whether the user should be prompted for
+permission to write to files. This should not need be}
 }
 \description{
-We cannot directly share DHS data. WE can share coordinates,
-  but not the data values. This function attempted to fill
+We cannot directly share DHS data. We can share coordinates,
+  but not the data values. This function attempts to fill
   the data gaps directly from the DHS server using the package
   rdhs. To use the function you will need to setup an 
   account on the DHS website and request any datasets you wish
-  to use (including requesting the GPS data). Once this has 
-  been verified, you should be able to use this function.
+  to use (including requesting the GPS data). Confirmation
+  can take a few days. Once this has been verified, you should be 
+  able to use this function.
+}
+\details{
+This function requires the package \code{rdhs} which is currently
+  only suggested by the package (not a dependency). So you will
+  need to install it.
+
+Note that the \code{project} has to be the exact name in your
+  DHS project.
 }
 \examples{
 \dontrun{
 pf <- malariaAtlas::getPR("all",species = "pf")
 pf <- fillDHSCoordinates(pf, 
-email = "pretend_email@gmail.com",
+email = "pretend_email@emaildomain.com",
 project = "pretend project name")
 }
 }
