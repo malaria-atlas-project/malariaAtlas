@@ -33,7 +33,12 @@ listShp <- function(printed = TRUE, admin_level = c("admin0", "admin1")){
                   "admin3" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_3_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,name_3,id_3,type_3,source"))
     
     use_URL_list <- URL_list[names(URL_list) %in% admin_level & !(0:3) %in% available_admin$admn_level]
-    available_admin_new <- lapply(X = use_URL_list, FUN = utils::read.csv, encoding = "UTF-8")
+    available_admin_new <- try(lapply(X = use_URL_list, FUN = utils::read.csv, encoding = "UTF-8"))
+    if(inherits(available_admin_new, 'try-error')){
+      message(available_admin_new[1])
+      return(available_admin_new)
+    }
+    
     
     available_admin <- suppressWarnings(dplyr::bind_rows(available_admin_new, available_admin))
     
