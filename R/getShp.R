@@ -293,7 +293,11 @@ downloadShp <- function(URL) {
   dir.create(uzipdir)
   # download shapefile to temp directory & extract shapefilepath & layername
   
-  r <- httr::GET(utils::URLencode(URL), httr::write_disk(temp, overwrite = TRUE))
+  r <- try(httr::GET(utils::URLencode(URL), httr::write_disk(temp, overwrite = TRUE)))
+  if(inherits(r, 'try-error')){
+    message(r[1])
+    return(r)
+  }
   
   utils::unzip(temp, exdir = uzipdir)
   shp <- dir(uzipdir, "*.shp$")
