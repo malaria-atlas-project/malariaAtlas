@@ -109,13 +109,13 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
     message1 <- "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':"
     
                       
-    warning(message1, '\n', paste("  -", surface[is.na(raster_code_list)], collapse = "\n"))  
+    message(message1, '\n', paste("  -", surface[is.na(raster_code_list)], collapse = "\n"))  
     return(paste0(message1, paste("  ", surface[is.na(raster_code_list)], collapse = ", ")))
   } else if( length(raster_code_list) == 0 ) {
     message1 <- "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':"
     
     
-    warning(message1, '\n', paste("  -", surface, collapse = "\n"))  
+    message(message1, '\n', paste("  -", surface, collapse = "\n"))  
     return(paste0(message1, paste("  ", surface, collapse = ", ")))
     
   } else {
@@ -193,7 +193,7 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   if (year_warnings > 0) {
     message <- "Specified surfaces are not available for all requested years. \n Try downloading surfaces separately or double-check availability of 'surface'-'year' combinations using listRaster()\n see warnings() for more info."
 
-    warning(message)
+    message(message)
     return(message)
   }
   
@@ -235,7 +235,7 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   # Return error if new rasters are not found
   if (length(newrst) == 0) {
     message <- "Raster download error: check surface and/or extent are specified correctly"
-    warning(message)
+    message(message)
     return(message)
     # If only one new raster is found, read this in
   } else if (length(newrst) == 1) {
@@ -380,7 +380,7 @@ download_rst <-
       
       if (!"image/geotiff" %in% r$headers$`content-type`) {
         file.remove(rst_path)
-        warning(
+        message(
           "Raster download error - check ",
           raster_code,
           " surface is available for specified extent at map.ox.ac.uk/explorer."
@@ -398,8 +398,8 @@ download_rst <-
     }
     
     if (download_warnings > 0) {
-      message <- paste0(download_warnings, " Raster download error(s) check warnings() for details.")
-      warning(message)
+      message <- paste0(download_warnings, " Raster download error(s). Details have been returned.")
+      message(message)
       return(message)
     }
     
