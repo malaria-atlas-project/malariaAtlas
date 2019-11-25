@@ -103,11 +103,12 @@ test_that('Wrong name errors correctly', {
 
 test_that('Wrong year errors correctly', {
   skip_on_cran()
+ 
+  MDG_rasters <- getRaster(surface = "Plasmodium falciparum PR2-10",
+                           year = 1902)
   
-  expect_error(
-    MDG_rasters <- getRaster(surface = "Plasmodium falciparum PR2-10",
-                             year = 1902),
-    regexp = 'not available for all requested years')
+  expect_true(inherits(MDG_rasters, 'character'))
+  expect_true(grepl('not available for all requested years', MDG_rasters))
   
 })
 
