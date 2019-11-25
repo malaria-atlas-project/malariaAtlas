@@ -129,7 +129,7 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
     
   }
   if(identical(checked_availability_vec$location[checked_availability_vec$is_available==0], location_input_vec)) {
-    stop("Specified location not found, see below comments: \n \n",
+    message("Specified location not found, see below comments: \n \n",
          paste(error_message, collapse = " \n"))
   } else if (length(error_message) != 0) {
     warning(paste(error_message, collapse = " \n"),call. = FALSE)
