@@ -36,7 +36,12 @@ listSpecies <- function(printed = TRUE){
     columns <- 
       "&PROPERTYNAME=species_plain,country"
     
-    available_species <- unique(utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,c("species_plain", "country")]) 
+    available_species <- try(unique(utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[,c("species_plain", "country")]) )
+    if(inherits(available_species, 'try-error')){
+      message(available_species[1])
+      return(available_species)
+    }
+    
     available_species <- dplyr::select(available_species, species_plain, country)
 
     #Just to avoid visible binding notes
