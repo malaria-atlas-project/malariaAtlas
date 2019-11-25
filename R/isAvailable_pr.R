@@ -132,7 +132,7 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
     
   }
   if(identical(checked_availability_pr$location[checked_availability_pr$is_available==0], location_input_pr)) {
-    stop("Specified location not found, see below comments: \n \n",
+    message("Specified location not found, see below comments: \n \n",
          paste(error_message, collapse = " \n"))
   } else if (length(error_message) != 0) {
     warning(paste(error_message, collapse = " \n"),call. = FALSE)
