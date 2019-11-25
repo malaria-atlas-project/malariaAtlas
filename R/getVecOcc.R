@@ -49,7 +49,11 @@ getVecOcc <- function(country = NULL,
   if (exists('available_countries_stored_vec', envir =  .malariaAtlasHidden)) {
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
   } else{
-    available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")     
+    available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")
+    if(inherits(available_countries_vec, 'try-error')){
+      message(available_countries_vec)
+      return(available_countries_vec)
+    }
   }
   
   if(is.null(country) & 
