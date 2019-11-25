@@ -106,15 +106,17 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   }
 
   if (anyNA(raster_code_list)) {
-    stop(
-      "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':\n",
-      paste("  -", surface[is.na(raster_code_list)], collapse = "\n")
-    )  
+    message1 <- "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':"
+    
+                      
+    warning(message1, '\n', paste("  -", surface[is.na(raster_code_list)], collapse = "\n"))  
+    return(paste0(message1, paste("  ", surface[is.na(raster_code_list)], collapse = ", ")))
   } else if( length(raster_code_list) == 0 ) {
-    stop(
-      "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':\n",
-      paste("  -", surface, collapse = "\n")
-    )  
+    message1 <- "The following surfaces have been incorrectly specified, use listRaster to confirm spelling of raster 'title':"
+    
+    
+    warning(message1, '\n', paste("  -", surface, collapse = "\n"))  
+    return(paste0(message1, paste("  ", surface, collapse = ", ")))
     
   } else {
     message("All specified surfaces are available to download.")
@@ -189,9 +191,10 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   }
   
   if (year_warnings > 0) {
-    stop(
-      "Specified surfaces are not available for all requested years,. \n Try downloading surfaces separately or double-check availability of 'surface'-'year' combinations using listRaster()\n see warnings() for more info."
-    )
+    message <- "Specified surfaces are not available for all requested years. \n Try downloading surfaces separately or double-check availability of 'surface'-'year' combinations using listRaster()\n see warnings() for more info."
+
+    warning(message)
+    return(message)
   }
   
   ## create directory to which rasters will be downloaded
@@ -231,7 +234,9 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   
   # Return error if new rasters are not found
   if (length(newrst) == 0) {
-    stop("Raster download error: check surface and/or extent are specified correctly")
+    message <- "Raster download error: check surface and/or extent are specified correctly"
+    warning(message)
+    return(message)
     # If only one new raster is found, read this in
   } else if (length(newrst) == 1) {
     rst_dl <- raster::raster(file.path(rstdir, newrst))
@@ -393,11 +398,12 @@ download_rst <-
     }
     
     if (download_warnings > 0) {
-      stop(download_warnings,
-           " Raster download error(s) check warnings() for details.")
+      message <- paste0(download_warnings, " Raster download error(s) check warnings() for details.")
+      warning(message)
+      return(message)
     }
     
-  }
+}
 
 
 # TEST_SHP <- getShp(ISO = "MDG", admin_level = "admin0")
