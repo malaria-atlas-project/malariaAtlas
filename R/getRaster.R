@@ -86,23 +86,23 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
   
   
   if(length(raster_code_list)!=length(surface)&any(grepl("anoph", raster_code_list, ignore.case = T))){
-    
-  for(i in surface){
-    if(length(as.character(available_rasters$raster_code[available_rasters$title%in%i]))>1){
-      raster_code_list_i <- as.character(available_rasters$raster_code[available_rasters$title%in%i])
       
-      idx <- raster_code_list %in% raster_code_list_i
-      
-      if(is.null(vector_year)){
-      vector_year <- max(as.numeric(substr(raster_code_list_i, 1, 4)))
+    for(i in surface){
+      if(length(as.character(available_rasters$raster_code[available_rasters$title%in%i]))>1){
+        raster_code_list_i <- as.character(available_rasters$raster_code[available_rasters$title%in%i])
+        
+        idx <- raster_code_list %in% raster_code_list_i
+        
+        if(is.null(vector_year)){
+        vector_year <- max(as.numeric(substr(raster_code_list_i, 1, 4)))
+        }
+        
+         raster_code_list <- c(raster_code_list[!idx], grep(vector_year, raster_code_list, value = TRUE))
+        
       }
       
-       raster_code_list <- c(raster_code_list[!idx], grep(vector_year, raster_code_list, value = TRUE))
-      
     }
-    
-  }
-    
+      
   }
 
   if (anyNA(raster_code_list)) {
