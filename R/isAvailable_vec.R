@@ -29,7 +29,13 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
   
   if(exists('available_countries_stored_vec', envir = .malariaAtlasHidden)){
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
-  }else{available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")}  
+  }else{
+    available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")
+    if(inherits(available_countries_vec, 'try-error')){
+      message(available_countries_vec)
+      return(available_countries_vec)
+    }
+  }  
   
   capwords <- function(string) {
     cap <- function(s) {

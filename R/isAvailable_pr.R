@@ -31,6 +31,10 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
     available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
   }else{
     available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
+    if(inherits(available_countries_pr, 'try-error')){
+      message(available_countries_pr)
+      return(available_countries_pr)
+    }
   }  
   
   if(is.null(country) & is.null(ISO) & is.null(continent)){
