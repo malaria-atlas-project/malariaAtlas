@@ -73,8 +73,8 @@
 test_that("error messages are appropriate to given error", {
   
   skip_on_cran()
-  expect_error(getVecOcc(country = "madgascar"), regexp = "did you mean Madagascar?")
-  expect_error(getVecOcc(country = "xxxx"), regexp = "Data not found for 'Xxxx', use listPoints()")
+  expect_error(getVecOcc(country = "madgascar"), regexp = "Vector occurrence data is not available?")
+  expect_error(getVecOcc(country = "xxxx"), regexp = "Vector occurrence data is not available")
 })
 
 
