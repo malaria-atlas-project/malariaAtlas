@@ -35,8 +35,11 @@ message("Downloading list of available rasters...")
   }else{
 
   #query the geoserver to return xml containing a list of all available rasters & convert this to a list
-    xml <- xml2::read_xml("http://map.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities")
-
+    xml <- try(xml2::read_xml("http://map.ox.ac.uk/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities"))
+    if(inherits(xml, 'try-error')){
+      return(xml)
+    }
+    
     layer_xml <-xml2::xml_find_first(xml2::xml_ns_strip(xml), ".//Layer")
     layer_xml <-  xml2::xml_find_all(layer_xml, ".//Layer")
 
