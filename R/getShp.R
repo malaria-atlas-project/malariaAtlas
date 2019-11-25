@@ -63,6 +63,11 @@ getShp <- function(country = NULL,
   # Specifcy country_input (ISO3 code) for db query
 
   available_admin <- listShp(printed = FALSE, admin_level= "admin0")
+  if(inherits(available_admin, 'try-error')){
+    message(available_admin)
+    return(available_admin)
+  }
+  
 
   if(all(!admin_level %in% c("admin0", "admin1", "admin2", "admin3", "all"))){
     stop('admin_level must be one or more of: c("admin0", "admin1", "admin2", "admin3", "all")')
