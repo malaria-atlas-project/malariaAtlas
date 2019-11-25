@@ -90,7 +90,7 @@ isAvailable_vec(ISO = "BRA")
 ```{r message = FALSE}
 MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 ```
-```{r echo = FALSE}
+```{r echo = FALSE, error = TRUE, purl = FALSE}
 tibble::glimpse(MDG_pr_data)
 ```
 
@@ -101,7 +101,7 @@ tibble::glimpse(MDG_pr_data)
 ```{r message = FALSE}
 MMR_vec_data <- getVecOcc(country = "Myanmar")
 ```
-```{r echo = FALSE}
+```{r echo = FALSE, error = TRUE, purl = FALSE}
 tibble::glimpse(MMR_vec_data)
 ```
 
