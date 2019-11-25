@@ -4,8 +4,8 @@
 \alias{isAvailable_vec}
 \title{Check whether Vector Occurrence points are available for a given location}
 \usage{
-isAvailable_vec(sourcedata = "vector points", country = NULL, ISO = NULL,
-  continent = NULL, full_results = FALSE)
+isAvailable_vec(sourcedata = "vector points", country = NULL,
+  ISO = NULL, continent = NULL, full_results = FALSE)
 }
 \arguments{
 \item{sourcedata}{by default this is "vector points", highlighting the dataset to be searched}
