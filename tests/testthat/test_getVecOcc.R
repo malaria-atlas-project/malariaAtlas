@@ -41,6 +41,12 @@
    expect_equal(levels(Brazil_darlingi$country), "Brazil")
    expect_equal(levels(americas_multiple$country), c("Bolivia", "Brazil"))
    expect_equal(levels(americas_multiple_albitarsis$country), c("Bolivia", "Brazil"))
+
+   # This test was originally like this.
+   #  Not sure what has changed.
+   # expect_equal(levels(americas_multiple_albitarsis$country), c("Argentina", "Bolivia", "Brazil", "Paraguay"))
+
+   
    #checking years fall between 1800 & 2050
    expect_true(unique(Brazil_all$year_start[!is.na(Brazil_all$year_start)]>1800 & Brazil_all$year_start[!is.na(Brazil_all$year_start)]<2030))
    expect_true(unique(Brazil_all$year_end[!is.na(Brazil_all$year_end)]>1800 & Brazil_all$year_end[!is.na(Brazil_all$year_end)]<2030))
