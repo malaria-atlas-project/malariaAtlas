@@ -43,7 +43,9 @@ matrix:
       r: release
     - os: linux
       r: devel
-
+    - os: linux
+      r: release
+      env: NOT_CRAN='false'
 
 
 
