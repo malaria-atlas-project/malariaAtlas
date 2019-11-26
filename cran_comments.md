@@ -8,7 +8,7 @@ Other small changes.
 Travis Ubuntu 16.04 Stable R version 3.6.1 (2017-01-27)
 Travis Ubuntu 16.04 Devel R (2019-08-02 r76910)
 Winbuilder R version 3.5.1 (2018-07-02)
-Winbuilder R version Devel (2018-10-30 r75516)
+
 
 
 ## R CMD check results

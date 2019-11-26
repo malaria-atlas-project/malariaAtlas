@@ -4,10 +4,10 @@
 \alias{fillDHSCoordinates}
 \title{Add DHS locations to malaria data}
 \usage{
-fillDHSCoordinates(data, email = NULL, project = NULL, cache_path = NULL,
-  config_path = NULL, global = TRUE, verbose_download = FALSE,
-  verbose_setup = TRUE, data_frame = NULL, timeout = 30,
-  password_prompt = FALSE, prompt = TRUE)
+fillDHSCoordinates(data, email = NULL, project = NULL,
+  cache_path = NULL, config_path = NULL, global = TRUE,
+  verbose_download = FALSE, verbose_setup = TRUE, data_frame = NULL,
+  timeout = 30, password_prompt = FALSE, prompt = TRUE)
 }
 \arguments{
 \item{data}{Data to add DHS coordinates to}

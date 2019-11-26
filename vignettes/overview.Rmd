@@ -64,7 +64,7 @@ isAvailable_pr(country = "Madagascar")
 ```
 
 Check whether PR data is available for the United States of America
-```{r, error = TRUE, highlight = TRUE}
+```{r, error = TRUE, purl = FALSE, highlight = TRUE}
 isAvailable_pr(ISO = "USA")
 ```
 
@@ -76,7 +76,7 @@ isAvailable_vec(country = "Myanmar")
 ```
 
 Check whether Vector occcurrence data is available for the Brazil
-```{r, error = TRUE, highlight = TRUE}
+```{r, error = TRUE, purl = FALSE, highlight = TRUE}
 isAvailable_vec(ISO = "BRA")
 ```
 
@@ -90,7 +90,7 @@ isAvailable_vec(ISO = "BRA")
 ```{r message = FALSE}
 MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 ```
-```{r echo = FALSE}
+```{r echo = FALSE, error = TRUE, purl = FALSE}
 tibble::glimpse(MDG_pr_data)
 ```
 
@@ -101,27 +101,27 @@ tibble::glimpse(MDG_pr_data)
 ```{r message = FALSE}
 MMR_vec_data <- getVecOcc(country = "Myanmar")
 ```
-```{r echo = FALSE}
+```{r echo = FALSE, error = TRUE, purl = FALSE}
 tibble::glimpse(MMR_vec_data)
 ```
 
 `autoplot.pr.points` is an autoplot method to enable quick mapping of the locations of downloaded PR points. 
 
 
-```{r message = FALSE, warning = FALSE, results = "hide"}
+```{r message = FALSE, warning = FALSE, results = "hide", error = TRUE, purl = FALSE}
 autoplot(MDG_pr_data)
 ```
 
 `autoplot.vector.points` is an autoplot method to enable quick mapping of the locations of downloaded vector occurrence points. 
 
 
-```{r message = FALSE, warning = FALSE, results = "hide"}
+```{r message = FALSE, warning = FALSE, results = "hide", error = TRUE, purl = FALSE}
 autoplot(MMR_vec_data)
 ```
 
 Furthermore, being ggplot2 plots, these plots can easily be added to or modified.
 
-```{r message = FALSE, warning = FALSE, results = "hide"}
+```{r message = FALSE, warning = FALSE, results = "hide", error = TRUE, purl = FALSE}
 p <- autoplot(MDG_pr_data, printed = FALSE)
 p + 
   scale_fill_gradientn(colours = rev(palettetown::pokepal('charmeleon', spread = 3))) +
@@ -135,13 +135,13 @@ p +
 ```{r message = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin1", "admin2"))
 ```
-```{r echo = FALSE}
+```{r echo = FALSE, error = TRUE, purl = FALSE, error = TRUE, purl = FALSE}
 tibble::glimpse(MDG_shp)
 ```
 
 `autoplot.MAPshp` configures autoplot method to enable quick mapping of downloaded shapefiles.
 
-```{r message = FALSE}
+```{r message = FALSE, error = TRUE, purl = FALSE}
 MDG_shp <- as.MAPshp(MDG_shp)
 autoplot(MDG_shp)
 ```
@@ -150,7 +150,7 @@ autoplot(MDG_shp)
 
 `getRaster()`downloads publicly available MAP rasters for a specific surface & year, clipped to a given bounding box or shapefile
 
-```{r message = FALSE}
+```{r message = FALSE, error = TRUE, purl = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
 ```
@@ -158,7 +158,7 @@ N.B. to use downloaded rasters and shapefiles directly with autoplot, use as.MAP
 
 `autoplot.MAPraster` and `autoplot_MAPraster` are autoplot methods to enable quick mapping of downloaded rasters.
 
-```{r message = FALSE}
+```{r message = FALSE, error = TRUE, purl = FALSE, purl = FALSE}
 MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
 MDG_shp_df <- as.MAPshp(MDG_shp)
 p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
@@ -169,7 +169,7 @@ p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
 
 By using the above tools along with ggplot, simple comparison figures can be easily produced. 
 
-```{r message = FALSE, warning = FALSE}
+```{r message = FALSE, warning = FALSE, error = TRUE, purl = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_shp_df <- as.MAPshp(MDG_shp)
 MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
@@ -185,7 +185,7 @@ scale_size_continuous(name = "Survey Size")+
  ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
 ```
 
-```{r message = FALSE, warning = FALSE}
+```{r message = FALSE, warning = FALSE, error = TRUE, purl = FALSE}
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 MMR_shp_df <- as.MAPshp(MMR_shp)
 MMR_an_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)

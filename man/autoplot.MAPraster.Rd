@@ -4,9 +4,10 @@
 \alias{autoplot.MAPraster}
 \title{Quickly visualise Rasters downloaded from MAP}
 \usage{
-\method{autoplot}{MAPraster}(object, ..., shp_df = NULL, legend_title = "",
-  plot_titles = TRUE, fill_scale_transform = "identity",
-  fill_colour_palette = "RdYlBu", printed = TRUE)
+\method{autoplot}{MAPraster}(object, ..., shp_df = NULL,
+  legend_title = "", plot_titles = TRUE,
+  fill_scale_transform = "identity", fill_colour_palette = "RdYlBu",
+  printed = TRUE)
 }
 \arguments{
 \item{object}{MAPraster object to be visualised.}

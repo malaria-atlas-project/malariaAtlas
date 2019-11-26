@@ -49,7 +49,11 @@ getVecOcc <- function(country = NULL,
   if (exists('available_countries_stored_vec', envir =  .malariaAtlasHidden)) {
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
   } else{
-    available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")     
+    available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")
+    if(inherits(available_countries_vec, 'try-error')){
+      message(available_countries_vec)
+      return(available_countries_vec)
+    }
   }
   
   if(is.null(country) & 
@@ -129,7 +133,12 @@ getVecOcc <- function(country = NULL,
                         sep = "")
   
     df <-
-      utils::read.csv(full_URL, encoding = "UTF-8")[,-1]
+      try(utils::read.csv(full_URL, encoding = "UTF-8")[, -1])
+    if(inherits(df, 'try-error')){
+      message(df[1])
+      return(df)
+    }
+    
     message(paste("Data downloaded for all available locations.",
     "Data downloaded for species:",
             paste(unique(df$species_plain))
@@ -214,8 +223,12 @@ getVecOcc <- function(country = NULL,
     }
   
     
-    
-    df <- utils::read.csv(full_URL, encoding = "UTF-8")[, -1]
+    df <-
+      try(utils::read.csv(full_URL, encoding = "UTF-8")[, -1])
+    if(inherits(df, 'try-error')){
+      message(df[1])
+      return(df)
+    }
     
     #Just to avoid visible binding notes - moved higher up
     #species_plain <- species_plain <- permissions_info <- NULL 

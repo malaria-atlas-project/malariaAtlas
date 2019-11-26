@@ -31,6 +31,10 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
     available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
   }else{
     available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
+    if(inherits(available_countries_pr, 'try-error')){
+      message(available_countries_pr)
+      return(available_countries_pr)
+    }
   }  
   
   if(is.null(country) & is.null(ISO) & is.null(continent)){
@@ -132,7 +136,7 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
     
   }
   if(identical(checked_availability_pr$location[checked_availability_pr$is_available==0], location_input_pr)) {
-    stop("Specified location not found, see below comments: \n \n",
+    message("Specified location not found, see below comments: \n \n",
          paste(error_message, collapse = " \n"))
   } else if (length(error_message) != 0) {
     warning(paste(error_message, collapse = " \n"),call. = FALSE)

@@ -29,7 +29,13 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
   
   if(exists('available_countries_stored_vec', envir = .malariaAtlasHidden)){
     available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
-  }else{available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")}  
+  }else{
+    available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")
+    if(inherits(available_countries_vec, 'try-error')){
+      message(available_countries_vec)
+      return(available_countries_vec)
+    }
+  }  
   
   capwords <- function(string) {
     cap <- function(s) {
@@ -129,7 +135,7 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
     
   }
   if(identical(checked_availability_vec$location[checked_availability_vec$is_available==0], location_input_vec)) {
-    stop("Specified location not found, see below comments: \n \n",
+    message("Specified location not found, see below comments: \n \n",
          paste(error_message, collapse = " \n"))
   } else if (length(error_message) != 0) {
     warning(paste(error_message, collapse = " \n"),call. = FALSE)

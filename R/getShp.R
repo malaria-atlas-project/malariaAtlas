@@ -63,6 +63,11 @@ getShp <- function(country = NULL,
   # Specifcy country_input (ISO3 code) for db query
 
   available_admin <- listShp(printed = FALSE, admin_level= "admin0")
+  if(inherits(available_admin, 'try-error')){
+    message(available_admin)
+    return(available_admin)
+  }
+  
 
   if(all(!admin_level %in% c("admin0", "admin1", "admin2", "admin3", "all"))){
     stop('admin_level must be one or more of: c("admin0", "admin1", "admin2", "admin3", "all")')
@@ -293,7 +298,11 @@ downloadShp <- function(URL) {
   dir.create(uzipdir)
   # download shapefile to temp directory & extract shapefilepath & layername
   
-  r <- httr::GET(utils::URLencode(URL), httr::write_disk(temp, overwrite = TRUE))
+  r <- try(httr::GET(utils::URLencode(URL), httr::write_disk(temp, overwrite = TRUE)))
+  if(inherits(r, 'try-error')){
+    message(r[1])
+    return(r)
+  }
   
   utils::unzip(temp, exdir = uzipdir)
   shp <- dir(uzipdir, "*.shp$")

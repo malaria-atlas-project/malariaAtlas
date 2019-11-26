@@ -50,6 +50,10 @@ getPR <- function(country = NULL,
       .malariaAtlasHidden$available_countries_stored_pr
   } else{
     available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
+    if(inherits(available_countries_pr, 'try-error')){
+      message(available_countries_pr)
+      return(available_countries_pr)
+    }
   }
   
   if (is.null(country) &
@@ -84,7 +88,12 @@ getPR <- function(country = NULL,
       sep = ""
     ))
     df <-
-      utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[, -1]
+      try(utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[, -1])
+    if(inherits(df, 'try-error')){
+      message(df[1])
+      return(df)
+    }
+    
     message("Data downloaded for all available locations.")
   } else{
     if (any(c(!is.null(country),!is.null(ISO),!is.null(continent)))) {
@@ -144,8 +153,12 @@ getPR <- function(country = NULL,
       full_URL <- paste0(URL, columns, bbox_filter)
     }
     
-    
-    df <- utils::read.csv(full_URL, encoding = "UTF-8")[, -1]
+    df <-
+      try(utils::read.csv(full_URL, encoding = "UTF-8")[, -1])
+    if(inherits(df, 'try-error')){
+      message(df[1])
+      return(df)
+    }
     
     # Just to avoid visible binding notes
     pf_pr <- pv_pr <- permissions_info <- NULL

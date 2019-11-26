@@ -91,10 +91,11 @@ test_that('arg length mismatched work', {
 
 test_that('Wrong name errors correctly', {
   skip_on_cran()
-  expect_error(
     MDG_rasters <- getRaster(surface = "Plasmodium falciparum PR2",
-                             year = NA),
-    regexp = 'following surfaces have been incorrectly specified')
+                             year = NA)
+    
+    expect_true(inherits(MDG_rasters, 'character'))
+    expect_true(grepl('following surfaces have been incorrectly specified', MDG_rasters))
   
 })
 
@@ -102,11 +103,12 @@ test_that('Wrong name errors correctly', {
 
 test_that('Wrong year errors correctly', {
   skip_on_cran()
+ 
+  MDG_rasters <- getRaster(surface = "Plasmodium falciparum PR2-10",
+                           year = 1902)
   
-  expect_error(
-    MDG_rasters <- getRaster(surface = "Plasmodium falciparum PR2-10",
-                             year = 1902),
-    regexp = 'not available for all requested years')
+  expect_true(inherits(MDG_rasters, 'character'))
+  expect_true(grepl('not available for all requested years', MDG_rasters))
   
 })
 

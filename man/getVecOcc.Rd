@@ -6,8 +6,8 @@
 \code{getVecOcc} downloads all publicly available vector occurrence points for a specified country (or countries) and returns this as a dataframe.
 \code{country} and \code{ISO} refer to countries and a lower-level administrative regions such as French Guiana.}
 \usage{
-getVecOcc(country = NULL, ISO = NULL, continent = NULL, species = "all",
-  extent = NULL)
+getVecOcc(country = NULL, ISO = NULL, continent = NULL,
+  species = "all", extent = NULL)
 }
 \arguments{
 \item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
