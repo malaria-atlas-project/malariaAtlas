@@ -13,7 +13,7 @@ Authors@R: c(
     person("David", "Smith", role = c("ctb")))
 Description: A suite of tools to allow you to download all 
   publicly available parasite rate survey points, mosquito occurrence points and raster surfaces from 
-  the 'Malaria Atlas Project' <https://map.ox.ac.uk/> servers as well as utility functions for plotting
+  the 'Malaria Atlas Project' <https://malariaatlas.org/> servers as well as utility functions for plotting
   the downloaded data.
 License: MIT + file LICENSE
 Encoding: UTF-8

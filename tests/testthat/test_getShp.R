@@ -5,7 +5,7 @@ test_that("downloadShp downloads shapefiles and loads them correctly",{
   
   skip_on_cran()
   
-  test_URL <- utils::URLencode("https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=mapadmin_0_2018&cql_filter=iso%20IN%20(%27BDI%27)")
+  test_URL <- utils::URLencode("https://malariaatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326&TypeName=mapadmin_0_2018&cql_filter=iso%20IN%20(%27BDI%27)")
   
   test_dlshp <- downloadShp(test_URL)
   

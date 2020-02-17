@@ -96,7 +96,7 @@ getVecOcc <- function(country = NULL,
   #species_plain <- species_plain <- permissions_info <- NULL
   
   URL <-
-    "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
+    "https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
   
   columns <-
     "&PROPERTYNAME=site_id,latitude,longitude,country,country_id,continent_id,month_start,year_start,month_end,year_end,anopheline_id,species,species_plain,id_method1,id_method2,sample_method1,sample_method2,sample_method3,sample_method4,assi,citation,geom,time_start,time_end"
@@ -237,13 +237,13 @@ getVecOcc <- function(country = NULL,
       stop(
         "Error in downloading data for extent: (",
         paste0(extent, collapse = ","), 
-        "), \n try query using country or continent name OR check data availability at map.ox.ac.uk/explorer."
+        "), \n try query using country or continent name OR check data availability at malariaatlas.org/explorer."
       )
     }
     
     if (nrow(df) == 0) {
       stop(
-        "Vector occurrence data is not available for the specificed countries; \n confirm data availability at map.ox.ac.uk/explorer."
+        "Vector occurrence data is not available for the specificed countries; \n confirm data availability at malariaatlas.org/explorer."
       )
     }
     
