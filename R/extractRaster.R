@@ -107,7 +107,7 @@ extractLayerValues <- function(df = NULL,
   body = paste('{"name":','"',paste(temp_foldername),'"}',sep = "")
 
   #create folder on MAP server via POST request
-  r1 <- httr::POST("https://map.ox.ac.uk/explorer-api/containers",
+  r1 <- httr::POST("https://malariaatlas.org/explorer-api/containers",
                    body = body,
                    httr::add_headers("content-type" = "application/json;charset=UTF-8"))
 
@@ -122,7 +122,7 @@ extractLayerValues <- function(df = NULL,
 
   file_name <- basename(csv_path)
 
-  r2 <- httr::POST(paste("https://map.ox.ac.uk/explorer-api/containers/",temp_foldername,"/upload", sep = ""),
+  r2 <- httr::POST(paste("https://malariaatlas.org/explorer-api/containers/",temp_foldername,"/upload", sep = ""),
                    body = list(data = httr::upload_file(csv_path, "text/csv")))
 
   if(r2$status_code != 200){
@@ -130,9 +130,9 @@ extractLayerValues <- function(df = NULL,
   }
 
   if(!is.na(min_year)&!is.na(max_year)){
-  r3 <- httr::GET(utils::URLencode(paste0("https://map.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year)))
+  r3 <- httr::GET(utils::URLencode(paste0("https://malariaatlas.org/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year)))
   }else{
-  r3 <- httr::GET(utils::URLencode(paste0("https://map.ox.ac.uk/explorer-api/ExtractLayerValues?container=",temp_foldername,"&file=",file_name,"&raster=",surface_code)))
+  r3 <- httr::GET(utils::URLencode(paste0("https://malariaatlas.org/explorer-api/ExtractLayerValues?container=",temp_foldername,"&file=",file_name,"&raster=",surface_code)))
   }
 
   if(r3$status_code != 200){
@@ -140,11 +140,11 @@ extractLayerValues <- function(df = NULL,
   }
 
 
-  utils::download.file(paste("https://map.ox.ac.uk/explorer-api/containers/",temp_foldername,"/download/analysis_",file_name, sep = ""), file.path(working_dir, "extractRaster_results.csv"), mode = "wb")
+  utils::download.file(paste("https://malariaatlas.org/explorer-api/containers/",temp_foldername,"/download/analysis_",file_name, sep = ""), file.path(working_dir, "extractRaster_results.csv"), mode = "wb")
 
   new_df <- utils::read.csv(file.path(working_dir, "extractRaster_results.csv"))
 
-  r4 <- httr::DELETE(paste("https://map.ox.ac.uk/explorer-api/containers/", temp_foldername, sep = ""))
+  r4 <- httr::DELETE(paste("https://malariaatlas.org/explorer-api/containers/", temp_foldername, sep = ""))
 
   if(r4$status_code != 200){
     stop("Error deleting file, check deletion from server.")

@@ -176,7 +176,7 @@ getShp <- function(country = NULL,
 
   #define which admin levels are queried and return as a list full geoserver query URL
   base_URL <-
-    "https://map.ox.ac.uk/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
+    "https://malariaatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=shape-zip&srsName=EPSG:4326"
   
   
   if ("all" %in% tolower(admin_level) ) {

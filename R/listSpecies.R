@@ -31,7 +31,7 @@ listSpecies <- function(printed = TRUE){
   } else {
     
     URL <- 
-      "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
+      "https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=Anopheline_Data"
     
     columns <- 
       "&PROPERTYNAME=species_plain,country"
