@@ -63,7 +63,7 @@ getPR <- function(country = NULL,
   
   
   URL <-
-    "https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data"
+    "https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data"
   
   if (tolower(species) == "both") {
     columns <-
@@ -176,13 +176,13 @@ getPR <- function(country = NULL,
       stop(
         "Error in downloading data for extent: (",
         paste0(extent, collapse = ","),
-        "),\n try query using country or continent name OR check data availability at map.ox.ac.uk/explorer."
+        "),\n try query using country or continent name OR check data availability at malariaatlas.org/explorer."
       )
     }
     
     if (nrow(df) == 0) {
       stop(
-        "PR data points are not available for the specified species in requested countries; \n confirm species-specific data availability at map.ox.ac.uk/explorer."
+        "PR data points are not available for the specified species in requested countries; \n confirm species-specific data availability at malariaatlas.org/explorer."
       )
     }
     
@@ -203,11 +203,11 @@ getPR <- function(country = NULL,
   if (tolower(species) == "both") {
     if (all(is.na(unique(df$pv_pos)))) {
       message(
-        "NOTE: All available data for this query was downloaded for both species,\n but there are no PR points for P. vivax in this region in the MAP database. \nTo check endemicity patterns or to contribute data, visit map.ox.ac.uk OR email us at map@bdi.ox.ac.uk."
+        "NOTE: All available data for this query was downloaded for both species,\n but there are no PR points for P. vivax in this region in the MAP database. \nTo check endemicity patterns or to contribute data, visit malariaatlas.org OR email us at map@bdi.ox.ac.uk."
       )
     } else if (all(is.na(unique(df$pf_pos)))) {
       message(
-        "NOTE: All available data for this query was downloaded for both species,\n but there are no PR points for P. falciparum in this region in the MAP database. \nTo check endemicity patterns or to contribute data, visit map.ox.ac.uk OR email us at map@bdi.ox.ac.uk."
+        "NOTE: All available data for this query was downloaded for both species,\n but there are no PR points for P. falciparum in this region in the MAP database. \nTo check endemicity patterns or to contribute data, visit malariaatlas.org OR email us at map@bdi.ox.ac.uk."
       )
     }
   }

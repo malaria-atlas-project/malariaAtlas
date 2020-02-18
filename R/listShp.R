@@ -27,10 +27,10 @@ listShp <- function(printed = TRUE, admin_level = c("admin0", "admin1")){
   
   if(!all(admin_level_numeric %in% available_admin$admn_level)){
     
-    URL_list <- c("admin0" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_0_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,source"),
-                  "admin1" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_1_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,source"),
-                  "admin2" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_2_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,source" ),
-                  "admin3" = utils::URLencode("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_3_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,name_3,id_3,type_3,source"))
+    URL_list <- c("admin0" = utils::URLencode("https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_0_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,source"),
+                  "admin1" = utils::URLencode("https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_1_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,source"),
+                  "admin2" = utils::URLencode("https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_2_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,source" ),
+                  "admin3" = utils::URLencode("https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=mapadmin_3_2018&PROPERTYNAME=iso,admn_level,name_0,id_0,type_0,name_1,id_1,type_1,name_2,id_2,type_2,name_3,id_3,type_3,source"))
     
     use_URL_list <- URL_list[names(URL_list) %in% admin_level & !(0:3) %in% available_admin$admn_level]
     available_admin_new <- try(lapply(X = use_URL_list, FUN = utils::read.csv, encoding = "UTF-8"))

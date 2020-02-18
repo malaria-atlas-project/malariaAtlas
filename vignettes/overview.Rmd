@@ -17,11 +17,11 @@ knitr::opts_chunk$set(fig.width=12, fig.height=8)
 
 # Overview 
 
-This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*) and modelled raster outputs from the [Malaria Atlas Project](https://map.ox.ac.uk/).
+This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*) and modelled raster outputs from the [Malaria Atlas Project](https://malariaatlas.org/).
 
 ## Available Data
 
-The data can be interactively explored at [https://map.ox.ac.uk/explorer/#/explorer](https://map.ox.ac.uk/explorer/#/explorer).
+The data can be interactively explored at [https://malariaatlas.org/explorer/#/explorer](https://malariaatlas.org/explorer/#/explorer).
 This is also useful for finding information on the raster data available and checking the extents of different rasters (some are Africa only for example).
 
 

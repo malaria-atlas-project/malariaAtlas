@@ -35,7 +35,7 @@ listPoints <- function(printed = TRUE, sourcedata) {
 
     } else {
       
-      available_countries_pr <- try(unique(utils::read.csv("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data&PROPERTYNAME=country,country_id,continent_id", encoding = "UTF-8")[,c("country", "country_id","continent_id")]))
+      available_countries_pr <- try(unique(utils::read.csv("https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data&PROPERTYNAME=country,country_id,continent_id", encoding = "UTF-8")[,c("country", "country_id","continent_id")]))
       if(inherits(available_countries_pr, 'try-error')){
         message(available_countries_pr[1])
         return(available_countries_pr)
@@ -66,7 +66,7 @@ listPoints <- function(printed = TRUE, sourcedata) {
   
       } else {
   
-        available_countries_vec <- try(unique(utils::read.csv("https://map.ox.ac.uk/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data&PROPERTYNAME=country,country_id,continent_id", encoding = "UTF-8")[,c("country", "country_id","continent_id")]))
+        available_countries_vec <- try(unique(utils::read.csv("https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data&PROPERTYNAME=country,country_id,continent_id", encoding = "UTF-8")[,c("country", "country_id","continent_id")]))
         if(inherits(available_countries_vec, 'try-error')){
           message(available_countries_vec[1])
           return(available_countries_vec)

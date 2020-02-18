@@ -360,7 +360,7 @@ download_rst <-
       raster_code_URL <- curl::curl_escape(raster_code)
       rst_URL <-
         paste(
-          "https://map.ox.ac.uk/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",
+          "https://malariaatlas.org/geoserver/Explorer/ows?service=WCS&version=2.0.1&request=GetCoverage&format=image/geotiff&coverageid=",
           raster_code_URL,
           bbox_filter,
           sep = ""
@@ -383,7 +383,7 @@ download_rst <-
         message(
           "Raster download error - check ",
           raster_code,
-          " surface is available for specified extent at map.ox.ac.uk/explorer."
+          " surface is available for specified extent at malariaatlas.org/explorer."
         )
         message(rst_URL)
         download_warnings <- download_warnings + 1
