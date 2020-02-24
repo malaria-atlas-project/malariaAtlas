@@ -54,7 +54,12 @@ if(length(surface)==1&!inherits(year, "list")){
 }
 
 if(all(sapply(year, function(x) all(abs(diff(x)) == 1)))){
-  df_new <- do.call(rbind, lapply(surface, function(x) extractLayerValues(df = df, csv_path = csv_path, surface = x, year = year[[which(surface==x)]])))
+  list_new <- lapply(surface, function(x) extractLayerValues(df = df, csv_path = csv_path, surface = x, year = year[[which(surface==x)]]))
+  if(any(sapply(list_new, inherits, 'try-error'))){
+    warning('Problems downloading one or more layers.')
+    return(list_new)
+  }
+  df_new <- do.call(rbind, list_new)
 
   }else{
 
@@ -66,6 +71,11 @@ if(all(sapply(year, function(x) all(abs(diff(x)) == 1)))){
 
       df_new_i <- extractLayerValues(df = df, csv_path = csv_path, surface = s, year=y)
 
+      if(inherits(df_new_i, 'try-error')){
+        warning('Problems downloading one or more layers.')
+        return(df_new_i)
+      }
+      
       df_new <- rbind(df_new, df_new_i)
       }
     }
@@ -88,8 +98,15 @@ extractLayerValues <- function(df = NULL,
 
   dir.create(working_dir, showWarnings = FALSE)
 
-  available_rasters <- suppressMessages(listRaster())
-
+  try(
+    available_rasters <- suppressMessages(listRaster())
+  )
+  
+  if(inherits(available_rasters, 'try-error')){
+    warning('Could not download list of raster layers. Check internet connection.')
+    return(available_rasters)
+  }
+  
   surface_code <- unlist(available_rasters$raster_code[available_rasters$title %in% surface])
 
 
@@ -107,12 +124,21 @@ extractLayerValues <- function(df = NULL,
   body = paste('{"name":','"',paste(temp_foldername),'"}',sep = "")
 
   #create folder on MAP server via POST request
-  r1 <- httr::POST("https://malariaatlas.org/explorer-api/containers",
-                   body = body,
-                   httr::add_headers("content-type" = "application/json;charset=UTF-8"))
-
+  try(
+    r1 <- httr::POST("https://malariaatlas.org/explorer-api/containers",
+                     body = body,
+                     httr::add_headers("content-type" = "application/json;charset=UTF-8"))
+  )
+  
+  if(inherits(r1, 'try-error')){
+    warning("Error uploading coords, could not create temporary directory.")
+    return(r1)
+    
+  }
+  
   if(r1$status_code != 200){
-    stop("Error uploading coords, could not create temporary directory.")
+    warning("Error uploading coords, could not create temporary directory.")
+    return(r1)
   }
 
   if(!is.null(df)){
@@ -122,32 +148,57 @@ extractLayerValues <- function(df = NULL,
 
   file_name <- basename(csv_path)
 
-  r2 <- httr::POST(paste("https://malariaatlas.org/explorer-api/containers/",temp_foldername,"/upload", sep = ""),
+  try(
+    r2 <- httr::POST(paste("https://malariaatlas.org/explorer-api/containers/",temp_foldername,"/upload", sep = ""),
                    body = list(data = httr::upload_file(csv_path, "text/csv")))
-
+  )
+  if(inherits(r2, 'try-error')){
+    warning("Error uploading coords, could not upload file.")
+    return(r2)
+    
+  }
+  
   if(r2$status_code != 200){
-    stop("Error uploading coords, could not upload file.")
+    warning("Error uploading coords, could not upload file.")
+    return(r2)
   }
 
-  if(!is.na(min_year)&!is.na(max_year)){
-  r3 <- httr::GET(utils::URLencode(paste0("https://malariaatlas.org/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year)))
-  }else{
-  r3 <- httr::GET(utils::URLencode(paste0("https://malariaatlas.org/explorer-api/ExtractLayerValues?container=",temp_foldername,"&file=",file_name,"&raster=",surface_code)))
+  try(
+    if(!is.na(min_year)&!is.na(max_year)){
+      r3 <- httr::GET(utils::URLencode(paste0("https://malariaatlas.org/explorer-api/ExtractLayerValues?container=",temp_foldername,"&endYear=",max_year,"&file=",file_name,"&raster=",surface_code,"&startYear=",min_year)))
+    }else{
+      r3 <- httr::GET(utils::URLencode(paste0("https://malariaatlas.org/explorer-api/ExtractLayerValues?container=",temp_foldername,"&file=",file_name,"&raster=",surface_code)))
+    }
+  )
+  if(inherits(r3, 'try-error')){
+    warning("Error performing extraction, check server status.")
+    return(r3)
+    
   }
+  
 
   if(r3$status_code != 200){
-    stop("Error performing extraction, check server status.")
+    warning("Error performing extraction, check server status.")
+    return(r3)
   }
 
 
-  utils::download.file(paste("https://malariaatlas.org/explorer-api/containers/",temp_foldername,"/download/analysis_",file_name, sep = ""), file.path(working_dir, "extractRaster_results.csv"), mode = "wb")
-
-  new_df <- utils::read.csv(file.path(working_dir, "extractRaster_results.csv"))
-
-  r4 <- httr::DELETE(paste("https://malariaatlas.org/explorer-api/containers/", temp_foldername, sep = ""))
-
+  try(
+    {
+    utils::download.file(paste("https://malariaatlas.org/explorer-api/containers/",temp_foldername,"/download/analysis_",file_name, sep = ""), file.path(working_dir, "extractRaster_results.csv"), mode = "wb")
+  
+    new_df <- utils::read.csv(file.path(working_dir, "extractRaster_results.csv"))
+  
+    r4 <- httr::DELETE(paste("https://malariaatlas.org/explorer-api/containers/", temp_foldername, sep = ""))
+    }
+  )
+  if(inherits(new_df, 'try-error')){
+    warning("Error reading written csv back into R")
+    return(new_df)
+  }
+  
   if(r4$status_code != 200){
-    stop("Error deleting file, check deletion from server.")
+    warning("Error deleting file, check deletion from server.")
   }
   return(new_df)
 
