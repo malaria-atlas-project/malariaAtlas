@@ -20,9 +20,9 @@ test_that("downloaded data.frame is in the correct format",{
   expect_true("Kenya" %in% available_countries_pr$country)
   expect_true("KEN" %in% available_countries_pr$country_id)
   expect_true("Oceania" %in% available_countries_pr$continent)
-  expect_true(inherits(available_countries_pr$country, "factor"))
-  expect_true(inherits(available_countries_pr$country_id, "factor"))
-  expect_true(inherits(available_countries_pr$continent, "factor"))
+  #expect_true(inherits(available_countries_pr$country, "factor"))
+  #expect_true(inherits(available_countries_pr$country_id, "factor"))
+  #expect_true(inherits(available_countries_pr$continent, "factor"))
 #})
 
 #test_that("available_countries_stored_pr object is stored in hidden environment",{
@@ -55,9 +55,9 @@ test_that("downloaded data.frame is in the correct format",{
   expect_true("Kenya" %in% available_countries_vec$country)
   expect_true("KEN" %in% available_countries_vec$country_id)
   expect_true("Oceania" %in% available_countries_vec$continent)
-  expect_true(inherits(available_countries_vec$country, "factor"))
-  expect_true(inherits(available_countries_vec$country_id, "factor"))
-  expect_true(inherits(available_countries_vec$continent, "factor"))
+  #expect_true(inherits(available_countries_vec$country, "factor"))
+  #expect_true(inherits(available_countries_vec$country_id, "factor"))
+  #expect_true(inherits(available_countries_vec$continent, "factor"))
 #})
 
 #test_that("available_countries_stored_vec object is stored in hidden environment",{
