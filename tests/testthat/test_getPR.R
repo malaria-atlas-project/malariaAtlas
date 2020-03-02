@@ -40,12 +40,12 @@ test_that("data is downloaded as a data.frame", {
   expect_equal(sort(names(kenya_pf)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
   expect_equal(sort(names(kenya_BOTH)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
   # checking country name specification works
-  expect_equal(levels(kenya_pf$country), "Kenya")
-  expect_equal(levels(kenya_pv$country), "Kenya")
-  expect_equal(levels(kenya_BOTH$country), "Kenya")
-  expect_equal(levels(multiple_pv$country), c("Madagascar","Nigeria","Suriname"))
-  expect_equal(levels(multiple_pf$country), c("Madagascar","Nigeria","Suriname"))
-  expect_equal(levels(multiple_BOTH$country), c("Madagascar","Nigeria","Suriname"))
+  expect_equal(levels(factor(kenya_pf$country)), "Kenya")
+  expect_equal(levels(factor(kenya_pv$country)), "Kenya")
+  expect_equal(levels(factor(kenya_BOTH$country)), "Kenya")
+  expect_equal(levels(factor(multiple_pv$country)), c("Madagascar","Nigeria","Suriname"))
+  expect_equal(levels(factor(multiple_pf$country)), c("Madagascar","Nigeria","Suriname"))
+  expect_equal(levels(factor(multiple_BOTH$country)), c("Madagascar","Nigeria","Suriname"))
   #checking years fall between 1800 & 2050
   expect_true(unique(kenya_pv$year_start[!is.na(kenya_pv$year_start)]>1800 & kenya_pv$year_start[!is.na(kenya_pv$year_start)]<2030))
   expect_true(unique(kenya_pv$year_end[!is.na(kenya_pv$year_end)]>1800 & kenya_pv$year_end[!is.na(kenya_pv$year_end)]<2030))

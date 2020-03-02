@@ -37,10 +37,10 @@
    expect_equal(sort(names(Brazil_all)),sort(c("site_id","latitude","longitude","country","country_id","continent_id","month_start","year_start","month_end","year_end","anopheline_id","species","species_plain","id_method1","id_method2","sample_method1","sample_method2","sample_method3","sample_method4","assi","citation","geom","time_start","time_end")))
    expect_equal(sort(names(Brazil_darlingi)),sort(c("site_id","latitude","longitude","country","country_id","continent_id","month_start","year_start","month_end","year_end","anopheline_id","species","species_plain","id_method1","id_method2","sample_method1","sample_method2","sample_method3","sample_method4","assi","citation","geom","time_start","time_end")))
    #checking country name specificaion works
-   expect_equal(levels(Brazil_all$country), "Brazil")
-   expect_equal(levels(Brazil_darlingi$country), "Brazil")
-   expect_equal(levels(americas_multiple$country), c("Bolivia", "Brazil"))
-   expect_equal(levels(americas_multiple_albitarsis$country), c("Bolivia", "Brazil"))
+   expect_equal(levels(factor(Brazil_all$country)), "Brazil")
+   expect_equal(levels(factor(Brazil_darlingi$country)), "Brazil")
+   expect_equal(levels(factor(americas_multiple$country)), c("Bolivia", "Brazil"))
+   expect_equal(levels(factor(americas_multiple_albitarsis$country)), c("Bolivia", "Brazil"))
 
    # This test was originally like this.
    #  Not sure what has changed.
