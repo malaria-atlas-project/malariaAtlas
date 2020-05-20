@@ -1,5 +1,7 @@
 # Continuous integration with travis
 language: r
+dist: trusty
+cache: packages
 sudo: required
 
 
