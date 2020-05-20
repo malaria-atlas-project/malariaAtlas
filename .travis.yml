@@ -10,6 +10,7 @@ sudo: required
 
 before_install:
  - sudo apt-get install texinfo
+  - R -e 'install.packages("rgdal", repos=c("http://R-Forge.R-project.org", "http://cran.rstudio.com"))'
 
 
 
@@ -19,9 +20,6 @@ addons:
       - libgdal-dev
       - libproj-dev
       
-r_binary_packages:
-- rgdal
-
 r_packages:
  - curl
  - raster 
