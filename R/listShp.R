@@ -39,8 +39,11 @@ listShp <- function(printed = TRUE, admin_level = c("admin0", "admin1")){
       return(available_admin_new)
     }
     
-    
-    available_admin <- suppressWarnings(dplyr::bind_rows(available_admin_new, available_admin))
+    if(is.null(available_admin)){
+      available_admin <- suppressWarnings(dplyr::bind_rows(available_admin_new))
+    } else {
+      available_admin <- suppressWarnings(dplyr::bind_rows(available_admin_new, available_admin))
+    }
     
     available_admin <- dplyr::select(available_admin, names(available_admin)[names(available_admin) %in% c("iso","admn_level","name_0","id_0",
                                                                                                            "type_0","name_1","id_1","type_1","name_2","id_2","type_2",
