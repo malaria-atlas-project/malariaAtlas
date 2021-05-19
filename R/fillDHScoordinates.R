@@ -91,8 +91,18 @@ fillDHSCoordinates <- function(data,
   # download the datasets
   message('Downloading DHS data.')
   geo <- rdhs::get_datasets(dats)
+  
+
   no_permission <- "Dataset is not available with your DHS login credentials"
-  geo <- geo[-which(unlist(geo) == no_permission)]
+  
+  # filter to only those that succesfful downloaded and had data for
+  no_matches <- which(unlist(geo) == no_permission)
+  if (length(no_matches) > 0) {
+  geo <- geo[-no_matches]
+  }
+  
+  # now only do the next step if we found at least 1 survey
+  if (length(geo) > 0) {
   
   # missing info (can add more depending on factors, e.g. encoding of urban/rural)
   mis_info <- c("dhs_id","site_id", "latitude", "longitude")
@@ -115,6 +125,8 @@ fillDHSCoordinates <- function(data,
       data[stats::na.omit(matches), mis_info] <- shp[which(!is.na(matches)), dhs_info]
       
     } 
+  }
+  
   }
   
   return(data)
