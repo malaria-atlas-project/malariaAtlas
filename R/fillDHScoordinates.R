@@ -91,32 +91,38 @@ fillDHSCoordinates <- function(data,
   # download the datasets
   message('Downloading DHS data.')
   geo <- rdhs::get_datasets(dats)
+  
+
   no_permission <- "Dataset is not available with your DHS login credentials"
-  geo <- geo[-which(unlist(geo) == no_permission)]
   
-  # missing info (can add more depending on factors, e.g. encoding of urban/rural)
-  mis_info <- c("dhs_id","site_id", "latitude", "longitude")
-  dhs_info <- c("DHSID","DHSCLUST", "LATNUM", "LONGNUM")
+  # filter to only those that successful downloaded and had data for
+  no_matches <- which(unlist(geo) == no_permission)
+  if (length(no_matches) > 0) {
+    geo <- geo[-no_matches]
+  }
   
-  # fill in blanks
-  for(stem in dhs_id_stems) {
-    
-    # what file does the stem relate to
-    file_name_match <- dats$FileName[which(substr(dats$SurveyId, 1, 6) == stem)]
-    file_name <- gsub("(*).zip", "", file_name_match, ignore.case = TRUE)
-    
-    # did we find that file
-    if (length(file_name)==1) {
-      
-      # read in the data and then fill in blanks
-      shp <- readRDS(geo[[file_name]])@data
-      matches <- match(shp$DHSID,data$dhs_id)
-      
-      data[stats::na.omit(matches), mis_info] <- shp[which(!is.na(matches)), dhs_info]
-      
-    } 
+  # now only do the next step if we found at least 1 survey
+  if (length(geo) > 0) {
+    # missing info (can add more depending on factors, e.g. encoding of urban/rural)
+    mis_info <- c("dhs_id","site_id", "latitude", "longitude")
+    dhs_info <- c("DHSID","DHSCLUST", "LATNUM", "LONGNUM")
+
+    # fill in blanks
+    for(stem in dhs_id_stems) {
+      # what file does the stem relate to
+      file_name_match <- dats$FileName[which(substr(dats$SurveyId, 1, 6) == stem)]
+      file_name <- gsub("(*).zip", "", file_name_match, ignore.case = TRUE)
+
+      # did we find that file
+      if (length(file_name)==1) {
+        # read in the data and then fill in blanks
+        shp <- readRDS(geo[[file_name]])@data
+        matches <- match(shp$DHSID,data$dhs_id)
+
+        data[stats::na.omit(matches), mis_info] <- shp[which(!is.na(matches)), dhs_info]
+      }
+    }
   }
   
   return(data)
-  
 }
