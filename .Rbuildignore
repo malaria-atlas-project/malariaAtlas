@@ -3,6 +3,7 @@
 .gitlab-ci.yml
 .travis.yml
 renv.lock
+environment.yml
 tests/.test_coverage.R
 tests/.tests_for_CI.R
 README.Rmd
