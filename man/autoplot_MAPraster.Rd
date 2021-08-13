@@ -38,7 +38,7 @@ geom_point(data = pr[pr$year_start==2013,],
            aes(longitude, latitude, fill = positive / examined, size = examined), shape = 21) +
   scale_size_continuous(name = "Survey Size") +
   scale_fill_distiller(name = "PfPR", palette = "RdYlBu") +
-  ggtitle("Raw PfPR Survey points\\n + Modelled PfPR 2-10 in Madagascar in 2013")}
+  ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")}
 
 
 # Download global raster of G6PD deficiency (Howes et al 2012) and visualise this on a map.

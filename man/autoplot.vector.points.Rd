@@ -4,10 +4,17 @@
 \alias{autoplot.vector.points}
 \title{Create a basic plot showing locations of downloaded Vector points}
 \usage{
-\method{autoplot}{vector.points}(object, ..., shp_df = NULL,
-  admin_level = "admin0", map_title = "Vector Survey Locations",
+\method{autoplot}{vector.points}(
+  object,
+  ...,
+  shp_df = NULL,
+  admin_level = "admin0",
+  map_title = "Vector Survey Locations",
   fill_legend_title = "Raw Vetor Occurrences",
-  fill_scale_transform = "identity", facet = NULL, printed = TRUE)
+  fill_scale_transform = "identity",
+  facet = NULL,
+  printed = TRUE
+)
 }
 \arguments{
 \item{object}{a vector.points object downloaded using /code{/link{getVecOcc}}}
@@ -63,7 +70,7 @@ geom_point(data = species,
 scale_fill_distiller(name = "Predicted distribution of An. dirus complex",
  palette = "PuBuGn",
   direction = 1)+
-  ggtitle("Vector Survey points\\n + The predicted distribution of An. dirus complex")
+  ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 }
 
 }

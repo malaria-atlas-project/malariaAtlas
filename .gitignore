@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Rproj
+..Rcheck
 inst/doc
 .html
 /home/whgu0708/.cache/rdhs/rdhs.json

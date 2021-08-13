@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 .gitlab-ci.yml
 .travis.yml
+renv.lock
 tests/.test_coverage.R
 tests/.tests_for_CI.R
 README.Rmd

@@ -4,8 +4,7 @@
 \alias{autoplot.MAPshp}
 \title{Create a basic plot to visualise downloaded shapefiles}
 \usage{
-\method{autoplot}{MAPshp}(object, ..., map_title = NULL, facet = FALSE,
-  printed = TRUE)
+\method{autoplot}{MAPshp}(object, ..., map_title = NULL, facet = FALSE, printed = TRUE)
 }
 \arguments{
 \item{object}{A MAPshp object downloaded using /code{/link{getShp}} with format = "df" specified.}
