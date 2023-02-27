@@ -14,7 +14,7 @@ output:
 ### An R interface to open-access malaria data, hosted by the Malaria Atlas Project. 
 
 
-# The MAP web address has moved. Please update to version 1.0.0 or higher as soon as possible.
+*The gitlab version of the malariaAtlas package has some additional bugfixes over the stable CRAN package. If you have any issues, try installing the latest github version. See below for instructions.*
 
 
 # Overview 
@@ -375,16 +375,13 @@ geom_point(data = vec, aes(longitude, latitude, colour = species))+
 
 ![plot of chunk unnamed-chunk-24](man/figures/unnamed-chunk-24-1.png)
 
-## Basic Spatial utility tools 
 
-### extractRaster 
+## Installation
 
+### Latest stable version from CRAN
 
+Just install using `install.packages("malariaAtlas")` or using the package manager in RStudio.
 
+### Latest version from github
 
-
-
-
-
-
-
+While this version is not as well-tested, it may include additional bugfixes not in the stable CRAN version. Install the `devtools` package and then install using `devtools::install_github('malaria-atlas-project/malariaAtlas')`
