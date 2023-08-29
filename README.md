@@ -39,7 +39,7 @@ Use:
 
 * listData(datatype = "vector points") OR listPoints(sourcedata = "vector points") to see for which countries Vector survey data can be downloaded.
 
-* use listData(datatype = "rasters") OR listRaster() to see rasters available to download. 
+* use listData(datatype = "raster") OR listRaster() to see rasters available to download. 
 
 * use listData(datatype = "shape") OR listShp() to see shapefiles available to download. 
 
