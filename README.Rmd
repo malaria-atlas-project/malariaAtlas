@@ -10,7 +10,6 @@ output:
 
 ```{r, echo = FALSE, message = FALSE, results = "hide", warning = FALSE}
 library(malariaAtlas)
-library(rgdal)
 library(tibble)
 
 knitr::opts_chunk$set(fig.path = 'man/figures/')
