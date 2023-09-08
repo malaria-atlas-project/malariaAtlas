@@ -32,7 +32,8 @@ Imports:
   methods,
   stats,
   utils,
-  rlang
+  rlang,
+  sf
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,

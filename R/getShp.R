@@ -310,12 +310,13 @@ downloadShp <- function(URL) {
   lyr <- sub(".shp$", "", shp)
 
   ## read shapefile into R
-  shapefile_dl <- rgdal::readOGR(dsn = shp.path, layer = lyr)
-
-  extra_cols <- list("id_0"=NA,"name_1"=NA,"id_1"=NA,"code_1"=NA,"type_1"=NA,"name_2"=NA,"id_2"=NA,"code_2"=NA,"type_2"=NA,"name_3"=NA,"id_3"=NA,"code_3"=NA,"type_3"=NA)
-  if(any(!names(extra_cols)%in%names(shapefile_dl))){
-  shapefile_dl@data <- cbind(shapefile_dl@data, extra_cols[!names(extra_cols)%in%names(shapefile_dl)])
-}
+  shapefile_dl <- sf::st_read(dsn = shp.path, layer = lyr)
+  
+  extra_cols <- c("id_0", "name_1", "id_1", "code_1", "type_1", "name_2", "id_2", "code_2", "type_2", "name_3", "id_3", "code_3", "type_3")
+  for (col_name in setdiff(extra_cols, names(shapefile_dl))) {
+    shapefile_dl[[col_name]] <- col_name
+  }
+  
   shapefile_dl <-  shapefile_dl[,c("iso","admn_level",
                                  "name_0","id_0","type_0","name_1",
                                  "id_1","type_1","name_2","id_2",
