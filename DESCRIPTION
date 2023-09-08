@@ -35,7 +35,7 @@ Imports:
   utils,
   rlang
 Depends: ggplot2
-RoxygenNote: 7.0.2
+RoxygenNote: 7.2.3
 Suggests: testthat,
     knitr,
     rmarkdown,

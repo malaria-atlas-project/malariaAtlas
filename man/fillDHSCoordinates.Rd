@@ -4,10 +4,20 @@
 \alias{fillDHSCoordinates}
 \title{Add DHS locations to malaria data}
 \usage{
-fillDHSCoordinates(data, email = NULL, project = NULL,
-  cache_path = NULL, config_path = NULL, global = TRUE,
-  verbose_download = FALSE, verbose_setup = TRUE, data_frame = NULL,
-  timeout = 30, password_prompt = FALSE, prompt = TRUE)
+fillDHSCoordinates(
+  data,
+  email = NULL,
+  project = NULL,
+  cache_path = NULL,
+  config_path = NULL,
+  global = TRUE,
+  verbose_download = FALSE,
+  verbose_setup = TRUE,
+  data_frame = NULL,
+  timeout = 30,
+  password_prompt = FALSE,
+  prompt = TRUE
+)
 }
 \arguments{
 \item{data}{Data to add DHS coordinates to}
@@ -65,7 +75,7 @@ We cannot directly share DHS data. We can share coordinates,
 \details{
 This function requires the package \code{rdhs} which is currently
   only suggested by the package (not a dependency). So you will
-  need to install it.
+  need to install it. 
 
 Note that the \code{project} has to be the exact name in your
   DHS project.

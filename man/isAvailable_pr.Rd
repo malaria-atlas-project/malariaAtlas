@@ -4,8 +4,13 @@
 \alias{isAvailable_pr}
 \title{Check whether PR points are available for a given location}
 \usage{
-isAvailable_pr(sourcedata = "pr points", country = NULL, ISO = NULL,
-  continent = NULL, full_results = FALSE)
+isAvailable_pr(
+  sourcedata = "pr points",
+  country = NULL,
+  ISO = NULL,
+  continent = NULL,
+  full_results = FALSE
+)
 }
 \arguments{
 \item{sourcedata}{by default this is "pr points", highlighting the dataset to be searched}
