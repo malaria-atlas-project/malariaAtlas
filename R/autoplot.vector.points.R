@@ -86,34 +86,26 @@ autoplot.vector.points <- function(object,
     
     if(admin_level == "admin0"){
       vector_plot <-  ggplot2::ggplot()+
-        ggplot2::geom_polygon(data = vector_shp[vector_shp$admn_level == 0,],
-                              aes_string(x="long", y = "lat", group = "group"), colour = "grey50", fill = "grey95")
+        ggplot2::geom_sf(data = vector_shp[vector_shp$admn_level == 0,], aes(group = "group"), colour = "grey50", fill = "grey95")
     }
     
     if(admin_level == "admin1"){
       vector_plot <-  ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = vector_shp[vector_shp$admn_level == 1,],
-                              aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")
+        ggplot2::geom_sf(data = vector_shp[vector_shp$admn_level == 1,], aes(group = "group"), colour = "grey80", fill = "grey95")
     }
     
     if(admin_level == "both"){
       vector_plot <-  ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = vector_shp[vector_shp$admn_level == 1,],
-                              aes_string(x="long", y = "lat", group = "group"),
-                              colour = "grey80", fill = "grey95") +
-        ggplot2::geom_polygon(data = vector_shp[vector_shp$admn_level == 0,],
-                              aes_string(x="long", y = "lat", group = "group"),
-                              colour = "grey50", alpha = 0)
+        ggplot2::geom_sf(data = vector_shp[vector_shp$admn_level == 1,], aes(group = "group"), colour = "grey80", fill = "grey95") + 
+        ggplot2::geom_sf(data = vector_shp[vector_shp$admn_level == 0,], aes(group = "group"), colour = "grey50", fill = "grey95")
     }
-  }else{
-    vector_plot <-  ggplot2::ggplot() +
-      ggplot2::geom_polygon(data = shp_df,
-                            aes_string(x="long", y = "lat", group = "group"),
-                            colour = "grey80", fill = "grey95")
+  } else {
+    vector_plot <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = shp_df, aes(group = "group"), colour = "grey80", fill = "grey95")
   }
   
   vector_plot <- vector_plot +
-    ggplot2::coord_equal()+
+    ggplot2::coord_sf() +
     ggplot2::ggtitle(paste(map_title))+
     ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes_string(x = "longitude", y = "latitude", fill = "species"), alpha = 0.8, shape = 21, na.rm = TRUE)+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
