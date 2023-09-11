@@ -12,7 +12,7 @@ test_that("downloadShp downloads shapefiles and loads them correctly",{
   #check that Shp folder is deleted on exit
   expect_false("shp" %in% dir(tempdir()))
   # check that downloaded object is as expected
-  expect_true(inherits(test_dlshp, "SpatialPolygonsDataFrame"))
+  expect_true(inherits(test_dlshp, "sf"))
   expect_true(unique(test_dlshp$iso)=="BDI")
 
   skip_on_cran()
@@ -43,12 +43,12 @@ test_that("getShp downloads the correct shapefiles and stores them",{
   test_getshp_poly_b_2 <- getShp(ISO = c("BDI","RWA"), admin_level = "all")
   
   # check class of returned polygons
-  expect_true(inherits(test_getshp_poly_0_1, "SpatialPolygonsDataFrame"))
-  expect_true(inherits(test_getshp_poly_0_2, "SpatialPolygonsDataFrame"))
-  expect_true(inherits(test_getshp_poly_1_1, "SpatialPolygonsDataFrame"))
-  expect_true(inherits(test_getshp_poly_1_2, "SpatialPolygonsDataFrame"))
-  expect_true(inherits(test_getshp_poly_b_1, "SpatialPolygonsDataFrame"))
-  expect_true(inherits(test_getshp_poly_b_2, "SpatialPolygonsDataFrame"))
+  expect_true(inherits(test_getshp_poly_0_1, "sf"))
+  expect_true(inherits(test_getshp_poly_0_2, "sf"))
+  expect_true(inherits(test_getshp_poly_1_1, "sf"))
+  expect_true(inherits(test_getshp_poly_1_2, "sf"))
+  expect_true(inherits(test_getshp_poly_b_1, "sf"))
+  expect_true(inherits(test_getshp_poly_b_2, "sf"))
   # check that the right countries' polygons are downloaded at the right admin_level
   expect_true(all(c("BDI_0") %in% unique(test_getshp_poly_0_1$country_level)))
   expect_true(all(c("BDI_0", "RWA_0") %in% unique(test_getshp_poly_0_2$country_level)))
