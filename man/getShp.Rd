@@ -9,7 +9,7 @@ getShp(
   ISO = NULL,
   extent = NULL,
   admin_level = c("admin0"),
-  format = "spatialpolygon",
+  format = NULL,
   long = NULL,
   lat = NULL
 )
@@ -24,7 +24,7 @@ Note: getShp downloads the entire polygon for any polygons falling within the ex
 
 \item{admin_level}{string specifying the administrative level for which shapefile are desired (only "admin0","admin1","admin2","admin3", or "all" accepted). N.B. Not all administrative levels are available for all countries. Use listShp to check which shapefiles are available. If an administrative level is requested that is not available, the closest available administrative level shapefiles will be returned.}
 
-\item{format}{string specifying the desired format for the downloaded shapefile: either "spatialpolygon" or "df"}
+\item{format}{deprecated argument. Please remove it from your code.}
 
 \item{long}{longitude of a point location falling within the desired shapefile.}
 

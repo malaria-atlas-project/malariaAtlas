@@ -18,7 +18,7 @@
 #' }
 #'
 #' @importFrom ggplot2 autoplot
-#' @method autoplot MAPshp
+#' @method autoplot sf
 #' @export
 
 
