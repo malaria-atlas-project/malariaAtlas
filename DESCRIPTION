@@ -21,7 +21,6 @@ LazyData: true
 Imports:
   curl, 
   raster, 
-  sp, 
   xml2, 
   grid, 
   gridExtra, 

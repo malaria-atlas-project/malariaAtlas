@@ -23,7 +23,7 @@ getVecOcc(
 
 \item{species}{string specifying the Anopheles species for which to find vector occurrence points, options include: \code{"Anopheles...."} OR \code{"ALL"}}
 
-\item{extent}{2x2 matrix specifying the spatial extent within which vector occurrence data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))}
+\item{extent}{an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox().}
 }
 \value{
 \code{getVecOcc} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.

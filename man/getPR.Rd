@@ -15,7 +15,7 @@ getPR(country = NULL, ISO = NULL, continent = NULL, species, extent = NULL)
 
 \item{species}{string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}}
 
-\item{extent}{2x2 matrix specifying the spatial extent within which PR data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))}
+\item{extent}{an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox().}
 }
 \value{
 \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
