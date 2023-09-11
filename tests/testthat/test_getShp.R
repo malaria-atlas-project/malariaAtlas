@@ -30,17 +30,17 @@ test_that("getShp downloads the correct shapefiles and stores them",{
   skip_on_cran()
   #test getShp
   #test one country, admin0
-  test_getshp_poly_0_1 <- getShp(ISO = "BDI", admin_level = "admin0", format = "spatialpolygon")
+  test_getshp_poly_0_1 <- getShp(ISO = "BDI", admin_level = "admin0")
   #test two countries, admin0
-  test_getshp_poly_0_2 <- getShp(ISO = c("BDI","RWA"), admin_level = "admin0", format = "spatialpolygon")
+  test_getshp_poly_0_2 <- getShp(ISO = c("BDI","RWA"), admin_level = "admin0")
   #test one country, admin1
-  test_getshp_poly_1_1 <- getShp(ISO = "BDI", admin_level = "admin1", format = "spatialpolygon")
+  test_getshp_poly_1_1 <- getShp(ISO = "BDI", admin_level = "admin1")
   #test two countries, admin1
-  test_getshp_poly_1_2 <- getShp(ISO = c("BDI","RWA"), admin_level = "admin1", format = "spatialpolygon")
+  test_getshp_poly_1_2 <- getShp(ISO = c("BDI","RWA"), admin_level = "admin1")
   #test one country, admin0 & admin1
-  test_getshp_poly_b_1 <- getShp(ISO = "BDI", admin_level = "all", format = "spatialpolygon")
+  test_getshp_poly_b_1 <- getShp(ISO = "BDI", admin_level = "all")
   #test two countries, admin0 & admin1
-  test_getshp_poly_b_2 <- getShp(ISO = c("BDI","RWA"), admin_level = "all", format = "spatialpolygon")
+  test_getshp_poly_b_2 <- getShp(ISO = c("BDI","RWA"), admin_level = "all")
   
   # check class of returned polygons
   expect_true(inherits(test_getshp_poly_0_1, "SpatialPolygonsDataFrame"))
