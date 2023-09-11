@@ -33,7 +33,8 @@ Imports:
   stats,
   utils,
   rlang,
-  sf
+  sf,
+  lifecycle
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,
