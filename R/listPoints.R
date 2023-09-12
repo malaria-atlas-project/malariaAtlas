@@ -27,9 +27,8 @@ listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
     wfs_client <- getOption("malariaatlas.wfs_clients")$Malaria
     
     if(is.null(dataset_id)) {
-      prDatasets <- listParasiteRateDatasets()
-      pf_dataset_id = getLastestVersionOfDataset(prDatasets, 'Global_Pf_Parasite_Rate_Surveys')
-      pv_dataset_id = getLastestVersionOfDataset(prDatasets, 'Global_Pv_Parasite_Rate_Surveys')
+      pf_dataset_id = getLatestDatasetIdForPfPrData()
+      pv_dataset_id = getLatestDatasetIdForPvPrData()
       message('Please Note: Because you did not provide a dataset_id, by default the two datasets being used are ', pf_dataset_id, ' and ', 
               pv_dataset_id, ' (These are the most recent versions of parasite rate data. To see other dataset options use function listParasiteRateDatasets)')
       
@@ -53,8 +52,7 @@ listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
     wfs_client <- getOption("malariaatlas.wfs_clients")$Vector_Occurrence
     
     if(is.null(dataset_id)) {
-      vecOccDatasets <- listVectorOccurrenceDatasets()
-      dataset_id = getLastestVersionOfDataset(vecOccDatasets, 'Global_Dominant_Vector_Surveys')
+      dataset_id <- getLatestDatasetIdForVecOccData()
       message('Please Note: Because you did not provide a dataset_id, by default the dataset being used is ', dataset_id, 
               ' (This is the most recent version of vector occurrence data. To see other dataset options use function listVectorOccurrenceDatasets)')
     }
