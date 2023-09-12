@@ -18,11 +18,9 @@ test_that("downloadShp downloads shapefiles and loads them correctly",{
   skip_on_cran()
   # test as.MAPshp
   test_dlshp <- getShp(ISO = "BDI", admin_level = "admin0")
-  test_dlshp_df <- as.MAPshp(test_dlshp)
   
-  expect_true(inherits(test_dlshp_df, "data.frame"))
-  expect_true(inherits(test_dlshp_df, "MAPshp"))
-  expect_true(unique(test_dlshp_df$iso)=="BDI")
+  expect_true(inherits(test_dlshp, "sf"))
+  expect_true(unique(test_dlshp$iso)=="BDI")
 })
 
 test_that("getShp downloads the correct shapefiles and stores them",{
