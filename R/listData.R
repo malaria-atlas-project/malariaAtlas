@@ -6,7 +6,7 @@
 #'
 #' @param datatype One of 'pr points', 'vector points', 'raster' or 'shape'
 #' @param printed Should the list be printed to the console?
-#' @param ... Other arguments to be passed to \code{list*} functions. (e.g. \code{admin_level} for \code{listShp})
+#' @param ... Other arguments to be passed to \code{list*} functions. (e.g. \code{admin_level} for \code{listShp}, or \code{dataset_id} for \code{listPoints})
 #' @examples
 #' \donttest{
 #' available_admin_units <- listShp()
@@ -28,9 +28,9 @@ listData <- function(datatype, printed = TRUE, ...){
   }
 
   if(datatype == "pr points"){
-    listPoints(printed = printed, sourcedata = "pr points")      
+    listPoints(printed = printed, sourcedata = "pr points", ...)      
   }else if(datatype == "vector points"){
-   listPoints(printed = printed, sourcedata = "vector points")
+   listPoints(printed = printed, sourcedata = "vector points", ...)
   }else if(datatype == "raster"){
     listRaster(printed = printed)
   }else if(datatype == "shape"){
