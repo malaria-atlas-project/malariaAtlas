@@ -5,7 +5,7 @@
 #' @param surface string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
 #' Check \code{\link{listRaster}} to find titles of available rasters.
 #' @param shp SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
-#' @param extent  2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
+#' @param extent  2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
 #' @param file_path string specifying the directory to which working files will be downloaded. Defaults to tempdir().
 #' @param year default = \code{rep(NA, length(surface))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.
 #' @param vector_year default = \code{NULL} for vector occurence rasters, the desired version as prefixed in raster_code returned using available_rasters. By default (\code{NULL}) returns the most recent raster version )
@@ -58,9 +58,9 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
                       file_path = tempdir(),
                       year = as.list(rep(NA, length(surface))), 
                       vector_year= NULL) {
-  ## if extent is not defined by user, use sp::bbox to define this from provided shapefile
+  ## if extent is not defined by user, use sf::st_bbox to define this from provided shapefile
   if (is.null(extent) & !is.null(shp)) {
-    extent <- sp::bbox(shp)
+    extent <- matrix(unlist(sf::st_bbox(shp)), ncol = 2)
   }
   
   if (length(surface) > 1) {

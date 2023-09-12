@@ -4,9 +4,14 @@
 \alias{getRaster}
 \title{Download Rasters produced by the Malaria Atlas Project}
 \usage{
-getRaster(surface = "Plasmodium falciparum PR2-10", shp = NULL,
-  extent = NULL, file_path = tempdir(), year = as.list(rep(NA,
-  length(surface))), vector_year = NULL)
+getRaster(
+  surface = "Plasmodium falciparum PR2-10",
+  shp = NULL,
+  extent = NULL,
+  file_path = tempdir(),
+  year = as.list(rep(NA, length(surface))),
+  vector_year = NULL
+)
 }
 \arguments{
 \item{surface}{string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
@@ -14,7 +19,7 @@ Check \code{\link{listRaster}} to find titles of available rasters.}
 
 \item{shp}{SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).}
 
-\item{extent}{2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).}
+\item{extent}{2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).}
 
 \item{file_path}{string specifying the directory to which working files will be downloaded. Defaults to tempdir().}
 

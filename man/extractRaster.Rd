@@ -4,8 +4,12 @@
 \alias{extractRaster}
 \title{Extract pixel values from MAP rasters using point coordinates.}
 \usage{
-extractRaster(df = NULL, csv_path = NULL, surface = "PfPR2-10",
-  year = rep(NA, length(surface)))
+extractRaster(
+  df = NULL,
+  csv_path = NULL,
+  surface = "PfPR2-10",
+  year = rep(NA, length(surface))
+)
 }
 \arguments{
 \item{df}{data.frame containing coordinates of input point locations, must contain columns named 'latitude'/'lat'/'x'  AND 'longitude'/'long'/'y')}

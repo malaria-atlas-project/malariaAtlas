@@ -87,31 +87,23 @@ if(is.null(shp_df)){
   pr_shp <- getShp(ISO = unique_iso, format = "df", admin_level = admin_level_request)
 
   if(admin_level == "admin0"){
-    pr_plot <-  ggplot2::ggplot()+
-                  ggplot2::geom_polygon(data = pr_shp[pr_shp$admn_level == 0,],
-                                        aes_string(x="long", y = "lat", group = "group"), colour = "grey50", fill = "grey95")
+    pr_plot <-  ggplot2::ggplot() +
+      ggplot2::geom_sf(data = pr_shp[pr_shp$admn_level == 0,], aes(group = "group"), colour = "grey50", fill = "grey95")
   }
 
   if(admin_level == "admin1"){
     pr_plot <-  ggplot2::ggplot() +
-                  ggplot2::geom_polygon(data = pr_shp[pr_shp$admn_level == 1,],
-                                        aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")
+      ggplot2::geom_sf(data = pr_shp[pr_shp$admn_level == 1,], aes(group = "group"), colour = "grey80", fill = "grey95")
   }
 
   if(admin_level == "both"){
     pr_plot <-  ggplot2::ggplot() +
-                  ggplot2::geom_polygon(data = pr_shp[pr_shp$admn_level == 1,],
-                                        aes_string(x="long", y = "lat", group = "group"),
-                                        colour = "grey80", fill = "grey95") +
-                  ggplot2::geom_polygon(data = pr_shp[pr_shp$admn_level == 0,],
-                                        aes_string(x="long", y = "lat", group = "group"),
-                                        colour = "grey50", alpha = 0)
+      ggplot2::geom_sf(data = pr_shp[pr_shp$admn_level == 1,], aes(group = "group"), colour = "grey80", fill = "grey95") +
+      ggplot2::geom_sf(data = pr_shp[pr_shp$admn_level == 0,], aes(group = "group"), colour = "grey50", fill = "grey95")
   }
-}else{
+} else {
   pr_plot <-  ggplot2::ggplot() +
-                ggplot2::geom_polygon(data = shp_df,
-                                      aes_string(x="long", y = "lat", group = "group"),
-                                      colour = "grey80", fill = "grey95")
+    ggplot2::geom_sf(data = shp_df, aes(group = "group"), colour = "grey80", fill = "grey95")
   }
 
 
@@ -123,7 +115,7 @@ if(is.null(shp_df)){
 
 if(plot_species_n == 1){
   pr_plot <- pr_plot +
-    ggplot2::coord_equal()+
+    ggplot2::coord_sf() +
     ggplot2::ggtitle(paste(map_title))+
     ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes_string(x = "longitude", y = "latitude", fill = "pr", size = "examined"), alpha = 0.8, shape = 21, na.rm = TRUE)+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
@@ -140,7 +132,7 @@ if(plot_species_n == 1){
     }
 } else if(plot_species_n == 2){
   pr_plot <- pr_plot +
-    ggplot2::coord_equal()+
+    ggplot2::coord_sf() +
     ggplot2::ggtitle(paste(map_title))+
     ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes_string(x = "longitude", y = "latitude", fill = "pr", size = "examined"), alpha = 0.8, shape = 21, na.rm = TRUE)+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),

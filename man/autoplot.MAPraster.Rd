@@ -4,10 +4,16 @@
 \alias{autoplot.MAPraster}
 \title{Quickly visualise Rasters downloaded from MAP}
 \usage{
-\method{autoplot}{MAPraster}(object, ..., shp_df = NULL,
-  legend_title = "", plot_titles = TRUE,
-  fill_scale_transform = "identity", fill_colour_palette = "RdYlBu",
-  printed = TRUE)
+\method{autoplot}{MAPraster}(
+  object,
+  ...,
+  shp_df = NULL,
+  legend_title = "",
+  plot_titles = TRUE,
+  fill_scale_transform = "identity",
+  fill_colour_palette = "RdYlBu",
+  printed = TRUE
+)
 }
 \arguments{
 \item{object}{MAPraster object to be visualised.}
@@ -56,7 +62,7 @@ geom_point(data = pr[pr$year_start==2013,],
                size = examined), shape = 21) +
   scale_size_continuous(name = "Survey Size") +
   scale_fill_distiller(name = "PfPR", palette = "RdYlBu") +
-  ggtitle("Raw PfPR Survey points\\n +
+  ggtitle("Raw PfPR Survey points\n +
           Modelled PfPR 2-10 in Madagascar in 2013")
 
 

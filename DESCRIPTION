@@ -20,9 +20,7 @@ Encoding: UTF-8
 LazyData: true
 Imports:
   curl, 
-  rgdal, 
   raster, 
-  sp, 
   xml2, 
   grid, 
   gridExtra, 
@@ -33,9 +31,11 @@ Imports:
   methods,
   stats,
   utils,
-  rlang
+  rlang,
+  sf,
+  lifecycle
 Depends: ggplot2
-RoxygenNote: 7.0.2
+RoxygenNote: 7.2.3
 Suggests: testthat,
     knitr,
     rmarkdown,
