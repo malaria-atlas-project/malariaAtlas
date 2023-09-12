@@ -11,3 +11,20 @@ get_workspace_and_version_from_wfs_feature_type_id <- function(id) {
   return(list(workspace = workspace, version = version))
 }
 
+#' Get the name from a wfs feature type id.
+#'
+#' @param id The ID to parse.
+#' @return A name of the dataset
+#' @keywords internal
+#'
+get_name_from_wfs_feature_type_id <- function(id) {
+  parts <- unlist(strsplit(id, ":"))
+  name <- substring(parts[2], 8)
+  return(name)
+}
+
+
+
+
+
+
