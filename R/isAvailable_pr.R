@@ -25,21 +25,13 @@
 #' }
 #' @export isAvailable_pr
 
-isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL, continent = NULL, full_results = FALSE) {
-  
-  if(exists('available_countries_stored_pr', envir = .malariaAtlasHidden)){
-    available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
-  }else{
-    available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
-    if(inherits(available_countries_pr, 'try-error')){
-      message(available_countries_pr)
-      return(available_countries_pr)
-    }
-  }  
-  
+isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL, continent = NULL, full_results = FALSE, dataset_id = NULL) {
+
   if(is.null(country) & is.null(ISO) & is.null(continent)){
     stop('Must specify one of country, ISO or continent.')
   }
+  
+  available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points", dataset_id = NULL)
   
   capwords <- function(string) {
     cap <- function(s) {
@@ -104,7 +96,6 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
   
   checked_availability_pr <- list("location"= location_input_pr, "is_available"=rep(NA,length = length(location_input_pr)), "possible_match"=rep(NA,length = length(location_input_pr)))
   
-  
   for(i in 1:length(unique(location_input_pr))) {
     if(!(location_input_pr[i] %in% available_locs_pr)){
       checked_availability_pr$is_available[i] <- 0
@@ -116,7 +107,6 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
     }
     checked_availability_pr$possible_match[checked_availability_pr$possible_match %in% c("NULL","")] <- NA
   }
-  
   
   if(1 %in% checked_availability_pr$is_available) {
     message("PR points are available for ", paste(checked_availability_pr$location[checked_availability_pr$is_available==1], collapse = ", "), ".")
