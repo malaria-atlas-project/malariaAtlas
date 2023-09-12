@@ -28,7 +28,7 @@ Check \code{\link{listRaster}} to find titles of available rasters.}
 \item{vector_year}{default = \code{NULL} for vector occurence rasters, the desired version as prefixed in raster_code returned using available_rasters. By default (\code{NULL}) returns the most recent raster version )}
 }
 \value{
-\code{getRaster} returns a RasterLayer (if only a single raster is queried) or RasterStack (for multiple rasters) for the specified extent.
+\code{getRaster} returns a SpatRaster for the specified extent.
 }
 \description{
 \code{getRaster} downloads publicly available MAP rasters for a specific surface & year, clipped to a provided bounding box or shapefile.

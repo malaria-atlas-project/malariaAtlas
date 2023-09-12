@@ -34,7 +34,8 @@ Imports:
   rlang,
   sf,
   lifecycle,
-  terra
+  terra,
+  tidyterra
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,
