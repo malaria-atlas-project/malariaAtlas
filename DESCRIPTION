@@ -1,9 +1,12 @@
 Package: malariaAtlas
 Title: An R Interface to Open-Access Malaria Data, Hosted by the 'Malaria Atlas Project'
-Version: 1.0.0
+Version: 1.2.0
 Authors@R: c(
+    person("Malaria Atlas Project, Data Engineering Team", email = "data.malariaatlas.org@telethonkids.org.au", role="cre"),
     person("Daniel", "Pfeffer", email = "daniel.pfeffer@uqconnect.edu.au", role = c("aut"), comment = c(ORCID = "0000-0002-2204-3488")),
-    person("Tim", "Lucas", email =  "timcdlucas@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-4694-8107")),
+    person("Tim", "Lucas", email =  "timcdlucas@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0003-4694-8107")),
+    person("Mauricio", "van den Berg", email =  "mauricio.vandenberg@telethonkids.org.au", role = c("aut")),
+    person("Sarah", "Connor", email =  "sarah.connor@telethonkids.org.au", role = c("aut")),
     person("Daniel", "May", role = c("aut"), comment = c(ORCID = "0000-0003-0005-2452")),
     person("Suzanne", "Keddie", role = c("aut"), comment = c(ORCID = "0000-0003-1254-7794")),
     person("Jen", "Rozier", role = c("aut"), comment = c(ORCID = "0000-0002-2610-7557")),
