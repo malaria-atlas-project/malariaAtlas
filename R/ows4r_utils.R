@@ -48,11 +48,11 @@ get_name_from_wfs_feature_type_id <- function(id) {
 getLatestDatasetId <- function(datasets, dataset_name) {
   datasetNames <- future.apply::future_lapply(datasets$dataset_id, get_name_from_wfs_feature_type_id)
   datasetNames <- do.call(rbind, datasetNames)
-  datasets$dataset_name <- datasetNames
-  datasets <- subset(datasets, dataset_name==dataset_name)
-  maxVersion <- max(datasets$version)
-  datasets <- subset(datasets, version==maxVersion)
-  datasetId <- datasets$dataset_id[1]
+  datasets$name <- datasetNames
+  datasets_filtered_by_name <- subset(datasets, name==dataset_name)
+  maxVersion <- max(datasets_filtered_by_name$version)
+  datasets_filtered_by_name_and_version <- subset(datasets_filtered_by_name, version==maxVersion)
+  datasetId <- datasets_filtered_by_name_and_version$dataset_id[1]
   return(datasetId)
 }
 
@@ -84,6 +84,28 @@ getLatestDatasetIdForPvPrData <- function() {
 getLatestDatasetIdForVecOccData <- function() {
   vecOccDatasets <- listVectorOccurrenceDatasets()
   return(getLatestDatasetId(vecOccDatasets, 'Global_Dominant_Vector_Surveys'))
+}
+
+#' Builds a cql filter to be used with getFeatures, that will filter based on the given bounding box.
+#'
+#' @param bbox A matrix representing a bounding box.
+#' @return The character string of the cql filter.
+build_bbox_filter <- function(bbox) {
+  minX <- bbox[2, 1]
+  minY <- bbox[1, 1]
+  maxX <- bbox[2, 2]
+  maxY <- bbox[1, 2]
+  bbox_filter <-
+    paste(minX,
+          ",",
+          minY,
+          ",",
+          maxX,
+          ",",
+          maxY,
+          ",EPSG:4326",
+          sep = '')
+  return(bbox_filter)
 }
 
 
