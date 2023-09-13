@@ -10,7 +10,7 @@
 #' @param year default = \code{rep(NA, length(surface))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.
 #' @param vector_year default = \code{NULL} for vector occurence rasters, the desired version as prefixed in raster_code returned using available_rasters. By default (\code{NULL}) returns the most recent raster version )
 #'
-#' @return \code{getRaster} returns a SpatRaster for the specified extent.
+#' @return \code{getRaster} returns a SpatRaster for the specified extent. Or a SpatRasterCollection if the two rasters are incompatible in terms of projection/extent/resolution
 #'
 #' @examples
 #' # Download PfPR2-10 Raster for Madagascar in 2015 and visualise this immediately.
@@ -302,11 +302,10 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
       for (i in 1:length(stk_list)) {
         for (ii in 1:length(stk_list[i])) {
           names(stk_list[i][[ii]]) <-
-            query_def$raster_title[paste0('X', query_def$file_name) %in% names(stk_list[i][[ii]])]
+            query_def$raster_title[query_def$file_name %in% names(stk_list[i][[ii]])]
         }
       }
-      
-      return(stk_list)
+      return(terra::sprc(stk_list))
     }
   }
 }

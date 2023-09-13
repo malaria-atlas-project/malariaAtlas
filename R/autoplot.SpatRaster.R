@@ -56,70 +56,40 @@
 #' @method autoplot SpatRaster
 #' @export
 
-autoplot.SpatRaster <- function(object,
-                               ...,
-                               shp_df = NULL,
-                               legend_title = "",
-                               plot_titles = TRUE,
-                               fill_scale_transform = "identity",
-                               fill_colour_palette = "RdYlBu",
-                               printed = TRUE) {
-
-
-  make_plot <- function(object, rastername, shp_df, legend_title) {
-    plot <- ggplot2::ggplot() +
-      tidyterra::geom_spatraster(data = object[[rastername]], aes()) +
-      ggplot2::coord_sf() +
-      ggplot2::scale_fill_distiller(name = paste(legend_title),
-                           palette = fill_colour_palette,
-                           trans = fill_scale_transform,
-                           na.value = grDevices::grey(0.9)) +
-      ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
-          panel.background = ggplot2::element_rect(fill = "white"),
-          panel.grid = ggplot2::element_blank(),
-          axis.title = ggplot2::element_blank(),
-          panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))
-  
-    if (plot_titles == TRUE) {
-      plot <- plot +  ggplot2::ggtitle(paste(rastername))
-    }
-  
-    if (!is.null(shp_df)) {
-      plot$layers <- c(ggplot2::geom_sf(data = shp_df, ggplot2::aes(group = "group"), fill = "grey65"),
-                       plot$layers)
-      plot <- plot + ggplot2::geom_sf(data = shp_df, ggplot2::aes(group = "group"), alpha = 0, colour = "grey40")
-    }
-  
-    return(plot)
-  }
-
+autoplot.SpatRaster <- function(
+    object,
+    ...,
+    shp_df = NULL,
+    legend_title = "",
+    plot_titles = TRUE,
+    fill_scale_transform = "identity",
+    fill_colour_palette = "RdYlBu",
+    printed = TRUE
+) {
   raster_names <- unique(names(object))
-  plot_list <- lapply(X = raster_names, FUN = make_plot, object = object, shp_df = shp_df, legend_title = legend_title)
+  plot_list <- lapply(X = raster_names, function(name) {
+    makeSpatRasterAutoplot(spatraster = object[[name]], name, shp_df, legend_title, fill_scale_transform, fill_colour_palette, plot_titles)
+  })
+                     
   names(plot_list) <- raster_names
   
-  if(printed == TRUE){
-  if(length(plot_list)==1){
-    message("Plotting:\n", paste("  -",names(plot_list), collapse = "\n"))
-  gridExtra::grid.arrange(plot_list[[1]])
-    }else if(length(plot_list)>1) {
+  if (printed == TRUE) {
+    if (length(plot_list) == 1) {
+      message("Plotting:\n", paste("  -",names(plot_list), collapse = "\n"))
+      gridExtra::grid.arrange(plot_list[[1]])
+    } else if (length(plot_list) > 1) {
       split_list <- base::split(plot_list, (seq_along(plot_list)-1) %/% 4)
   
-      if(length(plot_list)==2){
-        nrow = 1
-      }else{
-        nrow = 2
-      }
-  
+      nrow = if(length(plot_list)==2) 1 else 2
       message("Plotting (over ",length(split_list)," page(s)):\n", paste("  -",names(plot_list), collapse = "\n"))
   
-      for(p in 1:length(split_list)){
-     do.call(gridExtra::grid.arrange, args = list(grobs = split_list[[p]], nrow = nrow, ncol = 2, top = paste("Page", p, "of", length(split_list))))
-        }
+      for (p in 1:length(split_list)) {
+        do.call(gridExtra::grid.arrange, args = list(grobs = split_list[[p]], nrow = nrow, ncol = 2, top = paste("Page", p, "of", length(split_list))))
       }
+    }
   }
 
   return(invisible(plot_list))
-
 }
 
 
