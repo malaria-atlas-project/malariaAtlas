@@ -2,15 +2,14 @@
 #'
 #' @param spatraster SpatRaster object containing a single layer
 #' @param rastername raster name, to include in title
-#' @param shp_df 
-#' @param legend_title 
-#' @param fill_scale_transform 
-#' @param fill_colour_palette 
+#' @param shp_df sf shapefile 
+#' @param legend_title title for legend
+#' @param fill_scale_transform scale
+#' @param fill_colour_palette palette
 #' @param plot_titles bool, whether to include title
 #'
 #' @return ggplot object
 #'
-#' @examples
 makeSpatRasterAutoplot <- function(
     spatraster, 
     rastername, 
@@ -20,7 +19,13 @@ makeSpatRasterAutoplot <- function(
     fill_colour_palette,
     plot_titles
 ) {
-  plot <- ggplot2::ggplot() +
+  plot <- ggplot2::ggplot()
+  
+  if (!is.null(shp_df)) {
+    plot <- plot + ggplot2::geom_sf(data = shp_df, ggplot2::aes(group = "group"), fill = "grey65")
+  }
+  
+  plot <- plot +
     tidyterra::geom_spatraster(data = spatraster, aes()) +
     ggplot2::coord_sf() +
     ggplot2::scale_fill_distiller(name = paste(legend_title),
@@ -38,8 +43,6 @@ makeSpatRasterAutoplot <- function(
   }
   
   if (!is.null(shp_df)) {
-    plot$layers <- c(ggplot2::geom_sf(data = shp_df, ggplot2::aes(group = "group"), fill = "grey65"),
-                     plot$layers)
     plot <- plot + ggplot2::geom_sf(data = shp_df, ggplot2::aes(group = "group"), alpha = 0, colour = "grey40")
   }
   
