@@ -11,7 +11,10 @@
 #' @param continent string containing continent (one of "Africa", "Americas", "Asia", "Oceania") for desired data, e.g. \code{c("continent1", "continent2", ...)}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param species string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}
 #' @param extent 2x2 matrix specifying the spatial extent within which PR data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
-#'
+#' @param sf an sf (simple feature) object specifying the spatial extent within which PR data is desired
+#' @param start_date string object representing the lower date to filter the PR data by (inclusive)
+#' @param end_date string object representing the upper date to filter the PR data by (exclusive)
+#' @param dataset_id  A character string specifying the dataset ID. Is NULL by default, and the most recent version of PR data will be selected. 
 #'
 #' @return \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 #'
@@ -43,72 +46,60 @@
 getPR <- function(country = NULL,
                   ISO = NULL,
                   continent = NULL,
-                  species,
-                  extent = NULL) {
-  if (exists('available_countries_stored_pr', envir = .malariaAtlasHidden)) {
-    available_countries_pr <-
-      .malariaAtlasHidden$available_countries_stored_pr
-  } else{
-    available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
-    if(inherits(available_countries_pr, 'try-error')){
-      message(available_countries_pr)
-      return(available_countries_pr)
-    }
-  }
+                  species = NULL,
+                  extent = NULL,
+                  sf = NULL,
+                  start_date = NULL, 
+                  end_date = NULL,
+                  dataset_id = NULL
+                  ) {
+  
   
   if (is.null(country) &
-      is.null(ISO) & is.null(continent) & is.null(extent)) {
-    stop("Must specify one of: 'country', 'ISO', 'continent', or 'extent'.")
+      is.null(ISO) & is.null(continent) & is.null(extent) & is.null(sf)) {
+    stop("Must specify one of: 'country', 'ISO', 'continent', 'extent', or 'sf'.")
   }
   
-  
-  URL <-
-    "https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data"
-  
-  if (tolower(species) == "both") {
-    columns <-
-      "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
-    
-  } else if (tolower(species) == "pf") {
-    columns <-
-      "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
-    
-  } else if (tolower(species) == "pv") {
-    columns <-
-      "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
-    
-  } else {
-    stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")
+  if (!is.null(extent) & !is.null(sf)) {
+    stop("Can not specifiy both: 'extent' and 'sf'. Please choose one.")
   }
   
+  if (is.null(dataset_id) & is.null(species)) {
+    stop("Must specify one of: 'dataset_id' or 'species'.")
+  }
+
+  wfs_client <- getOption("malariaatlas.wfs_clients")$Malaria
+  wfs_cap <- wfs_client$getCapabilities()
+
+  bbox_filter <- NULL
+  time_filter <- NULL
+  location_filter <- NULL
+  
+  #Building time filter
+  start_date <- convert_to_date_with_trycatch(start_date, 'start_date')
+  end_date <- convert_to_date_with_trycatch(end_date, 'end_date')
+  
+  if(!is.null(start_date) | !is.null(end_date)) {
+    time_filter <- build_cql_time_filter(start_date, end_date)
+  }
+  
+  #Building location filter or bbox filter
+  available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points", dataset_id = NULL)
   
   if ("all" %in% tolower(c(country, ISO))) {
-    message(paste(
-      "Importing PR point data for all locations, please wait...",
-      sep = ""
-    ))
-    df <-
-      try(utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[, -1])
-    if(inherits(df, 'try-error')){
-      message(df[1])
-      return(df)
-    }
+   location_filter <- NULL
     
     message("Data downloaded for all available locations.")
   } else{
     if (any(c(!is.null(country),!is.null(ISO),!is.null(continent)))) {
       if (!(is.null(country))) {
-        cql_filter <- "country"
-        colname <- "country"
+        location_cql_col <- "country"
       } else if (!(is.null(ISO))) {
-        cql_filter <- "country_id"
-        colname <- "country_id"
+        location_cql_col <- "country_id"
       } else if (!(is.null(continent))) {
-        cql_filter <- "continent_id"
-        colname <- "continent"
+        location_cql_col <- "continent_id"
       }
       
-
       checked_availability_pr <-
         isAvailable_pr(
           sourcedata = "pr points",
@@ -117,48 +108,60 @@ getPR <- function(country = NULL,
           continent = continent,
           full_results = TRUE
         )
+      
       message(paste(
         "Attempting to download PR point data for",
-        paste(available_countries_pr$country[available_countries_pr[, colname] %in% checked_availability_pr$location[checked_availability_pr$is_available ==
+        paste(available_countries_pr$country[available_countries_pr[, location_cql_col] %in% checked_availability_pr$location[checked_availability_pr$is_available ==
                                                                                                               1]], collapse = ", "),
         "..."
       ))
-      country_URL <-
-        paste("%27",
-              curl::curl_escape(gsub(
-                "'", "''", checked_availability_pr$location[checked_availability_pr$is_available ==
-                                                           1]
-              )),
-              "%27",
-              sep = "",
-              collapse = ",")
-      full_URL <- paste(URL,
-                        columns,
-                        "&cql_filter=",
-                        cql_filter,
-                        "%20IN%20(",
-                        country_URL,
-                        ")",
-                        sep = "")
+      
+      valid_locations <- checked_availability_pr$location[checked_availability_pr$is_available ==
+                                                      1]
+      location_filter <- build_cql_filter(location_cql_col, valid_locations)
+      
     } else if (!is.null(extent)) {
-      bbox_filter <-
-        paste0("&srsName=EPSG:4326&bbox=",
-               extent[2, 1],
-               ",",
-               extent[1, 1],
-               ",",
-               extent[2, 2],
-               ",",
-               extent[1, 2])
-      full_URL <- paste0(URL, columns, bbox_filter)
+        bbox_filter <- build_bbox_filter(extent)
+      }
+      else if(!is.null(sf)) {
+        bbox_filter <- build_bbox_filter(sf::st_bbox(sf))
+      }
+  }
+    
+    
+    if(is.null(dataset_id)) {
+      if(tolower(species) == "both") {
+        
+        pf_dataset_id <- getLatestDatasetIdForPfPrData()
+        pv_dataset_id <- getLatestDatasetIdForPvPrData()
+        pf_wfs_feature_type <- wfs_cap$findFeatureTypeByName(pf_dataset_id)
+        pv_wfs_feature_type <- wfs_cap$findFeatureTypeByName(pv_dataset_id)
+        pf_df <- callGetFeaturesWithFilters(pf_wfs_feature_type, time_filter, location_filter, bbox_filter)
+        pv_df <- callGetFeaturesWithFilters(pv_wfs_feature_type, time_filter, location_filter, bbox_filter)
+        df <- dplyr::bind_rows(pf_df, pv_df)
+        
+      } else if (tolower(species) == "pf") {
+        
+        dataset_id <- getLatestDatasetIdForPfPrData()
+        wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
+        df <- callGetFeaturesWithFilters(wfs_feature_type, time_filter, location_filter, bbox_filter)
+        
+      } else if (tolower(species) == "pv") {
+        
+        dataset_id <- getLatestDatasetIdForPvPrData()
+        wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
+        df <- callGetFeaturesWithFilters(wfs_feature_type, time_filter, location_filter, bbox_filter)
+        
+      } else {
+        stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")
+      }
+    } else {
+      
+      wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
+      df <- callGetFeaturesWithFilters(wfs_feature_type, time_filter, location_filter, bbox_filter)
+      
     }
     
-    df <-
-      try(utils::read.csv(full_URL, encoding = "UTF-8")[, -1])
-    if(inherits(df, 'try-error')){
-      message(df[1])
-      return(df)
-    }
     
     # Just to avoid visible binding notes
     pf_pr <- pv_pr <- permissions_info <- NULL
@@ -180,6 +183,14 @@ getPR <- function(country = NULL,
       )
     }
     
+    if (!nrow(df) > 0 & !is.null(sf)) {
+      stop(
+        "Error in downloading data for sf: (",
+        paste0(sf, collapse = ","),
+        "),\n try query using country or continent name OR check data availability at malariaatlas.org/explorer."
+      )
+    }
+    
     if (nrow(df) == 0) {
       stop(
         "PR data points are not available for the specified species in requested countries; \n confirm species-specific data availability at malariaatlas.org/explorer."
@@ -196,9 +207,12 @@ getPR <- function(country = NULL,
     } else if (!is.null(extent)) {
       message("Data downloaded for extent: ",
               paste0(extent, collapse = ","))
+    } else if (!is.null(extent)) {
+      message("Data downloaded for sf: ",
+              paste0(sf, collapse = ","))
     }
     
-  }
+  
   
   if (tolower(species) == "both") {
     if (all(is.na(unique(df$pv_pos)))) {
@@ -482,5 +496,104 @@ as.pr.points <- function(x){
 }
 
 
+#' Calls getFeatures on the given type with the given filters, where they are not NULL.
+#'
+#' @param feature_type Object of WFSFeatureType.
+#' @param time_filter A character string that reflects time cql filter e.g. "time_start AFTER 2020-00-00T00:00:00Z"
+#' @param location_filter A character string that reflects location cql filter e.g. "country IN ('Nigeria')"
+#' @param bbox_filter A character string that reflects bbox filter e.g. "120,130,178,187,EPSG:4326"
+#' @return The features returned from the getFeatures called on the feature_type with the filter where not NULL. 
+#' @keywords internal
+#'
+callGetFeaturesWithFilters <- function(feature_type, time_filter, location_filter, bbox_filter) {
+  cql_filter <- NULL
+  if(!is.null(time_filter) & !is.null(location_filter)) {
+    cql_filter <- paste(time_filter, country_filter, sep = ' AND ')
+  } else if(!is.null(time_filter) & is.null(location_filter)) {
+    cql_filter <- time_filter
+  } else if(is.null(time_filter) & !is.null(location_filter)) {
+    cql_filter <- location_filter
+  }
+  
+  if(!is.null(cql_filter) & !is.null(bbox_filter)) {
+    features <- feature_type$getFeatures(outputFormat="json", cql_filter = cql_filter, bbox = bbox_filter)
+  } else if(!is.null(cql_filter) & is.null(bbox_filter)) {
+    features <- feature_type$getFeatures(outputFormat="json", cql_filter = cql_filter)
+  } else if(is.null(cql_filter) & !is.null(bbox_filter)) {
+    features <- feature_type$getFeatures(outputFormat="json", bbox = bbox_filter)
+  } else {
+    features <- feature_type$getFeatures(outputFormat="json")
+  }
+  return(features)
+}
+
+
+#' Tries to convert character into a Date object. If this fails, the program will be stopped and an error message
+#' shown to the user
+#'
+#' @param input A character of length 1, to convert into a Date object.
+#' @param input_name A character string that reflects the name of the input (to inform the user).
+#' @return Will return input as a Date is it can be converted into one. Else will stop the program and issue the user with an error message.
+#' @keywords internal
+#'
+convert_to_date_with_trycatch <- function(input, input_name) {
+  if(is.null(input)) {
+    return(NULL)
+  }
+  tryCatch({
+    return(as.Date(input))
+  },
+  error = function(e) {
+    message(
+      paste0(
+        'Input Error: The value you provided for ',
+        input_name,
+        ' is not in a format that can be converted in a Date'
+      )
+    )
+    stop(e)
+  })
+}
+
+
+#' Builds a cql filter to be used with getFeatures, that will filter based on the time range
+#' provided by start_date and end_date.
+#'
+#' @param start_date A Date Object that is the lower bound on the time range (inclusive).
+#' @param end_date A Date Object that is the upper bound on the time range (exclusive).
+#' @return The character string of the cql filter.
+#' @keywords internal
+#'
+build_cql_time_filter <- function(start_date, end_date) {
+  filters <- list()
+  if (!is.na(start_date)) {
+    start_date_formatted <- format(start_date - 1, '%Y-%m-%dT%H:%M:%SZ')
+    filters$start_date <-
+      paste("time_start AFTER ", start_date_formatted, sep = "")
+  }
+  
+  if (!is.na(end_date)) {
+    end_date_formatted <- format(end_date, '%Y-%m-%dT%H:%M:%SZ')
+    filters$end_date <-
+      paste("time_end BEFORE ", end_date_formatted, sep = "")
+  }
+  all_filters <- paste(filters, collapse = ' AND ')
+  return(all_filters)
+}
+
+
+#' Builds a cql filter to be used with getFeatures, that will filter based on the given list of values.
+#'
+#'@param attribute A string representing the attribute to filter by
+#' @param values A character, or character list, representing one or more values
+#' @return The character string of the cql filter.
+#' @keywords internal
+#'
+build_cql_filter <- function(attribute, values) {
+  values_string <- paste(values, collapse = "', '")
+  filter <-
+    paste0(attribute, " IN ('", values_string, "')")
+  return(filter)
+}
 
 
