@@ -16,12 +16,11 @@
 #' @return \code{autoplot.SpatRasterCollection} returns a list of plots (gg objects) for each
 #'   supplied raster.
 #'
-#' @return
+#' @return gg object
 #' @export
 #'
-#' @examples
 autoplot.SpatRasterCollection <- function(
-    object,
+    raster_collection,
     ...,
     shp_df = NULL,
     legend_title = "",

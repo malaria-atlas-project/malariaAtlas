@@ -5,7 +5,7 @@
 \title{Quickly visualise Rasters downloaded from MAP}
 \usage{
 \method{autoplot}{SpatRasterCollection}(
-  object,
+  raster_collection,
   ...,
   shp_df = NULL,
   legend_title = "",
@@ -16,6 +16,8 @@
 )
 }
 \arguments{
+\item{raster_collection}{SpatRasterCollection object to be visualised.}
+
 \item{...}{Other arguments passed to specific methods}
 
 \item{shp_df}{Shapefile(s) (data.frame) to plot with downloaded raster.}
@@ -30,12 +32,12 @@ See the trans argument in \code{\link{continuous_scale}} for possible values.}
 \item{fill_colour_palette}{String referring to a colorbrewer palette to be used for raster colour scale.}
 
 \item{printed}{Logical vector indicating whether to print maps of supplied rasters.}
-
-\item{raster_collection}{SpatRasterCollection object to be visualised.}
 }
 \value{
 \code{autoplot.SpatRasterCollection} returns a list of plots (gg objects) for each
   supplied raster.
+
+gg object
 }
 \description{
 \code{autoplot.SpatRasterCollection} creates a map of all rasters in a autoplot.SpatRasterCollection object and

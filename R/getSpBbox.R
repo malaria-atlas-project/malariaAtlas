@@ -5,7 +5,6 @@
 #'
 #' @return bbox in sp style. A 2x2 matrix - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
 #'
-#' @examples
 getSpBbox <- function(sfBboxOrShp) {
   if (inherits(sfBboxOrShp, "matrix") && all(dim(sfBboxOrShp) == c(2,2))) {
     # already in correct format

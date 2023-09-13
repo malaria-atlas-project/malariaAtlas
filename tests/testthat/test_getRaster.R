@@ -120,7 +120,7 @@ test_that('Mosquito layers work correctly', {
   MDG_anoph1 <- getRaster(surface = "Anopheles arabiensis Patton, 1905", shp = MDG_shp, vector_year = 2010)
   MDG_anoph2 <- getRaster(surface = "Anopheles arabiensis Patton, 1905", shp = MDG_shp, vector_year = 2017)
   
-  expect_true(values(MDG_anoph1)[845] != values(MDG_anoph2)[845])
+  expect_true(terra::values(MDG_anoph1)[845] != terra::values(MDG_anoph2)[845])
 })
 
 

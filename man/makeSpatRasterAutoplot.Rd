@@ -19,13 +19,13 @@ makeSpatRasterAutoplot(
 
 \item{rastername}{raster name, to include in title}
 
-\item{shp_df}{}
+\item{shp_df}{sf shapefile}
 
-\item{legend_title}{}
+\item{legend_title}{title for legend}
 
-\item{fill_scale_transform}{}
+\item{fill_scale_transform}{scale}
 
-\item{fill_colour_palette}{}
+\item{fill_colour_palette}{palette}
 
 \item{plot_titles}{bool, whether to include title}
 }
