@@ -139,10 +139,9 @@ MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin1", "admin2"))
 tibble::glimpse(MDG_shp)
 ```
 
-`autoplot.MAPshp` configures autoplot method to enable quick mapping of downloaded shapefiles.
+`autoplot.sf` configures autoplot method to enable quick mapping of downloaded shapefiles.
 
 ```{r message = FALSE, error = TRUE, purl = FALSE}
-MDG_shp <- as.MAPshp(MDG_shp)
 autoplot(MDG_shp)
 ```
 
@@ -154,14 +153,11 @@ autoplot(MDG_shp)
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
 ```
-N.B. to use downloaded rasters and shapefiles directly with autoplot, use as.MAPraster() and as.MAPshp() to convert these to data.frames. Alternatively autoplot_MAPraster() will work directly with RasterLayer, RasterStack or RasterBrick objects downloaded with getRaster().
 
-`autoplot.MAPraster` and `autoplot_MAPraster` are autoplot methods to enable quick mapping of downloaded rasters.
+`autoplot.SpatRaster` and `autoplot.SpatRasterCollection` are autoplot methods to enable quick mapping of downloaded rasters.
 
 ```{r message = FALSE, error = TRUE, purl = FALSE, purl = FALSE}
-MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
-MDG_shp_df <- as.MAPshp(MDG_shp)
-p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
+p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 ```
 
 
@@ -171,11 +167,9 @@ By using the above tools along with ggplot, simple comparison figures can be eas
 
 ```{r message = FALSE, warning = FALSE, error = TRUE, purl = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_shp_df <- as.MAPshp(MDG_shp)
 MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
-MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
 
-p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df, printed = FALSE)
+p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp, printed = FALSE)
 
 pr <- getPR(country = c("Madagascar"), species = "Pf")
 p[[1]] +
@@ -187,11 +181,9 @@ scale_size_continuous(name = "Survey Size")+
 
 ```{r message = FALSE, warning = FALSE, error = TRUE, purl = FALSE}
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
-MMR_shp_df <- as.MAPshp(MMR_shp)
 MMR_an_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)
-MMR_an_dirus_df <- as.MAPraster(MMR_an_dirus)
 
-p <- autoplot(MMR_an_dirus_df, shp_df = MMR_shp_df, printed = FALSE)
+p <- autoplot(MMR_an_dirus, shp_df = MMR_shp, printed = FALSE)
 
 vec <- getVecOcc(country = c("Myanmar"), species = "Anopheles dirus")
 p[[1]] +
