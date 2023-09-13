@@ -18,6 +18,8 @@ knitr::opts_chunk$set(fig.path = 'man/figures/')
 # malariaAtlas 
 ### An R interface to open-access malaria data, hosted by the Malaria Atlas Project. 
 
+*The gitlab version of the malariaAtlas package has some additional bugfixes over the stable CRAN package. If you have any issues, try installing the latest github version. See below for instructions.*
+
 # Overview 
 
 This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*), survey occurrence data of the 41 dominant malaria vector species, and modelled raster outputs from the [Malaria Atlas Project](https://malariaatlas.org/).
@@ -210,16 +212,13 @@ geom_point(data = vec, aes(longitude, latitude, colour = species))+
  ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 ```
 
-## Basic Spatial utility tools 
 
-### extractRaster 
+## Installation
 
+### Latest stable version from CRAN
 
+Just install using `install.packages("malariaAtlas")` or using the package manager in RStudio.
 
+### Latest version from github
 
-
-
-
-
-
-
+While this version is not as well-tested, it may include additional bugfixes not in the stable CRAN version. Install the `devtools` package and then install using `devtools::install_github('malaria-atlas-project/malariaAtlas')`
