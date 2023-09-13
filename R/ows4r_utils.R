@@ -46,18 +46,20 @@ get_name_from_wfs_feature_type_id <- function(id) {
 #' @keywords internal
 #'
 getLatestDatasetId <- function(datasets, dataset_name) {
-  datasetNames <- future.apply::future_lapply(datasets$dataset_id, get_name_from_wfs_feature_type_id)
+  datasetNames <-
+    future.apply::future_lapply(datasets$dataset_id, get_name_from_wfs_feature_type_id)
   datasetNames <- do.call(rbind, datasetNames)
   datasets$name <- datasetNames
-  datasets_filtered_by_name <- subset(datasets, name==dataset_name)
+  datasets_filtered_by_name <- subset(datasets, name == dataset_name)
   maxVersion <- max(datasets_filtered_by_name$version)
-  datasets_filtered_by_name_and_version <- subset(datasets_filtered_by_name, version==maxVersion)
+  datasets_filtered_by_name_and_version <-
+    subset(datasets_filtered_by_name, version == maxVersion)
   datasetId <- datasets_filtered_by_name_and_version$dataset_id[1]
   return(datasetId)
 }
 
 #' Get the dataset id of the latest version of pf PR data
-#' 
+#'
 #' @return The dataset id of the latest version of pf PR Data
 #' @keywords internal
 #'
@@ -67,7 +69,7 @@ getLatestDatasetIdForPfPrData <- function() {
 }
 
 #' Get the dataset id of the latest version of pv PR data
-#' 
+#'
 #' @return The dataset id of the latest version of pv PR Data
 #' @keywords internal
 #'
@@ -77,7 +79,7 @@ getLatestDatasetIdForPvPrData <- function() {
 }
 
 #' Get the dataset id of the latest version of vector occurrence data
-#' 
+#'
 #' @return The dataset id of the latest version of vector occurrence Data
 #' @keywords internal
 #'
@@ -109,8 +111,114 @@ build_bbox_filter <- function(bbox) {
 }
 
 
+#' Builds a cql filter to be used with getFeatures, that will filter based on the given list of values.
+#'
+#'@param attribute A string representing the attribute to filter by
+#' @param values A character, or character list, representing one or more values
+#' @return The character string of the cql filter.
+#' @keywords internal
+#'
+build_cql_filter <- function(attribute, values) {
+  values_string <- paste(values, collapse = "', '")
+  filter <-
+    paste0(attribute, " IN ('", values_string, "')")
+  return(filter)
+}
+
+#' Calls getFeatures on the given type with the given filters, where they are not NULL.
+#'
+#' @param feature_type Object of WFSFeatureType.
+#' @param cql_filter A character string that reflects cql filter e.g. "time_start AFTER 2020-00-00T00:00:00Z AND country IN ('Nigeria')"
+#' @param bbox_filter A character string that reflects bbox filter e.g. "120,130,178,187,EPSG:4326"
+#' @return The features returned from the getFeatures called on the feature_type with the filter where not NULL.
+#' @keywords internal
+#'
+callGetFeaturesWithFilters <-
+  function(feature_type, cql_filter, bbox_filter) {
+    if (!is.null(cql_filter) & !is.null(bbox_filter)) {
+      features <-
+        feature_type$getFeatures(outputFormat = "json",
+                                 cql_filter = cql_filter,
+                                 bbox = bbox_filter)
+    } else if (!is.null(cql_filter) & is.null(bbox_filter)) {
+      features <-
+        feature_type$getFeatures(outputFormat = "json", cql_filter = cql_filter)
+    } else if (is.null(cql_filter) & !is.null(bbox_filter)) {
+      features <-
+        feature_type$getFeatures(outputFormat = "json", bbox = bbox_filter)
+    } else {
+      features <- feature_type$getFeatures(outputFormat = "json")
+    }
+    return(features)
+  }
 
 
+#' Tries to convert character into a Date object. If this fails, the program will be stopped and an error message
+#' shown to the user
+#'
+#' @param input A character of length 1, to convert into a Date object.
+#' @param input_name A character string that reflects the name of the input (to inform the user).
+#' @return Will return input as a Date is it can be converted into one. Else will stop the program and issue the user with an error message.
+#' @keywords internal
+#'
+convert_to_date_with_trycatch <- function(input, input_name) {
+  if (is.null(input)) {
+    return(NULL)
+  }
+  tryCatch({
+    return(as.Date(input))
+  },
+  error = function(e) {
+    message(
+      paste0(
+        'Input Error: The value you provided for ',
+        input_name,
+        ' is not in a format that can be converted in a Date'
+      )
+    )
+    stop(e)
+  })
+}
 
 
+#' Builds a cql filter to be used with getFeatures, that will filter based on the time range
+#' provided by start_date and end_date.
+#'
+#' @param start_date A Date Object that is the lower bound on the time range (inclusive).
+#' @param end_date A Date Object that is the upper bound on the time range (exclusive).
+#' @return The character string of the cql filter.
+#' @keywords internal
+#'
+build_cql_time_filter <- function(start_date, end_date) {
+  filters <- list()
+  if (!is.null(start_date)) {
+    start_date_formatted <- format(start_date - 1, '%Y-%m-%dT%H:%M:%SZ')
+    filters$start_date <-
+      paste("time_start AFTER ", start_date_formatted, sep = "")
+  }
+  
+  if (!is.null(end_date)) {
+    end_date_formatted <- format(end_date, '%Y-%m-%dT%H:%M:%SZ')
+    filters$end_date <-
+      paste("time_end BEFORE ", end_date_formatted, sep = "")
+  }
+  all_filters <- paste(filters, collapse = ' AND ')
+  return(all_filters)
+}
 
+
+#' Builds a cql filter from a list of cql sub filters
+#'
+#' @param filter_list List of characters and NULL objects that represent individual cql filters e.g. list("time_start AFTER 2020-00-00T00:00:00Z", NULL, "country IN ('Nigeria')")
+#' @return If all values in filter_list are null, will return NULL, else will return character of combined filters. e.g. "time_start AFTER 2020-00-00T00:00:00Z AND country IN ('Nigeria')"
+#' @keywords internal
+#'
+combine_cql_filters <- function(filter_list) {
+  cql_filters_not_null <- filter_list[lengths(filter_list) != 0]
+  
+  cql_filter <- paste(cql_filters_not_null, collapse = ' AND ')
+  if (length(cql_filter) == 0) {
+    cql_filter <- NULL
+  }
+  return(cql_filter)
+}
