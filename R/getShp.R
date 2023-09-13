@@ -61,7 +61,7 @@ getShp <- function(country = NULL,
                    long = NULL,
                    lat = NULL) {
   if (!is.null(format)) {
-    lifecycle::deprecate_warn("1.1.0", "getShp(format)", details = "The argument 'format' has been deprecated. It will be removed in the next version. Admin boundaries will be correctly plotted using autoplot without the argument.")
+    lifecycle::deprecate_warn("1.5.0", "getShp(format)", details = "The argument 'format' has been deprecated. It will be removed in the next version. Admin boundaries will be correctly plotted using autoplot without the argument.")
   }
   
   # Specify country_input (ISO3 code) for db query

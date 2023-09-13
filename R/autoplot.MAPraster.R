@@ -71,10 +71,12 @@ autoplot.MAPraster <- function(object,
                                plot_titles = TRUE,
                                fill_scale_transform = "identity",
                                fill_colour_palette = "RdYlBu",
-                               printed = TRUE){
+                               printed = TRUE) {
+  
+  lifecycle::deprecate_stop("1.5.0", "autoplot.MAPraster()", details = "This function will is deprecated. getRaster should return an object of type SpatRaster")
+  
 
   make_plot <- function(object, rastername, shp_df, legend_title){
-
 
   plot <- ggplot2::ggplot()+
     ggplot2::geom_raster(data = object[object$raster_name == rastername,], ggplot2::aes_string(x="x", y="y", fill = "z"))+

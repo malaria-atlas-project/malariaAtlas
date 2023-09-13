@@ -20,7 +20,6 @@ Encoding: UTF-8
 LazyData: true
 Imports:
   curl, 
-  raster, 
   xml2, 
   grid, 
   gridExtra, 
@@ -33,7 +32,9 @@ Imports:
   utils,
   rlang,
   sf,
-  lifecycle
+  lifecycle,
+  terra,
+  tidyterra
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,
