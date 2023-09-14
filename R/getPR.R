@@ -11,7 +11,6 @@
 #' @param continent string containing continent (one of "Africa", "Americas", "Asia", "Oceania") for desired data, e.g. \code{c("continent1", "continent2", ...)}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param species string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}
 #' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
-#' @param sf an sf (simple feature) object specifying the spatial extent within which PR data is desired
 #' @param start_date string object representing the lower date to filter the PR data by (inclusive) e.g. '2020-01-01'
 #' @param end_date string object representing the upper date to filter the PR data by (exclusive) e.g. '2020-01-01'
 #' @param dataset_id  A character string specifying the dataset ID. Is NULL by default, and the most recent version of PR data will be selected.
@@ -48,18 +47,13 @@ getPR <- function(country = NULL,
                   continent = NULL,
                   species = NULL,
                   extent = NULL,
-                  sf = NULL,
                   start_date = NULL,
                   end_date = NULL,
                   dataset_id = NULL) {
   if (is.null(country) &
       is.null(ISO) &
-      is.null(continent) & is.null(extent) & is.null(sf)) {
-    stop("Must specify one of: 'country', 'ISO', 'continent', 'extent', or 'sf'.")
-  }
-  
-  if (!is.null(extent) & !is.null(sf)) {
-    stop("Can not specifiy both: 'extent' and 'sf'. Please choose one.")
+      is.null(continent) & is.null(extent)) {
+    stop("Must specify one of: 'country', 'ISO', 'continent', or 'extent'.")
   }
   
   if (!is.null(extent)) {
@@ -131,9 +125,6 @@ getPR <- function(country = NULL,
     } else if (!is.null(extent)) {
       bbox_filter <- build_bbox_filter(extent)
     }
-    else if (!is.null(sf)) {
-      bbox_filter <- build_bbox_filter(sf::st_bbox(sf))
-    }
   }
   
   cql_filters <- list(time_filter, location_filter)
@@ -201,14 +192,6 @@ getPR <- function(country = NULL,
     )
   }
   
-  if (!nrow(df) > 0 & !is.null(sf)) {
-    stop(
-      "Error in downloading data for sf: (",
-      paste0(sf, collapse = ","),
-      "),\n try query using country or continent name OR check data availability at malariaatlas.org/explorer."
-    )
-  }
-  
   if (nrow(df) == 0) {
     stop(
       "PR data points are not available for the specified species in requested countries; \n confirm species-specific data availability at malariaatlas.org/explorer."
@@ -225,10 +208,7 @@ getPR <- function(country = NULL,
   } else if (!is.null(extent)) {
     message("Data downloaded for extent: ",
             paste0(extent, collapse = ","))
-  } else if (!is.null(extent)) {
-    message("Data downloaded for sf: ",
-            paste0(sf, collapse = ","))
-  }
+  } 
   
   
   
