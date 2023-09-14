@@ -76,6 +76,11 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
     }
   }
   
+
+  if (!is.null(shp)) {
+    shp <- terra::vect(shp)
+  }
+
   ## download list of all available rasters and use this df to define raster codes for specifed 'surface's
   available_rasters <- listRaster(printed = FALSE)
   
