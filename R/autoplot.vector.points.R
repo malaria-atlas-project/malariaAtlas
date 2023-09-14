@@ -25,25 +25,23 @@
 #'
 #' # Download Myanmar shapefile to use for raster download.
 #' MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
-#' MMR_shp_df <- as.MAPshp(MMR_shp)
 #'
 #' # Download An. dirus predicted distribution Raster & plot this
 #' MMR_An_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)
-#' MMR_An_dirus_df <- as.MAPraster(MMR_An_dirus)
-#' p <- autoplot_MAPraster(MMR_An_dirus, shp_df = MMR_shp_df, printed = FALSE)
+#' p <- autoplot(MMR_An_dirus, shp_df = MMR_shp, printed = FALSE)
 #'
 #' # Download raw occurrence points & plot these over the top of the raster   
 #' species <- getVecOcc(country = "Myanmar", species = "Anopheles dirus")
-#' p[[1]] +
-#' geom_point(data = species,
-#'  aes(longitude,
-#'   latitude,
-#'   colour = species))+
-#'   scale_colour_manual(values = "black", name = "Vector suvery locations")+
-#' scale_fill_distiller(name = "Predicted distribution of An. dirus complex",
-#'  palette = "PuBuGn",
-#'   direction = 1)+
-#'   ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
+#' # p[[1]] +
+#' # geom_point(data = species,
+#' #  aes(longitude,
+#' #   latitude,
+#' #   colour = species))+
+#' #   scale_colour_manual(values = "black", name = "Vector suvery locations")+
+#' # scale_fill_distiller(name = "Predicted distribution of An. dirus complex",
+#' #  palette = "PuBuGn",
+#' #   direction = 1)+
+#' #   ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 #' }
 #'
 #' @method autoplot vector.points
@@ -86,34 +84,26 @@ autoplot.vector.points <- function(object,
     
     if(admin_level == "admin0"){
       vector_plot <-  ggplot2::ggplot()+
-        ggplot2::geom_polygon(data = vector_shp[vector_shp$admn_level == 0,],
-                              aes_string(x="long", y = "lat", group = "group"), colour = "grey50", fill = "grey95")
+        ggplot2::geom_sf(data = vector_shp[vector_shp$admn_level == 0,], aes(group = "group"), colour = "grey50", fill = "grey95")
     }
     
     if(admin_level == "admin1"){
       vector_plot <-  ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = vector_shp[vector_shp$admn_level == 1,],
-                              aes_string(x="long", y = "lat", group = "group"), colour = "grey80", fill = "grey95")
+        ggplot2::geom_sf(data = vector_shp[vector_shp$admn_level == 1,], aes(group = "group"), colour = "grey80", fill = "grey95")
     }
     
     if(admin_level == "both"){
       vector_plot <-  ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = vector_shp[vector_shp$admn_level == 1,],
-                              aes_string(x="long", y = "lat", group = "group"),
-                              colour = "grey80", fill = "grey95") +
-        ggplot2::geom_polygon(data = vector_shp[vector_shp$admn_level == 0,],
-                              aes_string(x="long", y = "lat", group = "group"),
-                              colour = "grey50", alpha = 0)
+        ggplot2::geom_sf(data = vector_shp[vector_shp$admn_level == 1,], aes(group = "group"), colour = "grey80", fill = "grey95") + 
+        ggplot2::geom_sf(data = vector_shp[vector_shp$admn_level == 0,], aes(group = "group"), colour = "grey50", fill = "grey95")
     }
-  }else{
-    vector_plot <-  ggplot2::ggplot() +
-      ggplot2::geom_polygon(data = shp_df,
-                            aes_string(x="long", y = "lat", group = "group"),
-                            colour = "grey80", fill = "grey95")
+  } else {
+    vector_plot <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = shp_df, aes(group = "group"), colour = "grey80", fill = "grey95")
   }
   
   vector_plot <- vector_plot +
-    ggplot2::coord_equal()+
+    ggplot2::coord_sf() +
     ggplot2::ggtitle(paste(map_title))+
     ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes_string(x = "longitude", y = "latitude", fill = "species"), alpha = 0.8, shape = 21, na.rm = TRUE)+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),

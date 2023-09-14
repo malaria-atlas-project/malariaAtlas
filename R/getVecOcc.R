@@ -8,11 +8,12 @@
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent string containing continent (one of "Africa", "Americas", "Asia", "Oceania") for desired data, e.g. \code{c("continent1", "continent2", ...)}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param species string specifying the Anopheles species for which to find vector occurrence points, options include: \code{"Anopheles...."} OR \code{"ALL"}
-#' @param extent 2x2 matrix specifying the spatial extent within which vector occurrence data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
+#' @param extent extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox(). - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
 #' @param sf an sf (simple feature) object specifying the spatial extent within which PR data is desired
 #' @param start_date string object representing the lower date to filter the vector occurrence data by (inclusive)
 #' @param end_date string object representing the upper date to filter the vector occurrence data by (exclusive)
 #' @param dataset_id  A character string specifying the dataset ID. Is NULL by default, and the most recent version of vector occurrence data will be selected.
+#' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox().
 
 #'@return \code{getVecOcc} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 
@@ -68,9 +69,10 @@ getVecOcc <- function(country = NULL,
   dataset_id <- getLatestDatasetIdForVecOccData()
   wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
   features <- wfs_feature_type$getFeatures(outputFormat = "json")
-  
-  print(features)
-  print(colnames(features))
+
+  if (!is.null(extent)) {
+    extent <- getSpBbox(extent)
+  }
   
   species_filter <- NULL
   time_filter <- NULL

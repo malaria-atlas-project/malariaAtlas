@@ -2,7 +2,10 @@
 
 S3method(autoplot,MAPraster)
 S3method(autoplot,MAPshp)
+S3method(autoplot,SpatRaster)
+S3method(autoplot,SpatRasterCollection)
 S3method(autoplot,pr.points)
+S3method(autoplot,sf)
 S3method(autoplot,vector.points)
 export(as.MAPraster)
 export(as.MAPshp)

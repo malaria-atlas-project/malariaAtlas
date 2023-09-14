@@ -10,7 +10,6 @@ output:
 
 ```{r, echo = FALSE, message = FALSE, results = "hide", warning = FALSE}
 library(malariaAtlas)
-library(rgdal)
 library(tibble)
 
 knitr::opts_chunk$set(fig.path = 'man/figures/')
@@ -18,6 +17,8 @@ knitr::opts_chunk$set(fig.path = 'man/figures/')
 
 # malariaAtlas 
 ### An R interface to open-access malaria data, hosted by the Malaria Atlas Project. 
+
+*The gitlab version of the malariaAtlas package has some additional bugfixes over the stable CRAN package. If you have any issues, try installing the latest github version. See below for instructions.*
 
 # Overview 
 
@@ -139,10 +140,9 @@ MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 tibble::glimpse(MDG_shp)
 ```
 
-`autoplot.MAPshp` configures autoplot method to enable quick mapping of downloaded shapefiles.
+`autoplot.sf` configures autoplot method to enable quick mapping of downloaded shapefiles.
 
 ```{r message = FALSE}
-MDG_shp <- as.MAPshp(MDG_shp)
 autoplot(MDG_shp)
 ```
 
@@ -162,14 +162,12 @@ autoplot(MDG_shp,
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
 ```
-N.B. to use downloaded rasters and shapefiles directly with autoplot, use as.MAPraster() and as.MAPshp() to convert these to data.frames. Alternatively autoplot_MAPraster() will work directly with RasterLayer, RasterStack or RasterBrick objects downloaded with getRaster().
 
-`autoplot.MAPraster`&`autoplot_MAPraster`configures autoplot method to enable quick mapping of downloaded rasters.
+
+`autoplot.SpatRaster` & `autoplot.SpatRasterCollection` configures autoplot method to enable quick mapping of downloaded rasters.
 
 ```{r message = FALSE}
-MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
-MDG_shp_df <- as.MAPshp(MDG_shp)
-p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df)
+p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 ```
 
 
@@ -179,11 +177,9 @@ By using the above tools along with ggplot, simple comparison figures can be eas
 
 ```{r message = FALSE, warning = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_shp_df <- as.MAPshp(MDG_shp)
 MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
-MDG_PfPR2_10_df <- as.MAPraster(MDG_PfPR2_10)
 
-p <- autoplot(MDG_PfPR2_10_df, shp_df = MDG_shp_df, printed = FALSE)
+p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp, printed = FALSE)
 
 pr <- getPR(country = c("Madagascar"), species = "Pf")
 p[[1]] +
@@ -197,11 +193,9 @@ Similarly for vector survey data
 
 ```{r message = FALSE, warning = FALSE}
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
-MMR_shp_df <- as.MAPshp(MMR_shp)
 MMR_An_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)
-MMR_An_dirus_df <- as.MAPraster(MMR_An_dirus)
 
-p <- autoplot(MMR_An_dirus_df, shp_df = MMR_shp_df, printed = FALSE)
+p <- autoplot(MMR_An_dirus, shp_df = MMR_shp, printed = FALSE)
 
 vec <- getVecOcc(country = c("Myanmar"), species = "Anopheles dirus")
 p[[1]] +
@@ -211,16 +205,24 @@ geom_point(data = vec, aes(longitude, latitude, colour = species))+
  ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 ```
 
-## Basic Spatial utility tools 
 
-### extractRaster 
+## Installation
 
+### Latest stable version from CRAN
 
+Just install using `install.packages("malariaAtlas")` or using the package manager in RStudio.
 
+### Latest version from github
 
+While this version is not as well-tested, it may include additional bugfixes not in the stable CRAN version. Install the `devtools` package and then install using `devtools::install_github('malaria-atlas-project/malariaAtlas')`
 
+## Changes
 
+### 1.2.0
 
-
-
-
+- Removed `rgdal`, `sp`, `raster` packages dependencies and added `terra`, `sf`, `tidyterra`, `lifecycle`
+- As a result `getShp` will now return `sf` objects
+- Similarly, `getRaster` returns `SpatRaster` or `SpatRasterCollection`
+- Some functions have been deprecated. They will still run in this version, with a warning. Please remove them from your code, they will be completely removed in the future.
+  - Deprecated `as.MAPraster`, `as.MAPshp`. They are no longer required for working with `autoplot`
+  - Deprecated `autoplot_MAPraster`. Use `autoplot` directly with the result of `getRaster`

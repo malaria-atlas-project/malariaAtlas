@@ -3,7 +3,6 @@
 \docType{package}
 \name{malariaAtlas}
 \alias{malariaAtlas}
-\alias{malariaAtlas-package}
 \title{An R interface to open-access malaria data, hosted by the Malaria Atlas Project.}
 \description{
 \code{malariaAtlas} provides a suite of tools to allow you to

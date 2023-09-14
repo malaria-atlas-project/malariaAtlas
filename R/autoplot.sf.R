@@ -1,34 +1,33 @@
 #' Create a basic plot to visualise downloaded shapefiles
 #'
-#' \code{autoplot.MAPshp} creates a map of shapefiles downloaded using getShp.
+#' \code{autoplot.sf} creates a map of shapefiles downloaded using getShp.
 #'
-#' @param object A MAPshp object downloaded using /code{/link{getShp}} with format = "df" specified.
+#' @param object A sf object downloaded using /code{/link{getShp}}.
 #' @param map_title Custom title used for the plot.
 #' @param facet If TRUE, splits map into a separate facet for each administrative level.
 #' @param printed Should the plot print to graphics device.
 #' @param ... Other arguments passed to specific methods
 #'
-#' @return \code{autoplot.MAPshp} returns a map (gg object) of the supplied MAPShp dataframe.
+#' @return \code{autoplot.sf} returns a map of the supplied sf object
 #'
 #'
 #' @examples
 #' \donttest{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-#' autoplot(as.MAPshp(MDG_shp))
+#' autoplot(MDG_shp)
 #' }
 #'
 #' @importFrom ggplot2 autoplot
-#' @method autoplot MAPshp
+#' @method autoplot sf
 #' @export
 
 
-autoplot.MAPshp <- function(object,
+autoplot.sf <- function(object,
                             ...,
                             map_title = NULL,
                             facet = FALSE,
                             printed = TRUE){
-  lifecycle::deprecate_stop("1.5.0", "autoplot.MAPshp", details = "This function will is deprecated. getShp should return an object of type sf.")
-  
+
   if(is.null(map_title)){
     map_title <- paste0(paste0(unique(object$name_0), collapse = ", "),": ",paste0("admin", unique(object$admn_level), collapse = ", "))
   }

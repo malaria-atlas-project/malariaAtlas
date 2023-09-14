@@ -30,16 +30,9 @@
 #'
 #' @export
 
-
 as.MAPshp <- function(object){
-
-  object@data$id <- rownames(object@data)
-  object_df <- ggplot2::fortify(object)
-  object_df <- merge(object_df, object@data, by = "id")
-  class(object_df) <- c(class(object_df), "MAPshp")
-
-  return(object_df)
-
+  lifecycle::deprecate_warn("1.5.0", "as.MAPshp()", details = "This function has become unnecessary for usage with autoplot. It will be removed in the next version.")
+  return(object)
 }
 
 

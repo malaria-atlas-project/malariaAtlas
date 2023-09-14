@@ -4,8 +4,13 @@
 \alias{isAvailable}
 \title{Available data to download from the MAP geoserver.}
 \usage{
-isAvailable(sourcedata = NULL, full_results = FALSE, country = NULL,
-  ISO = NULL, continent = NULL)
+isAvailable(
+  sourcedata = NULL,
+  full_results = FALSE,
+  country = NULL,
+  ISO = NULL,
+  continent = NULL
+)
 }
 \arguments{
 \item{sourcedata}{One of 'pr points' or 'vector points'}
