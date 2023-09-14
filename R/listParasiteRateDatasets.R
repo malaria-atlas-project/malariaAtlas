@@ -4,7 +4,7 @@
 #' from the Web Feature Services provided by the Malaria Atlas Project.
 #' 
 #' @return A data.frame with columns 'dataset_id', 'version', and 'workspace' representing the unique identifier, version, and domain/workspace of the datasets.
-#' The dataset_id and version can then be provided to other functions to fetch the data within that dataset. e.g. in getPR 
+#' The dataset_id can then be provided to other functions to fetch the data within that dataset. e.g. in getPR 
 #' @examples
 #' \donttest{
 #' prDatasets <- listParasiteRateDatasets()

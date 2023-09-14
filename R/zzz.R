@@ -1,7 +1,7 @@
 .onLoad <- function(libname, pkgname) {
  assign(x = ".malariaAtlasHidden", value = new.env(), pos = parent.env(environment()))
   
-  workspaces <- c("Malaria", "Interventions", "Blood_Disorders", "Accessibility", "Vector_Occurrence", "Explorer")
+  workspaces <- c("Malaria", "Interventions", "Blood_Disorders", "Accessibility", "Vector_Occurrence", "Explorer", "Admin_Units")
   options("workspaces" = workspaces)
   wms_clients_by_workspace <- list()
   wcs_clients_by_workspace <- list()
