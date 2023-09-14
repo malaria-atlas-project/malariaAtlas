@@ -97,12 +97,17 @@ getLatestDatasetIdForVecOccData <- function() {
 #'
 getLatestVersionForAdminData <- function() {
   adminDatasets <- listAdministrativeBoundariesDatasets()
-  maxVersion <- max(adminDatasets$version)
+  datasetNames <-
+    future.apply::future_lapply(adminDatasets$dataset_id, get_name_from_wfs_feature_type_id)
+  datasetNames <- do.call(rbind, datasetNames)
+  adminDatasets$name <- datasetNames
+  datasets_filtered_by_name <- subset(adminDatasets, name == 'Global_Admin_0')
+  maxVersion <- max(datasets_filtered_by_name$version)
   return(maxVersion)
 }
 
 getDatasetIdForAdminDataGivenAdminLevelAndVersion <- function(admin_level, version) {
-  admin_level_numeric <- gsub('admin', '', admin_level)
+  admin_level_numeric <- gsub('admin', '', admin_level) 
   return(paste0('Admin_Units:', version, '_Global_Admin_', admin_level_numeric))
 }
 
@@ -152,7 +157,7 @@ build_cql_filter <- function(attribute, values) {
 #' @keywords internal
 #'
 callGetFeaturesWithFilters <-
-  function(feature_type, cql_filter, bbox_filter) {
+  function(feature_type, cql_filter, bbox_filter, ...) {
     if (!is.null(cql_filter) & !is.null(bbox_filter)) {
       features <-
         feature_type$getFeatures(outputFormat = "json",
@@ -165,7 +170,7 @@ callGetFeaturesWithFilters <-
       features <-
         feature_type$getFeatures(outputFormat = "json", bbox = bbox_filter)
     } else {
-      features <- feature_type$getFeatures(outputFormat = "json")
+      features <- feature_type$getFeatures(outputFormat = "json", ...)
     }
     return(features)
   }
