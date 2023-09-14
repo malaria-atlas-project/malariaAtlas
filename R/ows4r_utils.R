@@ -38,6 +38,7 @@ get_name_from_wfs_feature_type_id <- function(id) {
 }
 
 
+
 #' Get the dataset id of the latest version of a given dataset name within a dataset
 #'
 #' @param datasets The datasets in a data.frame with columns for dataset_id, version and workspace.
@@ -86,6 +87,23 @@ getLatestDatasetIdForPvPrData <- function() {
 getLatestDatasetIdForVecOccData <- function() {
   vecOccDatasets <- listVectorOccurrenceDatasets()
   return(getLatestDatasetId(vecOccDatasets, 'Global_Dominant_Vector_Surveys'))
+}
+
+
+#' Get the latest version of admin boundary data
+#'
+#' @return The latest version of admin boundary data
+#' @keywords internal
+#'
+getLatestVersionForAdminData <- function() {
+  adminDatasets <- listAdministrativeBoundariesDatasets()
+  maxVersion <- max(adminDatasets$version)
+  return(maxVersion)
+}
+
+getDatasetIdForAdminDataGivenAdminLevelAndVersion <- function(admin_level, version) {
+  admin_level_numeric <- gsub('admin', '', admin_level)
+  return(paste0('Admin_Units:', version, '_Global_Admin_', admin_level_numeric))
 }
 
 #' Builds a cql filter to be used with getFeatures, that will filter based on the given bounding box.
