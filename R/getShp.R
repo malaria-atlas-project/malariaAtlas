@@ -6,7 +6,6 @@
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin0","admin1","admin2","admin3", or "all" accepted). N.B. Not all administrative levels are available for all countries. Use listShp to check which shapefiles are available. If an administrative level is requested that is not available, the closest available administrative level shapefiles will be returned.
 #' @param extent 2x2 matrix specifying the spatial extent within which polygons are desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).
-#' @param sf an sf (simple feature) object specifying the spatial extent within which polygons are desired
 #' @param format deprecated argument. Please remove it from your code.
 #' @param long longitude of a point location falling within the desired shapefile.
 #' @param lat latitude of a point location falling within the desired shapefile.
@@ -58,7 +57,6 @@
 getShp <- function(country = NULL,
                    ISO = NULL,
                    extent = NULL,
-                   sf = NULL,
                    admin_level = c("admin0"),
                    format = NULL,
                    long = NULL,
@@ -86,8 +84,8 @@ getShp <- function(country = NULL,
     stop("If you specify one of 'lat' or 'long', you must also specify the other.")
   }
   
-  if (sum(c(!is.null(extent), !is.null(sf), !is.null(lat) | !is.null(lat)), na.rm = TRUE) > 1) {
-    stop("Can only specify one of: 'extent', 'sf' or 'lat' and 'long'. Please choose one.")
+  if (!is.null(extent) & !is.null(lat) & !is.null(lat)) {
+    stop("Can only specify one of: 'extent' or 'lat' and 'long'. Please choose one.")
   }
   
   if(is.null(version)) {
@@ -116,13 +114,11 @@ getShp <- function(country = NULL,
     bbox_filter <- build_bbox_filter(latlong_extent)
   } else if (!is.null(extent)) {
     bbox_filter <- build_bbox_filter(extent)
-  } else if (!is.null(sf)) {
-    bbox_filter <- build_bbox_filter(sf::st_bbox(sf))
-  }
+  } 
   
   location_filter <- build_cql_filter('iso', iso_list)
   
-  if (length(iso_list) == 0 & is.null(c(extent, sf, lat, long))) {
+  if (length(iso_list) == 0 & is.null(c(extent, lat, long))) {
     stop(
       "Invalid country/ISO definition, use isAvailable() OR listShp() to confirm country spelling and/or ISO code."
     )
