@@ -1,20 +1,15 @@
+image: rocker/geospatial:4.2.1
+
 stages:
-  - env_test
-  - code_test
-  - code_coverage
-confirm_runtime_available:
-  stage: env_test
-  tags: ['dev1-ssh-deploy']
-  script:
-    - which R || echo 'R runtime is not available - could not proceed'
-run_tests:
-  stage: code_test
-  tags: ['dev1-ssh-deploy']
-  script:
-    - Rscript ./tests/.tests_for_CI.R
-check_coverage:
-    stage: code_coverage
-    tags: ['dev1-ssh-deploy']
+  - test
+
+testing:
+    stage: test
     script:
-    - R CMD INSTALL .
-    - Rscript ./tests/.test_coverage.R
+        - R -e "remotes::install_deps(dependencies='hard', upgrade=FALSE, repos=c(Sys.getenv('CRAN_URL'), 'https://packagemanager.rstudio.com/cran/latest', 'https://cran.curtin.edu.au'))"
+        - R -e 'devtools::check()'
+        - Rscript -e 'devtools::test()'
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+        - if: $CI_COMMIT_BRANCH == 'main'
+

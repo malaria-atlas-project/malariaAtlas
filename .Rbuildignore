@@ -8,3 +8,4 @@ README.Rmd
 README_files*
 wfsrequest.txt
 cran_comments.md
+^\.gitlab-ci\.yml$
