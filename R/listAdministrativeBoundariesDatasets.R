@@ -1,17 +1,17 @@
-#' List all datasets from the Web Feature Services provided by the Malaria Atlas Project within the Vector Occurrence workspace.
+#' List all datasets from the Web Feature Services provided by the Malaria Atlas Project within the Admin Units workspace.
 #' 
-#' \code{listVectorOccurrenceDatasets} lists minimal information of all the feature datasets in the Vector Occurrence workspace 
+#' \code{listAdministrativeBoundariesDatasets} lists minimal information of all the feature datasets in the Admin Units workspace 
 #' from the Web Feature Services provided by the Malaria Atlas Project.
 #' 
 #' @return A data.frame with columns 'dataset_id', 'version', and 'workspace' representing the unique identifier, version, and domain/workspace of the datasets.
-#' The dataset_id can then be provided to other functions to fetch the data within that dataset. e.g. in getVecOcc 
+#' The version can then be provided to other functions to fetch the data within that dataset. e.g. in getShp
 #' @examples
 #' \donttest{
-#' vecOccDatasets <- listVectorOccurrenceDatasets()
-#' @export listVectorOccurrenceDatasets
+#' vecOccDatasets <- listAdministrativeBoundariesDatasets()
+#' @export listAdministrativeBoundariesDatasets
 
-listVectorOccurrenceDatasets <- function(){
-  wfs_client <- getOption("malariaatlas.wfs_clients")$Vector_Occurrence
+listAdministrativeBoundariesDatasets <- function(){
+  wfs_client <- getOption("malariaatlas.wfs_clients")$Admin_Units
   wfs_cap <- wfs_client$getCapabilities()
   wfs_ft_types <- wfs_cap$getFeatureTypes()
   
