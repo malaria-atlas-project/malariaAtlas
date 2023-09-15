@@ -11,7 +11,7 @@
 #' @export listParasiteRateDatasets
 
 listParasiteRateDatasets <- function(){
-  wfs_client <- get_wfs_client()$Malaria
+  wfs_client <- get_wfs_clients()$Malaria
   wfs_cap <- wfs_client$getCapabilities()
   wfs_ft_types <- wfs_cap$getFeatureTypes()
   

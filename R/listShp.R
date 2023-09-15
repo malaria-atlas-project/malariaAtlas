@@ -24,7 +24,7 @@ listShp <- function(printed = TRUE,
             ' (This is the most recent version of admin boundary data. To see other version options use function listAdministrativeBoundariesDatasets)')
   }
 
-  wfs_client <- get_wfs_client()$Admin_Units
+  wfs_client <- get_wfs_clients()$Admin_Units
   wfs_cap <- wfs_client$getCapabilities()
   
   features_list <-

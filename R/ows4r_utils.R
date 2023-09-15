@@ -1,18 +1,56 @@
-#' Return WFS client from cache or create one
+#' WFS clients lazily created or from cache
 #'
 #' @return A list with of WFSClients by workspace
-get_wfs_client <- function(logger=NULL) {
+get_wfs_clients <- function(logger=NULL) {
   if(exists('malariaatlas.wfs_clients', envir = .malariaAtlasHidden)){
     wfs_clients_by_workspace <- .malariaAtlasHidden$malariaatlas.wfs_clients
     return(invisible(wfs_clients_by_workspace))
   }
 
   wfs_clients_by_workspace <- list()
-  for (workspace in .malariaAtlasHidden$workspaces) {
+  for (workspace in get_workspaces()) {
     wfs_clients_by_workspace[[workspace]] <- ows4R::WFSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "2.0.0", logger = logger)
   }
   .malariaAtlasHidden$malariaatlas.wfs_clients <- wfs_clients_by_workspace
   return(wfs_clients_by_workspace)
+}
+
+#' WCS clients lazily created or from cache
+#'
+#' @return A list with of WCSClients by workspace
+get_wcs_clients <- function(logger=NULL) {
+  if(exists('malariaatlas.wcs_clients', envir = .malariaAtlasHidden)){
+    wcs_clients_by_workspace <- .malariaAtlasHidden$malariaatlas.wcs_clients
+    return(invisible(wcs_clients_by_workspace))
+  }
+
+  wcs_clients_by_workspace <- list()
+  for (workspace in get_workspaces()) {
+    wcs_clients_by_workspace[[workspace]] <- ows4R::WCSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "2.0.1", logger)
+  }
+  .malariaAtlasHidden$malariaatlas.wcs_clients <- wcs_clients_by_workspace
+  return(wcs_clients_by_workspace)
+}
+
+#' WMS clients lazily created or from cache
+#'
+#' @return A list with of WMSClients by workspace
+get_wms_clients <- function(logger=NULL) {
+  if(exists('malariaatlas.wms_clients', envir = .malariaAtlasHidden)){
+    wms_clients_by_workspace <- .malariaAtlasHidden$malariaatlas.wms_clients
+    return(invisible(wms_clients_by_workspace))
+  }
+
+  wms_clients_by_workspace <- list()
+  for (workspace in get_workspaces()) {
+    wms_clients_by_workspace[[workspace]] <- ows4R::WMSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "1.3.0", logger)
+  }
+  .malariaAtlasHidden$malariaatlas.wms_clients <- wms_clients_by_workspace
+  return(wms_clients_by_workspace)
+}
+
+get_workspaces <- function() {
+  return(.malariaAtlasHidden$workspaces)
 }
 
 #' Get the workspace and version from a raster id.
@@ -24,7 +62,6 @@ get_wfs_client <- function(logger=NULL) {
 get_workspace_and_version_from_coverage_id <- function(id) {
   parts <- unlist(strsplit(id, "__"))
   workspace <- parts[1]
-  wcs_client <- getOption("malariaatlas.wcs_clients")[[workspace]]
   version <- unlist(strsplit(parts[2], "_"))[1]
   return(list(workspace = workspace, version = version))
 }
@@ -271,7 +308,7 @@ combine_cql_filters <- function(filter_list) {
 #'
 get_wcs_coverage_summary_from_raster_id <- function(raster) {
   id_parts <- get_workspace_and_version_from_coverage_id(raster)
-  wcs_client <- getOption("malariaatlas.wcs_clients")[[id_parts$workspace]]
+  wcs_client <- get_wcs_clients()[[id_parts$workspace]]
   coverageSummary <- wcs_client$getCapabilities()$findCoverageSummaryById(raster, exact = TRUE)
   coverageSummary
 }
