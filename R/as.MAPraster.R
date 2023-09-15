@@ -44,7 +44,9 @@
 #' @export as.MAPraster
 
 as.MAPraster <- function(raster_object){
-
+  lifecycle::deprecate_warn("1.5.0", "as.MAPraster()", details = "This function has become unnecessary for usage with autoplot. It will be removed in the next version.")
+  return(raster_object)
+  
   x <- y <- NULL
 
   rasterobj2df <- function(object){

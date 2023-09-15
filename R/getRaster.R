@@ -5,23 +5,23 @@
 #' @param surface string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
 #' Check \code{\link{listRaster}} to find titles of available rasters.
 #' @param shp SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
-#' @param extent  2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
+#' @param extent  2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
 #' @param file_path string specifying the directory to which working files will be downloaded. Defaults to tempdir().
 #' @param year default = \code{rep(NA, length(surface))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.
 #' @param vector_year default = \code{NULL} for vector occurence rasters, the desired version as prefixed in raster_code returned using available_rasters. By default (\code{NULL}) returns the most recent raster version )
 #'
-#' @return \code{getRaster} returns a RasterLayer (if only a single raster is queried) or RasterStack (for multiple rasters) for the specified extent.
+#' @return \code{getRaster} returns a SpatRaster for the specified extent. Or a SpatRasterCollection if the two rasters are incompatible in terms of projection/extent/resolution
 #'
 #' @examples
 #' # Download PfPR2-10 Raster for Madagascar in 2015 and visualise this immediately.
 #' \donttest{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #' MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2015)
-#' autoplot_MAPraster(MDG_PfPR2_10)
+#' autoplot(MDG_PfPR2_10)
 #'
 #' # Download global raster of G6PD deficiency from Howes et al 2012.
 #' G6PDd_global <- getRaster(surface = "G6PD Deficiency Allele Frequency")
-#' autoplot_MAPraster(G6PDd_global)
+#' autoplot(G6PDd_global)
 #'
 #' # Download a temporal raster by range
 #' MDG_PfPR2_10_range <- getRaster(surface = "Plasmodium falciparum PR2-10", 
@@ -32,7 +32,7 @@
 #'                                      'Plasmodium falciparum Incidence', 
 #'                                      'Plasmodium falciparum Support'),
 #'                          shp = MDG_shp, year = list(2009:2012, 2005:2007, NA))
-#' p <- autoplot_MAPraster(MDG_rasters)
+#' p <- autoplot(MDG_rasters)
 #'
 #' }
 #'
@@ -58,9 +58,9 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
                       file_path = tempdir(),
                       year = as.list(rep(NA, length(surface))), 
                       vector_year= NULL) {
-  ## if extent is not defined by user, use sp::bbox to define this from provided shapefile
+  ## if extent is not defined by user, use sf::st_bbox to define this from provided shapefile
   if (is.null(extent) & !is.null(shp)) {
-    extent <- sp::bbox(shp)
+    extent <- matrix(unlist(sf::st_bbox(shp)), ncol = 2)
   }
   
   if (length(surface) > 1) {
@@ -76,6 +76,11 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
     }
   }
   
+
+  if (!is.null(shp)) {
+    shp <- terra::vect(shp)
+  }
+
   ## download list of all available rasters and use this df to define raster codes for specifed 'surface's
   available_rasters <- listRaster(printed = FALSE)
   
@@ -239,37 +244,37 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
     return(message)
     # If only one new raster is found, read this in
   } else if (length(newrst) == 1) {
-    rst_dl <- raster::raster(file.path(rstdir, newrst))
-    raster::NAvalue(rst_dl) <- -9999
+    rst_dl <- terra::rast(file.path(rstdir, newrst))
+    terra::NAflag(rst_dl) <- -9999
     names(rst_dl) <- query_def$raster_title
     if (!is.null(shp)) {
-      rst_dl <- raster::mask(rst_dl, shp)
+      rst_dl <- terra::mask(rst_dl, shp)
     }
     return(rst_dl)
     
     #if more than one raster is found we want a raster stack - but only for rasters with the same resolution
   } else if (length(newrst) > 1) {
     #read in multiple rasters into a list
-    rst_list <- lapply(file.path(rstdir, newrst), raster::raster)
+    rst_list <- lapply(file.path(rstdir, newrst), terra::rast)
     # create a dataframe with information on the resolution of each raster
     rst_list_index <-
       data.frame(cbind(
-        "resolution" = lapply(rst_list, raster::res),
+        "resolution" = lapply(rst_list, terra::res),
         "raster_name" = lapply(rst_list, names),
         "res_id" = as.numeric(factor(as.character(
-          lapply(rst_list, function(x) round(raster::res(x), 6))
+          lapply(rst_list, function(x) round(terra::res(x), 6))
         )))
       ))
     
     #check whether more than one resolution is present in downloaded rasters
     #if only one resolution is present, create a raster stack of all downloaded rasters
     if (length(unique(rst_list_index$res_id)) == 1) {
-      rst_stk <- raster::stack(rst_list)
+      rst_stk <- terra::rast(rst_list)
       
-      raster::NAvalue(rst_stk) <- -9999
+      terra::NAflag(rst_stk) <- -9999
       
       if (!is.null(shp)) {
-        rst_stk <- raster::mask(rst_stk, shp)
+        rst_stk <- terra::mask(rst_stk, shp)
       }
       
       names(rst_stk) <- query_def$raster_title
@@ -279,7 +284,7 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
       #for each unique raster resolution create a raster stack and store this in stk_list
       
       stack_rst <- function(res_id) {
-        return(raster::stack(rst_list[rst_list_index$res_id == res_id]))
+        return(terra::rast(rst_list[rst_list_index$res_id == res_id]))
       }
       
       stk_list <-
@@ -287,14 +292,14 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
       
       for (i in 1:length(stk_list)) {
         for (r in 1:length(names(stk_list[[i]]))) {
-          raster::NAvalue(stk_list[[i]][[r]]) <- -9999
+          terra::NAflag(stk_list[[i]][[r]]) <- -9999
         }
       }
       
       # mask each stack by shapefile if this is provided
       if (!is.null(shp)) {
         stk_list <- lapply(X = stk_list,
-                           FUN = raster::mask,
+                           FUN = terra::mask,
                            mask = shp)
       }
       
@@ -302,11 +307,10 @@ getRaster <- function(surface = "Plasmodium falciparum PR2-10",
       for (i in 1:length(stk_list)) {
         for (ii in 1:length(stk_list[i])) {
           names(stk_list[i][[ii]]) <-
-            query_def$raster_title[paste0('X', query_def$file_name) %in% names(stk_list[i][[ii]])]
+            query_def$raster_title[query_def$file_name %in% names(stk_list[i][[ii]])]
         }
       }
-      
-      return(stk_list)
+      return(terra::sprc(stk_list))
     }
   }
 }

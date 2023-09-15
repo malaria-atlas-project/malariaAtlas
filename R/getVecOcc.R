@@ -8,7 +8,7 @@
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent string containing continent (one of "Africa", "Americas", "Asia", "Oceania") for desired data, e.g. \code{c("continent1", "continent2", ...)}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param species string specifying the Anopheles species for which to find vector occurrence points, options include: \code{"Anopheles...."} OR \code{"ALL"}
-#' @param extent 2x2 matrix specifying the spatial extent within which vector occurrence data is desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
+#' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox().
 
 
 #'@return \code{getVecOcc} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
@@ -61,6 +61,9 @@ getVecOcc <- function(country = NULL,
     stop("Must specify one of: 'country', 'ISO', 'continent' or 'extent'.")
   }
   
+  if (!is.null(extent)) {
+    extent <- getSpBbox(extent)
+  }
   
   if (exists('available_species_stored', envir = .malariaAtlasHidden)) {
     available_species <- .malariaAtlasHidden$available_species_stored

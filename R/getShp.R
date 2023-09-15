@@ -5,9 +5,9 @@
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})
 #' @param admin_level string specifying the administrative level for which shapefile are desired (only "admin0","admin1","admin2","admin3", or "all" accepted). N.B. Not all administrative levels are available for all countries. Use listShp to check which shapefiles are available. If an administrative level is requested that is not available, the closest available administrative level shapefiles will be returned.
-#' @param extent 2x2 matrix specifying the spatial extent within which polygons are desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).
+#' @param extent 2x2 matrix specifying the spatial extent within which polygons are desired. The first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).
 #' Note: getShp downloads the entire polygon for any polygons falling within the extent.
-#' @param format string specifying the desired format for the downloaded shapefile: either "spatialpolygon" or "df"
+#' @param format deprecated argument. Please remove it from your code.
 #' @param long longitude of a point location falling within the desired shapefile.
 #' @param lat latitude of a point location falling within the desired shapefile.
 #'
@@ -57,12 +57,15 @@ getShp <- function(country = NULL,
                    ISO = NULL,
                    extent = NULL,
                    admin_level = c("admin0"),
-                   format = "spatialpolygon",
+                   format = NULL,
                    long = NULL,
                    lat = NULL) {
-  # Specifcy country_input (ISO3 code) for db query
-
-  available_admin <- listShp(printed = FALSE, admin_level= "admin0")
+  if (!is.null(format)) {
+    lifecycle::deprecate_warn("1.5.0", "getShp(format)", details = "The argument 'format' has been deprecated. It will be removed in the next version. Admin boundaries will be correctly plotted using autoplot without the argument.")
+  }
+  
+  # Specify country_input (ISO3 code) for db query
+    available_admin <- listShp(printed = FALSE, admin_level= "admin0")
   if(inherits(available_admin, 'try-error')){
     message(available_admin)
     return(available_admin)
@@ -106,21 +109,14 @@ getShp <- function(country = NULL,
   # if lat and long are provided, define extent from lat-longs
 
   if (!is.null(lat) & !is.null(long)) {
-    extent <- sp::bbox(array(data.frame(long, lat)))
+    extent <- extent <- matrix(unlist(sf::st_bbox(array(data.frame(long, lat)))), ncol = 2)
   }
 
   #treat ISO = "ALL" separately - return stored polygon OR define big bounding box.
   if ("all" %in% tolower(ISO)) {
     if (exists("all_polygons", envir = .malariaAtlasHidden)) {
       Shp_polygon <- .malariaAtlasHidden$all_polygons
-
-      if (tolower(format) == "spatialpolygon") {
-        return(Shp_polygon)
-      } else if (tolower(format) == "df") {
-        Shp_df <- as.MAPshp(Shp_polygon)
-        return(Shp_df)
-      }
-
+      return(Shp_polygon)
     } else {
       extent <- matrix(c(-180, -60, 180, 85), nrow = 2)
     }
@@ -143,12 +139,7 @@ getShp <- function(country = NULL,
               paste(x, admin_num, sep = "_")
           )), ]
 
-        if (tolower(format) == "spatialpolygon") {
-          return(Shp_polygon)
-        } else if (tolower(format) == "df") {
-          Shp_df <- as.MAPshp(Shp_polygon)
-          return(Shp_df)
-        }
+        return(Shp_polygon)
       }
     }
   }
@@ -257,8 +248,8 @@ getShp <- function(country = NULL,
   if (length(admin_level) == 1 & !("all" %in% admin_level)){
     Shp_polygon <- Shp_polygon[[paste(admin_level)]]
   } else {
-    Shp_polygon <- do.call(what = sp::rbind.SpatialPolygonsDataFrame, args = Shp_polygon)
-    }
+    Shp_polygon <- do.call(what = rbind, args = Shp_polygon)
+  }
 
   Shp_polygon$country_level <-
     paste(Shp_polygon$iso, "_", Shp_polygon$admn_level, sep = "")
@@ -273,16 +264,11 @@ getShp <- function(country = NULL,
       new_shps <-
         Shp_polygon[!Shp_polygon$country_level %in% unique(.malariaAtlasHidden$stored_polygons$country_level), ]
       .malariaAtlasHidden$stored_polygons <-
-        sp::rbind.SpatialPolygonsDataFrame(.malariaAtlasHidden$stored_polygons, new_shps)
+        rbind(.malariaAtlasHidden$stored_polygons, new_shps)
     }
   }
-
-  if (tolower(format) == "spatialpolygon") {
-    return(Shp_polygon)
-  } else if (tolower(format) == "df") {
-    Shp_df <- as.MAPshp(Shp_polygon)
-    return(Shp_df)
-  }
+  
+  return(Shp_polygon)
 }
 
 #Define a few utility funcitons:
@@ -310,12 +296,13 @@ downloadShp <- function(URL) {
   lyr <- sub(".shp$", "", shp)
 
   ## read shapefile into R
-  shapefile_dl <- rgdal::readOGR(dsn = shp.path, layer = lyr)
-
-  extra_cols <- list("id_0"=NA,"name_1"=NA,"id_1"=NA,"code_1"=NA,"type_1"=NA,"name_2"=NA,"id_2"=NA,"code_2"=NA,"type_2"=NA,"name_3"=NA,"id_3"=NA,"code_3"=NA,"type_3"=NA)
-  if(any(!names(extra_cols)%in%names(shapefile_dl))){
-  shapefile_dl@data <- cbind(shapefile_dl@data, extra_cols[!names(extra_cols)%in%names(shapefile_dl)])
-}
+  shapefile_dl <- sf::st_read(dsn = shp.path, layer = lyr)
+  
+  extra_cols <- c("id_0", "name_1", "id_1", "code_1", "type_1", "name_2", "id_2", "code_2", "type_2", "name_3", "id_3", "code_3", "type_3")
+  for (col_name in setdiff(extra_cols, names(shapefile_dl))) {
+    shapefile_dl[[col_name]] <- col_name
+  }
+  
   shapefile_dl <-  shapefile_dl[,c("iso","admn_level",
                                  "name_0","id_0","type_0","name_1",
                                  "id_1","type_1","name_2","id_2",

@@ -27,23 +27,14 @@
 #' # Download PfPR2-10 Raster for 2013 & plot this
 #' MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", 
 #'                           shp = MDG_shp, year = 2013)
-#' p <- autoplot_MAPraster(MDG_PfPR2_10, shp_df = MDG_shp)
+#' p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 #'
 #' # Download raw PfPR survey points & plot these over the top of the raster
 #' pr <- getPR(country = c("Madagascar"), species = "Pf")
-#' p[[1]] +
-#' geom_point(data = pr[pr$year_start==2013,],
-#'            aes(longitude, latitude, fill = positive / examined,
-#'                size = examined), shape = 21) +
-#'   scale_size_continuous(name = "Survey Size") +
-#'   scale_fill_distiller(name = "PfPR", palette = "RdYlBu") +
-#'   ggtitle("Raw PfPR Survey points\n +
-#'           Modelled PfPR 2-10 in Madagascar in 2013")
-#'
 #'
 #' # Download global raster of G6PD deficiency (Howes et al 2012) and visualise this on a map.
 #' G6PDd_global <- getRaster(surface = "G6PD Deficiency Allele Frequency")
-#' autoplot_MAPraster(G6PDd_global)
+#' autoplot(G6PDd_global)
 #' }
 #'
 #' @seealso
@@ -71,10 +62,12 @@ autoplot.MAPraster <- function(object,
                                plot_titles = TRUE,
                                fill_scale_transform = "identity",
                                fill_colour_palette = "RdYlBu",
-                               printed = TRUE){
+                               printed = TRUE) {
+  
+  lifecycle::deprecate_stop("1.5.0", "autoplot.MAPraster()", details = "This function will is deprecated. getRaster should return an object of type SpatRaster")
+  
 
   make_plot <- function(object, rastername, shp_df, legend_title){
-
 
   plot <- ggplot2::ggplot()+
     ggplot2::geom_raster(data = object[object$raster_name == rastername,], ggplot2::aes_string(x="x", y="y", fill = "z"))+
