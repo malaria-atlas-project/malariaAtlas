@@ -24,7 +24,7 @@ listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
     # If we've already downloaded a list of available countries, print that.
     # Otherwise download a list from the geoserver
 
-    wfs_client <- get_wfs_client()$Malaria
+    wfs_client <- get_wfs_clients()$Malaria
     
     if(is.null(dataset_id)) {
       pf_dataset_id = getLatestDatasetIdForPfPrData()
@@ -49,7 +49,7 @@ listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
   
   if(sourcedata == "vector points"){
 
-    wfs_client <- get_wfs_client()$Vector_Occurrence
+    wfs_client <- get_wfs_clients()$Vector_Occurrence
 
     if(is.null(dataset_id)) {
       dataset_id <- getLatestDatasetIdForVecOccData()

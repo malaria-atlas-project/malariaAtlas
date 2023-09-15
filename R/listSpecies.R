@@ -25,7 +25,7 @@ listSpecies <- function(printed = TRUE, dataset_id = NULL){
             ' (This is the most recent version of vector occurrence data. To see other dataset options use function listVectorOccurrenceDatasets)')
   }
 
-  wfs_client <- get_wfs_client()$Vector_Occurrence
+  wfs_client <- get_wfs_clients()$Vector_Occurrence
   wfs_cap <- wfs_client$getCapabilities()
   wfs_ft_type <- wfs_cap$findFeatureTypeByName(dataset_id)
   

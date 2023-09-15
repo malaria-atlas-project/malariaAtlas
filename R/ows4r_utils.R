@@ -1,7 +1,7 @@
-#' Return WFS client from cache or create one
+#' WFS clients lazily created or from cache
 #'
 #' @return A list with of WFSClients by workspace
-get_wfs_client <- function(logger=NULL) {
+get_wfs_clients <- function(logger=NULL) {
   if(exists('malariaatlas.wfs_clients', envir = .malariaAtlasHidden)){
     wfs_clients_by_workspace <- .malariaAtlasHidden$malariaatlas.wfs_clients
     return(invisible(wfs_clients_by_workspace))

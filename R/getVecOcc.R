@@ -63,7 +63,7 @@ getVecOcc <- function(country = NULL,
     stop("Can not specifiy both: 'extent' and 'sf'. Please choose one.")
   }
   
-  wfs_client <- get_wfs_client()$Vector_Occurrence
+  wfs_client <- get_wfs_clients()$Vector_Occurrence
   wfs_cap <- wfs_client$getCapabilities()
   dataset_id <- getLatestDatasetIdForVecOccData()
   wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
