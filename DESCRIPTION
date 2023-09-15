@@ -37,7 +37,8 @@ Imports:
   sf,
   lifecycle,
   terra,
-  tidyterra
+  tidyterra,
+  ows4R
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,
