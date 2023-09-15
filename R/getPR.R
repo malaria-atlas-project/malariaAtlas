@@ -64,7 +64,7 @@ getPR <- function(country = NULL,
     stop("Must specify one of: 'dataset_id' or 'species'.")
   }
   
-  wfs_client <- getOption("malariaatlas.wfs_clients")$Malaria
+  wfs_client <- get_wfs_client()$Malaria
   wfs_cap <- wfs_client$getCapabilities()
   
   bbox_filter <- NULL

@@ -11,7 +11,7 @@
 #' @export listAdministrativeBoundariesDatasets
 
 listAdministrativeBoundariesDatasets <- function(){
-  wfs_client <- getOption("malariaatlas.wfs_clients")$Admin_Units
+  wfs_client <- get_wfs_client()$Admin_Units
   wfs_cap <- wfs_client$getCapabilities()
   wfs_ft_types <- wfs_cap$getFeatureTypes()
   

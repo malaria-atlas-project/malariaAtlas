@@ -11,7 +11,7 @@
 #' @export listVectorOccurrenceDatasets
 
 listVectorOccurrenceDatasets <- function(){
-  wfs_client <- getOption("malariaatlas.wfs_clients")$Vector_Occurrence
+  wfs_client <- get_wfs_client()$Vector_Occurrence
   wfs_cap <- wfs_client$getCapabilities()
   wfs_ft_types <- wfs_cap$getFeatureTypes()
   

@@ -1,3 +1,20 @@
+#' Return WFS client from cache or create one
+#'
+#' @return A list with of WFSClients by workspace
+get_wfs_client <- function(logger=NULL) {
+  if(exists('malariaatlas.wfs_clients', envir = .malariaAtlasHidden)){
+    wfs_clients_by_workspace <- .malariaAtlasHidden$malariaatlas.wfs_clients
+    return(invisible(wfs_clients_by_workspace))
+  }
+
+  wfs_clients_by_workspace <- list()
+  for (workspace in .malariaAtlasHidden$workspaces) {
+    wfs_clients_by_workspace[[workspace]] <- ows4R::WFSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "2.0.0", logger = logger)
+  }
+  .malariaAtlasHidden$malariaatlas.wfs_clients <- wfs_clients_by_workspace
+  return(wfs_clients_by_workspace)
+}
+
 #' Get the workspace and version from a raster id.
 #'
 #' @param id The ID to parse.

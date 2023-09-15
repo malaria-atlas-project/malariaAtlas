@@ -92,7 +92,7 @@ getShp <- function(country = NULL,
     version <- getLatestVersionForAdminData()
   }
   
-  wfs_client <- getOption("malariaatlas.wfs_clients")$Admin_Units
+  wfs_client <- get_wfs_client()$Admin_Units
   wfs_cap <- wfs_client$getCapabilities()
   
   if ("all" %in% tolower(admin_level)){
