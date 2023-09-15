@@ -37,7 +37,7 @@ Use:
 
 * listData(datatype = "vector points") OR listPoints(sourcedata = "vector points") to see for which countries Vector survey data can be downloaded.
 
-* use listData(datatype = "rasters") OR listRaster() to see rasters available to download. 
+* use listData(datatype = "raster") OR listRaster() to see rasters available to download. 
 
 * use listData(datatype = "shape") OR listShp() to see shapefiles available to download. 
 
@@ -377,3 +377,4 @@ While this version is not as well-tested, it may include additional bugfixes not
 - Some functions have been deprecated. They will still run in this version, with a warning. Please remove them from your code, they will be completely removed in the future.
   - Deprecated `as.MAPraster`, `as.MAPshp`. They are no longer required for working with `autoplot`
   - Deprecated `autoplot_MAPraster`. Use `autoplot` directly with the result of `getRaster`
+
