@@ -32,6 +32,23 @@ get_wcs_clients <- function(logger=NULL) {
   return(wcs_clients_by_workspace)
 }
 
+#' WMS clients lazily created or from cache
+#'
+#' @return A list with of WMSClients by workspace
+get_wms_clients <- function(logger=NULL) {
+  if(exists('malariaatlas.wms_clients', envir = .malariaAtlasHidden)){
+    wms_clients_by_workspace <- .malariaAtlasHidden$malariaatlas.wms_clients
+    return(invisible(wms_clients_by_workspace))
+  }
+
+  wms_clients_by_workspace <- list()
+  for (workspace in .malariaAtlasHidden$workspaces) {
+    wms_clients_by_workspace[[workspace]] <- ows4R::WMSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "1.3.0", logger)
+  }
+  .malariaAtlasHidden$malariaatlas.wms_clients <- wms_clients_by_workspace
+  return(wms_clients_by_workspace)
+}
+
 #' Get the workspace and version from a raster id.
 #'
 #' @param id The ID to parse.
