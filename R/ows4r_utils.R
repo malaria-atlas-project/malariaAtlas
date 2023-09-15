@@ -245,3 +245,17 @@ combine_cql_filters <- function(filter_list) {
   }
   return(cql_filter)
 }
+
+#' Get the WCS coverage summary for a raster ID.
+#'
+#' @param raster The raster ID.
+#' @return A \link{WCSCoverageSummary} object from the \pkg{ows4R} package.
+#' @keywords internal
+#'
+get_wcs_coverage_summary_from_raster_id <- function(raster) {
+  id_parts <- get_workspace_and_version_from_coverage_id(raster)
+  wcs_client <- getOption("malariaatlas.wcs_clients")[[id_parts$workspace]]
+  coverageSummary <- wcs_client$getCapabilities()$findCoverageSummaryById(raster, exact = TRUE)
+  coverageSummary
+}
+

@@ -126,7 +126,6 @@ clean_mosquito_names <- function(available_rasters){
 #' @keywords internal
 #'
 getMinAndMaxYear <- function(time_dimension_values) {
-  print(type_of(time_dimension_values))
   if(length(time_dimension_values) == 1) {
     #In format "2000-01-01T00:00:00.000Z/2019-01-01T00:00:00.000Z/PT1S"
     years <- stringr::str_extract_all(time_dimension_values, "\\d{4}")[[1]]
