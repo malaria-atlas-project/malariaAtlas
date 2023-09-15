@@ -8,7 +8,7 @@ get_wfs_clients <- function(logger=NULL) {
   }
 
   wfs_clients_by_workspace <- list()
-  for (workspace in .malariaAtlasHidden$workspaces) {
+  for (workspace in get_workspaces()) {
     wfs_clients_by_workspace[[workspace]] <- ows4R::WFSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "2.0.0", logger = logger)
   }
   .malariaAtlasHidden$malariaatlas.wfs_clients <- wfs_clients_by_workspace
@@ -25,7 +25,7 @@ get_wcs_clients <- function(logger=NULL) {
   }
 
   wcs_clients_by_workspace <- list()
-  for (workspace in .malariaAtlasHidden$workspaces) {
+  for (workspace in get_workspaces()) {
     wcs_clients_by_workspace[[workspace]] <- ows4R::WCSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "2.0.1", logger)
   }
   .malariaAtlasHidden$malariaatlas.wcs_clients <- wcs_clients_by_workspace
@@ -42,11 +42,15 @@ get_wms_clients <- function(logger=NULL) {
   }
 
   wms_clients_by_workspace <- list()
-  for (workspace in .malariaAtlasHidden$workspaces) {
+  for (workspace in get_workspaces()) {
     wms_clients_by_workspace[[workspace]] <- ows4R::WMSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "1.3.0", logger)
   }
   .malariaAtlasHidden$malariaatlas.wms_clients <- wms_clients_by_workspace
   return(wms_clients_by_workspace)
+}
+
+get_workspaces <- function() {
+  return(.malariaAtlasHidden$workspaces)
 }
 
 #' Get the workspace and version from a raster id.

@@ -35,7 +35,7 @@ listRaster <- function(printed = TRUE){
     return(invisible(available_rasters))
   }
 
-  workspaces <- getOption("malariaatlas.workspaces")
+  workspaces <- get_workspaces()
   
   available_rasters <- future.apply::future_lapply(workspaces, function(workspace){
     wcs_client <- get_wcs_clients()[[workspace]]
