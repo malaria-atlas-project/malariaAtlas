@@ -75,6 +75,11 @@ listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
 #' @keywords internal
 #'
 fetchCountriesGivenDatasetId <- function(wfs_client, dataset_id) {
+  cached <- .malariaAtlasHidden$list_points[[dataset_id]]
+  if(!is.null(cached)) {
+    return(cached)
+  }
+  
   wfs_cap <- wfs_client$getCapabilities()
   wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
   suppressWarnings({
@@ -84,6 +89,8 @@ fetchCountriesGivenDatasetId <- function(wfs_client, dataset_id) {
   available_countries <- available_countries[available_countries$continent_id!= "",]
   available_countries <- na.omit(available_countries)
   names(available_countries) <- c("country", "country_id", "continent")
+  
+  .malariaAtlasHidden$list_points[[dataset_id]] <- available_countries # add to cache
   return(available_countries)
 }
 

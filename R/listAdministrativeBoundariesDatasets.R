@@ -11,6 +11,11 @@
 #' @export listAdministrativeBoundariesDatasets
 
 listAdministrativeBoundariesDatasets <- function(){
+  cached <- .malariaAtlasHidden$list_admin_boundaries_datasets
+  if(!is.null(cached)) {
+    return(cached)
+  }
+  
   wfs_client <- get_wfs_clients()$Admin_Units
   wfs_cap <- wfs_client$getCapabilities()
   wfs_ft_types <- wfs_cap$getFeatureTypes()
@@ -27,5 +32,7 @@ listAdministrativeBoundariesDatasets <- function(){
   })
   
   df_datasets <- do.call(rbind, wfs_ft_types_dataframes)
+  
+  .malariaAtlasHidden$list_admin_boundaries_datasets <- df_datasets # add to cache
   return(df_datasets)
 }
