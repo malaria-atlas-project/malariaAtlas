@@ -62,7 +62,7 @@ test_that("downloaded data.frame is in the correct format",{
 #})
 
 #test_that("available_countries_stored_vec object is stored in hidden environment",{
-  expect_equal(grep("Global_Dominant_Vector_Surveys", names(.malariaAtlasHidden$list_points)), 1)
+  expect_equal(length(grep("Global_Dominant_Vector_Surveys", names(.malariaAtlasHidden$list_points))), 1)
 })
 
 # listRaster() tests
