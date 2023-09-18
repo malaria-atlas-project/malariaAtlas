@@ -83,6 +83,7 @@ fetchCountriesGivenDatasetId <- function(wfs_client, dataset_id) {
   available_countries <- unique(data.frame(country = features$country, country_id = features$country_id, continent_id = features$continent_id))
   available_countries <- available_countries[available_countries$continent_id!= "",]
   available_countries <- na.omit(available_countries)
+  names(available_countries) <- c("country", "country_id", "continent")
   return(available_countries)
 }
 
