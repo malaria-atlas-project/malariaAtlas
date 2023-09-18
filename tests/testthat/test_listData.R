@@ -26,7 +26,8 @@ test_that("downloaded data.frame is in the correct format",{
 #})
 
 #test_that("available_countries_stored_pr object is stored in hidden environment",{
-  expect_true(exists("available_countries_stored_pr", envir = .malariaAtlasHidden))
+  expect_equal(length(grep("Pv_Parasite_Rate_Surveys", names(.malariaAtlasHidden$list_points))), 1)
+  expect_equal(length(grep("Pf_Parasite_Rate_Surveys", names(.malariaAtlasHidden$list_points))), 1)
 })
 
 
@@ -61,7 +62,7 @@ test_that("downloaded data.frame is in the correct format",{
 #})
 
 #test_that("available_countries_stored_vec object is stored in hidden environment",{
-  expect_true(exists("available_countries_stored_vec", envir = .malariaAtlasHidden))
+  expect_equal(grep("Global_Dominant_Vector_Surveys", names(.malariaAtlasHidden$list_points)), 1)
 })
 
 # listRaster() tests
