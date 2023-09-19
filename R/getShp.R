@@ -128,7 +128,7 @@ getShp <- function(country = NULL,
   #Getting features
 
   features_list <-
-    future.apply::future_lapply(admin_level, function(individual_admin_level) {
+    future.apply::future_sapply(admin_level, function(individual_admin_level) {
       dataset_id_admin_level <-
         getDatasetIdForAdminDataGivenAdminLevelAndVersion(individual_admin_level, version)
       dataset_id_admin_level <-
@@ -137,17 +137,14 @@ getShp <- function(country = NULL,
         wfs_cap$findFeatureTypeByName(dataset_id_admin_level)
       features_admin_level <- callGetFeaturesWithFilters(wfs_ft_type, location_filter, bbox_filter, propertyName = getPropertiesForAdminLevel(individual_admin_level))
       return(features_admin_level)
-    })
-  
-  features <- dplyr::bind_rows(features_list)
-  
-  df_features <- data.frame(features)
-  
-  df_features <- df_features[,!names(df_features)%in%c("gid", "id")]
-  
-  df_features$country_level <- paste0(df_features$iso, "_", df_features$admn_level)
-  
-  return(invisible(df_features))
+    }, simplify = FALSE,USE.NAMES = TRUE)
 
+  if (length(admin_level) == 1 & !("all" %in% admin_level)){
+    features <- features_list[[paste(admin_level)]]
+  } else {
+    features <- do.call(what = rbind, args = features_list)
+  }
+  
+  return(invisible(features))
 }
 
