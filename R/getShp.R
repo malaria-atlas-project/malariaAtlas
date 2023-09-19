@@ -11,7 +11,7 @@
 #' @param lat latitude of a point location falling within the desired shapefile.
 #' @param version The admin unit dataset version to return. Is NULL by default, and if left NULL will just use the most recent version of admin unit data.
 #'
-#' @return \code{getShp} returns either a dataframe or spatialPolygon object for requested administrative unit polygons. The following attribute fields are included:
+#' @return \code{getShp} returns either a sf object for requested administrative unit polygons. The following attribute fields are included:
 #'
 #' \enumerate{
 #' \item \code{iso} ISO-3 code of given administrative unit (or the ISO code of parent unit for administrative-level 1 units).
@@ -127,17 +127,9 @@ getShp <- function(country = NULL,
 
   #Getting features
 
-  features_list <-
-    future.apply::future_sapply(admin_level, function(individual_admin_level) {
-      dataset_id_admin_level <-
-        getDatasetIdForAdminDataGivenAdminLevelAndVersion(individual_admin_level, version)
-      dataset_id_admin_level <-
-        getDatasetIdForAdminDataGivenAdminLevelAndVersion(individual_admin_level, version)
-      wfs_ft_type <-
-        wfs_cap$findFeatureTypeByName(dataset_id_admin_level)
-      features_admin_level <- callGetFeaturesWithFilters(wfs_ft_type, location_filter, bbox_filter, propertyName = getPropertiesForAdminLevel(individual_admin_level))
-      return(features_admin_level)
-    }, simplify = FALSE,USE.NAMES = TRUE)
+  features_list <- future.apply::future_sapply(
+    admin_level, function(al) {download_shp(wfs_cap, al, version, location_filter, bbox_filter)}, simplify = FALSE, USE.NAMES = TRUE
+  )
 
   if (length(admin_level) == 1 & !("all" %in% admin_level)){
     features <- features_list[[paste(admin_level)]]
@@ -148,3 +140,27 @@ getShp <- function(country = NULL,
   return(invisible(features))
 }
 
+
+download_shp <- function(wfs_cap, individual_admin_level, version, location_filter, bbox_filter) {
+  dataset_id_admin_level <-
+    getDatasetIdForAdminDataGivenAdminLevelAndVersion(individual_admin_level, version)
+  wfs_ft_type <-
+    wfs_cap$findFeatureTypeByName(dataset_id_admin_level)
+  features_admin_level <- callGetFeaturesWithFilters(wfs_ft_type, location_filter, bbox_filter, propertyName = getPropertiesForAdminLevel(individual_admin_level))
+  
+  extra_cols <- c("id_0", "name_1", "id_1", "code_1", "type_1", "name_2", "id_2", "code_2", "type_2", "name_3", "id_3", "code_3", "type_3")
+  for (col_name in setdiff(extra_cols, names(features_admin_level))) {
+    features_admin_level[[col_name]] <- NA
+  }
+  
+  features_admin_level <-  features_admin_level[,c("iso","admn_level",
+                                   "name_0","id_0","type_0","name_1",
+                                   "id_1","type_1","name_2","id_2",
+                                   "type_2","name_3","id_3",
+                                   "type_3","source")]
+  features_admin_level$country_level <-
+    paste(features_admin_level$iso, "_", features_admin_level$admn_level, sep = "")
+  
+  
+  return(features_admin_level)
+}
