@@ -313,3 +313,15 @@ get_wcs_coverage_summary_from_raster_id <- function(raster) {
   coverageSummary
 }
 
+#' Get the WCS client for a raster ID.
+#'
+#' @param raster The raster ID.
+#' @return A \link{WCSClient} object from the \pkg{ows4R} package.
+#' @keywords internal
+#'
+get_wcs_client_from_raster_id <- function(raster) {
+  id_parts <- get_workspace_and_version_from_coverage_id(raster)
+  wcs_client <- getOption("malariaatlas.wcs_clients")[[id_parts$workspace]]
+  wcs_client
+}
+
