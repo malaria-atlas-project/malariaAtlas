@@ -62,7 +62,7 @@ test_that("downloaded data.frame is in the correct format",{
 #})
 
 #test_that("available_countries_stored_vec object is stored in hidden environment",{
-  expect_equal(grep("Global_Dominant_Vector_Surveys", names(.malariaAtlasHidden$list_points)), 1)
+  expect_equal(length(grep("Global_Dominant_Vector_Surveys", names(.malariaAtlasHidden$list_points))), 1)
 })
 
 # listRaster() tests
@@ -112,20 +112,20 @@ test_that("downloaded data.frame is in the correct format",{
 
 
 #test_that("available_admin_stored object is stored in hidden environment",{
-  expect_true(exists("available_admin_stored", envir = .malariaAtlasHidden))
-  
+  expect_equal(length(names(.malariaAtlasHidden$list_shp$admin0)), 1)
+
   
   # Test that admin level works.
   
   dd1 <- listShp(printed = FALSE, admin_level = 'admin0')
   expect_true(all(dd1$admn_level == 0))
   
-  expect_true(exists("available_admin_stored", envir = .malariaAtlasHidden))
   returned_rows1 <- nrow(dd1)
   #stored_rows1 <- nrow(malariaAtlas:::.malariaAtlasHidden$available_admin_stored)
   
   dd2 <- listShp(printed = FALSE, admin_level = 'admin1')
   expect_true(all(dd2$admn_level == 1))
+  expect_equal(length(names(.malariaAtlasHidden$list_shp$admin1)), 1)
   
   returned_rows2 <- nrow(dd2)
   #stored_rows2 <- nrow(malariaAtlas:::.malariaAtlasHidden$available_admin_stored)

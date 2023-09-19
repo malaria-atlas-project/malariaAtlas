@@ -23,12 +23,17 @@ listShp <- function(printed = TRUE,
     message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
             ' (This is the most recent version of admin boundary data. To see other version options use function listAdministrativeBoundariesDatasets)')
   }
-
-  wfs_client <- get_wfs_clients()$Admin_Units
+  
+    wfs_client <- get_wfs_clients()$Admin_Units
   wfs_cap <- wfs_client$getCapabilities()
   
   features_list <-
     future.apply::future_lapply(admin_level, function(individual_admin_level) {
+      cached <- .malariaAtlasHidden$list_shp[[individual_admin_level]][[version]]
+      if(!is.null(cached)) {
+        return(cached)
+      }
+      
       dataset_id_admin_level <-
         getDatasetIdForAdminDataGivenAdminLevelAndVersion(individual_admin_level, version)
       dataset_id_admin_level <-
@@ -38,6 +43,8 @@ listShp <- function(printed = TRUE,
       features_admin_level <-
         wfs_ft_type$getFeatures(outputFormat = "json",
                                 propertyName = getPropertiesForAdminLevel(individual_admin_level))
+      
+      .malariaAtlasHidden$list_shp[[individual_admin_level]][[version]] <- features_admin_level # add to cache
       return(features_admin_level)
     })
   
