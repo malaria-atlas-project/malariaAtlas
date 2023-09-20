@@ -182,10 +182,6 @@ getVecOcc <- function(country = NULL,
     dataset_id <- getLatestDatasetIdForVecOccData()
   }
   
-  print(location_filter)
-  
-  print(cql_filter)
-  
   wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
   df <-
     callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
