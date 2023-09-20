@@ -126,12 +126,14 @@ getVecOcc <- function(country = NULL,
   } else {
     if (any(c(!is.null(country), !is.null(ISO), !is.null(continent))) &
         !("all" %in% c(country, ISO))) {
+      
       if (!(is.null(country))) {
-        location_cql_col <- "country"
+        location_cql_col <- location_col <- "country"
       } else if (!(is.null(ISO))) {
-        location_cql_col <- "country_id"
+        location_cql_col <- location_col<- "country_id"
       } else if (!(is.null(continent))) {
         location_cql_col <- "continent_id"
+        location_col <- "continent"
       }
       
       
@@ -146,7 +148,7 @@ getVecOcc <- function(country = NULL,
       
       message(paste(
         "Attempting to download vector occurence data for",
-        paste(available_countries_vec$country[available_countries_vec[, location_cql_col] %in%
+        paste(available_countries_vec$country[available_countries_vec[, location_col] %in%
                                                 checked_availability_vec$location[checked_availability_vec$is_available == 1]],
               collapse = ", "),
         "..."
@@ -263,7 +265,7 @@ as.vectorpoints <- function(x) {
       "longitude",
       "country",
       "country_id",
-      "continent_id",
+      "continent",
       "month_start",
       "year_start",
       "month_end",

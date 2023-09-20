@@ -170,10 +170,10 @@ getDatasetIdForAdminDataGivenAdminLevelAndVersion <- function(admin_level, versi
 #' @param bbox A matrix representing a bounding box.
 #' @return The character string of the cql filter.
 build_bbox_filter <- function(bbox) {
-  minX <- bbox[2, 1]
-  minY <- bbox[1, 1]
-  maxX <- bbox[2, 2]
-  maxY <- bbox[1, 2]
+  minY <- bbox[2, 1]
+  minX <- bbox[1, 1]
+  maxY <- bbox[2, 2]
+  maxX <- bbox[1, 2]
   bbox_filter <-
     paste(minX,
           ",",
@@ -292,11 +292,11 @@ build_cql_time_filter <- function(start_date, end_date) {
 #'
 combine_cql_filters <- function(filter_list) {
   cql_filters_not_null <- filter_list[lengths(filter_list) != 0]
+  if(is_empty(cql_filters_not_null)) {
+    return(NULL)
+  }
   
   cql_filter <- paste(cql_filters_not_null, collapse = ' AND ')
-  if (length(cql_filter) == 0) {
-    cql_filter <- NULL
-  }
   return(cql_filter)
 }
 
