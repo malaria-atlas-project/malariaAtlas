@@ -202,7 +202,7 @@ build_bbox_filter <- function(bbox) {
 #' @keywords internal
 #'
 build_cql_filter <- function(attribute, values) {
-  values_string <- paste(values, collapse = "', '")
+  values_string <- paste(gsub("'", "''", values), collapse = "', '")
   filter <-
     paste0(attribute, " IN ('", values_string, "')")
   return(filter)
