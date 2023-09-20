@@ -239,25 +239,5 @@ fetchRaster <- function(dataset_id, bbox_filter, year) {
 }
 
 
-#' Gets the rasters dataset id, given a surface (title). If more than one rasters have that surface/title, then the one with
-#' the most recent version is selected. If there are no matches, the program will stop with a relevant message. 
-#'
-#' @param rasterList data.frame containing available raster information, as returned by listRaster().
-#' @param surface character that is the surface/title of the raster.
-#' @return character that is the dataset id of the raster that matches the given surface.
-#' @keywords internal
-#'
-getRasterDatasetIdFromSurface <- function(rasterList, surface) {
-  rasterList_filtered_by_title <- subset(rasterList, title == surface)
-  if(length(rasterList_filtered_by_title) == 0) {
-    stop(paste("Surface with title ", surface, " not found. Please use the dataset_id parameter instead anyway. As thes surface parameter will be removed in next version. "))
-  } else if(length(rasterList_filtered_by_title) == 1) {
-    return(rasterList_filtered_by_title$dataset_id[1])
-  } else {
-    maxVersion <- max(rasterList_filtered_by_title$version)
-    rasterList_filtered_by_title_and_version <- subset(rasterList_filtered_by_title, version == maxVersion)
-    return(rasterList_filtered_by_title_and_version$dataset_id[1])
-  }
-}
 
 
