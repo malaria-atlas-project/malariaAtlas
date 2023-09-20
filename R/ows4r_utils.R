@@ -165,25 +165,31 @@ getDatasetIdForAdminDataGivenAdminLevelAndVersion <- function(admin_level, versi
   return(paste0('Admin_Units:', version, '_Global_Admin_', admin_level_numeric))
 }
 
-#' Builds a cql filter to be used with getFeatures, that will filter based on the given bounding box.
+#' Builds a CQL filter to be used with getFeatures, that will filter based on the given bounding box.
 #'
 #' @param bbox A matrix representing a bounding box.
-#' @return The character string of the cql filter.
+#' @return The character string of the CQL filter.
+build_cql_bbox_filter <- function(bbox) {
+  minY <- bbox[2, 1]
+  minX <- bbox[1, 1]
+  maxY <- bbox[2, 2]
+  maxX <- bbox[1, 2]
+  bbox_filter <-
+    paste("BBOX(geom,", minX,",",minY,",",maxX,",",maxY,",'EPSG:4326')",sep = '')
+  return(bbox_filter)
+}
+
+#' Builds a filter to be used with getFeatures, that will filter based on the given bounding box.
+#'
+#' @param bbox A matrix representing a bounding box.
+#' @return The character string of the filter.
 build_bbox_filter <- function(bbox) {
   minY <- bbox[2, 1]
   minX <- bbox[1, 1]
   maxY <- bbox[2, 2]
   maxX <- bbox[1, 2]
   bbox_filter <-
-    paste(minX,
-          ",",
-          minY,
-          ",",
-          maxX,
-          ",",
-          maxY,
-          ",EPSG:4326",
-          sep = '')
+    paste(minX,",",minY,",",maxX,",",maxY,",EPSG:4326",sep = '')
   return(bbox_filter)
 }
 
@@ -206,23 +212,15 @@ build_cql_filter <- function(attribute, values) {
 #'
 #' @param feature_type Object of WFSFeatureType.
 #' @param cql_filter A character string that reflects cql filter e.g. "time_start AFTER 2020-00-00T00:00:00Z AND country IN ('Nigeria')"
-#' @param bbox_filter A character string that reflects bbox filter e.g. "120,130,178,187,EPSG:4326"
 #' @return The features returned from the getFeatures called on the feature_type with the filter where not NULL.
 #' @keywords internal
 #'
 callGetFeaturesWithFilters <-
-  function(feature_type, cql_filter, bbox_filter, ...) {
-    if (!is.null(cql_filter) & !is.null(bbox_filter)) {
+  function(feature_type, cql_filter, ...) {
+    if (!is.null(cql_filter)) {
       features <-
         feature_type$getFeatures(outputFormat = "json",
-                                 cql_filter = cql_filter,
-                                 bbox = bbox_filter)
-    } else if (!is.null(cql_filter) & is.null(bbox_filter)) {
-      features <-
-        feature_type$getFeatures(outputFormat = "json", cql_filter = cql_filter)
-    } else if (is.null(cql_filter) & !is.null(bbox_filter)) {
-      features <-
-        feature_type$getFeatures(outputFormat = "json", bbox = bbox_filter)
+                                 cql_filter = cql_filter)
     } else {
       features <- feature_type$getFeatures(outputFormat = "json", ...)
     }

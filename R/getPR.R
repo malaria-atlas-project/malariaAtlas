@@ -123,11 +123,11 @@ getPR <- function(country = NULL,
         build_cql_filter(location_cql_col, valid_locations)
       
     } else if (!is.null(extent)) {
-      bbox_filter <- build_bbox_filter(extent)
+      bbox_filter <- build_cql_bbox_filter(extent)
     }
   }
   
-  cql_filters <- list(time_filter, location_filter)
+  cql_filters <- list(time_filter, location_filter, bbox_filter)
   cql_filter <- combine_cql_filters(cql_filters)
   
   
@@ -140,9 +140,9 @@ getPR <- function(country = NULL,
       pv_wfs_feature_type <-
         wfs_cap$findFeatureTypeByName(pv_dataset_id)
       pf_df <-
-        callGetFeaturesWithFilters(pf_wfs_feature_type, cql_filter, bbox_filter)
+        callGetFeaturesWithFilters(pf_wfs_feature_type, cql_filter)
       pv_df <-
-        callGetFeaturesWithFilters(pv_wfs_feature_type, cql_filter, bbox_filter)
+        callGetFeaturesWithFilters(pv_wfs_feature_type, cql_filter)
       df <- dplyr::bind_rows(pf_df, pv_df)
       
     } else if (tolower(species) == "pf") {
@@ -150,14 +150,14 @@ getPR <- function(country = NULL,
       wfs_feature_type <-
         wfs_cap$findFeatureTypeByName(dataset_id)
       df <-
-        callGetFeaturesWithFilters(wfs_feature_type, cql_filter, bbox_filter)
+        callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
       
     } else if (tolower(species) == "pv") {
       dataset_id <- getLatestDatasetIdForPvPrData()
       wfs_feature_type <-
         wfs_cap$findFeatureTypeByName(dataset_id)
       df <-
-        callGetFeaturesWithFilters(wfs_feature_type, cql_filter, bbox_filter)
+        callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
       
     } else {
       stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")
@@ -165,7 +165,7 @@ getPR <- function(country = NULL,
   } else {
     wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
     df <-
-      callGetFeaturesWithFilters(wfs_feature_type, cql_filter, bbox_filter)
+      callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
     
   }
   

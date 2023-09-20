@@ -163,15 +163,15 @@ getVecOcc <- function(country = NULL,
       
       
     } else if (!is.null(extent)) {
-      bbox_filter <- build_bbox_filter(extent)
+      bbox_filter <- build_cql_bbox_filter(extent)
     }
     
     else if (!is.null(sf)) {
-      bbox_filter <- build_bbox_filter(sf::st_bbox(sf))
+      bbox_filter <- build_cql_bbox_filter(sf::st_bbox(sf))
     }
   }
   
-  cql_filters <- list(time_filter, species_filter, location_filter)
+  cql_filters <- list(time_filter, species_filter, location_filter, bbox_filter)
   cql_filter <- combine_cql_filters(cql_filters)
   
   if (length(cql_filter) == 0) {
@@ -188,7 +188,7 @@ getVecOcc <- function(country = NULL,
   
   wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
   df <-
-    callGetFeaturesWithFilters(wfs_feature_type, cql_filter, bbox_filter)
+    callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
   
   
   #Just to avoid visible binding notes - moved higher up
