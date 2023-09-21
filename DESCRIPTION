@@ -36,7 +36,9 @@ Imports:
   lifecycle,
   terra,
   tidyterra,
-  ows4R
+  ows4R,
+  future.apply,
+  lubridate
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,

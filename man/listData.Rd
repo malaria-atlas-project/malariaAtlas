@@ -11,7 +11,7 @@ listData(datatype, printed = TRUE, ...)
 
 \item{printed}{Should the list be printed to the console?}
 
-\item{...}{Other arguments to be passed to \code{list*} functions. (e.g. \code{admin_level} for \code{listShp})}
+\item{...}{Other arguments to be passed to \code{list*} functions. (e.g. \code{admin_level} for \code{listShp}, or \code{dataset_id} for \code{listPoints})}
 }
 \value{
 \code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.

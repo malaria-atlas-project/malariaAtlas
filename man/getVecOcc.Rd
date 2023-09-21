@@ -11,7 +11,11 @@ getVecOcc(
   ISO = NULL,
   continent = NULL,
   species = "all",
-  extent = NULL
+  extent = NULL,
+  sf = NULL,
+  start_date = NULL,
+  end_date = NULL,
+  dataset_id = NULL
 )
 }
 \arguments{
@@ -24,6 +28,14 @@ getVecOcc(
 \item{species}{string specifying the Anopheles species for which to find vector occurrence points, options include: \code{"Anopheles...."} OR \code{"ALL"}}
 
 \item{extent}{an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox().}
+
+\item{sf}{an sf (simple feature) object specifying the spatial extent within which PR data is desired}
+
+\item{start_date}{string object representing the lower date to filter the vector occurrence data by (inclusive)}
+
+\item{end_date}{string object representing the upper date to filter the vector occurrence data by (exclusive)}
+
+\item{dataset_id}{A character string specifying the dataset ID. Is NULL by default, and the most recent version of vector occurrence data will be selected.}
 }
 \value{
 \code{getVecOcc} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.

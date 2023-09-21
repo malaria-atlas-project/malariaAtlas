@@ -11,7 +11,7 @@ as.vectorpoints(x)
 }
 \description{
 Will create empty columns for any missing columns expected in a vector.points data.frame.
-This function is particularly useful for use with packages like dplyr that strip 
+This function is particularly useful for use with packages like dplyr that strip
 objects of their classes.
 }
 \examples{
@@ -19,10 +19,10 @@ objects of their classes.
 library(dplyr)
 Brazil_vec <- getVecOcc(country = "Brazil")
 
-# Filter data.frame then readd vector points class so autoplot can be used. 
-Brazil_vec \%>\% 
-  filter(sample_method1 == 'larval collection') \%>\% 
-  as.vectorpoints \%>\% 
+# Filter data.frame then readd vector points class so autoplot can be used.
+Brazil_vec \%>\%
+  filter(sample_method1 == 'larval collection') \%>\%
+  as.vectorpoints \%>\%
   autoplot
 }
 }
