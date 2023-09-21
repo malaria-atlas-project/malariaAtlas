@@ -106,7 +106,7 @@ extractRaster <- function(df,
   }
   
   if(is.null(longitude_column)) {
-    stop("df has to contain a column named 'longitude', 'long' or 'x' to represent the latitude")
+    stop("df has to contain a column named 'longitude', 'long' or 'x' to represent the longitude")
   }
   
   coords <- c(longitude_column, latitude_column)
@@ -205,7 +205,7 @@ extractLayerValues <- function(points_to_query,
 #' Returns the best latitude column name in df data.frame, if one exists.
 #'
 #' @param df The data.frame, hopefully containing a column for latitude
-#' @return Returns the best column name for latitude - 'latitude', 'lat', or 'x' respectively, or NULL if none of these column names exists in df
+#' @return Returns the best column name for latitude - 'latitude', 'lat', or 'y' respectively, or NULL if none of these column names exists in df
 #' @keywords internal
 getLatitudeColumn <- function(df) {
   colnames <- colnames(df)
@@ -214,8 +214,8 @@ getLatitudeColumn <- function(df) {
     return('latitude')
   } else if ('lat' %in% colnames) {
     return('lat')
-  } else if ('x' %in% colnames) {
-    return('x')
+  } else if ('y' %in% colnames) {
+    return('y')
   } else {
     return(NULL)
   }
@@ -224,7 +224,7 @@ getLatitudeColumn <- function(df) {
 #' Returns the best longitude column name in df data.frame, if one exists.
 #'
 #' @param df The data.frame, hopefully containing a column for longitude.
-#' @return Returns the best column name for longitude - 'longitude', 'long', or 'y' respectively, or NULL if none of these column names exists in df
+#' @return Returns the best column name for longitude - 'longitude', 'long', or 'x' respectively, or NULL if none of these column names exists in df
 #' @keywords internal
 getLongitudeColumn <- function(df) {
   colnames <- colnames(df)
@@ -233,8 +233,8 @@ getLongitudeColumn <- function(df) {
     return('longitude')
   } else if ('long' %in% colnames) {
     return('long')
-  } else if ('y' %in% colnames) {
-    return('y')
+  } else if ('x' %in% colnames) {
+    return('x')
   } else {
     return(NULL)
   }
