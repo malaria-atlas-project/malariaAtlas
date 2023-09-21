@@ -5,7 +5,7 @@
 \title{Quickly visualise Rasters downloaded from MAP}
 \usage{
 \method{autoplot}{SpatRasterCollection}(
-  raster_collection,
+  object,
   ...,
   shp_df = NULL,
   legend_title = "",
@@ -16,7 +16,7 @@
 )
 }
 \arguments{
-\item{raster_collection}{SpatRasterCollection object to be visualised.}
+\item{object}{SpatRasterCollection object to be visualised.}
 
 \item{...}{Other arguments passed to specific methods}
 
