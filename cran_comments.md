@@ -1,31 +1,18 @@
+This is the first submission after changing maintainership
+
 ## Changes
 
-The Malaria Atlas Project server is moving. We have updated the package
-to reflect this. The old domain will still work for a fair while though.
+Removed dependency on rgdal, raster, sp. Only still currently remaining in optional dependency rdhs.
 
 ## Test environments
 
-Local Ubuntu 18.04 Stable R 3.6.2 (2019-12-12)
-Local Ubuntu 18.04 Stable 3.6.2 (2019-12-12) (with internet disconnected)
+Manual, Ubuntu 22.04.3 LTS, R version 4.2.1
+CI, Ubuntu through docker rocker/geopatial:4.2.1
 
-Travis Ubuntu 16.04 Stable R version 3.6.2 (2017-01-27)
-Travis Ubuntu 16.04 Devel (unstable) (2020-02-24 r77850)
-Travis Ubuntu 16.04 Stable R version 3.6.2 (2017-01-27) with env: NOT_CRAN=true
-
-Winbuilder Stable  R version 3.6.2 (2019-12-12)
-Winbuilder R Under development (unstable) (2020-01-28 r77738)
+Manual, Windows 10, R version 4.1.3
 
 
-## R CMD check results
+## devtools::check() results
 
 No warnings, no errors.
-
-I get one note when running check locally with the internet disconnected.
-> checking for future file timestamps ... NOTE
-  unable to verify current time
-
-This seems to be as expected.
-
-
-
 
