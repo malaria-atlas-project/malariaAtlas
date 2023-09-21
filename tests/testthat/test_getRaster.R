@@ -8,15 +8,15 @@ test_that('All combinations of spatially aligned requests work', {
 
   skip_on_cran()
   # Time varying single
-  MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2015)
+  MDG_PfPR2_10 <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate", shp = MDG_shp, year = 2015)
   expect_true(inherits(MDG_PfPR2_10, 'SpatRaster'))
 
   #time varying range
-  MDG_PfPR2_10_range <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2012:2015)
+  MDG_PfPR2_10_range <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate", shp = MDG_shp, year = 2012:2015)
   expect_true(inherits(MDG_PfPR2_10_range, 'SpatRaster'))
 
   # Time varying default
-  MDG_PfPR2_10_def <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = NA)
+  MDG_PfPR2_10_def <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate", shp = MDG_shp, year = NA)
   expect_true(inherits(MDG_PfPR2_10_def, 'SpatRaster'))
 
 
@@ -62,7 +62,7 @@ test_that('All combinations of spatially aligned requests work', {
   
   # Different resolutions 
   MDG_res <- getRaster(
-    surface = c("Plasmodium falciparum PR2-10", 
+    surface = c("Plasmodium falciparum PR2 - 10", 
                 'A global map of travel time to cities to assess inequalities in accessibility in 2015'), 
     shp = MDG_shp, 
     year = list(2009, NA)

@@ -42,8 +42,12 @@ getRaster <- function(dataset_id = NULL,
                       shp = NULL,
                       extent = NULL,
                       file_path = NULL,
-                      year = as.list(rep(NA, length(dataset_id))), 
+                      year = NULL, 
                       vector_year= NULL) {
+  
+  #Parameter checking
+  
+  availableRasters <- suppressMessages(listRaster(printed = FALSE))
   
   if (!is.null(surface)) {
     lifecycle::deprecate_warn("1.5.0", "getRaster(surface)", details = "The argument 'surface' has been deprecated. It will be removed in the next version. Please use dataset_id to specify the raster instead.")
@@ -55,14 +59,28 @@ getRaster <- function(dataset_id = NULL,
   
   if(is.null(dataset_id)) {
     if(!is.null(surface)) {
-      raster_list <- listRaster(printed = FALSE)
       dataset_id = future.apply::future_lapply(surface, function(individual_surface){
-        id <- getRasterDatasetIdFromSurface(raster_list, individual_surface)
+        id <- getRasterDatasetIdFromSurface(availableRasters, individual_surface)
         return(id)
       })
     } else {
       stop('Please provide a value for dataset_id. Options for this variable can be found by running listRaster() and looking in the dataset_id column.')
     }
+  } else {
+    diff <- setdiff(dataset_id, availableRasters$dataset_id)
+    intersect <- intersect(dataset_id, availableRasters$dataset_id)
+    if(length(diff) > 0) {
+      if(length(intersect) == 0) {
+        stop(paste0('All value(s) provided for dataset_id are not valid. All values must be from dataset_id column of listRasters()'))
+      } else {
+        warning(paste0('Following value(s) provided for dataset_id are not valid and so will be ignored: ', diff, ' . All values must be from dataset_id column of listRasters()'))
+        dataset_id <- intersect
+      }
+    }
+  }
+  
+  if(is.null(year)) {
+    year <- as.list(rep(NA, length(dataset_id)))
   }
   
   if (length(dataset_id) > 1) {
@@ -78,6 +96,36 @@ getRaster <- function(dataset_id = NULL,
     }
   }
   
+  year <- mapply(function(individual_dataset_id, year_range){
+    
+    #Check if the year (or year range) is valid for the dataset id
+    if(all(is.na(year_range))) {
+      return(year_range)
+    } else {
+      coverageSummary <- get_wcs_coverage_summary_from_raster_id(individual_dataset_id)
+      coverageTimes <- coverageSummary$getDimensions()[[3]]$coefficients
+      
+      if(is.null(coverageTimes)) {
+        warning(paste0('Raster ', individual_dataset_id, ' is static, yet you have provided a year value. This value will therefore be ignored'))
+        return(NA)
+      } else {
+        coverageYears <- sapply(coverageTimes, convertDateToYear)
+        diff <- setdiff(year_range, coverageYears)
+        intersect <- intersect(year_range, coverageYears)
+        if(length(diff) > 0) {
+          if(length(intersect) == 0) {
+            stop(paste0('Value(s) provided for year for ', individual_dataset_id, ' is invalid. Valid years are: ', paste(coverageYears, collapse=', ')))
+          } else {
+            warning(paste0('Following value(s) provided for year are not valid for ', individual_dataset_id,' and so will be ignored: ', paste(diff, collapse=', '), '. Valid years for this dataset are: ', paste(coverageYears, collapse=', ')))
+            return(intersect)
+          }
+        } else {
+          return(year_range)
+        }
+      }
+      
+    } 
+  }, dataset_id, year)
   
   
   if (!is.null(shp)) {
@@ -101,9 +149,10 @@ getRaster <- function(dataset_id = NULL,
             sep = "")
   }
   
+  #Fetching rasters
+  
+  #Loop through each dataset_id and its matching year (or year list).
   spat_rasters_by_dataset_id <- mapply(function(individual_dataset_id, year_range){
-    
-    coverageSummary <- get_wcs_coverage_summary_from_raster_id(individual_dataset_id)
     
     spat_rasters_by_year <- future.apply::future_lapply(year_range, function(individual_year){ 
 
@@ -162,8 +211,13 @@ getRaster <- function(dataset_id = NULL,
     return(spat_rasters[[1]])
   } else if (length(spat_rasters) > 1) {
     #if more than one raster is found we want a SpatRasterCollection - but only for rasters with the same resolution
-    spat_raster_collection <- collectRastersOfSameResolution(spat_rasters)
-    return(spat_raster_collection)
+    stk_list <- collectRastersOfSameResolution(spat_rasters)
+    if(length(stk_list) == 1) {
+      return(stk_list[[1]])
+    } else if(length(stk_list) > 1) {
+      spat_raster_collection <- terra::sprc(stk_list)
+      return(spat_raster_collection)
+    }
   }
 }
 
@@ -233,6 +287,15 @@ fetchRaster <- function(dataset_id, extent, year) {
   
   return(spat_raster)
 }
+
+
+convertDateToYear <- function(date_character) {
+  date <- lubridate::ymd_hms(date_character)
+  year <- lubridate::year(date)
+  return(year)
+}
+
+
 
 
 
