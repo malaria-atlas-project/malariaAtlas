@@ -23,7 +23,6 @@ LazyData: true
 Imports:
   curl, 
   xml2, 
-  grid, 
   gridExtra, 
   httr,
   dplyr,

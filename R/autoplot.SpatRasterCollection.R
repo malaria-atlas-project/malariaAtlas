@@ -3,7 +3,7 @@
 #' \code{autoplot.SpatRasterCollection} creates a map of all rasters in a autoplot.SpatRasterCollection object and
 #'   displays these in a grid.
 #'
-#' @param raster_collection SpatRasterCollection object to be visualised.
+#' @param object SpatRasterCollection object to be visualised.
 #' @param shp_df Shapefile(s) (data.frame) to plot with downloaded raster.
 #' @param legend_title String used as title for all colour scale legends.
 #' @param plot_titles Plot name of raster object as header for each individual raster plot?
@@ -20,7 +20,7 @@
 #' @export
 #'
 autoplot.SpatRasterCollection <- function(
-    raster_collection,
+    object,
     ...,
     shp_df = NULL,
     legend_title = "",
@@ -29,8 +29,8 @@ autoplot.SpatRasterCollection <- function(
     fill_colour_palette = "RdYlBu",
     printed = TRUE
 ) {
-  collection_list <- as.list(raster_collection)
-  names(collection_list) <- lapply(as.list(raster_collection), names)
+  collection_list <- as.list(object)
+  names(collection_list) <- lapply(as.list(object), names)
   
   raster_names <- unique(names(collection_list))
   plot_list <- lapply(X = raster_names, function(name) {
