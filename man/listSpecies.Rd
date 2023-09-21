@@ -4,10 +4,12 @@
 \alias{listSpecies}
 \title{list all species which have occurrence data within the MAP database.}
 \usage{
-listSpecies(printed = TRUE)
+listSpecies(printed = TRUE, dataset_id = NULL)
 }
 \arguments{
 \item{printed}{should the list be printed to the database.}
+
+\item{dataset_id}{A character string specifying the dataset ID. Is NULL by default, and the most recent version of the vector points dataset will be selected.}
 }
 \value{
 \code{listSpecies} returns a data.frame detailing the following information for each species available to download from the Malaria Atlas Project database.

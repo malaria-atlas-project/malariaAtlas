@@ -9,7 +9,8 @@ isAvailable_vec(
   country = NULL,
   ISO = NULL,
   continent = NULL,
-  full_results = FALSE
+  full_results = FALSE,
+  dataset_id = NULL
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ isAvailable_vec(
 \item{continent}{string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
 \item{full_results}{By default this is FALSE meaning the function only gives a message outlining whether specified country is available, if \code{full_results == TRUE}, the function returns a named list outlining data availability.}
+
+\item{dataset_id}{A character string specifying the dataset ID. Is NULL by default, and the most recent version of the pr points or vector points will be selected. #'}
 }
 \value{
 \code{isAvailable_Vec} returns a named list of input locations with information regarding data availability.

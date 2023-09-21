@@ -4,12 +4,14 @@
 \alias{listPoints}
 \title{List countries with available MAP Point data.}
 \usage{
-listPoints(printed = TRUE, sourcedata)
+listPoints(printed = TRUE, sourcedata, dataset_id = NULL)
 }
 \arguments{
 \item{printed}{Should the list be printed to the console?}
 
 \item{sourcedata}{String contining desired dataset within the Malaria Atlas database to be searched, e.g \code{"pr points"} OR \code{"vector points"}}
+
+\item{dataset_id}{A character string specifying the dataset ID. Is NULL by default, and the most recent version of the pr points or vector points will be selected.}
 }
 \value{
 \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.

@@ -4,7 +4,16 @@
 \alias{getPR}
 \title{Download PR points from the MAP database}
 \usage{
-getPR(country = NULL, ISO = NULL, continent = NULL, species, extent = NULL)
+getPR(
+  country = NULL,
+  ISO = NULL,
+  continent = NULL,
+  species = NULL,
+  extent = NULL,
+  start_date = NULL,
+  end_date = NULL,
+  dataset_id = NULL
+)
 }
 \arguments{
 \item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
@@ -15,7 +24,13 @@ getPR(country = NULL, ISO = NULL, continent = NULL, species, extent = NULL)
 
 \item{species}{string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}}
 
-\item{extent}{an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox().}
+\item{extent}{an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))}
+
+\item{start_date}{string object representing the lower date to filter the PR data by (inclusive) e.g. '2020-01-01'}
+
+\item{end_date}{string object representing the upper date to filter the PR data by (exclusive) e.g. '2020-01-01'}
+
+\item{dataset_id}{A character string specifying the dataset ID. Is NULL by default, and the most recent version of PR data will be selected.}
 }
 \value{
 \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
