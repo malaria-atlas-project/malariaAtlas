@@ -126,12 +126,14 @@ getVecOcc <- function(country = NULL,
   } else {
     if (any(c(!is.null(country), !is.null(ISO), !is.null(continent))) &
         !("all" %in% c(country, ISO))) {
+      
       if (!(is.null(country))) {
-        location_cql_col <- "country"
+        location_cql_col <- location_col <- "country"
       } else if (!(is.null(ISO))) {
-        location_cql_col <- "country_id"
+        location_cql_col <- location_col<- "country_id"
       } else if (!(is.null(continent))) {
         location_cql_col <- "continent_id"
+        location_col <- "continent"
       }
       
       
@@ -146,7 +148,7 @@ getVecOcc <- function(country = NULL,
       
       message(paste(
         "Attempting to download vector occurence data for",
-        paste(available_countries_vec$country[available_countries_vec[, location_cql_col] %in%
+        paste(available_countries_vec$country[available_countries_vec[, location_col] %in%
                                                 checked_availability_vec$location[checked_availability_vec$is_available == 1]],
               collapse = ", "),
         "..."
@@ -161,15 +163,15 @@ getVecOcc <- function(country = NULL,
       
       
     } else if (!is.null(extent)) {
-      bbox_filter <- build_bbox_filter(extent)
+      bbox_filter <- build_cql_bbox_filter(extent)
     }
     
     else if (!is.null(sf)) {
-      bbox_filter <- build_bbox_filter(sf::st_bbox(sf))
+      bbox_filter <- build_cql_bbox_filter(sf::st_bbox(sf))
     }
   }
   
-  cql_filters <- list(time_filter, species_filter, location_filter)
+  cql_filters <- list(time_filter, species_filter, location_filter, bbox_filter)
   cql_filter <- combine_cql_filters(cql_filters)
   
   if (length(cql_filter) == 0) {
@@ -180,13 +182,9 @@ getVecOcc <- function(country = NULL,
     dataset_id <- getLatestDatasetIdForVecOccData()
   }
   
-  print(location_filter)
-  
-  print(cql_filter)
-  
   wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
   df <-
-    callGetFeaturesWithFilters(wfs_feature_type, cql_filter, bbox_filter)
+    callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
   
   
   #Just to avoid visible binding notes - moved higher up
@@ -263,7 +261,7 @@ as.vectorpoints <- function(x) {
       "longitude",
       "country",
       "country_id",
-      "continent_id",
+      "continent",
       "month_start",
       "year_start",
       "month_end",

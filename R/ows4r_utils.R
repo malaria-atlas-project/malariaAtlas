@@ -165,25 +165,31 @@ getDatasetIdForAdminDataGivenAdminLevelAndVersion <- function(admin_level, versi
   return(paste0('Admin_Units:', version, '_Global_Admin_', admin_level_numeric))
 }
 
-#' Builds a cql filter to be used with getFeatures, that will filter based on the given bounding box.
+#' Builds a CQL filter to be used with getFeatures, that will filter based on the given bounding box.
 #'
 #' @param bbox A matrix representing a bounding box.
-#' @return The character string of the cql filter.
-build_bbox_filter <- function(bbox) {
-  minX <- bbox[2, 1]
-  minY <- bbox[1, 1]
-  maxX <- bbox[2, 2]
-  maxY <- bbox[1, 2]
+#' @return The character string of the CQL filter.
+build_cql_bbox_filter <- function(bbox) {
+  minY <- bbox[2, 1]
+  minX <- bbox[1, 1]
+  maxY <- bbox[2, 2]
+  maxX <- bbox[1, 2]
   bbox_filter <-
-    paste(minX,
-          ",",
-          minY,
-          ",",
-          maxX,
-          ",",
-          maxY,
-          ",EPSG:4326",
-          sep = '')
+    paste("BBOX(geom,", minX,",",minY,",",maxX,",",maxY,",'EPSG:4326')",sep = '')
+  return(bbox_filter)
+}
+
+#' Builds a filter to be used with getFeatures, that will filter based on the given bounding box.
+#'
+#' @param bbox A matrix representing a bounding box.
+#' @return The character string of the filter.
+build_bbox_filter <- function(bbox) {
+  minY <- bbox[2, 1]
+  minX <- bbox[1, 1]
+  maxY <- bbox[2, 2]
+  maxX <- bbox[1, 2]
+  bbox_filter <-
+    paste(minX,",",minY,",",maxX,",",maxY,",EPSG:4326",sep = '')
   return(bbox_filter)
 }
 
@@ -196,7 +202,7 @@ build_bbox_filter <- function(bbox) {
 #' @keywords internal
 #'
 build_cql_filter <- function(attribute, values) {
-  values_string <- paste(values, collapse = "', '")
+  values_string <- paste(gsub("'", "''", values), collapse = "', '")
   filter <-
     paste0(attribute, " IN ('", values_string, "')")
   return(filter)
@@ -206,23 +212,15 @@ build_cql_filter <- function(attribute, values) {
 #'
 #' @param feature_type Object of WFSFeatureType.
 #' @param cql_filter A character string that reflects cql filter e.g. "time_start AFTER 2020-00-00T00:00:00Z AND country IN ('Nigeria')"
-#' @param bbox_filter A character string that reflects bbox filter e.g. "120,130,178,187,EPSG:4326"
 #' @return The features returned from the getFeatures called on the feature_type with the filter where not NULL.
 #' @keywords internal
 #'
 callGetFeaturesWithFilters <-
-  function(feature_type, cql_filter, bbox_filter, ...) {
-    if (!is.null(cql_filter) & !is.null(bbox_filter)) {
+  function(feature_type, cql_filter, ...) {
+    if (!is.null(cql_filter)) {
       features <-
         feature_type$getFeatures(outputFormat = "json",
-                                 cql_filter = cql_filter,
-                                 bbox = bbox_filter)
-    } else if (!is.null(cql_filter) & is.null(bbox_filter)) {
-      features <-
-        feature_type$getFeatures(outputFormat = "json", cql_filter = cql_filter)
-    } else if (is.null(cql_filter) & !is.null(bbox_filter)) {
-      features <-
-        feature_type$getFeatures(outputFormat = "json", bbox = bbox_filter)
+                                 cql_filter = cql_filter)
     } else {
       features <- feature_type$getFeatures(outputFormat = "json", ...)
     }
@@ -292,11 +290,11 @@ build_cql_time_filter <- function(start_date, end_date) {
 #'
 combine_cql_filters <- function(filter_list) {
   cql_filters_not_null <- filter_list[lengths(filter_list) != 0]
+  if(is_empty(cql_filters_not_null)) {
+    return(NULL)
+  }
   
   cql_filter <- paste(cql_filters_not_null, collapse = ' AND ')
-  if (length(cql_filter) == 0) {
-    cql_filter <- NULL
-  }
   return(cql_filter)
 }
 
@@ -324,4 +322,26 @@ get_wcs_client_from_raster_id <- function(raster) {
   wcs_client <- getOption("malariaatlas.wcs_clients")[[id_parts$workspace]]
   wcs_client
 }
+
+#' Gets the rasters dataset id, given a surface (title). If more than one rasters have that surface/title, then the one with
+#' the most recent version is selected. If there are no matches, the program will stop with a relevant message. 
+#'
+#' @param rasterList data.frame containing available raster information, as returned by listRaster().
+#' @param surface character that is the surface/title of the raster.
+#' @return character that is the dataset id of the raster that matches the given surface.
+#' @keywords internal
+#'
+getRasterDatasetIdFromSurface <- function(rasterList, surface) {
+  rasterList_filtered_by_title <- subset(rasterList, title == surface)
+  if(length(rasterList_filtered_by_title) == 0) {
+    stop(paste("Surface with title ", surface, " not found. Please use the dataset_id parameter instead anyway. As thes surface parameter will be removed in next version. "))
+  } else if(length(rasterList_filtered_by_title) == 1) {
+    return(rasterList_filtered_by_title$dataset_id[1])
+  } else {
+    maxVersion <- max(rasterList_filtered_by_title$version)
+    rasterList_filtered_by_title_and_version <- subset(rasterList_filtered_by_title, version == maxVersion)
+    return(rasterList_filtered_by_title_and_version$dataset_id[1])
+  }
+}
+
 
