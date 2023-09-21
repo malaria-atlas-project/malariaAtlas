@@ -21,7 +21,7 @@ This package allows you to download parasite rate data (*Plasmodium falciparum* 
 
 ## Available Data
 
-The data can be interactively explored at [https://malariaatlas.org/explorer/#/explorer](https://malariaatlas.org/explorer/#/explorer).
+The data can be interactively explored at [https://data.malariaatlas.org/maps](https://data.malariaatlas.org/maps).
 This is also useful for finding information on the raster data available and checking the extents of different rasters (some are Africa only for example).
 
 

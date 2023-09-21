@@ -387,7 +387,7 @@ download_rst <-
         message(
           "Raster download error - check ",
           raster_code,
-          " surface is available for specified extent at malariaatlas.org/explorer."
+          " surface is available for specified extent at https://data.malariaatlas.org/maps."
         )
         message(rst_URL)
         download_warnings <- download_warnings + 1
