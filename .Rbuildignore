@@ -9,3 +9,4 @@ README_files*
 wfsrequest.txt
 cran_comments.md
 ^\.gitlab-ci\.yml$
+^CRAN-SUBMISSION$

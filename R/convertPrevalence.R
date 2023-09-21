@@ -57,7 +57,7 @@ convertPrevalence <- function (prevalence,
   # get the correct parameters (either the Pf, Pv or user-specified parameters)
 
   # if it's one of the existing parameter sets
-  if (class(parameters) == "character" &&
+  if (methods::is(parameters, "character") &&
       length(parameters) == 1 &&
       parameters %in% c("Pf_Smith2007",
                         "Pv_Gething2012")) {
@@ -74,7 +74,7 @@ convertPrevalence <- function (prevalence,
                                             alpha = 6.66))
 
     # otherwise check it's a length 4 numeric, user-specified set of parameters
-  } else if (class(parameters) != 'numeric' ||
+  } else if (!methods::is(parameters, 'numeric') ||
              length(parameters) != 4) {
 
     # and throw an error if not
