@@ -89,12 +89,6 @@ getRaster <- function(dataset_id = NULL,
     extent <- matrix(unlist(sf::st_bbox(shp)), ncol = 2)
   }
   
-  if(!is.null(extent)) {
-    bbox_filter <- build_bbox_filter(extent)
-  } else {
-    bbox_filter <- NULL
-  }
-  
   if(!is.null(file_path)) {
     rstdir <- file.path(file_path, "getRaster")
     
@@ -108,6 +102,8 @@ getRaster <- function(dataset_id = NULL,
   }
   
   spat_rasters_by_dataset_id <- mapply(function(individual_dataset_id, year_range){
+    
+    coverageSummary <- get_wcs_coverage_summary_from_raster_id(individual_dataset_id)
     
     spat_rasters_by_year <- future.apply::future_lapply(year_range, function(individual_year){ 
 
@@ -127,13 +123,13 @@ getRaster <- function(dataset_id = NULL,
           )
         } else {
           rst_path <- file.path(rstdir, paste0(file_name, ".tiff"))
-          spat_raster <- fetchRaster(individual_dataset_id, bbox_filter, individual_year)
+          spat_raster <- fetchRaster(individual_dataset_id, extent, individual_year)
           terra::writeRaster(spat_raster, rst_path,  filetype = "GTiff", overwrite=FALSE)
           name(spat_raster)
           return(spat_raster)
         }
       } else {
-        spat_raster <- fetchRaster(individual_dataset_id, bbox_filter, individual_year)
+        spat_raster <- fetchRaster(individual_dataset_id, extent, individual_year)
         return(spat_raster)
       }
       
@@ -212,12 +208,12 @@ collectRastersOfSameResolution <- function(rst_list) {
 #' Fetches the raster from geoserver, given the dataset id of the raster, and filter value for bbox and year.
 #'
 #' @param dataset_id character that is the dataset id of a raster.
-#' @param bbox_filter character that represents a bbox filter, or NULL.
+#' @param extent 2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sf::st_bbox(), or NULL.
 #' @param year numeric that is a single year, or NA.
-#' @return the SpatRaster that matches the dataset_id with filters applied for bbox_filter and year if not NULL/NA.
+#' @return the SpatRaster that matches the dataset_id with filters applied for extent and year if not NULL/NA.
 #' @keywords internal
 #'
-fetchRaster <- function(dataset_id, bbox_filter, year) {
+fetchRaster <- function(dataset_id, extent, year) {
 
   wcs_client <- get_wcs_client_from_raster_id(dataset_id)
   
@@ -231,7 +227,7 @@ fetchRaster <- function(dataset_id, bbox_filter, year) {
     raster_name <- dataset_id
   }
   
-  spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = bbox_filter, time = time_filter)
+  spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, time = time_filter)
   
   names(spat_raster) <- raster_name
   
