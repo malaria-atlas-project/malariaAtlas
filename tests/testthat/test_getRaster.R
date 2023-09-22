@@ -81,19 +81,16 @@ test_that('arg length mismatched work', {
                                          'Malaria__202206_Global_Pf_Mortality_Rate',
                                          'Malaria__202206_Global_Pf_Incidence_Count'),
                              year = list(2009:2011)),
-      regexp = 'If downloading multiple different rasters, 'year' must be a list of the same length as 'dataset_id'.')
+      regexp = "If downloading multiple different rasters, 'year' must be a list of the same length as 'dataset_id'.")
                
 })
 
 
 test_that('Wrong name errors correctly', {
   skip_on_cran()
-    MDG_rasters <- getRaster(surface = "Plasmodium falciparum PR2",
-                             year = NA)
-    
-    expect_true(inherits(MDG_rasters, 'character'))
-    expect_true(grepl('following surfaces have been incorrectly specified', MDG_rasters))
-  
+  expect_error(
+    MDG_rasters <- getRaster(dataset_id = "Plasmodium falciparum PR2",
+                             year = NA))
 })
 
 
@@ -101,13 +98,24 @@ test_that('Wrong name errors correctly', {
 test_that('Wrong year errors correctly', {
   skip_on_cran()
  
-  MDG_rasters <- getRaster(surface = "Plasmodium falciparum PR2-10",
-                           year = 1902)
+  MDG_rasters <- expect_warning(getRaster(dataset_id = "Malaria__202206_Global_Pf_Incidence_Count",
+                           year = 1902))
   
   expect_true(inherits(MDG_rasters, 'character'))
   expect_true(grepl('not available for all requested years', MDG_rasters))
   
 })
+
+test_that('Using surface works', {
+  skip_on_cran()
+  
+  MDG_surface <- getRaster(surface = "Number of deaths from Plasmodium falciparum during a defined year",
+                           year = 2015)
+  
+  expect_true(inherits(MDG_surface, 'SpatRaster'))
+  
+})
+
 
 
 test_that('Mosquito layers work correctly', {
@@ -118,6 +126,8 @@ test_that('Mosquito layers work correctly', {
   MDG_anoph2 <- getRaster(surface = "Anopheles arabiensis Patton, 1905", shp = MDG_shp, vector_year = 2017)
   
   expect_true(terra::values(MDG_anoph1)[845] != terra::values(MDG_anoph2)[845])
+  
+  #TODO: Failing
 })
 
 
