@@ -116,6 +116,17 @@ test_that('Using surface works', {
   
 })
 
+test_that('Explorer datasets work', {
+  skip_on_cran()
+  
+  MDG_surface <- getRaster(dataset_id = c("Explorer__2020_Global_Pv_Cases", "Explorer__2020_Global_PvPR", "Explorer__2020_Global_Pf_Reproductive_Number"),
+                           year = list(2015, 2004:2007, NA))
+  
+  expect_true(inherits(MDG_surface, 'SpatRaster'))
+  
+  #TODO: Failing
+})
+
 
 
 test_that('Mosquito layers work correctly', {
