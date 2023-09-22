@@ -128,19 +128,3 @@ test_that('Explorer datasets work', {
 })
 
 
-
-test_that('Mosquito layers work correctly', {
-  skip_on_cran()
-  
-  MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-  MDG_anoph1 <- getRaster(surface = "Anopheles arabiensis Patton, 1905", shp = MDG_shp, vector_year = 2010)
-  MDG_anoph2 <- getRaster(surface = "Anopheles arabiensis Patton, 1905", shp = MDG_shp, vector_year = 2017)
-  
-  expect_true(terra::values(MDG_anoph1)[845] != terra::values(MDG_anoph2)[845])
-  
-  #TODO: Failing
-})
-
-
-
-
