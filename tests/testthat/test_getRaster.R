@@ -21,38 +21,35 @@ test_that('All combinations of spatially aligned requests work', {
 
 
   # two time varying single
-  MDG_tvs_tvs <- getRaster(surface = c("Plasmodium falciparum PR2-10", 'Plasmodium falciparum Incidence'), shp = MDG_shp, year = list(2012, 2010))
+  MDG_tvs_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_IRS_Coverage'), shp = MDG_shp, year = list(2012, 2010))
   expect_true(inherits(MDG_tvs_tvs, 'SpatRaster'))
 
-
   # time varying range plus time varying single
-  MDG_tvr_tvs <- getRaster(surface = c("Plasmodium falciparum PR2-10", 'Plasmodium falciparum Incidence'), shp = MDG_shp, year = list(2009:2012, 2010))
+  MDG_tvr_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_IRS_Coverage'), shp = MDG_shp, year = list(2009:2012, 2010))
   expect_true(inherits(MDG_tvr_tvs, 'SpatRaster'))
 
-
   # two time varying range
-  MDG_tvr_tvr <- getRaster(surface = c("Plasmodium falciparum PR2-10", 'Plasmodium falciparum Incidence'), shp = MDG_shp, year = list(2009:2012, 2005:2007))
+  MDG_tvr_tvr <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_IRS_Coverage'), shp = MDG_shp, year = list(2009:2012, 2005:2007))
   expect_true(inherits(MDG_tvr_tvr, 'SpatRaster'))
 
-
   # two static
-  MDG_stat_stat <- getRaster(surface = c("Artemisinin-based combination therapy (ACT) coverage", 'G6PD Deficiency Allele Frequency'), 
+  MDG_stat_stat <- getRaster(dataset_id = c("Accessibility__202001_Global_Motorized_Travel_Time_to_Healthcare", 'Accessibility__202001_Global_Walking_Only_Travel_Time_To_Healthcare'), 
                              shp = MDG_shp, year = c(NA, NA))
   expect_true(inherits(MDG_stat_stat, 'SpatRaster'))
 
  # one time varying single plus one static
-  MDG_tvs_stat <- getRaster(surface = c("Plasmodium falciparum PR2-10", 'G6PD Deficiency Allele Frequency'), shp = MDG_shp, year = c(2012, NA))
+  MDG_tvs_stat <- getRaster(dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 'Blood_Disorders__201201_Africa_HbC_Allele_Frequency'), shp = MDG_shp, year = c(2012, NA))
   expect_true(inherits(MDG_tvs_stat, 'SpatRaster'))
 
 # time varying range plus static
   MDG_tvr_tvs <- getRaster(
-    surface = c("Plasmodium falciparum PR2-10", 'Artemisinin-based combination therapy (ACT) coverage'), 
+    dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 'Blood_Disorders__201201_Africa_HbC_Allele_Frequency'), 
     shp = MDG_shp, year = list(2009:2012, NA))
   expect_true(inherits(MDG_tvr_tvs, 'SpatRaster'))
 
 # two time varying range plus static.
   MDG_tvr_tvr_s <- getRaster(
-    surface = c("Plasmodium falciparum PR2-10", 'Plasmodium falciparum Incidence', 'Artemisinin-based combination therapy (ACT) coverage'), 
+    dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 'Interventions__202106_Africa_IRS_Coverage', 'Blood_Disorders__201201_Africa_HbC_Allele_Frequency'), 
     shp = MDG_shp, 
     year = list(2009:2012, 2005:2007, NA)
     )
@@ -62,8 +59,8 @@ test_that('All combinations of spatially aligned requests work', {
   
   # Different resolutions 
   MDG_res <- getRaster(
-    surface = c("Plasmodium falciparum PR2 - 10", 
-                'A global map of travel time to cities to assess inequalities in accessibility in 2015'), 
+    dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 
+                'Accessibility__202001_Global_Motorized_Friction_Surface'), 
     shp = MDG_shp, 
     year = list(2009, NA)
   )
@@ -80,11 +77,11 @@ test_that('arg length mismatched work', {
   skip_on_cran()
   
   expect_error(
-    MDG_rasters <- getRaster(surface = c("Plasmodium falciparum PR2-10",
-                                         'Plasmodium falciparum Incidence',
-                                         'Plasmodium falciparum Support'),
+    MDG_rasters <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Mortality_Count",
+                                         'Malaria__202206_Global_Pf_Mortality_Rate',
+                                         'Malaria__202206_Global_Pf_Incidence_Count'),
                              year = list(2009:2011)),
-      regexp = 'downloading multiple different surfaces')
+      regexp = 'If downloading multiple different rasters, 'year' must be a list of the same length as 'dataset_id'.')
                
 })
 
