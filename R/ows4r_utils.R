@@ -333,13 +333,20 @@ get_wcs_client_from_raster_id <- function(raster) {
 #'
 getRasterDatasetIdFromSurface <- function(rasterList, surface) {
   rasterList_filtered_by_title <- subset(rasterList, title == surface)
-  if(length(rasterList_filtered_by_title) == 0) {
-    stop(paste("Surface with title ", surface, " not found. Please use the dataset_id parameter instead anyway. As thes surface parameter will be removed in next version. "))
-  } else if(length(rasterList_filtered_by_title) == 1) {
+  if (nrow(rasterList_filtered_by_title) == 0) {
+    stop(
+      paste(
+        "Surface with title ",
+        surface,
+        " not found. Please use the dataset_id parameter instead anyway. As thes surface parameter will be removed in next version. "
+      )
+    )
+  } else if (nrow(rasterList_filtered_by_title) == 1) {
     return(rasterList_filtered_by_title$dataset_id[1])
   } else {
     maxVersion <- max(rasterList_filtered_by_title$version)
-    rasterList_filtered_by_title_and_version <- subset(rasterList_filtered_by_title, version == maxVersion)
+    rasterList_filtered_by_title_and_version <-
+      subset(rasterList_filtered_by_title, version == maxVersion)
     return(rasterList_filtered_by_title_and_version$dataset_id[1])
   }
 }

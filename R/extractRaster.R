@@ -60,9 +60,8 @@ extractRaster <- function(df,
   
   if(is.null(dataset_id)) {
     if(!is.null(surface)) {
-      raster_list <- listRaster(printed = FALSE)
       dataset_id = future.apply::future_lapply(surface, function(individual_surface){
-        id <- getRasterDatasetIdFromSurface(raster_list, individual_surface)
+        id <- getRasterDatasetIdFromSurface(availableRasters, individual_surface)
         return(id)
       })
     } else {

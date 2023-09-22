@@ -7,7 +7,7 @@
 #' @param shp SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
 #' @param extent  2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).
 #' @param file_path string specifying the directory to which raster files will be downloaded, if you want to download them. If none given, rasters will not be saved to files. 
-#' @param year default = \code{rep(NA, length(dataset_id))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.
+#' @param year default = \code{rep(NA, length(dataset_id))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{dataset_id}, providing the desired year-range for each time-varying surface in \code{dataset_id} or \code{NA} for static rasters.
 #' @param vector_year deprecated argument. Please remove it from your code.
 #'
 
@@ -42,27 +42,50 @@ getRaster <- function(dataset_id = NULL,
                       shp = NULL,
                       extent = NULL,
                       file_path = NULL,
-                      year = as.list(rep(NA, length(dataset_id))), 
+                      year = NULL, 
                       vector_year= NULL) {
+  
+  #Parameter checking
+  
+  availableRasters <- suppressMessages(listRaster(printed = FALSE))
   
   if (!is.null(surface)) {
     lifecycle::deprecate_warn("1.5.0", "getRaster(surface)", details = "The argument 'surface' has been deprecated. It will be removed in the next version. Please use dataset_id to specify the raster instead.")
   }
   
-  if (!is.null(surface)) {
+  if (!is.null(vector_year)) {
     lifecycle::deprecate_warn("1.5.0", "getRaster(vector_year)", details = "The argument 'vector_year' has been deprecated. It will be removed in the next version. You can now just use the year parameter instead to specify the years for any type of raster.")
   }
   
   if(is.null(dataset_id)) {
     if(!is.null(surface)) {
-      raster_list <- listRaster(printed = FALSE)
-      dataset_id = future.apply::future_lapply(surface, function(individual_surface){
-        id <- getRasterDatasetIdFromSurface(raster_list, individual_surface)
+      dataset_id = lapply(surface, function(individual_surface){
+        id <- getRasterDatasetIdFromSurface(availableRasters, individual_surface)
         return(id)
       })
     } else {
       stop('Please provide a value for dataset_id. Options for this variable can be found by running listRaster() and looking in the dataset_id column.')
     }
+  } else {
+    diff <- setdiff(dataset_id, availableRasters$dataset_id)
+    intersect <- intersect(dataset_id, availableRasters$dataset_id)
+    if(length(diff) > 0) {
+      if(length(intersect) == 0) {
+        stop(paste0('All value(s) provided for dataset_id are not valid. All values must be from dataset_id column of listRasters()'))
+      } else {
+        warning(paste0('Following value(s) provided for dataset_id are not valid and so will be ignored: ', diff, ' . All values must be from dataset_id column of listRasters()'))
+        dataset_id <- intersect
+      }
+    }
+  }
+  
+  ## if extent is not defined by user, use sf::st_bbox to define this from provided shapefile
+  if (is.null(extent) & !is.null(shp)) {
+    extent <- matrix(unlist(sf::st_bbox(shp)), ncol = 2)
+  }
+  
+  if(is.null(year)) {
+    year <- as.list(rep(NA, length(dataset_id)))
   }
   
   if (length(dataset_id) > 1) {
@@ -78,166 +101,216 @@ getRaster <- function(dataset_id = NULL,
     }
   }
   
-  
-  
   if (!is.null(shp)) {
     shp <- terra::vect(shp)
   }
   
-  ## if extent is not defined by user, use sf::st_bbox to define this from provided shapefile
-  if (is.null(extent) & !is.null(shp)) {
-    extent <- matrix(unlist(sf::st_bbox(shp)), ncol = 2)
+  message("Checking if the following Surface-Year combinations are available to download:")
+  message(paste0("\n    ", "DATASET ID  ", "YEAR "))
+  query_def <- data.frame()
+  for (id in dataset_id) {
+    df_i <-
+      data.frame("dataset_id" = id, "year" = year[[which(dataset_id == id)]])
+    
+    for (y in 1:length(df_i$year)) {
+      if (is.na(df_i$year[y])) {
+        df_i$file_prefix[y] <- paste0(id, "_latest_")
+        df_i$raster_title[y] <-
+          paste(availableRasters$title[availableRasters$dataset_id == id])
+      } else if (!is.na(y)) {
+        df_i$file_prefix[y] <-
+          paste0(df_i$dataset_id[y], "-", df_i$year[y])
+        df_i$raster_title[y] <-
+          paste0(availableRasters$title[availableRasters$dataset_id == id], "-", df_i$year[y])
+      }
+    }
+    query_def <- rbind(query_def, df_i)
+    current_year <- year[[which(dataset_id == id)]]
+    
+    if (all(is.na(current_year))) {
+      message(paste0("  - ", id, ":  DEFAULT "))
+    } else{
+      message(paste0(
+        "  - ",
+        id,
+        ":  ",
+        paste0(current_year, collapse = ", ")
+      ))
+    }
+  }
+  message("")
+  
+  
+  
+  
+  # check whether specified years are available for specified rasters
+  year_warnings <- 0
+  for (r in dataset_id) {
+    for (y in unique(query_def$year[query_def$dataset_id == r])) {
+      if (!is.na(y)) {
+        if (!y %in% seq(
+          availableRasters$min_raster_year[availableRasters$dataset_id == r &
+                                           !is.na(availableRasters$min_raster_year)],
+          availableRasters$max_raster_year[availableRasters$dataset_id ==
+                                           r & !is.na(availableRasters$max_raster_year)],
+          by = 1
+        )) {
+          warning(
+            paste0(
+              "Raster: \"",
+              availableRasters$title[availableRasters$dataset_id == r],
+              "\" not available for specified year: ",
+              y,
+              "\n  - check available raster years using listRaster()."
+            )
+          )
+          year_warnings = year_warnings + 1
+        }
+      }
+    }
   }
   
-  if(!is.null(extent)) {
-    bbox_filter <- build_bbox_filter(extent)
-  } else {
-    bbox_filter <- NULL
+  if (year_warnings > 0) {
+    message <- "Specified surfaces are not available for all requested years. \n Try downloading surfaces separately or double-check availability of 'dataset_id'-'year' combinations using listRaster()\n see warnings() for more info."
+    
+    message(message)
+    return(message)
   }
   
   if(!is.null(file_path)) {
+    ## create directory to which rasters will be downloaded
     rstdir <- file.path(file_path, "getRaster")
-    
     dir.create(rstdir, showWarnings = FALSE)
-    
-    file_tag <-
-      paste(paste(substr(extent, 1, 5), collapse = "_"),
-            "_",
-            gsub("-", "_", Sys.Date()),
-            sep = "")
   }
-  
-  spat_rasters_by_dataset_id <- mapply(function(individual_dataset_id, year_range){
-    
-    spat_rasters_by_year <- future.apply::future_lapply(year_range, function(individual_year){ 
 
-      if(!is.null(file_path)) {
-        
-        if(!is.na(individual_year)) {
-          file_name <- gsub("-", ".", paste0(individual_dataset_id, '_', individual_year, '_', file_tag))
-        } else {
-          file_name <- gsub("-", ".", paste0(individual_dataset_id, file_tag))
-        }
-        
-        if (any(grepl(file_name, dir(rstdir)))) {
-          message(
-            "Pre-downloaded raster with identical query parameters loaded ('",
-            grep(file_name, dir(rstdir), value = T),
-            "')"
-          )
-        } else {
-          rst_path <- file.path(rstdir, paste0(file_name, ".tiff"))
-          spat_raster <- fetchRaster(individual_dataset_id, bbox_filter, individual_year)
-          terra::writeRaster(spat_raster, rst_path,  filetype = "GTiff", overwrite=FALSE)
-          name(spat_raster)
-          return(spat_raster)
-        }
-      } else {
-        spat_raster <- fetchRaster(individual_dataset_id, bbox_filter, individual_year)
-        return(spat_raster)
+  file_tag <-
+    paste(paste(substr(extent, 1, 5), collapse = "_"),
+          "_",
+          gsub("-", "_", Sys.Date()),
+          sep = "")
+  
+  query_def$file_name <-
+    gsub("-", ".", paste0(query_def$file_prefix, file_tag))
+  
+  #download rasters to designated file_path (tempdir as default)
+  rasters <- sapply(
+    X = 1:nrow(query_def),
+    FUN = function(x) {
+      download_rst(
+        dataset_id = query_def$dataset_id[x],
+        extent = extent,
+        year = query_def$year[x],
+        file_name = query_def$file_name[x],
+        file_path = file_path
+      )
+    }
+  )
+  
+  # Return error if new rasters are not found
+  if (length(rasters) == 0) {
+    message <- "Raster download error: check dataset_id and/or extent are specified correctly"
+    message(message)
+    return(message)
+    # If only one new raster is found, read this in
+  } else if (length(rasters) == 1) {
+    raster <- rasters[[1]]
+    terra::NAflag(raster) <- -9999
+    names(raster) <- query_def$raster_title
+    if (!is.null(shp)) {
+      raster <- terra::mask(raster, shp)
+    }
+    return(raster)
+    
+    #if more than one raster is found we want a raster stack - but only for rasters with the same resolution
+  } else if (length(rasters) > 1) {
+    # create a dataframe with information on the resolution of each raster
+    rasters_index <-
+      data.frame(cbind(
+        "resolution" = lapply(rasters, terra::res),
+        "raster_name" = lapply(rasters, names),
+        "res_id" = as.numeric(factor(as.character(
+          lapply(rasters, function(x) round(terra::res(x), 6))
+        )))
+      ))
+    
+    #check whether more than one resolution is present in downloaded rasters
+    #if only one resolution is present, create a raster stack of all downloaded rasters
+    if (length(unique(rasters_index$res_id)) == 1) {
+      rst_stk <- terra::rast(rasters)
+      
+      terra::NAflag(rst_stk) <- -9999
+      
+      if (!is.null(shp)) {
+        rst_stk <- terra::mask(rst_stk, shp)
       }
       
-    })
-    
-    return(spat_rasters_by_year)
-    
-  }, dataset_id, year)
-  
-  #Unnest list
-
-  spat_rasters <- lapply(rapply(spat_rasters_by_dataset_id, enquote, how="unlist"), eval)
-
-  if(length(spat_rasters) == 0) {
-    stop("Raster download error: check dataset_id and/or extent are specified correctly")
-  }
-  
-  # mask each stack by shapefile if this is provided
-  if (!is.null(shp)) {
-    spat_rasters <- lapply(X = spat_rasters,
-                       FUN = terra::mask,
-                       mask = shp)
-  }
-  
-  for (i in 1:length(spat_rasters)) {
-    terra::NAflag(spat_rasters[[i]]) <- -9999
-  }
-  
-  if (length(spat_rasters) == 1) {
-    return(spat_rasters[[1]])
-  } else if (length(spat_rasters) > 1) {
-    #if more than one raster is found we want a SpatRasterCollection - but only for rasters with the same resolution
-    spat_raster_collection <- collectRastersOfSameResolution(spat_rasters)
-    return(spat_raster_collection)
+      names(rst_stk) <- query_def$raster_title
+      return(rst_stk)
+      #if not then we want to return a list of raster stacks - one for each resolution present in the index dataframe above.
+    } else if (length(unique(rasters_index$res_id)) != 1) {
+      #for each unique raster resolution create a raster stack and store this in stk_list
+      
+      stack_rst <- function(res_id) {
+        return(terra::rast(rasters[rasters_index$res_id == res_id]))
+      }
+      
+      stk_list <-
+        lapply(X = unique(rasters_index$res_id), FUN = stack_rst)
+      
+      for (i in 1:length(stk_list)) {
+        for (r in 1:length(names(stk_list[[i]]))) {
+          terra::NAflag(stk_list[[i]][[r]]) <- -9999
+        }
+      }
+      
+      # mask each stack by shapefile if this is provided
+      if (!is.null(shp)) {
+        stk_list <- lapply(X = stk_list,
+                           FUN = terra::mask,
+                           mask = shp)
+      }
+      
+      # tidy names of rasters within the stacks within this list.
+      for (i in 1:length(stk_list)) {
+        for (ii in 1:length(stk_list[i])) {
+          names(stk_list[i][[ii]]) <-
+            query_def$raster_title[query_def$file_name %in% names(stk_list[i][[ii]])]
+        }
+      }
+      return(terra::sprc(stk_list))
+    }
   }
 }
 
-#' Will group rasters that have the same resolution into a SpatRasterCollection. Ones that do not have the same
-#' resolution as any other raster are left as a single SpatRaster.
-#'
-#' @param rst_list list of SpatRasters.
-#' @return either a list of SpatRasters/SpatRasterCollections, or a single SpatRaster or SpatRasterCollection
-#' @keywords internal
-#'
-collectRastersOfSameResolution <- function(rst_list) {
-  # create a dataframe with information on the resolution of each raster
-  rst_list_index <-
-    data.frame(cbind(
-      "resolution" = lapply(rst_list, terra::res),
-      "raster_name" = lapply(rst_list, names),
-      "res_id" = as.numeric(factor(as.character(
-        lapply(rst_list, function(x) round(terra::res(x), 6))
-      )))
-    ))
-  
-  #check whether more than one resolution is present in downloaded rasters
-  #if only one resolution is present, create a raster stack of all downloaded rasters
-  if (length(unique(rst_list_index$res_id)) == 1) {
-    return(rst_list)
-    #if not then we want to return a list of raster stacks - one for each resolution present in the index dataframe above.
-  } else if (length(unique(rst_list_index$res_id)) != 1) {
-    #for each unique raster resolution create a raster stack and store this in stk_list
+#Define a small function that downloads rasters from the MAP geoserver to a specifed location
+download_rst <-
+  function(dataset_id,
+           extent,
+           year,
+           file_name, 
+           file_path) {
     
-    stack_rst <- function(res_id) {
-      return(rst_list[rst_list_index$res_id == res_id])
+    wcs_client <- get_wcs_client_from_raster_id(dataset_id)
+    
+    if (!is.na(year) & !is.null(year)) {
+      time <- lapply(year, lubridate::make_date)
+      time <- lapply(time, format, format = '%Y-%m-%dT%H:%M:%S')
+      time_filter <- do.call('c', time)
+      raster_name <- paste0(dataset_id, '_', year)
+    } else {
+      time_filter <- NULL
+      raster_name <- dataset_id
     }
     
-    stk_list <-
-      lapply(X = unique(rst_list_index$res_id), FUN = stack_rst)
+    spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, time = time_filter)
     
-    return(terra::sprc(stk_list))
+    if(!is.null(file_path)) {
+      rst_path <- file.path(file_path, paste0(file_name, ".tiff"))
+      terra::writeRaster(spat_raster, rst_path,  filetype = "GTiff", overwrite=FALSE)
+    }
+    
+    names(spat_raster) <- file_name
+    
+    return(spat_raster)
   }
-}
-
-
-#' Fetches the raster from geoserver, given the dataset id of the raster, and filter value for bbox and year.
-#'
-#' @param dataset_id character that is the dataset id of a raster.
-#' @param bbox_filter character that represents a bbox filter, or NULL.
-#' @param year numeric that is a single year, or NA.
-#' @return the SpatRaster that matches the dataset_id with filters applied for bbox_filter and year if not NULL/NA.
-#' @keywords internal
-#'
-fetchRaster <- function(dataset_id, bbox_filter, year) {
-
-  wcs_client <- get_wcs_client_from_raster_id(dataset_id)
-  
-  if (!is.na(year) & !is.null(year)) {
-    time <- lapply(year, lubridate::make_date)
-    time <- lapply(time, format, format = '%Y-%m-%dT%H:%M:%S')
-    time_filter <- do.call('c', time)
-    raster_name <- paste0(dataset_id, '_', year)
-  } else {
-    time_filter <- NULL
-    raster_name <- dataset_id
-  }
-  
-  spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = bbox_filter, time = time_filter)
-  
-  names(spat_raster) <- raster_name
-  
-  return(spat_raster)
-}
-
-
-
 
