@@ -4,7 +4,8 @@
 #'
 #' @param printed Should the list be printed to the console?
 #' @param sourcedata String contining desired dataset within the Malaria Atlas database to be searched, e.g \code{"pr points"} OR \code{"vector points"}
-#' @param dataset_id A character string specifying the dataset ID. Is NULL by default, and the most recent version of the pr points or vector points will be selected. 
+#' @param version (optional) The pr point or vector point dataset version to return. If not provided, will just use the most recent version of pr or vector data. (To see available version options for pr points, 
+#' use listPRPointVersions, and for vector points use listVecOccPointVersions). 
 #' @return \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
 #'
 #' @examples
@@ -16,7 +17,7 @@
 #' @importFrom rlang .data
 
 
-listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
+listPoints <- function(printed = TRUE, sourcedata, version = NULL) {
   message("Creating list of countries for which MAP data is available, please wait...")
 
   if(sourcedata == "pr points"){
@@ -26,18 +27,18 @@ listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
 
     wfs_client <- get_wfs_clients()$Malaria
     
-    if(is.null(dataset_id)) {
-      pf_dataset_id = getLatestDatasetIdForPfPrData()
-      pv_dataset_id = getLatestDatasetIdForPvPrData()
-      message('Please Note: Because you did not provide a dataset_id, by default the two datasets being used are ', pf_dataset_id, ' and ', 
-              pv_dataset_id, ' (These are the most recent versions of parasite rate data. To see other dataset options use function listPRPointVersions)')
-      
-      available_countries_pr_pf <- fetchCountriesGivenDatasetId(wfs_client, pf_dataset_id)
-      available_countries_pr_pv <- fetchCountriesGivenDatasetId(wfs_client, pv_dataset_id)
-      available_countries_pr <- unique(rbind(available_countries_pr_pf, available_countries_pr_pv))
-    } else {
-      available_countries_pr <- fetchCountriesGivenDatasetId(wfs_client, dataset_id)
+    if (is.null(version)) {
+      version <- getLatestPRPointVersion()
+      message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
+              ' (This is the most recent version of PR data. To see other version options use function listPRPointVersions)')
     }
+    
+    pf_dataset_id <- getPfPRPointDatasetIdFromVersion(version)
+    pv_dataset_id <- getPvPRPointDatasetIdFromVersion(version)
+
+    available_countries_pr_pf <- fetchCountriesGivenDatasetId(wfs_client, pf_dataset_id)
+    available_countries_pr_pv <- fetchCountriesGivenDatasetId(wfs_client, pv_dataset_id)
+    available_countries_pr <- unique(rbind(available_countries_pr_pf, available_countries_pr_pv))
 
     if(printed == TRUE){
       message("Countries with PR Data: \n ",paste(paste(available_countries_pr$country," (",available_countries_pr$country_id, ")", sep = ""), collapse = " \n "))
@@ -51,13 +52,15 @@ listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
 
     wfs_client <- get_wfs_clients()$Vector_Occurrence
 
-    if(is.null(dataset_id)) {
-      dataset_id <- getLatestDatasetIdForVecOccData()
-      message('Please Note: Because you did not provide a dataset_id, by default the dataset being used is ', dataset_id, 
-              ' (This is the most recent version of vector occurrence data. To see other dataset options use function listVecOccPointVersions)')
+    if (is.null(version)) {
+      version <- getLatestVecOccPointVersion()
+      message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
+              ' (This is the most recent version of vector data. To see other version options use function listVecOccPointVersions)')
     }
     
-    available_countries_vec <- fetchCountriesGivenDatasetId(wfs_client, dataset_id)
+    vec_dataset_id <- getVecOccPointDatasetIdFromVersion(version)
+    
+    available_countries_vec <- fetchCountriesGivenDatasetId(wfs_client, vec_dataset_id)
         
     if(printed == TRUE){
       message("Countries with vector occurrence data: \n ",paste(paste(available_countries_vec$country," (",available_countries_vec$country_id, ")", sep = ""), collapse = " \n "))

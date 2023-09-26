@@ -13,7 +13,8 @@
 #' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
 #' @param start_date string object representing the lower date to filter the PR data by (inclusive) e.g. '2020-01-01'
 #' @param end_date string object representing the upper date to filter the PR data by (exclusive) e.g. '2020-01-01'
-#' @param version (optional) The PR dataset version to return. If not provided, will just use the most recent version of PR data.
+#' @param version (optional) The PR dataset version to return. If not provided, will just use the most recent version of PR data. (To see available version options, 
+#' use listPRPointVersions)
 #' 
 #' @return \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 #'
