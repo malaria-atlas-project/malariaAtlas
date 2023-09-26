@@ -373,3 +373,18 @@ getRasterDatasetIdFromSurface <- function(rasterList, surface) {
 }
 
 
+getLatestPRPointVersion <- function() {
+  df_versions <- listPRPointVersions()
+  print(df_versions$version)
+  print(typeof(df_versions$version))
+  return(max(unlist(df_versions$version)))
+}
+
+getPfPRPointDatasetIdFromVersion <- function(version) {
+  return(paste0('Malaria:', version, '_Global_Pf_Parasite_Rate_Surveys'))
+}
+
+getPvPRPointDatasetIdFromVersion <- function(version) {
+  return(paste0('Malaria:', version, '_Global_Pv_Parasite_Rate_Surveys'))
+}
+
