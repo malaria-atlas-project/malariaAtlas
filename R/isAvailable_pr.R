@@ -9,7 +9,7 @@
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent  string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param full_results By default this is FALSE meaning the function only gives a message outlining whether specified country is available, if \code{full_results == TRUE}, the function returns a named list outlining data availability.
-#' @param version (optional) The PR dataset version to use If not provided, will just use the most recent version of PR data. (To see available version options, 
+#' @param version (optional) The PR dataset version to use. If not provided, will just use the most recent version of PR data. (To see available version options, 
 #' use listPRPointVersions)
 #'
 #' @return if \code{full_results == TRUE}, a named list is returned with the following elements:

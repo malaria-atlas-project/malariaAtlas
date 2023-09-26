@@ -4,13 +4,14 @@
 #'
 #' @return \code{isAvailable_Vec} returns a named list of input locations with information regarding data availability.
 #'
-#' @param sourcedata by default this is "vector points", highlighting the dataset to be searched
+#' @param sourcedata deprecated argument. Please remove it from your code.
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent  string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param full_results By default this is FALSE meaning the function only gives a message outlining whether specified country is available, if \code{full_results == TRUE}, the function returns a named list outlining data availability.
-#' @param dataset_id A character string specifying the dataset ID. Is NULL by default, and the most recent version of the pr points or vector points will be selected. #'
-#'
+#' @param version (optional) The vector points dataset version to use. If not provided, will just use the most recent version of vector points data. (To see available version options, 
+#' use listVecOccPointVersions)
+#' 
 #' @return if \code{full_results == TRUE}, a named list is returned with the following elements:
 #' \enumerate{
 #' \item \code{location} - specified input locations
@@ -26,9 +27,17 @@
 #' }
 #' @export isAvailable_vec
 
-isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = NULL, continent = NULL, full_results = FALSE, dataset_id = NULL) {
+isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = NULL, continent = NULL, full_results = FALSE, version = NULL) {
   
-  available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points", dataset_id = dataset_id)
+  if (!is.null(sourcedata)) {
+    lifecycle::deprecate_warn("1.5.0", "isAvailable_vec(sourcedata)", details = "The argument 'sourcedata' has been deprecated. It will be removed in the next version. It has no meaning.")
+  }
+  
+  if(is.null(country) & is.null(ISO) & is.null(continent)){
+    stop('Must specify one of country, ISO or continent.')
+  }
+  
+  available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points", version = version)
   
   capwords <- function(string) {
     cap <- function(s) {
