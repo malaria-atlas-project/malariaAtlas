@@ -22,7 +22,7 @@ listSpecies <- function(printed = TRUE, dataset_id = NULL){
   if(is.null(dataset_id)) {
     dataset_id <- getLatestDatasetIdForVecOccData()
     message('Please Note: Because you did not provide a dataset_id, by default the dataset being used is ', dataset_id, 
-            ' (This is the most recent version of vector occurrence data. To see other dataset options use function listVectorOccurrenceDatasets)')
+            ' (This is the most recent version of vector occurrence data. To see other dataset options use function listVecOccPointVersions)')
   }
 
   wfs_client <- get_wfs_clients()$Vector_Occurrence

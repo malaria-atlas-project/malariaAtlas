@@ -30,7 +30,7 @@ listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
       pf_dataset_id = getLatestDatasetIdForPfPrData()
       pv_dataset_id = getLatestDatasetIdForPvPrData()
       message('Please Note: Because you did not provide a dataset_id, by default the two datasets being used are ', pf_dataset_id, ' and ', 
-              pv_dataset_id, ' (These are the most recent versions of parasite rate data. To see other dataset options use function listParasiteRateDatasets)')
+              pv_dataset_id, ' (These are the most recent versions of parasite rate data. To see other dataset options use function listPRPointVersions)')
       
       available_countries_pr_pf <- fetchCountriesGivenDatasetId(wfs_client, pf_dataset_id)
       available_countries_pr_pv <- fetchCountriesGivenDatasetId(wfs_client, pv_dataset_id)
@@ -54,7 +54,7 @@ listPoints <- function(printed = TRUE, sourcedata, dataset_id = NULL) {
     if(is.null(dataset_id)) {
       dataset_id <- getLatestDatasetIdForVecOccData()
       message('Please Note: Because you did not provide a dataset_id, by default the dataset being used is ', dataset_id, 
-              ' (This is the most recent version of vector occurrence data. To see other dataset options use function listVectorOccurrenceDatasets)')
+              ' (This is the most recent version of vector occurrence data. To see other dataset options use function listVecOccPointVersions)')
     }
     
     available_countries_vec <- fetchCountriesGivenDatasetId(wfs_client, dataset_id)
