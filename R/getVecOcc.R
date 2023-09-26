@@ -12,7 +12,8 @@
 #' @param sf an sf (simple feature) object specifying the spatial extent within which PR data is desired
 #' @param start_date string object representing the lower date to filter the vector occurrence data by (inclusive)
 #' @param end_date string object representing the upper date to filter the vector occurrence data by (exclusive)
-#' @param dataset_id  A character string specifying the dataset ID. Is NULL by default, and the most recent version of vector occurrence data will be selected.
+#' @param version (optional) The vector points dataset version to use. If not provided, will just use the most recent version of vector points data. (To see available version options, 
+#' use listVecOccPointVersions)
 #' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox().
 
 #'@return \code{getVecOcc} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
@@ -52,7 +53,7 @@ getVecOcc <- function(country = NULL,
                       sf = NULL,
                       start_date = NULL,
                       end_date = NULL,
-                      dataset_id = NULL) {
+                      version = NULL) {
   if (is.null(country) &
       is.null(ISO) &
       is.null(continent) & is.null(extent) & is.null(sf)) {
@@ -63,10 +64,17 @@ getVecOcc <- function(country = NULL,
     stop("Can not specifiy both: 'extent' and 'sf'. Please choose one.")
   }
   
+  if (is.null(version)) {
+    version <- getLatestVecOccPointVersion()
+    message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
+            ' (This is the most recent version of vector data. To see other version options use function listVecOccPointVersions)')
+  }
+  
+  vec_dataset_id <- getVecOccPointDatasetIdFromVersion(version)
+  
   wfs_client <- get_wfs_clients()$Vector_Occurrence
   wfs_cap <- wfs_client$getCapabilities()
-  dataset_id <- getLatestDatasetIdForVecOccData()
-  wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
+  wfs_feature_type <- wfs_cap$findFeatureTypeByName(vec_dataset_id)
   features <- wfs_feature_type$getFeatures(outputFormat = "json")
 
   if (!is.null(extent)) {
@@ -90,7 +98,7 @@ getVecOcc <- function(country = NULL,
   #Building species filter
   
   available_species <-
-    listSpecies(printed = FALSE, dataset_id = dataset_id)
+    listSpecies(printed = FALSE, version = version)
   
   if ("all" %in% tolower(species)) {
     species_filter <- NULL
@@ -117,7 +125,7 @@ getVecOcc <- function(country = NULL,
   available_countries_vec <-
     listPoints(printed = FALSE,
                sourcedata = "vector points",
-               dataset_id = dataset_id)
+               version = version)
   
   if ("all" %in% tolower(c(country, ISO))) {
     location_fitler <- NULL
@@ -178,11 +186,7 @@ getVecOcc <- function(country = NULL,
     cql_filter <- NULL
   }
   
-  if (is.null(dataset_id)) {
-    dataset_id <- getLatestDatasetIdForVecOccData()
-  }
-  
-  wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
+  wfs_feature_type <- wfs_cap$findFeatureTypeByName(vec_dataset_id)
   df <-
     callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
   
