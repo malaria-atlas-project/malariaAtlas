@@ -165,22 +165,6 @@ getLatestDatasetIdForVecOccData <- function() {
 }
 
 
-#' Get the latest version of admin boundary data
-#'
-#' @return The latest version of admin boundary data
-#' @keywords internal
-#'
-getLatestVersionForAdminData <- function() {
-  adminDatasets <- listFeatureTypeDatasetsFromWorkspace('Admin_Units')
-  datasetNames <-
-    future.apply::future_lapply(adminDatasets$dataset_id, get_name_from_wfs_feature_type_id)
-  datasetNames <- do.call(rbind, datasetNames)
-  adminDatasets$name <- datasetNames
-  datasets_filtered_by_name <- subset(adminDatasets, name == 'Global_Admin_0')
-  maxVersion <- max(unlist(datasets_filtered_by_name$version))
-  return(maxVersion)
-}
-
 getDatasetIdForAdminDataGivenAdminLevelAndVersion <- function(admin_level, version) {
   admin_level_numeric <- gsub('admin', '', admin_level) 
   return(paste0('Admin_Units:', version, '_Global_Admin_', admin_level_numeric))
@@ -382,6 +366,18 @@ getLatestVecOccPointVersion <- function() {
   df_versions <- listVecOccPointVersions()
   return(max(unlist(df_versions$version)))
 }
+
+
+#' Get the latest version of admin boundary data
+#'
+#' @return The latest version of admin boundary data
+#' @keywords internal
+#'
+getLatestVersionForAdminData <- function() {
+  df_versions <- listShpVersions()
+  return(max(unlist(df_versions$version)))
+}
+
 
 getPfPRPointDatasetIdFromVersion <- function(version) {
   return(paste0('Malaria:', version, '_Global_Pf_Parasite_Rate_Surveys'))

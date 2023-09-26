@@ -21,7 +21,7 @@ listShp <- function(printed = TRUE,
   if (is.null(version)) {
     version <- getLatestVersionForAdminData()
     message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
-            ' (This is the most recent version of admin boundary data. To see other version options use function listShpVersions)')
+            ' (This is the most recent version of admin unit shape data. To see other version options use function listShpVersions)')
   }
   
     wfs_client <- get_wfs_clients()$Admin_Units
@@ -36,8 +36,7 @@ listShp <- function(printed = TRUE,
       
       dataset_id_admin_level <-
         getDatasetIdForAdminDataGivenAdminLevelAndVersion(individual_admin_level, version)
-      dataset_id_admin_level <-
-        getDatasetIdForAdminDataGivenAdminLevelAndVersion(individual_admin_level, version)
+
       wfs_ft_type <-
         wfs_cap$findFeatureTypeByName(dataset_id_admin_level)
       features_admin_level <-
