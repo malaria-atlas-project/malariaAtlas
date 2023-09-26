@@ -79,6 +79,7 @@ get_workspace_and_version_from_wfs_feature_type_id <- function(id) {
   return(list(workspace = workspace, version = version))
 }
 
+
 #' Get the name from a wfs feature type id.
 #'
 #' @param id The ID to parse.
@@ -119,8 +120,28 @@ getLatestDatasetId <- function(datasets, dataset_name) {
 #' @keywords internal
 #'
 getLatestDatasetIdForPfPrData <- function() {
-  prDatasets <- listParasiteRateDatasets()
+  prDatasets <- listFeatureTypeDatasetsFromWorkspace('Malaria')
   return(getLatestDatasetId(prDatasets, 'Global_Pf_Parasite_Rate_Surveys'))
+}
+
+listFeatureTypeDatasetsFromWorkspace <- function(workspace) {
+  wfs_client <- get_wfs_clients()[[workspace]]
+  wfs_cap <- wfs_client$getCapabilities()
+  wfs_ft_types <- wfs_cap$getFeatureTypes()
+  
+  wfs_ft_types_dataframes <- future.apply::future_lapply(wfs_ft_types, function(wfs_ft_type){
+    id <- wfs_ft_type$getName()
+    workspace_and_version <- get_workspace_and_version_from_wfs_feature_type_id(id)
+    
+    return(data.frame(
+      dataset_id = id,
+      version = workspace_and_version$version,
+      workspace = workspace_and_version$workspace
+    ))
+  })
+  
+  df_datasets <- do.call(rbind, wfs_ft_types_dataframes)
+  return(df_datasets)
 }
 
 #' Get the dataset id of the latest version of pv PR data
@@ -129,7 +150,7 @@ getLatestDatasetIdForPfPrData <- function() {
 #' @keywords internal
 #'
 getLatestDatasetIdForPvPrData <- function() {
-  prDatasets <- listParasiteRateDatasets()
+  prDatasets <- listFeatureTypeDatasetsFromWorkspace('Malaria')
   return(getLatestDatasetId(prDatasets, 'Global_Pv_Parasite_Rate_Surveys'))
 }
 
@@ -139,7 +160,7 @@ getLatestDatasetIdForPvPrData <- function() {
 #' @keywords internal
 #'
 getLatestDatasetIdForVecOccData <- function() {
-  vecOccDatasets <- listVectorOccurrenceDatasets()
+  vecOccDatasets <- listFeatureTypeDatasetsFromWorkspace('Vector_Occurrence')
   return(getLatestDatasetId(vecOccDatasets, 'Global_Dominant_Vector_Surveys'))
 }
 
@@ -150,7 +171,7 @@ getLatestDatasetIdForVecOccData <- function() {
 #' @keywords internal
 #'
 getLatestVersionForAdminData <- function() {
-  adminDatasets <- listAdministrativeBoundariesDatasets()
+  adminDatasets <- listFeatureTypeDatasetsFromWorkspace('Admin_Units')
   datasetNames <-
     future.apply::future_lapply(adminDatasets$dataset_id, get_name_from_wfs_feature_type_id)
   datasetNames <- do.call(rbind, datasetNames)

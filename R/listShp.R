@@ -21,7 +21,7 @@ listShp <- function(printed = TRUE,
   if (is.null(version)) {
     version <- getLatestVersionForAdminData()
     message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
-            ' (This is the most recent version of admin boundary data. To see other version options use function listAdministrativeBoundariesDatasets)')
+            ' (This is the most recent version of admin boundary data. To see other version options use function listShpVersions)')
   }
   
     wfs_client <- get_wfs_clients()$Admin_Units
