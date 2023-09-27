@@ -22,6 +22,17 @@ listShp <- function(printed = TRUE,
     version <- getLatestVersionForAdminData()
     message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
             ' (This is the most recent version of admin unit shape data. To see other version options use function listShpVersions)')
+  } else {
+    df_available_versions <- listShpVersions()
+    if (!version %in% df_available_versions$version) {
+      stop(
+        paste0(
+          'Version provided is not valid. Valid versions for admin unit shape data can be found using listShpVersions() and are ["',
+          paste(df_available_versions$version, collapse = '", "'),
+          '"]. Otherwise, you can choose to not specify a version, and the most recent version will be automatically selected'
+        )
+      )
+    }
   }
   
     wfs_client <- get_wfs_clients()$Admin_Units

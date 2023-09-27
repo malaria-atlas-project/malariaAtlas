@@ -13,14 +13,22 @@ listPRPointCountries <- function(printed = TRUE, version = NULL) {
   message("Creating list of countries for which MAP data is available, please wait...")
   
   wfs_client <- get_wfs_clients()$Malaria
-  
+
   if (is.null(version)) {
     version <- getLatestPRPointVersion()
-    message(
-      'Please Note: Because you did not provide a version, by default the version being used is ',
-      version,
-      ' (This is the most recent version of PR data. To see other version options use function listPRPointVersions)'
-    )
+    message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
+            ' (This is the most recent version of PR data. To see other version options use function listPRPointVersions)')
+  } else {
+    df_available_versions <- listPRPointVersions()
+    if (!version %in% df_available_versions$version) {
+      stop(
+        paste0(
+          'Version provided is not valid. Valid versions for PR point data can be found using listPRPointVersions() and are ["',
+          paste(df_available_versions$version, collapse = '", "'),
+          '"]. Otherwise, you can choose to not specify a version, and the most recent version will be automatically selected'
+        )
+      )
+    }
   }
   
   pf_dataset_id <- getPfPRPointDatasetIdFromVersion(version)
