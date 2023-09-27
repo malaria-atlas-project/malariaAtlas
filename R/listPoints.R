@@ -1,99 +1,29 @@
-#' List countries with available MAP Point data.
+#' Deprecated function. Please instead use listPRPointCountries for pr points, and listVecOccPointCountries for vector points
 #'
-#' \code{listPoints} lists all countries for which there are publicly visible datapoints in the MAP database required.
+#' \code{listPoints} deprecated function Please remove it from your code.
 #'
-#' @param printed Should the list be printed to the console?
-#' @param sourcedata String contining desired dataset within the Malaria Atlas database to be searched, e.g \code{"pr points"} OR \code{"vector points"}
-#' @param version (optional) The pr point or vector point dataset version to return. If not provided, will just use the most recent version of pr or vector data. (To see available version options for pr points, 
-#' use listPRPointVersions, and for vector points use listVecOccPointVersions). 
-#' @return \code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
-#'
-#' @examples
-#' \donttest{
-#' listPoints(sourcedata = "pr points")
-#' listPoints(sourcedata = "vector points")
-#' }
 #' @export listPoints
 #' @importFrom rlang .data
 
-
 listPoints <- function(printed = TRUE, sourcedata, version = NULL) {
-  message("Creating list of countries for which MAP data is available, please wait...")
+  
+  lifecycle::deprecate_warn("1.5.0", "listPoints()", details = "The function 'listPoints' has been deprecated. It will be removed in the next version. Please switch to using listPRPointCountries for pr points, and listVecOccPointCountries for vector points.")
 
   if(sourcedata == "pr points"){
 
-    # If we've already downloaded a list of available countries, print that.
-    # Otherwise download a list from the geoserver
-
-    wfs_client <- get_wfs_clients()$Malaria
-    
-    if (is.null(version)) {
-      version <- getLatestPRPointVersion()
-      message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
-              ' (This is the most recent version of PR data. To see other version options use function listPRPointVersions)')
-    }
-    
-    pf_dataset_id <- getPfPRPointDatasetIdFromVersion(version)
-    pv_dataset_id <- getPvPRPointDatasetIdFromVersion(version)
-
-    available_countries_pr_pf <- fetchCountriesGivenDatasetId(wfs_client, pf_dataset_id)
-    available_countries_pr_pv <- fetchCountriesGivenDatasetId(wfs_client, pv_dataset_id)
-    available_countries_pr <- unique(rbind(available_countries_pr_pf, available_countries_pr_pv))
-
-    if(printed == TRUE){
-      message("Countries with PR Data: \n ",paste(paste(available_countries_pr$country," (",available_countries_pr$country_id, ")", sep = ""), collapse = " \n "))
-    }
+    available_countries_pr <- listPRPointCountries(printed = printed, version = version)
   
     return(invisible(available_countries_pr))
-  
   } 
   
   if(sourcedata == "vector points"){
-
-    wfs_client <- get_wfs_clients()$Vector_Occurrence
-
-    if (is.null(version)) {
-      version <- getLatestVecOccPointVersion()
-      message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
-              ' (This is the most recent version of vector data. To see other version options use function listVecOccPointVersions)')
-    }
     
-    vec_dataset_id <- getVecOccPointDatasetIdFromVersion(version)
-    
-    available_countries_vec <- fetchCountriesGivenDatasetId(wfs_client, vec_dataset_id)
+    available_countries_vec <- listVecOccPointCountries(printed = printed, version = version)
         
-    if(printed == TRUE){
-      message("Countries with vector occurrence data: \n ",paste(paste(available_countries_vec$country," (",available_countries_vec$country_id, ")", sep = ""), collapse = " \n "))
-    }
-  
     return(invisible(available_countries_vec))
    }  
 }
 
 
-#' Get the list of available countries for a given dataset_id in the Explorer workspace,
-#'
-#' @param dataset_id The dataset id from which to get the list of available countries from.
-#' @return A dataframe with columns for country, country_id and continent_id
-#' @keywords internal
-#'
-fetchCountriesGivenDatasetId <- function(wfs_client, dataset_id) {
-  cached <- .malariaAtlasHidden$list_points[[dataset_id]]
-  if(!is.null(cached)) {
-    return(cached)
-  }
-  
-  wfs_cap <- wfs_client$getCapabilities()
-  wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
-  suppressWarnings({
-    features <- wfs_feature_type$getFeatures(outputFormat="json", propertyName='country,country_id,continent_id')
-  })
-  available_countries <- unique(data.frame(country = features$country, country_id = features$country_id, continent_id = features$continent_id))
-  available_countries <- available_countries[available_countries$continent_id!= "",]
-  available_countries <- na.omit(available_countries)
-  names(available_countries) <- c("country", "country_id", "continent")
-  
-  .malariaAtlasHidden$list_points[[dataset_id]] <- available_countries # add to cache
-  return(available_countries)
-}
+
 

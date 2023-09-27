@@ -123,8 +123,7 @@ getVecOcc <- function(country = NULL,
   #Building location filter or bbox filter
   
   available_countries_vec <-
-    listPoints(printed = FALSE,
-               sourcedata = "vector points",
+    listVecOccPointCountries(printed = FALSE,
                version = version)
   
   if ("all" %in% tolower(c(country, ISO))) {
