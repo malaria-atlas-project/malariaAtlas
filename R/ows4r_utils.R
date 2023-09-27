@@ -107,7 +107,7 @@ getLatestDatasetId <- function(datasets, dataset_name) {
   datasetNames <- do.call(rbind, datasetNames)
   datasets$name <- datasetNames
   datasets_filtered_by_name <- subset(datasets, name == dataset_name)
-  maxVersion <- max(datasets_filtered_by_name$version)
+  maxVersion <- max(unlist(datasets_filtered_by_name$version))
   datasets_filtered_by_name_and_version <-
     subset(datasets_filtered_by_name, version == maxVersion)
   datasetId <- datasets_filtered_by_name_and_version$dataset_id[1]
@@ -164,22 +164,6 @@ getLatestDatasetIdForVecOccData <- function() {
   return(getLatestDatasetId(vecOccDatasets, 'Global_Dominant_Vector_Surveys'))
 }
 
-
-#' Get the latest version of admin boundary data
-#'
-#' @return The latest version of admin boundary data
-#' @keywords internal
-#'
-getLatestVersionForAdminData <- function() {
-  adminDatasets <- listFeatureTypeDatasetsFromWorkspace('Admin_Units')
-  datasetNames <-
-    future.apply::future_lapply(adminDatasets$dataset_id, get_name_from_wfs_feature_type_id)
-  datasetNames <- do.call(rbind, datasetNames)
-  adminDatasets$name <- datasetNames
-  datasets_filtered_by_name <- subset(adminDatasets, name == 'Global_Admin_0')
-  maxVersion <- max(datasets_filtered_by_name$version)
-  return(maxVersion)
-}
 
 getDatasetIdForAdminDataGivenAdminLevelAndVersion <- function(admin_level, version) {
   admin_level_numeric <- gsub('admin', '', admin_level) 
@@ -365,7 +349,7 @@ getRasterDatasetIdFromSurface <- function(rasterList, surface) {
   } else if (nrow(rasterList_filtered_by_title) == 1) {
     return(rasterList_filtered_by_title$dataset_id[1])
   } else {
-    maxVersion <- max(rasterList_filtered_by_title$version)
+    maxVersion <- max(unlist(rasterList_filtered_by_title$version))
     rasterList_filtered_by_title_and_version <-
       subset(rasterList_filtered_by_title, version == maxVersion)
     return(rasterList_filtered_by_title_and_version$dataset_id[1])
@@ -373,3 +357,36 @@ getRasterDatasetIdFromSurface <- function(rasterList, surface) {
 }
 
 
+getLatestPRPointVersion <- function() {
+  df_versions <- listPRPointVersions()
+  return(max(unlist(df_versions$version)))
+}
+
+getLatestVecOccPointVersion <- function() {
+  df_versions <- listVecOccPointVersions()
+  return(max(unlist(df_versions$version)))
+}
+
+
+#' Get the latest version of admin boundary data
+#'
+#' @return The latest version of admin boundary data
+#' @keywords internal
+#'
+getLatestVersionForAdminData <- function() {
+  df_versions <- listShpVersions()
+  return(max(unlist(df_versions$version)))
+}
+
+
+getPfPRPointDatasetIdFromVersion <- function(version) {
+  return(paste0('Malaria:', version, '_Global_Pf_Parasite_Rate_Surveys'))
+}
+
+getPvPRPointDatasetIdFromVersion <- function(version) {
+  return(paste0('Malaria:', version, '_Global_Pv_Parasite_Rate_Surveys'))
+}
+
+getVecOccPointDatasetIdFromVersion <- function(version) {
+  return(paste0('Vector_Occurrence:', version, '_Global_Dominant_Vector_Surveys'))
+}

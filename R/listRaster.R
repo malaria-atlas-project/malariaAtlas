@@ -6,8 +6,6 @@
 #'
 #' \enumerate{
 #' \item \code{dataset_id} the unique dataset ID of the raster, which can the be used in functions such as getRaster and extractRaster
-#' \item \code{version} the version of the raster
-#' \item \code{workspace} the workspace/domain of the raster
 #' \item \code{raster_code} unique identifier for each raster
 #' \item \code{title} abbreviated title for each raster, used as \code{surface} argument in getRaster()
 #' \item \code{title_extended} extended title for each raster, detailing raster content
@@ -62,16 +60,14 @@ listRaster <- function(printed = TRUE){
 
       titles <- strsplit(wms_layer$getTitle(), "<small>")
       title <- xml2::xml_text(xml2::read_html(charToRaw(titles[[1]][1])))
-      extended_title <- xml2::xml_text(xml2::read_html(charToRaw(titles[[1]][2])))
+      title_extended <- xml2::xml_text(xml2::read_html(charToRaw(titles[[1]][2])))
       abstract <- xml2::xml_text(xml2::read_html(charToRaw(wms_layer$getAbstract())))
 
       return(data.frame(
         dataset_id = id,
-        version = id_parts$version,
-        workspace = id_parts$workspace,
         raster_code = layer_id,
         title = title,
-        extended_title = extended_title,
+        title_extended = title_extended,
         abstract = abstract,
         min_raster_year = min_raster_year,
         max_raster_year = max_raster_year

@@ -2,7 +2,8 @@
 #' 
 #' \code{listSpecies} lists all species occurrence data available to download from the Malaria Atlas Project database.
 #' @param printed should the list be printed to the database.
-#' @param dataset_id A character string specifying the dataset ID. Is NULL by default, and the most recent version of the vector points dataset will be selected. 
+#' @param version (optional) The vector dataset version to use If not provided, will just use the most recent version of vector dataset data. (To see available version options, 
+#' use listVecOccPointVersions)
 #' @return \code{listSpecies} returns a data.frame detailing the following information for each species available to download from the Malaria Atlas Project database.
 #' 
 #' \enumerate{
@@ -16,18 +17,20 @@
 #' 
 #' @export listSpecies
 
-listSpecies <- function(printed = TRUE, dataset_id = NULL){
+listSpecies <- function(printed = TRUE, version = NULL){
   message("Downloading list of available species, please wait...")
   
-  if(is.null(dataset_id)) {
-    dataset_id <- getLatestDatasetIdForVecOccData()
-    message('Please Note: Because you did not provide a dataset_id, by default the dataset being used is ', dataset_id, 
-            ' (This is the most recent version of vector occurrence data. To see other dataset options use function listVecOccPointVersions)')
+  if (is.null(version)) {
+    version <- getLatestVecOccPointVersion()
+    message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
+            ' (This is the most recent version of vector data. To see other version options use function listVecOccPointVersions)')
   }
-
+  
+  vec_dataset_id <- getVecOccPointDatasetIdFromVersion(version)
+  
   wfs_client <- get_wfs_clients()$Vector_Occurrence
   wfs_cap <- wfs_client$getCapabilities()
-  wfs_ft_type <- wfs_cap$findFeatureTypeByName(dataset_id)
+  wfs_ft_type <- wfs_cap$findFeatureTypeByName(vec_dataset_id)
   
   suppressWarnings({
     features <- wfs_ft_type$getFeatures(outputFormat = "json", propertyName='species_plain,country')

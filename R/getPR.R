@@ -13,7 +13,8 @@
 #' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
 #' @param start_date string object representing the lower date to filter the PR data by (inclusive) e.g. '2020-01-01'
 #' @param end_date string object representing the upper date to filter the PR data by (exclusive) e.g. '2020-01-01'
-#' @param dataset_id  A character string specifying the dataset ID. Is NULL by default, and the most recent version of PR data will be selected.
+#' @param version (optional) The PR dataset version to return. If not provided, will just use the most recent version of PR data. (To see available version options, 
+#' use listPRPointVersions)
 #' 
 #' @return \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 #'
@@ -49,7 +50,7 @@ getPR <- function(country = NULL,
                   extent = NULL,
                   start_date = NULL,
                   end_date = NULL,
-                  dataset_id = NULL) {
+                  version = NULL) {
   if (is.null(country) &
       is.null(ISO) &
       is.null(continent) & is.null(extent)) {
@@ -60,8 +61,10 @@ getPR <- function(country = NULL,
     extent <- getSpBbox(extent)
   }
   
-  if (is.null(dataset_id) & is.null(species)) {
-    stop("Must specify one of: 'dataset_id' or 'species'.")
+  if (is.null(version)) {
+    version <- getLatestPRPointVersion()
+    message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
+            ' (This is the most recent version of PR data. To see other version options use function listPRPointVersions)')
   }
   
   wfs_client <- get_wfs_clients()$Malaria
@@ -84,7 +87,7 @@ getPR <- function(country = NULL,
   available_countries_pr <-
     listPoints(printed = FALSE,
                sourcedata = "pr points",
-               dataset_id = NULL)
+               version = version)
   
   if ("all" %in% tolower(c(country, ISO))) {
     location_filter <- NULL
@@ -130,46 +133,36 @@ getPR <- function(country = NULL,
   cql_filters <- list(time_filter, location_filter, bbox_filter)
   cql_filter <- combine_cql_filters(cql_filters)
   
+  pf_dataset_id <- getPfPRPointDatasetIdFromVersion(version)
+  pv_dataset_id <- getPvPRPointDatasetIdFromVersion(version)
   
-  if (is.null(dataset_id)) {
-    if (tolower(species) == "both") {
-      pf_dataset_id <- getLatestDatasetIdForPfPrData()
-      pv_dataset_id <- getLatestDatasetIdForPvPrData()
-      pf_wfs_feature_type <-
-        wfs_cap$findFeatureTypeByName(pf_dataset_id)
-      pv_wfs_feature_type <-
-        wfs_cap$findFeatureTypeByName(pv_dataset_id)
-      pf_df <-
-        callGetFeaturesWithFilters(pf_wfs_feature_type, cql_filter)
-      pv_df <-
-        callGetFeaturesWithFilters(pv_wfs_feature_type, cql_filter)
-      df <- dplyr::bind_rows(pf_df, pv_df)
-      
-    } else if (tolower(species) == "pf") {
-      dataset_id <- getLatestDatasetIdForPfPrData()
-      wfs_feature_type <-
-        wfs_cap$findFeatureTypeByName(dataset_id)
-      df <-
-        callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
-      
-    } else if (tolower(species) == "pv") {
-      dataset_id <- getLatestDatasetIdForPvPrData()
-      wfs_feature_type <-
-        wfs_cap$findFeatureTypeByName(dataset_id)
-      df <-
-        callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
-      
-    } else {
-      stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")
-    }
-  } else {
-    wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
+  if (tolower(species) == "both") {
+    pf_wfs_feature_type <-
+      wfs_cap$findFeatureTypeByName(pf_dataset_id)
+    pv_wfs_feature_type <-
+      wfs_cap$findFeatureTypeByName(pv_dataset_id)
+    pf_df <-
+      callGetFeaturesWithFilters(pf_wfs_feature_type, cql_filter)
+    pv_df <-
+      callGetFeaturesWithFilters(pv_wfs_feature_type, cql_filter)
+    df <- dplyr::bind_rows(pf_df, pv_df)
+    
+  } else if (tolower(species) == "pf") {
+    wfs_feature_type <-
+      wfs_cap$findFeatureTypeByName(pf_dataset_id)
     df <-
       callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
     
+  } else if (tolower(species) == "pv") {
+    wfs_feature_type <-
+      wfs_cap$findFeatureTypeByName(pv_dataset_id)
+    df <-
+      callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
+    
+  } else {
+    stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")
   }
-  
-  
+
   # Just to avoid visible binding notes
   pf_pr <- pv_pr <- permissions_info <- NULL
   

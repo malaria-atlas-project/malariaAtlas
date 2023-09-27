@@ -20,16 +20,16 @@
 #'
 #' @export isAvailable
 
-isAvailable <- function(sourcedata = NULL, full_results = FALSE, country = NULL, ISO = NULL, continent = NULL){
+isAvailable <- function(sourcedata = NULL, full_results = FALSE, country = NULL, ISO = NULL, continent = NULL, ...){
   
   if(!sourcedata %in% c("vector points", "pr points")){
     stop("Please choose one of:\n sourcedata = \"pr points\"  \n sourcedata = \"vector points\"")
   }
   
   if(sourcedata == "pr points"){
-   isAvailable_pr(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results)      
+   isAvailable_pr(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results, ...)      
   }else if(sourcedata == "vector points"){
-    isAvailable_vec(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results)
+    isAvailable_vec(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results, ...)
   }
   
 }
