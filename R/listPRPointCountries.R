@@ -1,6 +1,13 @@
-
-
-
+#' List countries where there is pr point data available
+#'
+#' \code{listPRPointCountries} 
+#' @return \code{listPRPointCountries} returns a data.frame detailing the countries for which PR points are publicly available.
+#'
+#' @param printed Should the list be printed to the console?
+#' @param version (optional) The PR dataset version to use If not provided, will just use the most recent version of PR data. (To see available version options, 
+#' use listPRPointVersions)
+#' 
+#' @export listPRPointCountries
 
 listPRPointCountries <- function(printed = TRUE, version = NULL) {
   message("Creating list of countries for which MAP data is available, please wait...")

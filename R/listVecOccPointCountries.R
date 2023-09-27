@@ -1,6 +1,13 @@
-
-
-
+#' List countries where there is vector occurrence point data available
+#'
+#' \code{listVecOccPointCountries} 
+#' @return \code{listVecOccPointCountries} returns a data.frame detailing the countries for which vector occurrence points are publicly available.
+#'
+#' @param printed Should the list be printed to the console?
+#' @param version (optional) The vector occurrence dataset version to use If not provided, will just use the most recent version of vector occurrence data. (To see available version options, 
+#' use listVecOccPointVersions)
+#' 
+#' @export listVecOccPointCountries
 
 listVecOccPointCountries <- function(printed = TRUE, version = NULL) {
   message(
