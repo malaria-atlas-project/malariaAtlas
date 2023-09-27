@@ -390,3 +390,29 @@ getPvPRPointDatasetIdFromVersion <- function(version) {
 getVecOccPointDatasetIdFromVersion <- function(version) {
   return(paste0('Vector_Occurrence:', version, '_Global_Dominant_Vector_Surveys'))
 }
+
+#' Get the list of available countries for a given dataset_id in the Explorer workspace,
+#'
+#' @param dataset_id The dataset id from which to get the list of available countries from.
+#' @return A dataframe with columns for country, country_id and continent_id
+#' @keywords internal
+#'
+fetchCountriesGivenDatasetId <- function(wfs_client, dataset_id) {
+  cached <- .malariaAtlasHidden$list_points[[dataset_id]]
+  if(!is.null(cached)) {
+    return(cached)
+  }
+  
+  wfs_cap <- wfs_client$getCapabilities()
+  wfs_feature_type <- wfs_cap$findFeatureTypeByName(dataset_id)
+  suppressWarnings({
+    features <- wfs_feature_type$getFeatures(outputFormat="json", propertyName='country,country_id,continent_id')
+  })
+  available_countries <- unique(data.frame(country = features$country, country_id = features$country_id, continent_id = features$continent_id))
+  available_countries <- available_countries[available_countries$continent_id!= "",]
+  available_countries <- na.omit(available_countries)
+  names(available_countries) <- c("country", "country_id", "continent")
+  
+  .malariaAtlasHidden$list_points[[dataset_id]] <- available_countries # add to cache
+  return(available_countries)
+}

@@ -85,8 +85,7 @@ getPR <- function(country = NULL,
   
   #Building location filter or bbox filter
   available_countries_pr <-
-    listPoints(printed = FALSE,
-               sourcedata = "pr points",
+    listPRPointCountries(printed = FALSE,
                version = version)
   
   if ("all" %in% tolower(c(country, ISO))) {
