@@ -295,14 +295,19 @@ download_rst <-
     if (!is.na(year) & !is.null(year)) {
       time <- lapply(year, lubridate::make_date)
       time <- lapply(time, format, format = '%Y-%m-%dT%H:%M:%S')
-      time_filter <- do.call('c', time)
+      time_filter <- paste0('time=', time)
       raster_name <- paste0(dataset_id, '_', year)
     } else {
       time_filter <- NULL
       raster_name <- dataset_id
     }
     
-    spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, time = time_filter)
+    if (!is.null(time_filter)) {
+      spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, cql_filter = time_filter)
+    } else {
+      spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent)
+    }
+    
     
     if(!is.null(file_path)) {
       rst_path <- file.path(file_path, paste0(file_name, ".tiff"))
