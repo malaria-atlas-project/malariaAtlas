@@ -142,7 +142,7 @@ isAvailable_pr(country = "Madagascar", version = "202206")
 
 `getPR()` downloads all publicly available PR data points for a specified location (country, ISO, continent or extent) and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format:
 
-```{r message = FALSE}
+```{r message = FALSE, warning = FALSE, results = "hide"}
 MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 ```
 
@@ -195,10 +195,6 @@ You can also pass this function a dataset version. If you don't it will default 
 MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
 ```
 
-```{r echo = FALSE}
-tibble::glimpse(MMR_vec_data)
-```
-
 `autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points.
 
 ```{r message = FALSE, warning = FALSE, results = "hide"}
@@ -242,7 +238,7 @@ autoplot(MDG_shp,
 
 `getRaster()`downloads publicly available MAP rasters for a specific dataset_id & year, clipped to a given bounding box or shapefile
 
-```{r message = FALSE}
+```{r message = FALSE, warning = FALSE, results = "hide"}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
 ```
@@ -257,7 +253,7 @@ p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 
 By using the above tools along with ggplot, simple comparison figures can be easily produced.
 
-```{r message = FALSE, warning = FALSE}
+```{r message = FALSE, warning = FALSE, results = "hide"}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
 
@@ -273,7 +269,7 @@ scale_size_continuous(name = "Survey Size")+
 
 Similarly for vector survey data
 
-```{r message = FALSE, warning = FALSE}
+```{r message = FALSE, warning = FALSE, results = "hide"}
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 MMR_An_dirus <- getRaster(dataset_id = "Explorer__2010_Anopheles_dirus_complex", shp = MMR_shp)
 

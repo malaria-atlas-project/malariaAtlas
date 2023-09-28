@@ -10,10 +10,12 @@
 #' @export listVecOccPointCountries
 
 listVecOccPointCountries <- function(printed = TRUE, version = NULL) {
-  message(
-    "Creating list of countries for which MAP vector occurrence point data is available, please wait..."
-  )
-  
+  if(printed == TRUE) {
+    message(
+      "Creating list of countries for which MAP vector occurrence point data is available, please wait..."
+    )
+  }
+
   wfs_client <- get_wfs_clients()$Vector_Occurrence
   
   if (is.null(version)) {

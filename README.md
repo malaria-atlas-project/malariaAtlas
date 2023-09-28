@@ -156,15 +156,6 @@ isAvailable_pr(country = "Madagascar", version = "202206")
 MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 ```
 
-```
-## Warning: The `sourcedata` argument of `isAvailable_pr()` is deprecated as of malariaAtlas 1.5.0.
-## ℹ The argument 'sourcedata' has been deprecated. It will be removed in the next version. It has no meaning.
-## ℹ The deprecated feature was likely used in the malariaAtlas package.
-##   Please report the issue at <https://github.com/malaria-atlas-project/malariaAtlas/issues>.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
-```
-
 
 ```
 ## Rows: 395
@@ -283,37 +274,6 @@ You can also pass this function a dataset version. If you don't it will default 
 MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
 ```
 
-
-```
-## Rows: 2,866
-## Columns: 25
-## $ id             <int> 1945, 1946, 1951, 1952, 790, 781, 772, 791, 773, 783, 774, 776, 777, 792, 778, 779, 780, 1953, 784, 785…
-## $ site_id        <int> 30243, 30243, 30243, 30243, 1000000072, 1000000071, 1000000071, 1000000072, 1000000071, 1000000071, 100…
-## $ latitude       <dbl> 16.2570, 16.2570, 16.2570, 16.2570, 17.3500, 17.3800, 17.3800, 17.3500, 17.3800, 17.3800, 17.3800, 17.3…
-## $ longitude      <dbl> 97.7250, 97.7250, 97.7250, 97.7250, 96.0410, 96.0370, 96.0370, 96.0410, 96.0370, 96.0370, 96.0370, 96.0…
-## $ country        <chr> "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Mya…
-## $ country_id     <chr> "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR"…
-## $ continent_id   <chr> "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia",…
-## $ month_start    <int> 2, 3, 8, 9, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, …
-## $ year_start     <int> 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1…
-## $ month_end      <int> 2, 3, 8, 9, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 10, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …
-## $ year_end       <int> 1998, 1998, 1998, 1998, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 1…
-## $ anopheline_id  <int> 17, 17, 17, 17, 50, 49, 17, 51, 11, 4, 15, 1, 35, 30, 50, 51, 30, 17, 17, 11, 15, 1, 35, 49, 4, 17, 11,…
-## $ species        <chr> "Anopheles dirus species complex", "Anopheles dirus species complex", "Anopheles dirus species complex"…
-## $ species_plain  <chr> "Anopheles dirus", "Anopheles dirus", "Anopheles dirus", "Anopheles dirus", "Anopheles stephensi", "Ano…
-## $ id_method1     <chr> "unknown", "unknown", "unknown", "unknown", "morphology", "morphology", "morphology", "morphology", "mo…
-## $ id_method2     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-## $ sample_method1 <chr> "man biting", "man biting", "man biting", "man biting", "man biting indoors", "man biting indoors", "ma…
-## $ sample_method2 <chr> "animal baited net trap", "animal baited net trap", "animal baited net trap", "animal baited net trap",…
-## $ sample_method3 <chr> NA, NA, NA, NA, "animal baited net trap", "animal baited net trap", "animal baited net trap", "animal b…
-## $ sample_method4 <chr> NA, NA, NA, NA, "house resting inside", "house resting inside", "house resting inside", "house resting …
-## $ assi           <chr> "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",…
-## $ citation       <chr> "Oo, T.T., Storch, V. and Becker, N. (2003).  <b><i>Anopheles</i> <i>dirus</i> and its role in malaria …
-## $ time_start     <date> 1998-02-01, 1998-03-01, 1998-08-01, 1998-09-01, 1998-05-01, 1998-05-01, 1998-05-01, 1998-05-01, 1998-0…
-## $ time_end       <date> 1998-02-01, 1998-03-01, 1998-08-01, 1998-09-01, 2000-03-01, 2000-03-01, 2000-03-01, 2000-03-01, 2000-0…
-## $ geometry       <POINT [°]> POINT (97.725 16.257), POINT (97.725 16.257), POINT (97.725 16.257), POINT (97.725 16.257), POINT…
-```
-
 `autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points.
 
 
@@ -321,7 +281,7 @@ MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
 autoplot(MMR_vec_data)
 ```
 
-![plot of chunk unnamed-chunk-27](man/figures/unnamed-chunk-27-1.png)
+![plot of chunk unnamed-chunk-26](man/figures/unnamed-chunk-26-1.png)
 
 N.B. Facet-wrapped option is also available for species stratification.
 
@@ -331,7 +291,7 @@ autoplot(MMR_vec_data,
          facet = TRUE)
 ```
 
-![plot of chunk unnamed-chunk-28](man/figures/unnamed-chunk-28-1.png)
+![plot of chunk unnamed-chunk-27](man/figures/unnamed-chunk-27-1.png)
 
 ### Shapefiles
 
@@ -372,7 +332,7 @@ MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 autoplot(MDG_shp)
 ```
 
-![plot of chunk unnamed-chunk-31](man/figures/unnamed-chunk-31-1.png)
+![plot of chunk unnamed-chunk-30](man/figures/unnamed-chunk-30-1.png)
 
 N.B. Facet-wrapped option is also available for species stratification.
 
@@ -383,7 +343,7 @@ autoplot(MDG_shp,
          map_title = "Example of facetted shapefiles.")
 ```
 
-![plot of chunk unnamed-chunk-32](man/figures/unnamed-chunk-32-1.png)
+![plot of chunk unnamed-chunk-31](man/figures/unnamed-chunk-31-1.png)
 
 ### Modelled Rasters
 
@@ -395,12 +355,6 @@ MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
 ```
 
-```
-## <GMLEnvelope>
-## ....|-- lowerCorner: -25.6089 43.1914 "2000-01-01T00:00:00"
-## ....|-- upperCorner: -11.9454 50.4838 "2019-01-01T00:00:00"
-```
-
 `autoplot.SpatRaster` & `autoplot.SpatRasterCollection` configures autoplot method to enable quick mapping of downloaded rasters.
 
 
@@ -408,7 +362,7 @@ MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_s
 p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 ```
 
-![plot of chunk unnamed-chunk-34](man/figures/unnamed-chunk-34-1.png)
+![plot of chunk unnamed-chunk-33](man/figures/unnamed-chunk-33-1.png)
 
 ### Combined visualisation
 
@@ -418,15 +372,7 @@ By using the above tools along with ggplot, simple comparison figures can be eas
 ```r
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
-```
 
-```
-## <GMLEnvelope>
-## ....|-- lowerCorner: -25.6089 43.1914 "2000-01-01T00:00:00"
-## ....|-- upperCorner: -11.9454 50.4838 "2019-01-01T00:00:00"
-```
-
-```r
 p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp, printed = FALSE)
 
 pr <- getPR(country = c("Madagascar"), species = "Pf")
@@ -437,7 +383,7 @@ scale_size_continuous(name = "Survey Size")+
  ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
 ```
 
-![plot of chunk unnamed-chunk-35](man/figures/unnamed-chunk-35-1.png)
+![plot of chunk unnamed-chunk-34](man/figures/unnamed-chunk-34-1.png)
 
 Similarly for vector survey data
 
@@ -445,15 +391,7 @@ Similarly for vector survey data
 ```r
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 MMR_An_dirus <- getRaster(dataset_id = "Explorer__2010_Anopheles_dirus_complex", shp = MMR_shp)
-```
 
-```
-## <GMLEnvelope>
-## ....|-- lowerCorner: 9.601 92.1893
-## ....|-- upperCorner: 28.5478 101.1701
-```
-
-```r
 p <- autoplot(MMR_An_dirus, shp_df = MMR_shp, printed = FALSE)
 
 vec <- getVecOcc(country = c("Myanmar"), species = "Anopheles dirus")
@@ -464,7 +402,7 @@ geom_point(data = vec, aes(longitude, latitude, colour = species))+
  ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 ```
 
-![plot of chunk unnamed-chunk-36](man/figures/unnamed-chunk-36-1.png)
+![plot of chunk unnamed-chunk-35](man/figures/unnamed-chunk-35-1.png)
 
 ## Installation
 
