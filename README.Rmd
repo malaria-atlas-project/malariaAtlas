@@ -209,7 +209,7 @@ autoplot(MMR_vec_data,
 ```
 
 ### Shapefiles
-`getShp()` downloads a shapefile for a specified country (or countries) and returns this as either a spatialPolygon or data.frame object.
+`getShp()` downloads a shapefile for a specified country (or countries) and returns this as a simple feature object.
 
 ```{r message = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
@@ -234,11 +234,11 @@ autoplot(MDG_shp,
 
 ### Modelled Rasters 
 
-`getRaster()`downloads publicly available MAP rasters for a specific surface & year, clipped to a given bounding box or shapefile
+`getRaster()`downloads publicly available MAP rasters for a specific dataset_id & year, clipped to a given bounding box or shapefile
 
 ```{r message = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
+MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
 ```
 
 
@@ -255,7 +255,7 @@ By using the above tools along with ggplot, simple comparison figures can be eas
 
 ```{r message = FALSE, warning = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
+MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
 
 p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp, printed = FALSE)
 
@@ -271,7 +271,7 @@ Similarly for vector survey data
 
 ```{r message = FALSE, warning = FALSE}
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
-MMR_An_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)
+MMR_An_dirus <- getRaster(dataset_id = "Explorer:2010_Anopheles_dirus_complex", shp = MMR_shp)
 
 p <- autoplot(MMR_An_dirus, shp_df = MMR_shp, printed = FALSE)
 
