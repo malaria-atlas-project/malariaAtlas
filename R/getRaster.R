@@ -303,7 +303,13 @@ download_rst <-
     }
     
     if (!is.null(time_filter)) {
-      spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, cql_filter = time_filter)
+      workspace <- get_workspace_and_version_from_coverage_id(dataset_id)[[1]]
+      if (workspace == "Explorer") { # datetime is set up different between the old Explorer workspace and the new ones.
+        spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, cql_filter = time_filter)
+      } else {
+        spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, time = time)
+      }
+      
     } else {
       spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent)
     }
