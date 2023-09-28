@@ -27,7 +27,7 @@ This package allows you to download parasite rate data (*Plasmodium falciparum* 
 More details and example analyses can be found in the [published paper)[(https://malariajournal.biomedcentral.com/articles/10.1186/s12936-018-2500-5).
 
 ## Available Data: 
-The data can be explored at [https://malariaatlas.org/explorer/#/explorer](https://malariaatlas.org/explorer/#/explorer).
+The data can be explored at [https://data.malariaatlas.org/maps](https://data.malariaatlas.org/maps).
 
 
 
