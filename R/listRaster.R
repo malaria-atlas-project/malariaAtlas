@@ -28,7 +28,7 @@ listRaster <- function(printed = TRUE){
 
     #print out message of long raster names
     if(printed == TRUE){
-      message("Rasters Available for Download: \n ",paste(available_rasters$title, collapse = " \n "))
+      message("Rasters Available for Download: \n ",paste(available_rasters$dataset_id, collapse = " \n "))
     }
     return(invisible(available_rasters))
   }
@@ -85,7 +85,7 @@ listRaster <- function(printed = TRUE){
   
   #print out message of long raster names
   if(printed == TRUE){
-    message("Rasters Available for Download: \n ",paste(all_available_rasters$title, collapse = " \n "))
+    message("Rasters Available for Download: \n ",paste(all_available_rasters$dataset_id, collapse = " \n "))
   }
   
   .malariaAtlasHidden$available_rasters_stored <- all_available_rasters

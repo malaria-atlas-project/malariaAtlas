@@ -31,61 +31,112 @@ The data can be explored at [https://data.malariaatlas.org/maps](https://data.ma
 
 
 
-### list* Functions
+### List Versions Functions
 
-
-`listData()` retrieves a list of available data to download. 
+The list version functions are used to list the available versions of different datasets, and all return a data.frame with a single column for version. These versions can be passed to functions such as `listShp`, `listSpecies`, `listPRPointCountries`, `listVecOccPointCountries`, `getPR`, `getVecOcc` and `getShp`.
 
 Use: 
 
-* listData(datatype = "pr points") OR listPoints(sourcedata = "pr points") to see for which countries PR survey point data can be downloaded.
+* `listPRPointVerions()` to see the available versions for PR point data, which can then be used in `listPRPointCountries` and `getPR`.
 
-* listData(datatype = "vector points") OR listPoints(sourcedata = "vector points") to see for which countries Vector survey data can be downloaded.
+* `listVecOccPointVersions()` to see the available versions for vector occurrence data, which can then be used in `listSpecies`, `listVecOccPointCountries` and `getVecOcc`.
 
-* use listData(datatype = "raster") OR listRaster() to see rasters available to download. 
+* `listShpVersions()` to see the available versions for admin unit shape data, which can then be used in `listShp` and `getShp`.
 
-* use listData(datatype = "shape") OR listShp() to see shapefiles available to download. 
-
-```{r results = "hide", message = FALSE}
-listData(datatype = "pr points")
-```
-```{r results = "hide", message = FALSE}
-listData(datatype = "vector points")
-```
-```{r results = "hide", message = FALSE}
-listData(datatype = "raster")
-```
-``` {r results = "hide", message = FALSE}
-listData(datatype = "shape")
+```{r highlight = TRUE}
+listPRPointVerions()
 ```
 
-### is_available
+```{r highlight = TRUE}
+listVecOccPointVersions()
+```
 
-`isAvailable_pr` confirms whether or not PR survey point data is available to download for a specified country. 
+```{r highlight = TRUE}
+listShpVersions()
+```
+
+### List Countries and Species Functions
+
+To list the countries where there is available data for PR points or vector occurrence points, use:
+
+* `listPRPointCountries()` for PR points
+* `listVecOccPointCountries()` for vector occurrence points
+
+To list the species available for vector point data use `listSpecies()`
+
+All three of these functions can optionally take a version parameter (which can be found with the list versions functions). If you choose not to provide a version, the most recent version of the relevant dataset will be selected by default. 
+
+```{r highlight = TRUE}
+listPRPointCountries(version = "202206")
+```
+
+```{r highlight = TRUE}
+listVecOccPointCountries(version = "201201")
+```
+
+```{r highlight = TRUE}
+listSpecies(version = "201201")
+```
+
+### List Administrative Units
+
+To list administrative units for which shapefiles are stored on the MAP geoserver, use `listShp()`. Similar to the list countries and species functions, this function can optionally take a version.
+
+```{r highlight = TRUE}
+listShp(version = "202206")
+```
+
+### List Raster Function
+
+`listRaster()` gets minimal information on all available rasters. It returns a data.frame with several columns for each raster such as dataset_id, title, abstract, min_raster_year and max_raster_year. The dataset_id can then be used in `getRaster` and `extractRaster`.
+
+```{r highlight = TRUE}
+listRaster()
+```
+
+### Is Available Functions
+
+`isAvailable_pr` confirms whether or not PR survey point data is available to download for a specified country, ISO3 code or continent. 
 
 Check whether PR data is available for Madagascar:
 ```{r highlight = TRUE}
 isAvailable_pr(country = "Madagascar")
 ```
 
-Check whether PR data is available for the United States of America
+Check whether PR data is available for the United States of America by ISO code:
 ```{r, error = TRUE, highlight = TRUE}
 isAvailable_pr(ISO = "USA")
 ```
 
-`isAvailable_vec` confirms whether or not vector survey point data is available to download for a specified country. 
+Check whether PR data is available for Asia:
+```{r, error = TRUE, highlight = TRUE}
+isAvailable_pr(continent = "Asia")
+```
+
+`isAvailable_vec` confirms whether or not vector survey point data is available to download for a specified country, ISO3 code or continent. 
 
 Check whether vector data is available for Myanmar:
 ```{r highlight = TRUE}
 isAvailable_vec(country = "Myanmar")
 ```
 
+Check whether vector data is available for multiple countries:
+```{r highlight = TRUE}
+isAvailable_vec(country = c("Nigeria", "Ethiopia"))
+```
+
+You can also pass these functions a dataset version. If you don't they will default to using the most recent version.
+
+```{r highlight = TRUE}
+isAvailable_pr(country = "Madagascar", version = "202206")
+```
+
+
 ## Downloading & Visualising Data: 
 ### get* functions & autoplot methods
 
 ### Parasite Rate Survey Points
-`getPR()` downloads all publicly available PR data points for a specified country and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format: 
-
+`getPR()` downloads all publicly available PR data points for a specified location (country, ISO, continent or extent) and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format: 
 
 ```{r message = FALSE}
 MDG_pr_data <- getPR(country = "Madagascar", species = "both")
@@ -94,9 +145,27 @@ MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 tibble::glimpse(MDG_pr_data)
 ```
 
+```{r message = FALSE}
+Africa_pvpr_data <- getPR(continent = "Africa", species = "Pv")
+```
+```{r echo = FALSE}
+tibble::glimpse(Africa_pvpr_data)
+```
+
+```{r message = FALSE}
+Extent_pfpr_data <- getPR(extent = rbind(c(-2.460181, 13.581921), c(-3.867188, 34.277344)), species = "Pf")
+```
+```{r echo = FALSE}
+tibble::glimpse(Extent_pfpr_data)
+```
+
+You can also pass this function a dataset version. If you don't it will default to using the most recent version.
+
+```{r message = FALSE}
+MDG_pr_data_202206 <- getPR(country = "Madagascar", species = "both", version = "202206")
+```
 
 `autoplot.pr.points` configures autoplot method to enable quick mapping of the locations of downloaded PR points. 
-
 
 ```{r message = FALSE, warning = FALSE, results = "hide"}
 autoplot(MDG_pr_data)
@@ -109,10 +178,19 @@ autoplot(MDG_pr_data,
 ```
 
 ### Vector Survey Points
-`getVecOcc()` downloads all publicly available Vector survey points for a specified country and  and returns this as a dataframe with the following format: 
+`getVecOcc()` downloads all publicly available Vector survey points for a specified location (country, ISO, continent or extent) and species (options for which can be found with `listSpecies`) and returns this as a dataframe with the following format: 
 
 ```{r message = FALSE}
 MMR_vec_data <- getVecOcc(country = "Myanmar")
+```
+```{r echo = FALSE}
+tibble::glimpse(MMR_vec_data)
+```
+
+You can also pass this function a dataset version. If you don't it will default to using the most recent version.
+
+```{r message = FALSE}
+MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
 ```
 ```{r echo = FALSE}
 tibble::glimpse(MMR_vec_data)

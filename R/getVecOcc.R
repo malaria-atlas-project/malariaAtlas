@@ -8,13 +8,11 @@
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent string containing continent (one of "Africa", "Americas", "Asia", "Oceania") for desired data, e.g. \code{c("continent1", "continent2", ...)}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param species string specifying the Anopheles species for which to find vector occurrence points, options include: \code{"Anopheles...."} OR \code{"ALL"}
-#' @param extent extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox(). - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
-#' @param sf an sf (simple feature) object specifying the spatial extent within which PR data is desired
+#' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox(). - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
 #' @param start_date string object representing the lower date to filter the vector occurrence data by (inclusive)
 #' @param end_date string object representing the upper date to filter the vector occurrence data by (exclusive)
 #' @param version (optional) The vector points dataset version to use. If not provided, will just use the most recent version of vector points data. (To see available version options, 
 #' use listVecOccPointVersions)
-#' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox().
 
 #'@return \code{getVecOcc} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 
@@ -50,18 +48,13 @@ getVecOcc <- function(country = NULL,
                       continent = NULL,
                       species = "all",
                       extent = NULL,
-                      sf = NULL,
                       start_date = NULL,
                       end_date = NULL,
                       version = NULL) {
   if (is.null(country) &
       is.null(ISO) &
-      is.null(continent) & is.null(extent) & is.null(sf)) {
-    stop("Must specify one of: 'country', 'ISO', 'continent', 'extent', or 'sf'.")
-  }
-  
-  if (!is.null(extent) & !is.null(sf)) {
-    stop("Can not specifiy both: 'extent' and 'sf'. Please choose one.")
+      is.null(continent) & is.null(extent)) {
+    stop("Must specify one of: 'country', 'ISO', 'continent' or 'extent'.")
   }
   
   if (is.null(version)) {
@@ -182,10 +175,6 @@ getVecOcc <- function(country = NULL,
       
     } else if (!is.null(extent)) {
       bbox_filter <- build_cql_bbox_filter(extent)
-    }
-    
-    else if (!is.null(sf)) {
-      bbox_filter <- build_cql_bbox_filter(sf::st_bbox(sf))
     }
   }
   
