@@ -154,16 +154,8 @@ tibble::glimpse(MDG_pr_data)
 Africa_pvpr_data <- getPR(continent = "Africa", species = "Pv")
 ```
 
-```{r echo = FALSE}
-tibble::glimpse(Africa_pvpr_data)
-```
-
 ```{r message = FALSE}
 Extent_pfpr_data <- getPR(extent = rbind(c(-2.460181, 13.581921), c(-3.867188, 34.277344)), species = "Pf")
-```
-
-```{r echo = FALSE}
-tibble::glimpse(Extent_pfpr_data)
 ```
 
 You can also pass this function a dataset version. If you don't it will default to using the most recent version.
@@ -189,7 +181,7 @@ autoplot(MDG_pr_data,
 
 `getVecOcc()` downloads all publicly available Vector survey points for a specified location (country, ISO, continent or extent) and species (options for which can be found with `listSpecies`) and returns this as a dataframe with the following format:
 
-```{r message = FALSE}
+```{r message = FALSE, warning = FALSE, results = "hide"}
 MMR_vec_data <- getVecOcc(country = "Myanmar")
 ```
 
@@ -199,7 +191,7 @@ tibble::glimpse(MMR_vec_data)
 
 You can also pass this function a dataset version. If you don't it will default to using the most recent version.
 
-```{r message = FALSE}
+```{r message = FALSE, warning = FALSE, results = "hide"}
 MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
 ```
 
