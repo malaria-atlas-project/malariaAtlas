@@ -13,22 +13,49 @@ test_that("correct error messages are returned for various combinations of count
   expect_message(isAvailable(country = "Madagascar", sourcedata = "pr points"), "PR points are available for Madagascar")
   expect_message(isAvailable(country = "Myanmar", sourcedata = "vector points"), "Vector points are available for Myanmar")
 #one right, one wrong
-  expect_message(isAvailable(country = c("Madagascar","Australia"), sourcedata = "pr points"), "PR points are available for Madagascar")
-  expect_warning(isAvailable(country = c("Madagascar","Australia"), sourcedata = "pr points"), "Data not found for 'Australia', use listPRPointCountries()")
-  expect_message(isAvailable(country = c("Brazil","Libya"), sourcedata = "vector points"), "Vector points are available for Brazil")
-  expect_warning(isAvailable(country = c("Brazil","Libya"), sourcedata = "vector points"), "Data not found for 'Libya', use listVecOccPointCountries()")
+  expect_warnings_and_messages(
+    isAvailable(country = c("Madagascar","Australia"), sourcedata = "pr points"),
+    expected_messages = "PR points are available for Madagascar",
+    expected_warnings = "Data not found for 'Australia', use listPRPointCountries()"
+  )
+  
+  expect_warnings_and_messages(
+    isAvailable(country = c("Brazil","Libya"), sourcedata = "vector points"),
+    expected_messages = "Vector points are available for Brazil",
+    expected_warnings = "Data not found for 'Libya', use listVecOccPointCountries()"
+  )
+
 #one right, one mispelled
-  expect_message(isAvailable(country = c("Madagascar","Ngeria"), sourcedata = "pr points"), "PR points are available for Madagascar")
-  expect_warning(isAvailable(country = c("Madagascar","Ngeria"), sourcedata = "pr points"), "Data not found for 'Ngeria', did you mean Nigeria")
-  expect_message(isAvailable(country = c("Brazil","Ngeria"), sourcedata = "vector points"), "Vector points are available for Brazil")
-  expect_warning(isAvailable(country = c("Brazil","Ngeria"), sourcedata = "vector points"), "Data not found for 'Ngeria', did you mean Nigeria")
+  expect_warnings_and_messages(
+    isAvailable(country = c("Madagascar","Ngeria"), sourcedata = "pr points"),
+    expected_messages = "PR points are available for Madagascar",
+    expected_warnings =  "Data not found for 'Ngeria', did you mean Nigeria"
+  )
+  
+  expect_warnings_and_messages(
+    isAvailable(country = c("Brazil","Ngeria"), sourcedata = "vector points"),
+    expected_messages = "Vector points are available for Brazil",
+    expected_warnings = "Data not found for 'Ngeria', did you mean Nigeria"
+  )
+
 #one right, one wrong, one mispelled
-  expect_message(isAvailable(country = c("Madagascar","Australia","Ngeria"), sourcedata = "pr points"), "PR points are available for Madagascar")
-  expect_warning(isAvailable(country = c("Madagascar","Australia","Ngeria"), sourcedata = "pr points"), "Data not found for 'Australia', use listPRPointCountries()")
-  expect_warning(isAvailable(country = c("Madagascar","Australia","Ngeria"), sourcedata = "pr points"), "Data not found for 'Ngeria', did you mean Nigeria")
-  expect_message(isAvailable(country = c("Brazil","Libya","Ngeria"), sourcedata = "vector points"), "Vector points are available for Brazil")
-  expect_warning(isAvailable(country = c("Brazil","Libya","Ngeria"), sourcedata = "vector points"), "Data not found for 'Libya', use listVecOccPointCountries()")
-  expect_warning(isAvailable(country = c("Brazil","Libya","Ngeria"), sourcedata = "vector points"), "Data not found for 'Ngeria', did you mean Nigeria")
+  expect_warnings_and_messages(
+    isAvailable(country = c("Madagascar","Australia","Ngeria"), sourcedata = "pr points"),
+    expected_messages = "PR points are available for Madagascar",
+    expected_warnings = c(
+      "Data not found for 'Australia', use listPRPointCountries()",
+      "Data not found for 'Ngeria', did you mean Nigeria"
+    )
+  )
+  
+  expect_warnings_and_messages(
+    isAvailable(country = c("Brazil","Libya","Ngeria"), sourcedata = "vector points"),
+    expected_messages = "Vector points are available for Brazil",
+    expected_warnings = c(
+      "Data not found for 'Libya', use listVecOccPointCountries()",
+      "Data not found for 'Ngeria', did you mean Nigeria"
+    )
+  )
   
 #one wrong
   expect_message(isAvailable(country = "Australia", sourcedata = "pr points"), "Specified location not found, see below comments:")
