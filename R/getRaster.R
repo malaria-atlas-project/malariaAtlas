@@ -295,14 +295,25 @@ download_rst <-
     if (!is.na(year) & !is.null(year)) {
       time <- lapply(year, lubridate::make_date)
       time <- lapply(time, format, format = '%Y-%m-%dT%H:%M:%S')
-      time_filter <- do.call('c', time)
+      time_filter <- paste0('time=', time)
       raster_name <- paste0(dataset_id, '_', year)
     } else {
       time_filter <- NULL
       raster_name <- dataset_id
     }
     
-    spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, time = time_filter)
+    if (!is.null(time_filter)) {
+      workspace <- get_workspace_and_version_from_coverage_id(dataset_id)[[1]]
+      if (workspace == "Explorer") { # datetime is set up different between the old Explorer workspace and the new ones.
+        spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, cql_filter = time_filter)
+      } else {
+        spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, time = time)
+      }
+      
+    } else {
+      spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent)
+    }
+    
     
     if(!is.null(file_path)) {
       rst_path <- file.path(file_path, paste0(file_name, ".tiff"))
