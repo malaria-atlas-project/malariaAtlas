@@ -66,7 +66,7 @@ getPR <- function(country = NULL,
     message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
             ' (This is the most recent version of PR data. To see other version options use function listPRPointVersions)')
   } else {
-    df_available_versions <- listPRPointVersions()
+    df_available_versions <- listPRPointVersions(printed = FALSE)
     if (!version %in% df_available_versions$version) {
       stop(
         paste0(

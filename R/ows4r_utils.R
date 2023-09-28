@@ -351,7 +351,7 @@ getLatestVecOccPointVersion <- function() {
 #' @keywords internal
 #'
 getLatestVersionForAdminData <- function() {
-  df_versions <- listShpVersions()
+  df_versions <- listShpVersions(printed = FALSE)
   return(max(unlist(df_versions$version)))
 }
 

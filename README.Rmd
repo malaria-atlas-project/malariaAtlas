@@ -44,7 +44,7 @@ Use:
 * `listShpVersions()` to see the available versions for admin unit shape data, which can then be used in `listShp` and `getShp`.
 
 ```{r highlight = TRUE}
-listPRPointVerions()
+listPRPointVersions()
 ```
 
 ```{r highlight = TRUE}
@@ -66,15 +66,15 @@ To list the species available for vector point data use `listSpecies()`
 
 All three of these functions can optionally take a version parameter (which can be found with the list versions functions). If you choose not to provide a version, the most recent version of the relevant dataset will be selected by default. 
 
-```{r highlight = TRUE}
+```{r results = "hide", message = FALSE}
 listPRPointCountries(version = "202206")
 ```
 
-```{r highlight = TRUE}
+```{r results = "hide", message = FALSE}
 listVecOccPointCountries(version = "201201")
 ```
 
-```{r highlight = TRUE}
+```{r results = "hide", message = FALSE}
 listSpecies(version = "201201")
 ```
 
@@ -82,7 +82,7 @@ listSpecies(version = "201201")
 
 To list administrative units for which shapefiles are stored on the MAP geoserver, use `listShp()`. Similar to the list countries and species functions, this function can optionally take a version.
 
-```{r highlight = TRUE}
+```{r results = "hide", message = FALSE}
 listShp(version = "202206")
 ```
 
@@ -90,7 +90,7 @@ listShp(version = "202206")
 
 `listRaster()` gets minimal information on all available rasters. It returns a data.frame with several columns for each raster such as dataset_id, title, abstract, min_raster_year and max_raster_year. The dataset_id can then be used in `getRaster` and `extractRaster`.
 
-```{r highlight = TRUE}
+```{r results = "hide", message = FALSE}
 listRaster()
 ```
 
