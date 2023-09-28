@@ -1,6 +1,8 @@
 #' WFS clients lazily created or from cache
 #'
 #' @return A list with of WFSClients by workspace
+#' @keywords internal
+#'
 get_wfs_clients <- function(logger=NULL) {
   if(exists('malariaatlas.wfs_clients', envir = .malariaAtlasHidden)){
     wfs_clients_by_workspace <- .malariaAtlasHidden$malariaatlas.wfs_clients
@@ -18,6 +20,8 @@ get_wfs_clients <- function(logger=NULL) {
 #' WCS clients lazily created or from cache
 #'
 #' @return A list with of WCSClients by workspace
+#' @keywords internal
+#' 
 get_wcs_clients <- function(logger=NULL) {
   if(exists('malariaatlas.wcs_clients', envir = .malariaAtlasHidden)){
     wcs_clients_by_workspace <- .malariaAtlasHidden$malariaatlas.wcs_clients
@@ -35,6 +39,8 @@ get_wcs_clients <- function(logger=NULL) {
 #' WMS clients lazily created or from cache
 #'
 #' @return A list with of WMSClients by workspace
+#' @keywords internal
+#'
 get_wms_clients <- function(logger=NULL) {
   if(exists('malariaatlas.wms_clients', envir = .malariaAtlasHidden)){
     wms_clients_by_workspace <- .malariaAtlasHidden$malariaatlas.wms_clients
@@ -49,6 +55,8 @@ get_wms_clients <- function(logger=NULL) {
   return(wms_clients_by_workspace)
 }
 
+#' @keywords internal
+#'
 get_workspaces <- function() {
   return(.malariaAtlasHidden$workspaces)
 }
@@ -92,38 +100,15 @@ get_name_from_wfs_feature_type_id <- function(id) {
   return(name)
 }
 
-
-
-#' Get the dataset id of the latest version of a given dataset name within a dataset
+#' List all datasets from the Web Feature Services provided by the Malaria Atlas Project within the given workspace.
 #'
-#' @param datasets The datasets in a data.frame with columns for dataset_id, version and workspace.
-#' @param dataset_name The dataset name e.g. 'Global_Pf_Parasite_Rate_Surveys'.
-#' @return A dataset id within the datasets that matches the dataset name and has the most recent version
+#' This function lists minimal information of all the feature datasets from the Web Feature Services provided by the Malaria Atlas Project, in the given workspace.
+#'
+#' @param workspace Character vector representing the name of the workspace.
+#' @return A data.frame with columns 'id', 'version', and 'workspace' representing the unique identifier, version, and domain of the datasets
+#'
 #' @keywords internal
 #'
-getLatestDatasetId <- function(datasets, dataset_name) {
-  datasetNames <-
-    future.apply::future_lapply(datasets$dataset_id, get_name_from_wfs_feature_type_id)
-  datasetNames <- do.call(rbind, datasetNames)
-  datasets$name <- datasetNames
-  datasets_filtered_by_name <- subset(datasets, name == dataset_name)
-  maxVersion <- max(unlist(datasets_filtered_by_name$version))
-  datasets_filtered_by_name_and_version <-
-    subset(datasets_filtered_by_name, version == maxVersion)
-  datasetId <- datasets_filtered_by_name_and_version$dataset_id[1]
-  return(datasetId)
-}
-
-#' Get the dataset id of the latest version of pf PR data
-#'
-#' @return The dataset id of the latest version of pf PR Data
-#' @keywords internal
-#'
-getLatestDatasetIdForPfPrData <- function() {
-  prDatasets <- listFeatureTypeDatasetsFromWorkspace('Malaria')
-  return(getLatestDatasetId(prDatasets, 'Global_Pf_Parasite_Rate_Surveys'))
-}
-
 listFeatureTypeDatasetsFromWorkspace <- function(workspace) {
   wfs_client <- get_wfs_clients()[[workspace]]
   wfs_cap <- wfs_client$getCapabilities()
@@ -144,27 +129,9 @@ listFeatureTypeDatasetsFromWorkspace <- function(workspace) {
   return(df_datasets)
 }
 
-#' Get the dataset id of the latest version of pv PR data
-#'
-#' @return The dataset id of the latest version of pv PR Data
+
 #' @keywords internal
 #'
-getLatestDatasetIdForPvPrData <- function() {
-  prDatasets <- listFeatureTypeDatasetsFromWorkspace('Malaria')
-  return(getLatestDatasetId(prDatasets, 'Global_Pv_Parasite_Rate_Surveys'))
-}
-
-#' Get the dataset id of the latest version of vector occurrence data
-#'
-#' @return The dataset id of the latest version of vector occurrence Data
-#' @keywords internal
-#'
-getLatestDatasetIdForVecOccData <- function() {
-  vecOccDatasets <- listFeatureTypeDatasetsFromWorkspace('Vector_Occurrence')
-  return(getLatestDatasetId(vecOccDatasets, 'Global_Dominant_Vector_Surveys'))
-}
-
-
 getDatasetIdForAdminDataGivenAdminLevelAndVersion <- function(admin_level, version) {
   admin_level_numeric <- gsub('admin', '', admin_level) 
   return(paste0('Admin_Units:', version, '_Global_Admin_', admin_level_numeric))
@@ -174,6 +141,8 @@ getDatasetIdForAdminDataGivenAdminLevelAndVersion <- function(admin_level, versi
 #'
 #' @param bbox A matrix representing a bounding box.
 #' @return The character string of the CQL filter.
+#' @keywords internal
+#'
 build_cql_bbox_filter <- function(bbox) {
   minY <- bbox[2, 1]
   minX <- bbox[1, 1]
@@ -188,6 +157,8 @@ build_cql_bbox_filter <- function(bbox) {
 #'
 #' @param bbox A matrix representing a bounding box.
 #' @return The character string of the filter.
+#' @keywords internal
+#'
 build_bbox_filter <- function(bbox) {
   minY <- bbox[2, 1]
   minX <- bbox[1, 1]
@@ -356,12 +327,15 @@ getRasterDatasetIdFromSurface <- function(rasterList, surface) {
   }
 }
 
-
+#' @keywords internal
+#'
 getLatestPRPointVersion <- function() {
   df_versions <- listPRPointVersions()
   return(max(unlist(df_versions$version)))
 }
 
+#' @keywords internal
+#'
 getLatestVecOccPointVersion <- function() {
   df_versions <- listVecOccPointVersions()
   return(max(unlist(df_versions$version)))
@@ -378,15 +352,20 @@ getLatestVersionForAdminData <- function() {
   return(max(unlist(df_versions$version)))
 }
 
-
+#' @keywords internal
+#'
 getPfPRPointDatasetIdFromVersion <- function(version) {
   return(paste0('Malaria:', version, '_Global_Pf_Parasite_Rate_Surveys'))
 }
 
+#' @keywords internal
+#'
 getPvPRPointDatasetIdFromVersion <- function(version) {
   return(paste0('Malaria:', version, '_Global_Pv_Parasite_Rate_Surveys'))
 }
 
+#' @keywords internal
+#'
 getVecOccPointDatasetIdFromVersion <- function(version) {
   return(paste0('Vector_Occurrence:', version, '_Global_Dominant_Vector_Surveys'))
 }
