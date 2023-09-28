@@ -111,7 +111,7 @@ test_that("getRasterDatasetIdFromSurface works with multiple matches", {
                             version = c('2019', '2019', '2020')
   )
   
-  expect_equal(getRasterDatasetIdFromSurface(rasterList, 'Plasmodium vivax Cases'), 'Explorer__2020_Global_Pv_Cases'')
+  expect_equal(getRasterDatasetIdFromSurface(rasterList, 'Plasmodium vivax Cases'), 'Explorer__2020_Global_Pv_Cases')
 })
 
 

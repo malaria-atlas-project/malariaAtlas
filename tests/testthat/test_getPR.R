@@ -109,7 +109,7 @@ test_that('DL all works', {
   skip_on_cran()
   expect_message(
     d <- getPR(species = 'Pf', country = 'all'),
-    regexp = 'Importing PR point data for all'
+    regexp = 'Data downloaded for all'
   )
   expect_true(inherits(d, 'pr.points'))
   expect_true(nrow(d) > 0)
