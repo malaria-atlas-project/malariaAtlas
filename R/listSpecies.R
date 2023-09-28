@@ -25,7 +25,7 @@ listSpecies <- function(printed = TRUE, version = NULL){
     message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
             ' (This is the most recent version of vector data. To see other version options use function listVecOccPointVersions)')
   } else {
-    df_available_versions <- listVecOccPointVersions()
+    df_available_versions <- listVecOccPointVersions(printed = FALSE)
     if (!version %in% df_available_versions$version) {
       stop(
         paste0(

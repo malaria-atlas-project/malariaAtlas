@@ -2,7 +2,7 @@
 #' 
 #' \code{listVecOccPointVersions} lists available versions of all the feature datasets in the Vector Occurrence workspace 
 #' from the Web Feature Services provided by the Malaria Atlas Project.
-#' 
+#' @param printed Should the list be printed to the console?
 #' @return A data.frame with column 'version'.
 #' The version can then be provided to other functions to fetch the data within that dataset. e.g. in getVecOcc 
 #' @examples
@@ -10,7 +10,7 @@
 #' vecOccDatasets <- listVecOccPointVersions()
 #' @export listVecOccPointVersions
 
-listVecOccPointVersions <- function(){
+listVecOccPointVersions <- function(printed = TRUE){
   wfs_client <- get_wfs_clients()$Vector_Occurrence
   wfs_cap <- wfs_client$getCapabilities()
   wfs_ft_types <- wfs_cap$getFeatureTypes()
@@ -29,6 +29,10 @@ listVecOccPointVersions <- function(){
   
   df_versions <- as.data.frame(do.call(cbind, list(version=versions)))
   
-  return(df_versions)
+  if(printed == TRUE){
+    message("Versions available for vector occurrence point data: \n ",paste(df_versions$version, collapse = " \n "))
+  }
+  
+  return(invisible(df_versions))
   
 }

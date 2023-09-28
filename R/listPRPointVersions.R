@@ -1,7 +1,7 @@
 #' List all dataset versions from the Web Feature Services provided by the Malaria Atlas Project within the Parasite Rate workspace.
 #' 
 #' \code{listPRPointVersions} lists available versions of parasite rate point data from the Web Feature Services provided by the Malaria Atlas Project.
-#' 
+#' @param printed Should the list be printed to the console?
 #' @return A data.frame with column 'version'
 #' The version can then be provided to other functions to fetch the data within that dataset. e.g. in getPR 
 #' @examples
@@ -9,7 +9,7 @@
 #' prDatasets <- listPRPointVersions()
 #' @export listPRPointVersions
 
-listPRPointVersions <- function(){
+listPRPointVersions <- function(printed = TRUE){
   wfs_client <- get_wfs_clients()$Malaria
   wfs_cap <- wfs_client$getCapabilities()
   wfs_ft_types <- wfs_cap$getFeatureTypes()
@@ -28,5 +28,9 @@ listPRPointVersions <- function(){
   
   df_versions <- as.data.frame(do.call(cbind, list(version=versions)))
   
-  return(df_versions)
+  if(printed == TRUE){
+    message("Versions available for PR point data: \n ",paste(df_versions$version, collapse = " \n "))
+  }
+  
+  return(invisible(df_versions))
 }

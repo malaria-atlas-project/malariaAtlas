@@ -4,275 +4,325 @@ output:
     preserve_yaml: false
 ---
 
-[![Build Status](https://travis-ci.org/malaria-atlas-project/malariaAtlas.svg)](https://travis-ci.org/malaria-atlas-project/malariaAtlas)
-[![codecov.io](https://codecov.io/gh/malaria-atlas-project/malariaAtlas/coverage.svg?branch=master)](https://codecov.io/gh/malaria-atlas-project/malariaAtlas?branch=master)
+[![Build Status](https://travis-ci.org/malaria-atlas-project/malariaAtlas.svg)](https://travis-ci.org/malaria-atlas-project/malariaAtlas) [![codecov.io](https://codecov.io/gh/malaria-atlas-project/malariaAtlas/coverage.svg?branch=master)](https://codecov.io/gh/malaria-atlas-project/malariaAtlas?branch=master)
 
 
 
+# malariaAtlas
 
-# malariaAtlas 
-### An R interface to open-access malaria data, hosted by the Malaria Atlas Project. 
+### An R interface to open-access malaria data, hosted by the Malaria Atlas Project.
 
 *The gitlab version of the malariaAtlas package has some additional bugfixes over the stable CRAN package. If you have any issues, try installing the latest github version. See below for instructions.*
 
-# Overview 
+# Overview
 
 This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*), survey occurrence data of the 41 dominant malaria vector species, and modelled raster outputs from the [Malaria Atlas Project](https://malariaatlas.org/).
 
-More details and example analyses can be found in the [published paper)[(https://malariajournal.biomedcentral.com/articles/10.1186/s12936-018-2500-5).
+More details and example analyses can be found in the [published paper)[(<https://malariajournal.biomedcentral.com/articles/10.1186/s12936-018-2500-5>).
 
-## Available Data: 
-The data can be explored at [https://malariaatlas.org/explorer/#/explorer](https://malariaatlas.org/explorer/#/explorer).
+## Available Data:
 
+The data can be explored at <https://data.malariaatlas.org/maps>.
 
+### List Versions Functions
 
-### list* Functions
+The list version functions are used to list the available versions of different datasets, and all return a data.frame with a single column for version. These versions can be passed to functions such as `listShp`, `listSpecies`, `listPRPointCountries`, `listVecOccPointCountries`, `getPR`, `getVecOcc` and `getShp`.
 
+Use:
 
-`listData()` retrieves a list of available data to download. 
+-   `listPRPointVerions()` to see the available versions for PR point data, which can then be used in `listPRPointCountries` and `getPR`.
 
-Use: 
+-   `listVecOccPointVersions()` to see the available versions for vector occurrence data, which can then be used in `listSpecies`, `listVecOccPointCountries` and `getVecOcc`.
 
-* listData(datatype = "pr points") OR listPoints(sourcedata = "pr points") to see for which countries PR survey point data can be downloaded.
-
-* listData(datatype = "vector points") OR listPoints(sourcedata = "vector points") to see for which countries Vector survey data can be downloaded.
-
-* use listData(datatype = "raster") OR listRaster() to see rasters available to download. 
-
-* use listData(datatype = "shape") OR listShp() to see shapefiles available to download. 
+-   `listShpVersions()` to see the available versions for admin unit shape data, which can then be used in `listShp` and `getShp`.
 
 
 ```r
-listData(datatype = "pr points")
+listPRPointVersions()
 ```
+
 
 ```r
-listData(datatype = "vector points")
+listVecOccPointVersions()
 ```
+
 
 ```r
-listData(datatype = "raster")
+listShpVersions()
 ```
+
+### List Countries and Species Functions
+
+To list the countries where there is available data for PR points or vector occurrence points, use:
+
+-   `listPRPointCountries()` for PR points
+-   `listVecOccPointCountries()` for vector occurrence points
+
+To list the species available for vector point data use `listSpecies()`
+
+All three of these functions can optionally take a version parameter (which can be found with the list versions functions). If you choose not to provide a version, the most recent version of the relevant dataset will be selected by default.
+
 
 ```r
-listData(datatype = "shape")
+listPRPointCountries(version = "202206")
 ```
 
-### is_available
 
-`isAvailable_pr` confirms whether or not PR survey point data is available to download for a specified country. 
+```r
+listVecOccPointCountries(version = "201201")
+```
+
+
+```r
+listSpecies(version = "201201")
+```
+
+### List Administrative Units
+
+To list administrative units for which shapefiles are stored on the MAP geoserver, use `listShp()`. Similar to the list countries and species functions, this function can optionally take a version.
+
+
+```r
+listShp(version = "202206")
+```
+
+### List Raster Function
+
+`listRaster()` gets minimal information on all available rasters. It returns a data.frame with several columns for each raster such as dataset_id, title, abstract, min_raster_year and max_raster_year. The dataset_id can then be used in `getRaster` and `extractRaster`.
+
+
+```r
+listRaster()
+```
+
+### Is Available Functions
+
+`isAvailable_pr` confirms whether or not PR survey point data is available to download for a specified country, ISO3 code or continent.
 
 Check whether PR data is available for Madagascar:
+
 
 ```r
 isAvailable_pr(country = "Madagascar")
 ```
 
-```
-## Confirming availability of PR data for: Madagascar...
-```
+Check whether PR data is available for the United States of America by ISO code:
 
-```
-## PR points are available for Madagascar.
-```
-
-Check whether PR data is available for the United States of America
 
 ```r
 isAvailable_pr(ISO = "USA")
 ```
 
-```
-## Confirming availability of PR data for: USA...
+Check whether PR data is available for Asia:
+
+
+```r
+isAvailable_pr(continent = "Asia")
 ```
 
-```
-## Specified location not found, see below comments: 
-##  
-## Data not found for 'USA', did you mean UGA OR SAU?
-```
-
-`isAvailable_vec` confirms whether or not vector survey point data is available to download for a specified country. 
+`isAvailable_vec` confirms whether or not vector survey point data is available to download for a specified country, ISO3 code or continent.
 
 Check whether vector data is available for Myanmar:
+
 
 ```r
 isAvailable_vec(country = "Myanmar")
 ```
 
-```
-## Confirming availability of Vector data for: Myanmar...
+Check whether vector data is available for multiple countries:
+
+
+```r
+isAvailable_vec(country = c("Nigeria", "Ethiopia"))
 ```
 
-```
-## Vector points are available for Myanmar.
+You can also pass these functions a dataset version. If you don't they will default to using the most recent version.
+
+
+```r
+isAvailable_pr(country = "Madagascar", version = "202206")
 ```
 
-## Downloading & Visualising Data: 
-### get* functions & autoplot methods
+## Downloading & Visualising Data:
+
+### get\* functions & autoplot methods
 
 ### Parasite Rate Survey Points
-`getPR()` downloads all publicly available PR data points for a specified country and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format: 
 
+`getPR()` downloads all publicly available PR data points for a specified location (country, ISO, continent or extent) and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format:
 
 
 ```r
 MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 ```
 
+
 ```
-## Rows: 1,651
-## Columns: 28
-## $ dhs_id                    <chr> "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "…
-## $ site_id                   <int> 6221, 6021, 15070, 15795, 7374, 13099, 9849, 21475, 15943, 7930, …
-## $ site_name                 <chr> "Andranomasina", "Andasibe", "Ambohimarina", "Antohobe", "Ambohim…
-## $ latitude                  <dbl> -18.7170, -19.8340, -18.7340, -19.7699, -25.0323, -18.7010, -18.7…
-## $ longitude                 <dbl> 47.4660, 47.8500, 47.2520, 46.6870, 46.9960, 47.1660, 47.4905, 47…
-## $ rural_urban               <chr> "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN",…
-## $ country                   <chr> "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madagasc…
-## $ country_id                <chr> "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "M…
-## $ continent_id              <chr> "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Afri…
-## $ month_start               <int> 1, 3, 1, 7, 4, 1, 1, 7, 4, 7, 11, 4, 9, 7, 7, 3, 7, 3, 4, 6, 3, 7…
-## $ year_start                <int> 1987, 1987, 1987, 1995, 1986, 1987, 1987, 1995, 1986, 1995, 1997,…
-## $ month_end                 <int> 1, 3, 1, 8, 6, 1, 1, 8, 4, 8, 11, 6, 9, 8, 8, 6, 7, 3, 6, 6, 6, 7…
-## $ year_end                  <int> 1987, 1987, 1987, 1995, 1986, 1987, 1987, 1995, 1986, 1995, 1997,…
-## $ lower_age                 <dbl> 0, 0, 0, 2, 7, 0, 0, 2, 6, 2, 2, 7, 0, 2, 2, 0, 0, 0, 7, 0, 0, 0,…
-## $ upper_age                 <int> 99, 99, 99, 9, 22, 99, 99, 9, 12, 9, 9, 22, 99, 9, 9, 5, 99, 99, …
-## $ examined                  <int> 50, 246, 50, 50, 119, 50, 50, 50, 20, 50, 61, 156, 104, 50, 50, 1…
-## $ positive                  <dbl> 7.5, 126.0, 2.5, 6.0, 37.0, 13.5, 4.5, 11.5, 8.0, 7.0, 3.0, 97.0,…
-## $ pr                        <dbl> 0.1500, 0.5122, 0.0500, 0.1200, 0.3109, 0.2700, 0.0900, 0.2300, 0…
-## $ species                   <chr> "P. falciparum", "P. falciparum", "P. falciparum", "P. falciparum…
-## $ method                    <chr> "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Microsco…
-## $ rdt_type                  <chr> "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "…
-## $ pcr_type                  <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-## $ malaria_metrics_available <chr> "true", "true", "true", "true", "true", "true", "true", "true", "…
-## $ location_available        <chr> "true", "true", "true", "true", "true", "true", "true", "true", "…
-## $ permissions_info          <chr> "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "…
-## $ citation1                 <chr> "Lepers, J.P., Ramanamirija, J.A., Andriamangatiana-Rason, M.D. a…
-## $ citation2                 <chr> "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "…
-## $ citation3                 <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## Rows: 395
+## Columns: 29
+## $ dhs_id                    <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ site_id                   <int> 8689, 6221, 18093, 6021, 15070, 15795, 7374, 13099, 9849, 11961, 21475, 11572, 15943, 7930, …
+## $ site_name                 <chr> "Vodivohitra", "Andranomasina", "Ankazobe", "Andasibe", "Ambohimarina", "Antohobe", "Ambohim…
+## $ latitude                  <dbl> -16.21700, -18.71700, -18.31600, -19.83400, -18.73400, -19.76990, -25.03230, -18.70100, -18.…
+## $ longitude                 <dbl> 49.68300, 47.46600, 47.11800, 47.85000, 47.25200, 46.68700, 46.99600, 47.16600, 47.49050, 48…
+## $ rural_urban               <chr> "RURAL", "UNKNOWN", "RURAL", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN…
+## $ country                   <chr> "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madagas…
+## $ country_id                <chr> "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "…
+## $ continent_id              <chr> "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "A…
+## $ month_start               <int> 11, 1, 11, 3, 1, 7, 4, 1, 1, 2, 7, 11, 4, 7, 11, 4, 9, 7, 7, 3, 7, 7, 7, 11, 3, 4, 6, 3, 11,…
+## $ year_start                <int> 1989, 1987, 1989, 1987, 1987, 1995, 1986, 1987, 1987, 2003, 1995, 1989, 1986, 1995, 1997, 19…
+## $ month_end                 <int> 11, 1, 12, 3, 1, 8, 6, 1, 1, 2, 8, 12, 4, 8, 11, 6, 9, 8, 8, 6, 7, 7, 7, 12, 3, 6, 6, 6, 11,…
+## $ year_end                  <int> 1989, 1987, 1989, 1987, 1987, 1995, 1986, 1987, 1987, 2003, 1995, 1989, 1986, 1995, 1997, 19…
+## $ lower_age                 <dbl> 5, 0, 5, 0, 0, 2, 7, 0, 0, 0, 2, 5, 6, 2, 2, 7, 0, 2, 2, 0, 2, 0, 0, 5, 0, 7, 0, 0, 6, 5, 0,…
+## $ upper_age                 <int> 15, 99, 15, 99, 99, 9, 22, 99, 99, 99, 9, 15, 12, 9, 9, 22, 99, 9, 9, 5, 9, 99, 99, 15, 99, …
+## $ examined                  <int> 165, 50, 258, 246, 50, 50, 119, 50, 50, 210, 50, 340, 20, 50, 61, 156, 104, 50, 50, 147, 147…
+## $ positive                  <dbl> 144.0, 7.5, 139.0, 126.0, 2.5, 6.0, 37.0, 13.5, 4.5, 34.0, 11.5, 255.0, 8.0, 7.0, 3.0, 97.0,…
+## $ pr                        <dbl> 0.87272727, 0.15000000, 0.53875969, 0.51219512, 0.05000000, 0.12000000, 0.31092437, 0.270000…
+## $ species                   <chr> "P. falciparum", "P. falciparum", "P. falciparum", "P. falciparum", "P. falciparum", "P. fal…
+## $ method                    <chr> "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Microsc…
+## $ rdt_type                  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ pcr_type                  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ malaria_metrics_available <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TR…
+## $ location_available        <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TR…
+## $ permissions_info          <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ citation1                 <chr> "Lepers, J.P. (1989). <i>Rapport sur la situation du paludisme dans la région de Mananara No…
+## $ citation2                 <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ citation3                 <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ geometry                  <POINT [°]> POINT (49.683 -16.217), POINT (47.466 -18.717), POINT (47.118 -18.316), POINT (47.85 -…
 ```
 
 
-`autoplot.pr.points` configures autoplot method to enable quick mapping of the locations of downloaded PR points. 
+```r
+Africa_pvpr_data <- getPR(continent = "Africa", species = "Pv")
+```
 
+
+```r
+Extent_pfpr_data <- getPR(extent = rbind(c(-2.460181, 13.581921), c(-3.867188, 34.277344)), species = "Pf")
+```
+
+You can also pass this function a dataset version. If you don't it will default to using the most recent version.
+
+
+```r
+MDG_pr_data_202206 <- getPR(country = "Madagascar", species = "both", version = "202206")
+```
+
+`autoplot.pr.points` configures autoplot method to enable quick mapping of the locations of downloaded PR points.
 
 
 ```r
 autoplot(MDG_pr_data)
 ```
 
-![plot of chunk unnamed-chunk-11](man/figures/unnamed-chunk-11-1.png)
+![plot of chunk unnamed-chunk-21](man/figures/unnamed-chunk-21-1.png)
 
 A version without facetting is also available.
+
 
 ```r
 autoplot(MDG_pr_data,
          facet = FALSE)
 ```
 
-![plot of chunk unnamed-chunk-12](man/figures/unnamed-chunk-12-1.png)
+![plot of chunk unnamed-chunk-22](man/figures/unnamed-chunk-22-1.png)
 
 ### Vector Survey Points
-`getVecOcc()` downloads all publicly available Vector survey points for a specified country and  and returns this as a dataframe with the following format: 
+
+`getVecOcc()` downloads all publicly available Vector survey points for a specified location (country, ISO, continent or extent) and species (options for which can be found with `listSpecies`) and returns this as a dataframe with the following format:
 
 
 ```r
 MMR_vec_data <- getVecOcc(country = "Myanmar")
 ```
 
+
 ```
 ## Rows: 2,866
-## Columns: 24
-## $ site_id        <int> 30243, 30243, 30243, 30243, 1000000072, 1000000071, 1000000071, 1000000072, …
-## $ latitude       <dbl> 16.257, 16.257, 16.257, 16.257, 17.350, 17.380, 17.380, 17.350, 17.380, 17.3…
-## $ longitude      <dbl> 97.725, 97.725, 97.725, 97.725, 96.041, 96.037, 96.037, 96.041, 96.037, 96.0…
-## $ country        <chr> "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar",…
-## $ country_id     <chr> "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR",…
-## $ continent_id   <chr> "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asi…
-## $ month_start    <int> 2, 3, 8, 9, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 5, 5, 5, 5, 5, 5, 5, …
-## $ year_start     <int> 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998…
-## $ month_end      <int> 2, 3, 8, 9, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 10, 3, 3, 3, 3, 3, 3, 3, …
-## $ year_end       <int> 1998, 1998, 1998, 1998, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000…
-## $ anopheline_id  <int> 17, 17, 17, 17, 50, 49, 17, 51, 11, 4, 15, 1, 35, 30, 50, 51, 30, 17, 17, 11…
-## $ species        <chr> "Anopheles dirus species complex", "Anopheles dirus species complex", "Anoph…
-## $ species_plain  <chr> "Anopheles dirus", "Anopheles dirus", "Anopheles dirus", "Anopheles dirus", …
-## $ id_method1     <chr> "unknown", "unknown", "unknown", "unknown", "morphology", "morphology", "mor…
-## $ id_method2     <chr> "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", …
-## $ sample_method1 <chr> "man biting", "man biting", "man biting", "man biting", "man biting indoors"…
-## $ sample_method2 <chr> "animal baited net trap", "animal baited net trap", "animal baited net trap"…
-## $ sample_method3 <chr> "", "", "", "", "animal baited net trap", "animal baited net trap", "animal …
-## $ sample_method4 <chr> "", "", "", "", "house resting inside", "house resting inside", "house resti…
-## $ assi           <chr> "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", …
-## $ citation       <chr> "Oo, T.T., Storch, V. and Becker, N. (2003).  <b><i>Anopheles</i> <i>dirus</…
-## $ geom           <chr> "POINT (16.257 97.725)", "POINT (16.257 97.725)", "POINT (16.257 97.725)", "…
-## $ time_start     <chr> "1998-02-01", "1998-03-01", "1998-08-01", "1998-09-01", "1998-05-01", "1998-…
-## $ time_end       <chr> "1998-02-01", "1998-03-01", "1998-08-01", "1998-09-01", "2000-03-01", "2000-…
+## Columns: 25
+## $ id             <int> 1945, 1946, 1951, 1952, 790, 781, 772, 791, 773, 783, 774, 776, 777, 792, 778, 779, 780, 1953, 784, 785…
+## $ site_id        <int> 30243, 30243, 30243, 30243, 1000000072, 1000000071, 1000000071, 1000000072, 1000000071, 1000000071, 100…
+## $ latitude       <dbl> 16.2570, 16.2570, 16.2570, 16.2570, 17.3500, 17.3800, 17.3800, 17.3500, 17.3800, 17.3800, 17.3800, 17.3…
+## $ longitude      <dbl> 97.7250, 97.7250, 97.7250, 97.7250, 96.0410, 96.0370, 96.0370, 96.0410, 96.0370, 96.0370, 96.0370, 96.0…
+## $ country        <chr> "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Myanmar", "Mya…
+## $ country_id     <chr> "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR", "MMR"…
+## $ continent_id   <chr> "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia",…
+## $ month_start    <int> 2, 3, 8, 9, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, …
+## $ year_start     <int> 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1998, 1…
+## $ month_end      <int> 2, 3, 8, 9, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 10, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …
+## $ year_end       <int> 1998, 1998, 1998, 1998, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 1…
+## $ anopheline_id  <int> 17, 17, 17, 17, 50, 49, 17, 51, 11, 4, 15, 1, 35, 30, 50, 51, 30, 17, 17, 11, 15, 1, 35, 49, 4, 17, 11,…
+## $ species        <chr> "Anopheles dirus species complex", "Anopheles dirus species complex", "Anopheles dirus species complex"…
+## $ species_plain  <chr> "Anopheles dirus", "Anopheles dirus", "Anopheles dirus", "Anopheles dirus", "Anopheles stephensi", "Ano…
+## $ id_method1     <chr> "unknown", "unknown", "unknown", "unknown", "morphology", "morphology", "morphology", "morphology", "mo…
+## $ id_method2     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ sample_method1 <chr> "man biting", "man biting", "man biting", "man biting", "man biting indoors", "man biting indoors", "ma…
+## $ sample_method2 <chr> "animal baited net trap", "animal baited net trap", "animal baited net trap", "animal baited net trap",…
+## $ sample_method3 <chr> NA, NA, NA, NA, "animal baited net trap", "animal baited net trap", "animal baited net trap", "animal b…
+## $ sample_method4 <chr> NA, NA, NA, NA, "house resting inside", "house resting inside", "house resting inside", "house resting …
+## $ assi           <chr> "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",…
+## $ citation       <chr> "Oo, T.T., Storch, V. and Becker, N. (2003).  <b><i>Anopheles</i> <i>dirus</i> and its role in malaria …
+## $ time_start     <date> 1998-02-01, 1998-03-01, 1998-08-01, 1998-09-01, 1998-05-01, 1998-05-01, 1998-05-01, 1998-05-01, 1998-0…
+## $ time_end       <date> 1998-02-01, 1998-03-01, 1998-08-01, 1998-09-01, 2000-03-01, 2000-03-01, 2000-03-01, 2000-03-01, 2000-0…
+## $ geometry       <POINT [°]> POINT (97.725 16.257), POINT (97.725 16.257), POINT (97.725 16.257), POINT (97.725 16.257), POINT…
 ```
 
-`autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points. 
+You can also pass this function a dataset version. If you don't it will default to using the most recent version.
+
+
+```r
+MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
+```
+
+`autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points.
 
 
 ```r
 autoplot(MMR_vec_data)
 ```
 
-![plot of chunk unnamed-chunk-15](man/figures/unnamed-chunk-15-1.png)
+![plot of chunk unnamed-chunk-26](man/figures/unnamed-chunk-26-1.png)
 
-N.B. Facet-wrapped option is also available for species stratification. 
+N.B. Facet-wrapped option is also available for species stratification.
+
 
 ```r
 autoplot(MMR_vec_data,
          facet = TRUE)
 ```
 
-![plot of chunk unnamed-chunk-16](man/figures/unnamed-chunk-16-1.png)
+![plot of chunk unnamed-chunk-27](man/figures/unnamed-chunk-27-1.png)
 
 ### Shapefiles
-`getShp()` downloads a shapefile for a specified country (or countries) and returns this as either a spatialPolygon or data.frame object.
+
+`getShp()` downloads a shapefile for a specified country (or countries) and returns this as a simple feature object.
 
 
 ```r
 MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 ```
 
-```
-## Reading layer `mapadmin_0_2018' from data source 
-##   `/tmp/Rtmpq4W3uO/shp/shp24fe071ca81346/mapadmin_0_2018.shp' using driver `ESRI Shapefile'
-## Simple feature collection with 1 feature and 8 fields
-## Geometry type: MULTIPOLYGON
-## Dimension:     XY
-## Bounding box:  xmin: 43.19138 ymin: -25.60895 xmax: 50.48378 ymax: -11.94543
-## Geodetic CRS:  WGS 84
-## Reading layer `mapadmin_1_2018' from data source 
-##   `/tmp/Rtmpq4W3uO/shp/shp24fe071f231cf4/mapadmin_1_2018.shp' using driver `ESRI Shapefile'
-## Simple feature collection with 22 features and 12 fields
-## Geometry type: MULTIPOLYGON
-## Dimension:     XY
-## Bounding box:  xmin: 43.19138 ymin: -25.60895 xmax: 50.48378 ymax: -11.94543
-## Geodetic CRS:  WGS 84
-```
 
 ```
 ## Rows: 23
 ## Columns: 17
-## $ iso           <chr> "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", …
-## $ admn_level    <dbl> 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-## $ name_0        <chr> "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madaga…
-## $ id_0          <dbl> 10000910, 10000910, 10000910, 10000910, 10000910, 10000910, 10000910, 1000091…
-## $ type_0        <chr> "Country", "Country", "Country", "Country", "Country", "Country", "Country", …
-## $ name_1        <chr> "name_1", "Androy", "Anosy", "Atsimo Andrefana", "Atsimo Atsinanana", "Atsina…
-## $ id_1          <chr> "id_1", "10023001", "10023002", "10023003", "10022990", "10023000", "10022994…
-## $ type_1        <chr> "type_1", "Region", "Region", "Region", "Region", "Region", "Region", "Region…
-## $ name_2        <chr> "name_2", "name_2", "name_2", "name_2", "name_2", "name_2", "name_2", "name_2…
-## $ id_2          <chr> "id_2", "id_2", "id_2", "id_2", "id_2", "id_2", "id_2", "id_2", "id_2", "id_2…
-## $ type_2        <chr> "type_2", "type_2", "type_2", "type_2", "type_2", "type_2", "type_2", "type_2…
-## $ name_3        <chr> "name_3", "name_3", "name_3", "name_3", "name_3", "name_3", "name_3", "name_3…
-## $ id_3          <chr> "id_3", "id_3", "id_3", "id_3", "id_3", "id_3", "id_3", "id_3", "id_3", "id_3…
-## $ type_3        <chr> "type_3", "type_3", "type_3", "type_3", "type_3", "type_3", "type_3", "type_3…
-## $ source        <chr> "Madagascar NMCP 2016", "Madagascar NMCP 2016", "Madagascar NMCP 2016", "Mada…
-## $ geometry      <MULTIPOLYGON [°]> MULTIPOLYGON (((44.22776 -2..., MULTIPOLYGON (((45.25095 -2..., MULTIPOLYGON …
-## $ country_level <chr> "MDG_0", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "…
+## $ iso           <chr> "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG", "MDG",…
+## $ admn_level    <int> 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+## $ name_0        <chr> "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madagascar", "Madag…
+## $ id_0          <int> 10000910, 10000910, 10000910, 10000910, 10000910, 10000910, 10000910, 10000910, 10000910, 10000910, 1000…
+## $ type_0        <chr> "Country", "Country", "Country", "Country", "Country", "Country", "Country", "Country", "Country", "Coun…
+## $ name_1        <chr> NA, "Analamanga", "Analanjirofo", "Androy", "Anosy", "Atsimo Andrefana", "Atsimo Atsinanana", "Atsinanan…
+## $ id_1          <int> NA, 10022983, 10022999, 10023001, 10023002, 10023003, 10022990, 10023000, 10022994, 10022995, 10022984, …
+## $ type_1        <chr> NA, "Region", "Region", "Region", "Region", "Region", "Region", "Region", "Region", "Region", "Region", …
+## $ name_2        <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ id_2          <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ type_2        <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ name_3        <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ id_3          <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ type_3        <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ source        <chr> "Madagascar NMCP 2016", "Madagascar NMCP 2016", "Madagascar NMCP 2016", "Madagascar NMCP 2016", "Madagas…
+## $ country_level <chr> "MDG_0", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "MDG_1", "MDG_…
+## $ geometry      <MULTIPOLYGON [°]> MULTIPOLYGON (((44.2278 -25..., MULTIPOLYGON (((46.7425 -17..., MULTIPOLYGON (((49.8084 -17..., MULTIPOL…
 ```
 
 `autoplot.sf` configures autoplot method to enable quick mapping of downloaded shapefiles.
@@ -282,9 +332,9 @@ MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 autoplot(MDG_shp)
 ```
 
-![plot of chunk unnamed-chunk-19](man/figures/unnamed-chunk-19-1.png)
+![plot of chunk unnamed-chunk-30](man/figures/unnamed-chunk-30-1.png)
 
-N.B. Facet-wrapped option is also available for species stratification. 
+N.B. Facet-wrapped option is also available for species stratification.
 
 
 ```r
@@ -293,18 +343,17 @@ autoplot(MDG_shp,
          map_title = "Example of facetted shapefiles.")
 ```
 
-![plot of chunk unnamed-chunk-20](man/figures/unnamed-chunk-20-1.png)
+![plot of chunk unnamed-chunk-31](man/figures/unnamed-chunk-31-1.png)
 
-### Modelled Rasters 
+### Modelled Rasters
 
-`getRaster()`downloads publicly available MAP rasters for a specific surface & year, clipped to a given bounding box or shapefile
+`getRaster()`downloads publicly available MAP rasters for a specific dataset_id & year, clipped to a given bounding box or shapefile
 
 
 ```r
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
+MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
 ```
-
 
 `autoplot.SpatRaster` & `autoplot.SpatRasterCollection` configures autoplot method to enable quick mapping of downloaded rasters.
 
@@ -313,17 +362,16 @@ MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_sh
 p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 ```
 
-![plot of chunk unnamed-chunk-22](man/figures/unnamed-chunk-22-1.png)
+![plot of chunk unnamed-chunk-33](man/figures/unnamed-chunk-33-1.png)
 
+### Combined visualisation
 
-### Combined visualisation 
-
-By using the above tools along with ggplot, simple comparison figures can be easily produced. 
+By using the above tools along with ggplot, simple comparison figures can be easily produced.
 
 
 ```r
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
+MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
 
 p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp, printed = FALSE)
 
@@ -335,14 +383,14 @@ scale_size_continuous(name = "Survey Size")+
  ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
 ```
 
-![plot of chunk unnamed-chunk-23](man/figures/unnamed-chunk-23-1.png)
+![plot of chunk unnamed-chunk-34](man/figures/unnamed-chunk-34-1.png)
 
 Similarly for vector survey data
 
 
 ```r
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
-MMR_An_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)
+MMR_An_dirus <- getRaster(dataset_id = "Explorer__2010_Anopheles_dirus_complex", shp = MMR_shp)
 
 p <- autoplot(MMR_An_dirus, shp_df = MMR_shp, printed = FALSE)
 
@@ -354,8 +402,7 @@ geom_point(data = vec, aes(longitude, latitude, colour = species))+
  ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 ```
 
-![plot of chunk unnamed-chunk-24](man/figures/unnamed-chunk-24-1.png)
-
+![plot of chunk unnamed-chunk-35](man/figures/unnamed-chunk-35-1.png)
 
 ## Installation
 
@@ -371,10 +418,9 @@ While this version is not as well-tested, it may include additional bugfixes not
 
 ### 1.2.0
 
-- Removed `rgdal`, `sp`, `raster` packages dependencies and added `terra`, `sf`, `tidyterra`, `lifecycle`
-- As a result `getShp` will now return `sf` objects
-- Similarly, `getRaster` returns `SpatRaster` or `SpatRasterCollection`
-- Some functions have been deprecated. They will still run in this version, with a warning. Please remove them from your code, they will be completely removed in the future.
-  - Deprecated `as.MAPraster`, `as.MAPshp`. They are no longer required for working with `autoplot`
-  - Deprecated `autoplot_MAPraster`. Use `autoplot` directly with the result of `getRaster`
-
+-   Removed `rgdal`, `sp`, `raster` packages dependencies and added `terra`, `sf`, `tidyterra`, `lifecycle`
+-   As a result `getShp` will now return `sf` objects
+-   Similarly, `getRaster` returns `SpatRaster` or `SpatRasterCollection`
+-   Some functions have been deprecated. They will still run in this version, with a warning. Please remove them from your code, they will be completely removed in the future.
+    -   Deprecated `as.MAPraster`, `as.MAPshp`. They are no longer required for working with `autoplot`
+    -   Deprecated `autoplot_MAPraster`. Use `autoplot` directly with the result of `getRaster`

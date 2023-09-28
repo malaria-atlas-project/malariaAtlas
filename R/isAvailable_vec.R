@@ -27,7 +27,7 @@
 #' }
 #' @export isAvailable_vec
 
-isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = NULL, continent = NULL, full_results = FALSE, version = NULL) {
+isAvailable_vec <- function(sourcedata = NULL, country = NULL, ISO = NULL, continent = NULL, full_results = FALSE, version = NULL) {
   
   if (!is.null(sourcedata)) {
     lifecycle::deprecate_warn("1.5.0", "isAvailable_vec(sourcedata)", details = "The argument 'sourcedata' has been deprecated. It will be removed in the next version. It has no meaning.")

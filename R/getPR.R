@@ -66,7 +66,7 @@ getPR <- function(country = NULL,
     message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
             ' (This is the most recent version of PR data. To see other version options use function listPRPointVersions)')
   } else {
-    df_available_versions <- listPRPointVersions()
+    df_available_versions <- listPRPointVersions(printed = FALSE)
     if (!version %in% df_available_versions$version) {
       stop(
         paste0(
@@ -106,11 +106,12 @@ getPR <- function(country = NULL,
   } else{
     if (any(c(!is.null(country), !is.null(ISO), !is.null(continent)))) {
       if (!(is.null(country))) {
-        location_cql_col <- "country"
+        location_cql_col <- location_col <- "country"
       } else if (!(is.null(ISO))) {
-        location_cql_col <- "country_id"
+        location_cql_col <- location_col<- "country_id"
       } else if (!(is.null(continent))) {
         location_cql_col <- "continent_id"
+        location_col <- "continent"
       }
       
       checked_availability_pr <-
@@ -124,7 +125,7 @@ getPR <- function(country = NULL,
       
       message(paste(
         "Attempting to download PR point data for",
-        paste(available_countries_pr$country[available_countries_pr[, location_cql_col] %in% checked_availability_pr$location[checked_availability_pr$is_available ==
+        paste(available_countries_pr$country[available_countries_pr[, location_col] %in% checked_availability_pr$location[checked_availability_pr$is_available ==
                                                                                                                                 1]], collapse = ", "),
         "..."
       ))

@@ -333,14 +333,14 @@ getRasterDatasetIdFromSurface <- function(rasterList, surface) {
 #' @keywords internal
 #'
 getLatestPRPointVersion <- function() {
-  df_versions <- listPRPointVersions()
+  df_versions <- listPRPointVersions(printed = FALSE)
   return(max(unlist(df_versions$version)))
 }
 
 #' @keywords internal
 #'
 getLatestVecOccPointVersion <- function() {
-  df_versions <- listVecOccPointVersions()
+  df_versions <- listVecOccPointVersions(printed = FALSE)
   return(max(unlist(df_versions$version)))
 }
 
@@ -351,7 +351,7 @@ getLatestVecOccPointVersion <- function() {
 #' @keywords internal
 #'
 getLatestVersionForAdminData <- function() {
-  df_versions <- listShpVersions()
+  df_versions <- listShpVersions(printed = FALSE)
   return(max(unlist(df_versions$version)))
 }
 
