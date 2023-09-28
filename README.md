@@ -4,48 +4,41 @@ output:
     preserve_yaml: false
 ---
 
-[![Build Status](https://travis-ci.org/malaria-atlas-project/malariaAtlas.svg)](https://travis-ci.org/malaria-atlas-project/malariaAtlas)
-[![codecov.io](https://codecov.io/gh/malaria-atlas-project/malariaAtlas/coverage.svg?branch=master)](https://codecov.io/gh/malaria-atlas-project/malariaAtlas?branch=master)
+[![Build Status](https://travis-ci.org/malaria-atlas-project/malariaAtlas.svg)](https://travis-ci.org/malaria-atlas-project/malariaAtlas) [![codecov.io](https://codecov.io/gh/malaria-atlas-project/malariaAtlas/coverage.svg?branch=master)](https://codecov.io/gh/malaria-atlas-project/malariaAtlas?branch=master)
 
 
 
+# malariaAtlas
 
-# malariaAtlas 
-### An R interface to open-access malaria data, hosted by the Malaria Atlas Project. 
+### An R interface to open-access malaria data, hosted by the Malaria Atlas Project.
 
 *The gitlab version of the malariaAtlas package has some additional bugfixes over the stable CRAN package. If you have any issues, try installing the latest github version. See below for instructions.*
 
-# Overview 
+# Overview
 
 This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*), survey occurrence data of the 41 dominant malaria vector species, and modelled raster outputs from the [Malaria Atlas Project](https://malariaatlas.org/).
 
-More details and example analyses can be found in the [published paper)[(https://malariajournal.biomedcentral.com/articles/10.1186/s12936-018-2500-5).
+More details and example analyses can be found in the [published paper)[(<https://malariajournal.biomedcentral.com/articles/10.1186/s12936-018-2500-5>).
 
-## Available Data: 
-The data can be explored at [https://data.malariaatlas.org/maps](https://data.malariaatlas.org/maps).
+## Available Data:
 
-
+The data can be explored at <https://data.malariaatlas.org/maps>.
 
 ### List Versions Functions
 
 The list version functions are used to list the available versions of different datasets, and all return a data.frame with a single column for version. These versions can be passed to functions such as `listShp`, `listSpecies`, `listPRPointCountries`, `listVecOccPointCountries`, `getPR`, `getVecOcc` and `getShp`.
 
-Use: 
+Use:
 
-* `listPRPointVerions()` to see the available versions for PR point data, which can then be used in `listPRPointCountries` and `getPR`.
+-   `listPRPointVerions()` to see the available versions for PR point data, which can then be used in `listPRPointCountries` and `getPR`.
 
-* `listVecOccPointVersions()` to see the available versions for vector occurrence data, which can then be used in `listSpecies`, `listVecOccPointCountries` and `getVecOcc`.
+-   `listVecOccPointVersions()` to see the available versions for vector occurrence data, which can then be used in `listSpecies`, `listVecOccPointCountries` and `getVecOcc`.
 
-* `listShpVersions()` to see the available versions for admin unit shape data, which can then be used in `listShp` and `getShp`.
+-   `listShpVersions()` to see the available versions for admin unit shape data, which can then be used in `listShp` and `getShp`.
 
 
 ```r
 listPRPointVersions()
-```
-
-```
-## Versions available for PR point data: 
-##  202206
 ```
 
 
@@ -53,31 +46,21 @@ listPRPointVersions()
 listVecOccPointVersions()
 ```
 
-```
-## Versions available for vector occurrence point data: 
-##  201201
-```
-
 
 ```r
 listShpVersions()
-```
-
-```
-##   version
-## 1  202206
 ```
 
 ### List Countries and Species Functions
 
 To list the countries where there is available data for PR points or vector occurrence points, use:
 
-* `listPRPointCountries()` for PR points
-* `listVecOccPointCountries()` for vector occurrence points
+-   `listPRPointCountries()` for PR points
+-   `listVecOccPointCountries()` for vector occurrence points
 
 To list the species available for vector point data use `listSpecies()`
 
-All three of these functions can optionally take a version parameter (which can be found with the list versions functions). If you choose not to provide a version, the most recent version of the relevant dataset will be selected by default. 
+All three of these functions can optionally take a version parameter (which can be found with the list versions functions). If you choose not to provide a version, the most recent version of the relevant dataset will be selected by default.
 
 
 ```r
@@ -114,145 +97,43 @@ listRaster()
 
 ### Is Available Functions
 
-`isAvailable_pr` confirms whether or not PR survey point data is available to download for a specified country, ISO3 code or continent. 
+`isAvailable_pr` confirms whether or not PR survey point data is available to download for a specified country, ISO3 code or continent.
 
 Check whether PR data is available for Madagascar:
+
 
 ```r
 isAvailable_pr(country = "Madagascar")
 ```
 
-```
-## Creating list of countries for which MAP data is available, please wait...
-```
-
-```
-## Versions available for PR point data: 
-##  202206
-```
-
-```
-## Please Note: Because you did not provide a version, by default the version being used is 202206 (This is the most recent version of PR data. To see other version options use function listPRPointVersions)
-```
-
-```
-## Confirming availability of PR data for: Madagascar...
-```
-
-```
-## PR points are available for Madagascar.
-```
-
 Check whether PR data is available for the United States of America by ISO code:
+
 
 ```r
 isAvailable_pr(ISO = "USA")
 ```
 
-```
-## Creating list of countries for which MAP data is available, please wait...
-```
-
-```
-## Versions available for PR point data: 
-##  202206
-```
-
-```
-## Please Note: Because you did not provide a version, by default the version being used is 202206 (This is the most recent version of PR data. To see other version options use function listPRPointVersions)
-```
-
-```
-## Confirming availability of PR data for: USA...
-```
-
-```
-## Specified location not found, see below comments: 
-##  
-## Data not found for 'USA', did you mean UGA OR SAU?
-```
-
 Check whether PR data is available for Asia:
+
 
 ```r
 isAvailable_pr(continent = "Asia")
 ```
 
-```
-## Creating list of countries for which MAP data is available, please wait...
-```
-
-```
-## Versions available for PR point data: 
-##  202206
-```
-
-```
-## Please Note: Because you did not provide a version, by default the version being used is 202206 (This is the most recent version of PR data. To see other version options use function listPRPointVersions)
-```
-
-```
-## Confirming availability of PR data for: Asia...
-```
-
-```
-## PR points are available for Asia.
-```
-
-`isAvailable_vec` confirms whether or not vector survey point data is available to download for a specified country, ISO3 code or continent. 
+`isAvailable_vec` confirms whether or not vector survey point data is available to download for a specified country, ISO3 code or continent.
 
 Check whether vector data is available for Myanmar:
+
 
 ```r
 isAvailable_vec(country = "Myanmar")
 ```
 
-```
-## Creating list of countries for which MAP vector occurrence point data is available, please wait...
-```
-
-```
-## Versions available for vector occurrence point data: 
-##  201201
-```
-
-```
-## Please Note: Because you did not provide a version, by default the version being used is 201201 (This is the most recent version of vector data. To see other version options use function listVecOccPointVersions)
-```
-
-```
-## Confirming availability of Vector data for: Myanmar...
-```
-
-```
-## Vector points are available for Myanmar.
-```
-
 Check whether vector data is available for multiple countries:
+
 
 ```r
 isAvailable_vec(country = c("Nigeria", "Ethiopia"))
-```
-
-```
-## Creating list of countries for which MAP vector occurrence point data is available, please wait...
-```
-
-```
-## Versions available for vector occurrence point data: 
-##  201201
-```
-
-```
-## Please Note: Because you did not provide a version, by default the version being used is 201201 (This is the most recent version of vector data. To see other version options use function listVecOccPointVersions)
-```
-
-```
-## Confirming availability of Vector data for: Nigeria, Ethiopia...
-```
-
-```
-## Vector points are available for Nigeria, Ethiopia.
 ```
 
 You can also pass these functions a dataset version. If you don't they will default to using the most recent version.
@@ -262,34 +143,19 @@ You can also pass these functions a dataset version. If you don't they will defa
 isAvailable_pr(country = "Madagascar", version = "202206")
 ```
 
-```
-## Creating list of countries for which MAP data is available, please wait...
-```
+## Downloading & Visualising Data:
 
-```
-## Versions available for PR point data: 
-##  202206
-```
-
-```
-## Confirming availability of PR data for: Madagascar...
-```
-
-```
-## PR points are available for Madagascar.
-```
-
-
-## Downloading & Visualising Data: 
-### get* functions & autoplot methods
+### get\* functions & autoplot methods
 
 ### Parasite Rate Survey Points
-`getPR()` downloads all publicly available PR data points for a specified location (country, ISO, continent or extent) and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format: 
+
+`getPR()` downloads all publicly available PR data points for a specified location (country, ISO, continent or extent) and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format:
 
 
 ```r
 MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 ```
+
 
 ```
 ## Rows: 395
@@ -330,18 +196,46 @@ MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 Africa_pvpr_data <- getPR(continent = "Africa", species = "Pv")
 ```
 
-```
-## Error in `[.data.frame`(available_countries_pr, , location_cql_col): undefined columns selected
-```
 
 ```
-## Error in tibble::glimpse(Africa_pvpr_data): object 'Africa_pvpr_data' not found
+## Rows: 2,696
+## Columns: 29
+## $ dhs_id                    <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ site_id                   <int> 3638, 6694, 14021, 8017, 12873, 12260, 21446, 16833, 8689, 3434, 2160, 6533, 6706, 13981, 3196, 10603, 4150, 5506, 8910, 10349, 136…
+## $ site_name                 <chr> "Basare Section Kpandai", "Dole School", "Port Sudan (Eastern Sector)", "Gongoma School", "Buriya School", "Chobo 3", "Mekele, Quih…
+## $ latitude                  <dbl> 8.47000, 5.90141, 19.61600, 6.31747, 7.56736, 7.89960, 13.47600, 9.40630, -16.21700, -16.46200, 12.60700, 4.71923, 7.91830, 1.85100…
+## $ longitude                 <dbl> -0.01000, 38.94115, 37.23200, 39.83618, 40.75210, 34.45080, 39.50200, -0.99000, 49.68300, 26.57510, 37.46100, 38.76500, 34.44430, 4…
+## $ rural_urban               <chr> "RURAL", "UNKNOWN", "URBAN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "RURAL", "RURAL", "UNKNOWN", "URBAN", "UNKNOWN", "UNKNOWN"…
+## $ country                   <chr> "Ghana", "Ethiopia", "Sudan", "Ethiopia", "Ethiopia", "Ethiopia", "Ethiopia", "Ghana", "Madagascar", "Zambia", "Ethiopia", "Ethiopi…
+## $ country_id                <chr> "GHA", "ETH", "SDN", "ETH", "ETH", "ETH", "ETH", "GHA", "MDG", "ZMB", "ETH", "ETH", "ETH", "SOM", "MAR", "SDN", "ETH", "ETH", "CPV"…
+## $ continent_id              <chr> "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "Africa", "…
+## $ month_start               <int> 3, 6, 11, 6, 6, 9, 9, 2, 11, 5, 11, 6, 9, 9, 1, 11, 6, 10, 12, 9, 6, 10, 10, 11, 6, 6, 2, 4, 1, 3, 10, 11, 5, 6, 3, 7, 9, 3, 6, 9, …
+## $ year_start                <int> 2002, 2009, 1996, 2009, 2009, 1989, 1993, 2002, 1989, 2008, 2004, 2009, 1989, 1985, 2002, 1999, 2009, 1990, 2003, 1989, 2009, 1990,…
+## $ month_end                 <int> 3, 6, 11, 6, 6, 10, 12, 2, 11, 5, 12, 6, 10, 9, 1, 11, 6, 11, 12, 10, 6, 11, 11, 12, 6, 6, 2, 4, 1, 3, 11, 11, 5, 6, 3, 8, 1, 3, 6,…
+## $ year_end                  <int> 2002, 2009, 1996, 2009, 2009, 1989, 1993, 2002, 1989, 2008, 2004, 2009, 1989, 1985, 2002, 1999, 2009, 1990, 2003, 1989, 2009, 1990,…
+## $ lower_age                 <dbl> 0.5, 4.0, 0.0, 4.0, 4.0, 0.0, 0.5, 0.5, 5.0, 0.3, 0.0, 4.0, 0.0, 1.0, 0.0, 0.4, 4.0, 0.0, 2.0, 0.0, 4.0, 0.0, 0.0, 5.0, 4.0, 4.0, 0…
+## $ upper_age                 <int> 9, 15, 99, 15, 15, 99, 5, 9, 15, 94, 99, 15, 99, 9, 99, 60, 15, 99, 49, 99, 15, 99, 99, 15, 15, 15, 9, 98, 9, 9, 99, 19, 72, 99, 9,…
+## $ examined                  <int> 70, 110, 104, 108, 63, 108, 2080, 69, 165, 48, 103, 56, 260, 70, 664, 90, 109, 92, 22, 138, 107, 100, 50, 258, 110, 64, 71, 78, 81,…
+## $ positive                  <dbl> 0.00, 0.00, 0.00, 0.00, 0.00, 5.00, 0.00, 0.00, 10.00, 0.00, 1.00, 0.00, 4.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 0.00…
+## $ pr                        <dbl> 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.046296296, 0.000000000, 0.000000000, 0.060606061, 0.000000000, 0…
+## $ species                   <chr> "P. vivax", "P. vivax", "P. vivax", "P. vivax", "P. vivax", "P. vivax", "P. vivax", "P. vivax", "P. vivax", "P. vivax", "P. vivax",…
+## $ method                    <chr> "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Microscopy", "Micr…
+## $ rdt_type                  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ pcr_type                  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ malaria_metrics_available <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,…
+## $ location_available        <lgl> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,…
+## $ permissions_info          <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ citation1                 <chr> "Ehrhardt, S., Burchard, G.D., Mantel, C., Cramer, J.P., Kaiser, S., Kubo, M., Otchwemah, R.N., Bienzle, U. and Mockenhaupt, F.P. (…
+## $ citation2                 <chr> NA, NA, "Le Sueur, D., Binka, F., Lengeler, C., De Savigny, D., Snow, B., Teuscher, T. and Toure, Y. (1997).  <b>An atlas of malari…
+## $ citation3                 <chr> NA, NA, "Le Sueur, D., Binka, F., Lengeler, C., De Savigny, D., Snow, B., Teuscher, T. and Toure, Y. (1997).  <b>An atlas of malari…
+## $ geometry                  <POINT [°]> POINT (-0.01 8.47), POINT (38.9412 5.9014), POINT (37.232 19.616), POINT (39.8362 6.3175), POINT (40.7521 7.5674), POINT (34.…
 ```
 
 
 ```r
 Extent_pfpr_data <- getPR(extent = rbind(c(-2.460181, 13.581921), c(-3.867188, 34.277344)), species = "Pf")
 ```
+
 
 ```
 ## Rows: 2,174
@@ -384,7 +278,7 @@ You can also pass this function a dataset version. If you don't it will default 
 MDG_pr_data_202206 <- getPR(country = "Madagascar", species = "both", version = "202206")
 ```
 
-`autoplot.pr.points` configures autoplot method to enable quick mapping of the locations of downloaded PR points. 
+`autoplot.pr.points` configures autoplot method to enable quick mapping of the locations of downloaded PR points.
 
 
 ```r
@@ -395,6 +289,7 @@ autoplot(MDG_pr_data)
 
 A version without facetting is also available.
 
+
 ```r
 autoplot(MDG_pr_data,
          facet = FALSE)
@@ -403,12 +298,23 @@ autoplot(MDG_pr_data,
 ![plot of chunk unnamed-chunk-24](man/figures/unnamed-chunk-24-1.png)
 
 ### Vector Survey Points
-`getVecOcc()` downloads all publicly available Vector survey points for a specified location (country, ISO, continent or extent) and species (options for which can be found with `listSpecies`) and returns this as a dataframe with the following format: 
+
+`getVecOcc()` downloads all publicly available Vector survey points for a specified location (country, ISO, continent or extent) and species (options for which can be found with `listSpecies`) and returns this as a dataframe with the following format:
 
 
 ```r
 MMR_vec_data <- getVecOcc(country = "Myanmar")
 ```
+
+```
+## Warning: The `sourcedata` argument of `isAvailable_vec()` is deprecated as of malariaAtlas 1.5.0.
+## ℹ The argument 'sourcedata' has been deprecated. It will be removed in the next version. It has no meaning.
+## ℹ The deprecated feature was likely used in the malariaAtlas package.
+##   Please report the issue at <https://github.com/malaria-atlas-project/malariaAtlas/issues>.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
+```
+
 
 ```
 ## Rows: 2,866
@@ -447,6 +353,7 @@ You can also pass this function a dataset version. If you don't it will default 
 MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
 ```
 
+
 ```
 ## Rows: 2,866
 ## Columns: 25
@@ -477,7 +384,7 @@ MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
 ## $ geometry       <POINT [°]> POINT (97.725 16.257), POINT (97.725 16.257), POINT (97.725 16.257), POINT (97.725 16.257), POINT (96.041 17.35), POINT (96.037 17.38), …
 ```
 
-`autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points. 
+`autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points.
 
 
 ```r
@@ -486,7 +393,8 @@ autoplot(MMR_vec_data)
 
 ![plot of chunk unnamed-chunk-29](man/figures/unnamed-chunk-29-1.png)
 
-N.B. Facet-wrapped option is also available for species stratification. 
+N.B. Facet-wrapped option is also available for species stratification.
+
 
 ```r
 autoplot(MMR_vec_data,
@@ -496,12 +404,14 @@ autoplot(MMR_vec_data,
 ![plot of chunk unnamed-chunk-30](man/figures/unnamed-chunk-30-1.png)
 
 ### Shapefiles
+
 `getShp()` downloads a shapefile for a specified country (or countries) and returns this as a simple feature object.
 
 
 ```r
 MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 ```
+
 
 ```
 ## Rows: 23
@@ -534,7 +444,7 @@ autoplot(MDG_shp)
 
 ![plot of chunk unnamed-chunk-33](man/figures/unnamed-chunk-33-1.png)
 
-N.B. Facet-wrapped option is also available for species stratification. 
+N.B. Facet-wrapped option is also available for species stratification.
 
 
 ```r
@@ -545,7 +455,7 @@ autoplot(MDG_shp,
 
 ![plot of chunk unnamed-chunk-34](man/figures/unnamed-chunk-34-1.png)
 
-### Modelled Rasters 
+### Modelled Rasters
 
 `getRaster()`downloads publicly available MAP rasters for a specific dataset_id & year, clipped to a given bounding box or shapefile
 
@@ -556,11 +466,12 @@ MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_s
 ```
 
 ```
-## <GMLEnvelope>
-## ....|-- lowerCorner: -25.6089 43.1914 "2000-01-01T00:00:00"
-## ....|-- upperCorner: -11.9454 50.4838 "2019-01-01T00:00:00"
+## Warning in library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE, : there is no package called 'sp'
 ```
 
+```
+## Error in .requirePackage(package): unable to find required package 'sp'
+```
 
 `autoplot.SpatRaster` & `autoplot.SpatRasterCollection` configures autoplot method to enable quick mapping of downloaded rasters.
 
@@ -569,12 +480,13 @@ MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_s
 p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 ```
 
-![plot of chunk unnamed-chunk-36](man/figures/unnamed-chunk-36-1.png)
+```
+## Error in .Call(structure(list(name = "CppField__get", address = <pointer: (nil)>, : NULL value passed as symbol address
+```
 
+### Combined visualisation
 
-### Combined visualisation 
-
-By using the above tools along with ggplot, simple comparison figures can be easily produced. 
+By using the above tools along with ggplot, simple comparison figures can be easily produced.
 
 
 ```r
@@ -583,14 +495,18 @@ MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_s
 ```
 
 ```
-## <GMLEnvelope>
-## ....|-- lowerCorner: -25.6089 43.1914 "2000-01-01T00:00:00"
-## ....|-- upperCorner: -11.9454 50.4838 "2019-01-01T00:00:00"
+## Error in .requirePackage(package): unable to find required package 'sp'
 ```
 
 ```r
 p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp, printed = FALSE)
+```
 
+```
+## Error in .Call(structure(list(name = "CppField__get", address = <pointer: (nil)>, : NULL value passed as symbol address
+```
+
+```r
 pr <- getPR(country = c("Madagascar"), species = "Pf")
 p[[1]] +
 geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = positive / examined, size = examined), shape = 21)+
@@ -606,11 +522,11 @@ Similarly for vector survey data
 
 ```r
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
-MMR_An_dirus <- getRaster(dataset_id = "Explorer:2010_Anopheles_dirus_complex", shp = MMR_shp)
+MMR_An_dirus <- getRaster(dataset_id = "Explorer__2010_Anopheles_dirus_complex", shp = MMR_shp)
 ```
 
 ```
-## Error in getRaster(dataset_id = "Explorer:2010_Anopheles_dirus_complex", : All value(s) provided for dataset_id are not valid. All values must be from dataset_id column of listRasters()
+## Error in .requirePackage(package): unable to find required package 'sp'
 ```
 
 ```r
@@ -632,7 +548,6 @@ geom_point(data = vec, aes(longitude, latitude, colour = species))+
 
 ![plot of chunk unnamed-chunk-38](man/figures/unnamed-chunk-38-1.png)
 
-
 ## Installation
 
 ### Latest stable version from CRAN
@@ -647,9 +562,9 @@ While this version is not as well-tested, it may include additional bugfixes not
 
 ### 1.2.0
 
-- Removed `rgdal`, `sp`, `raster` packages dependencies and added `terra`, `sf`, `tidyterra`, `lifecycle`
-- As a result `getShp` will now return `sf` objects
-- Similarly, `getRaster` returns `SpatRaster` or `SpatRasterCollection`
-- Some functions have been deprecated. They will still run in this version, with a warning. Please remove them from your code, they will be completely removed in the future.
-  - Deprecated `as.MAPraster`, `as.MAPshp`. They are no longer required for working with `autoplot`
-  - Deprecated `autoplot_MAPraster`. Use `autoplot` directly with the result of `getRaster`
+-   Removed `rgdal`, `sp`, `raster` packages dependencies and added `terra`, `sf`, `tidyterra`, `lifecycle`
+-   As a result `getShp` will now return `sf` objects
+-   Similarly, `getRaster` returns `SpatRaster` or `SpatRasterCollection`
+-   Some functions have been deprecated. They will still run in this version, with a warning. Please remove them from your code, they will be completely removed in the future.
+    -   Deprecated `as.MAPraster`, `as.MAPshp`. They are no longer required for working with `autoplot`
+    -   Deprecated `autoplot_MAPraster`. Use `autoplot` directly with the result of `getRaster`
