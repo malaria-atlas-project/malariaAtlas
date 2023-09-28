@@ -1,28 +1,12 @@
-#' List data available to download from the MAP geoserver.
+#' Deprecated function. Please instead use listPRPointCountries for pr points, listVecOccPointCountries for vector points, listRaster for raster and listShp for shape.
 #'
-#' \code{listData} is a wrapper for listPRPointCountries, listVecOccPointCountries, listRaster and listShp, listing data (PR survey point data; raster data; shapefiles) available to download from the MAP geoserver.
-#'
-#' @return \code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
-#'
-#' @param datatype One of 'pr points', 'vector points', 'raster' or 'shape'
-#' @param printed Should the list be printed to the console?
-#' @param ... Other arguments to be passed to \code{list*} functions. (e.g. \code{admin_level} for \code{listShp}, or \code{version} for \code{listPRPointCountries})
-#' @examples
-#' \donttest{
-#' available_admin_units <- listShp()
-#' available_pr_points <- listPRPointCountries()
-#' available_vector_points <- listVecOccPointCountries()
-#' available_rasters <- listRaster()
-#' }
-#' @seealso
-#' \code{\link{listPRPointCountries}}
-#' \code{\link{listVecOccPointCountries}}
-#' \code{\link{listRaster}}
-#' \code{\link{listShp}}
+#' \code{listData}  deprecated function Please remove it from your code.
 #'
 #' @export listData
 
 listData <- function(datatype, printed = TRUE, ...){
+  
+  lifecycle::deprecate_warn("1.5.0", "listData()", details = "The function 'listData' has been deprecated. It will be removed in the next version. Please switch to using listPRPointCountries for pr points, listVecOccPointCountries for vector points, listRaster for raster and listShp for shape.")
 
   if(!datatype %in% c('pr points', 'vector points', 'raster', 'shape')){
     stop("Please choose one of: \n datatype = \"pr points\"  \n datatype = \"vector points\" \n datatype = \"raster\" \n datatype = \"shape\"")
