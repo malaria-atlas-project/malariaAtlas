@@ -65,6 +65,7 @@ listRaster <- function(printed = TRUE){
 
       return(data.frame(
         dataset_id = id,
+        version = id_parts$version,
         raster_code = layer_id,
         title = title,
         title_extended = title_extended,
