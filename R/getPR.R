@@ -232,6 +232,7 @@ getPR <- function(country = NULL,
     )
   }
   
+  df <- sf::st_drop_geometry(df)
   class(df) <- c("pr.points", class(df))
   
   df <- pr_wide2long(df)
