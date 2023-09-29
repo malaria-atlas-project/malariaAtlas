@@ -36,9 +36,9 @@ test_that("data is downloaded as a data.frame", {
 
 # test_that("dataframe contains expected data", {
   #confirm column names are as expected
-  expect_equal(sort(names(kenya_pv)),sort(c("site_id","geometry","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species", "method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
-  expect_equal(sort(names(kenya_pf)),sort(c("site_id","geometry","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
-  expect_equal(sort(names(kenya_BOTH)),sort(c("site_id","geometry","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
+  expect_equal(sort(names(kenya_pv)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species", "method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
+  expect_equal(sort(names(kenya_pf)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
+  expect_equal(sort(names(kenya_BOTH)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
   ##TODO: Failing
   # checking country name specification works
   expect_equal(levels(factor(kenya_pf$country)), "Kenya")
@@ -79,10 +79,10 @@ test_that("data is downloaded as a data.frame", {
   expect_error(getPR(country = "Australia", species = "both"), regexp = "PR data points are not available")
   
   expect_warning(getPR(country = c("kenya","ngeria"), species = "both"), regexp = "did you mean Nigeria")
-  expect_error(getPR(country = c("kenya","ngeria"), species = "both"), regexp = NA)
+  expect_error(suppressWarnings(getPR(country = c("kenya","ngeria"), species = "both")), regexp = NA)
   expect_warning(getPR(country = c("kenya","Australia"), species = "both"), regexp = "Data not found for 'Australia', use listPRPointCountries()")
 
-  expect_error(getPR(country = c("kenya","Australia"), species = "both"), regexp = NA)
+  expect_error(suppressWarnings(getPR(country = c("kenya","Australia"), species = "both")), regexp = NA)
   expect_error(getPR(country = c("Ngeria","Australia"), species = "both"), regexp = "PR data points are not available")
   expect_error(getPR(country = c("Ngeria","Australia"), species = "both"), regexp = "PR data points are not available")
   
