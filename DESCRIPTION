@@ -38,7 +38,8 @@ Imports:
   tidyterra,
   ows4R,
   future.apply,
-  lubridate
+  lubridate,
+  jsonlite
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,
