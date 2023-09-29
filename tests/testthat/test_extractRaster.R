@@ -201,8 +201,14 @@ test_that('Extract raster with static raster, but given year', {
   expect_true(nrow(data) == 2)
 })
 
-
-
-
-
-
+test_that('Output in same order as input', {
+  NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
+  complete <- complete.cases(NGA_CMR_PR[, c(4, 5, 16, 17)])
+  NGA_CMR_PR <- NGA_CMR_PR[complete, ]
+  
+  # Extract PfPR data at those locations.
+  data <- extractRaster(df = NGA_CMR_PR[, c('latitude', 'longitude')], dataset_id = 'Malaria__202206_Global_Pf_Parasite_Rate', year=2020)
+  
+  # Data are returned in the same order.
+  expect_equal(data$longitude, NGA_CMR_PR$longitude)
+})
