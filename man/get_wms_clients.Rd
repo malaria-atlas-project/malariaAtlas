@@ -12,3 +12,4 @@ A list with of WMSClients by workspace
 \description{
 WMS clients lazily created or from cache
 }
+\keyword{internal}

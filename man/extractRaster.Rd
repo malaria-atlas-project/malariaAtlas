@@ -45,10 +45,8 @@ NGA_CMR_PR <- NGA_CMR_PR[complete, ]
 
 # Extract PfPR data at those locations.
 data <- extractRaster(df = NGA_CMR_PR[, c('latitude', 'longitude')],
-                      dataset_id = 'Malaria__202206_Global_Pf_Parasite_Rate')
-
-# Data are returned in the same order.
-all(data$longitude == NGA_CMR_PR$longitude)
+                      dataset_id = 'Malaria__202206_Global_Pf_Parasite_Rate',
+                      year=2020)
 
 # Some rasters are stored with NA encoded as -9999
 data$value[data$value == -9999] <- NA

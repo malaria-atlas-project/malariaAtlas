@@ -12,7 +12,7 @@ getPR(
   extent = NULL,
   start_date = NULL,
   end_date = NULL,
-  dataset_id = NULL
+  version = NULL
 )
 }
 \arguments{
@@ -30,7 +30,8 @@ getPR(
 
 \item{end_date}{string object representing the upper date to filter the PR data by (exclusive) e.g. '2020-01-01'}
 
-\item{dataset_id}{A character string specifying the dataset ID. Is NULL by default, and the most recent version of PR data will be selected.}
+\item{version}{(optional) The PR dataset version to return. If not provided, will just use the most recent version of PR data. (To see available version options, 
+use listPRPointVersions)}
 }
 \value{
 \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.

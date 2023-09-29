@@ -33,7 +33,7 @@ getShp(
 \item{version}{The admin unit dataset version to return. Is NULL by default, and if left NULL will just use the most recent version of admin unit data.}
 }
 \value{
-\code{getShp} returns either a sf object for requested administrative unit polygons. The following attribute fields are included:
+\code{getShp} returns a sf object for requested administrative unit polygons. The following attribute fields are included:
 
 \enumerate{
 \item \code{iso} ISO-3 code of given administrative unit (or the ISO code of parent unit for administrative-level 1 units).

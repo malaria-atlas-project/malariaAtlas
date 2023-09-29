@@ -9,7 +9,8 @@ isAvailable(
   full_results = FALSE,
   country = NULL,
   ISO = NULL,
-  continent = NULL
+  continent = NULL,
+  ...
 )
 }
 \arguments{

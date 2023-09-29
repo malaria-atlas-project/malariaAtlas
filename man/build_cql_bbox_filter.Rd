@@ -15,3 +15,4 @@ The character string of the CQL filter.
 \description{
 Builds a CQL filter to be used with getFeatures, that will filter based on the given bounding box.
 }
+\keyword{internal}
