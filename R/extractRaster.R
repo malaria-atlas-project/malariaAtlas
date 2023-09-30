@@ -26,10 +26,8 @@
 #'
 #' # Extract PfPR data at those locations.
 #' data <- extractRaster(df = NGA_CMR_PR[, c('latitude', 'longitude')],
-#'                       dataset_id = 'Malaria__202206_Global_Pf_Parasite_Rate')
-#'
-#' # Data are returned in the same order.
-#' all(data$longitude == NGA_CMR_PR$longitude)
+#'                       dataset_id = 'Malaria__202206_Global_Pf_Parasite_Rate',
+#'                       year=2020)
 #'
 #' # Some rasters are stored with NA encoded as -9999
 #' data$value[data$value == -9999] <- NA
@@ -109,7 +107,7 @@ extractRaster <- function(df,
   }
   
   coords <- c(longitude_column, latitude_column)
-  points_to_query <- as.matrix(df[coords])
+  points_to_query <- as.matrix(dplyr::distinct(df[coords]))
   
   
   #Looping through dataset_id and year to fetch data
@@ -148,7 +146,7 @@ extractRaster <- function(df,
   df_new <- dplyr::rename(df_new, !!longitude_column := 'long')
   df_new <- dplyr::rename(df_new, !!latitude_column := 'lat')
   
-  df_merged <- merge(df, df_new, by = c(longitude_column, latitude_column))
+  df_merged <- dplyr::inner_join(df, df_new, by = c(longitude_column, latitude_column))
   
   
   #Saving to folder if csv_path is provided
