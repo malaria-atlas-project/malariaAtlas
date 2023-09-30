@@ -1,27 +1,28 @@
 citHeader("To cite malariaAtlas in publications, please use following citation. However, this citation should only be used to indicate how the data was accessed. Citations for the datasets themselves can be found within the downloaded data.")
 
-citEntry(entry = "Article",
-         author = as.person(c(
-           "Daniel Pfeffer",
-           "Tim Lucas", 
-           "Daniel May",
-           "Joseph Harris",
-           "Jennifer Rozier",
-           "Katherine Twohig",
-           "Ursula Dalrymple",
-           "Carlos Guerra",
-           "Catherine Moyes",
-           "Mike Thorn",
-           "Michele Nguyen", 
-           "Samir Bhatt", 
-           "Ewan Cameron", 
-           "Daniel Weiss", 
-           "Rosalind Howes", 
-           "Katherine Battle", 
-           "Harry Gibson", 
-           "Peter Gething"
-         )),
-         journal="Malaria Journal",
+bibentry(
+  bibtype = "Article",
+  author = as.person(c(
+    "Daniel Pfeffer",
+    "Tim Lucas", 
+    "Daniel May",
+    "Joseph Harris",
+    "Jennifer Rozier",
+    "Katherine Twohig",
+    "Ursula Dalrymple",
+    "Carlos Guerra",
+    "Catherine Moyes",
+    "Mike Thorn",
+    "Michele Nguyen", 
+    "Samir Bhatt", 
+    "Ewan Cameron", 
+    "Daniel Weiss", 
+    "Rosalind Howes", 
+    "Katherine Battle", 
+    "Harry Gibson", 
+    "Peter Gething"
+  )),
+  journal="Malaria Journal",
   volume="17",
   number="1",
   title="malariaAtlas: an R interface to global malariometric data hosted by the Malaria Atlas Project.",
@@ -31,4 +32,4 @@ citEntry(entry = "Article",
   publisher="BioMed",
   textVersion="Pfeffer, D.A., Lucas, T.C., May, D., Harris, J., Rozier, J., Twohig, K.A., Dalrymple, U., Guerra, C.A., Moyes, C.L., Thorn, M., Nguyen, M., et al. 2018. malariaAtlas: an R interface to global malariometric data hosted by the Malaria Atlas Project. Malaria Journal, 17(1), p.352.
 "
-  )
+)
