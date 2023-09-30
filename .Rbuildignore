@@ -10,3 +10,4 @@ wfsrequest.txt
 cran_comments.md
 ^\.gitlab-ci\.yml$
 ^CRAN-SUBMISSION$
+^cran-comments\.md$
