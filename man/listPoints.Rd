@@ -6,6 +6,14 @@
 \usage{
 listPoints(printed = TRUE, sourcedata, version = NULL)
 }
+\arguments{
+\item{printed}{whether to pretty print the output in console}
+
+\item{sourcedata}{"pr points" or "vector points"}
+
+\item{version}{(optional) The PR dataset version to use If not provided, will just use the most recent version of PR data. (To see available version options, 
+use listPRPointVersions)}
+}
 \description{
 \code{listPoints} deprecated function Please remove it from your code.
 }

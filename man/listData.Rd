@@ -6,6 +6,13 @@
 \usage{
 listData(datatype, printed = TRUE, ...)
 }
+\arguments{
+\item{datatype}{"pr points", "vector points" "raster", or "shape"}
+
+\item{printed}{whether to pretty print the output in console}
+
+\item{...}{passed on to listPRPointCountries, listVecOccPointCountries, listShp}
+}
 \description{
 \code{listData}  deprecated function Please remove it from your code.
 }

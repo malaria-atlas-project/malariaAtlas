@@ -23,6 +23,8 @@ isAvailable(
 \item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
 \item{continent}{string containing continent for desired data, e.g. \code{c("continent1", "continent2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
+
+\item{...}{passed on to isAvailable_vec and isAvailable_pr}
 }
 \value{
 \code{isAvailable} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
