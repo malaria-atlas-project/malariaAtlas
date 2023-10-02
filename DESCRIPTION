@@ -1,6 +1,6 @@
 Package: malariaAtlas
 Title: An R Interface to Open-Access Malaria Data, Hosted by the 'Malaria Atlas Project'
-Version: 1.2.0.9000
+Version: 1.5.0
 Authors@R: c(
     person("Mauricio", "van den Berg", email =  "mauricio.vandenberg@telethonkids.org.au", role = c("aut", "cre")),
     person("Sarah", "Connor", email =  "sarah.connor@telethonkids.org.au", role = c("aut")),
