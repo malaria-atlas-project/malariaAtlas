@@ -32,7 +32,7 @@ test_that('Extract multiple rasters with single years works', {
   skip_on_cran()
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
-                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_IRS_Coverage'),
+                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage'),
                         year = list(2015, 2017))
   
   expect_true(inherits(data, 'data.frame'))
@@ -41,7 +41,7 @@ test_that('Extract multiple rasters with single years works', {
   expect_true(nrow(data_first_raster) == 2)
   expect_true(all(data_first_raster$year == 2015))
   
-  data_second_raster <- subset(data, layerName == 'Interventions__202106_Africa_IRS_Coverage')
+  data_second_raster <- subset(data, layerName == 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage')
   expect_true(nrow(data_second_raster) == 2)
   expect_true(all(data_second_raster$year == 2017))
 })
@@ -52,7 +52,7 @@ test_that('Extract multiple rasters with single year and year range works', {
   skip_on_cran()
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
-                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_IRS_Coverage'),
+                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage'),
                         year = list(2015, 2017:2019))
   
   expect_true(inherits(data, 'data.frame'))
@@ -61,7 +61,7 @@ test_that('Extract multiple rasters with single year and year range works', {
   expect_true(nrow(data_first_raster) == 2)
   expect_true(all(data_first_raster$year == 2015))
   
-  data_second_raster <- subset(data, layerName == 'Interventions__202106_Africa_IRS_Coverage')
+  data_second_raster <- subset(data, layerName == 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage')
   expect_true(nrow(data_second_raster) == 6)
   expect_true(all(data_second_raster$year <= 2019 & data_second_raster$year >= 2017))
 })
@@ -71,7 +71,7 @@ test_that('Extract multiple rasters with both year ranges works', {
   skip_on_cran()
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
-                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_IRS_Coverage'),
+                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage'),
                         year = list(2014:2017, 2017:2019))
   
   expect_true(inherits(data, 'data.frame'))
@@ -80,7 +80,7 @@ test_that('Extract multiple rasters with both year ranges works', {
   expect_true(nrow(data_first_raster) == 8)
   expect_true(all(data_first_raster$year <= 2017 & data_first_raster$year >= 2014))
   
-  data_second_raster <- subset(data, layerName == 'Interventions__202106_Africa_IRS_Coverage')
+  data_second_raster <- subset(data, layerName == 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage')
   expect_true(nrow(data_second_raster) == 6)
   expect_true(all(data_second_raster$year <= 2019 & data_second_raster$year >= 2017))
 })
@@ -90,7 +90,7 @@ test_that('Extract multiple rasters with single year, NA and year range', {
   skip_on_cran()
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
-                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_IRS_Coverage', 'Malaria__202206_Global_Pf_Parasite_Rate'),
+                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage', 'Malaria__202206_Global_Pf_Parasite_Rate'),
                         year = list(2014, NA, 2017:2019))
   
   expect_true(inherits(data, 'data.frame'))
@@ -99,7 +99,7 @@ test_that('Extract multiple rasters with single year, NA and year range', {
   expect_true(nrow(data_first_raster) == 2)
   expect_true(all(data_first_raster$year == 2014))
   
-  data_second_raster <- subset(data, layerName == 'Interventions__202106_Africa_IRS_Coverage')
+  data_second_raster <- subset(data, layerName == 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage')
   expect_true(nrow(data_second_raster) > 0)
   
   data_third_raster <- subset(data, layerName == 'Malaria__202206_Global_Pf_Parasite_Rate')
@@ -123,7 +123,7 @@ test_that('Extract raster with incorrect year length', {
   skip_on_cran()
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   expect_error(extractRaster(d,
-                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_IRS_Coverage'),
+                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage'),
                         year = 2014))
 })
 
@@ -131,7 +131,7 @@ test_that('Extract raster with no year', {
   
   skip_on_cran()
   d <- data.frame(x = c(4, 8), y = c(13, 9))
-  data <- extractRaster(d, dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_IRS_Coverage'))
+  data <- extractRaster(d, dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage'))
   expect_true(inherits(data, 'data.frame'))
 })
 
@@ -139,7 +139,7 @@ test_that('Extract raster with no year as vector', {
   
   skip_on_cran()
   d <- data.frame(x = c(4, 8), y = c(13, 9))
-  data <- extractRaster(d, dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_IRS_Coverage'), 
+  data <- extractRaster(d, dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage'), 
                         year = c(2015, 2014))
   expect_true(inherits(data, 'data.frame'))
 })
