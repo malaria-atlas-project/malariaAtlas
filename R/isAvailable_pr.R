@@ -20,7 +20,7 @@
 #' }
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' isAvailable_pr(country = "Suriname")
 #' x <- isAvailable_pr(ISO = "NGA", full_results = TRUE)
 #' x <- isAvailable_pr(continent = "Oceania", full_results = TRUE)

@@ -5,7 +5,7 @@
 #' @return A data.frame with column 'version'.
 #' The version can then be provided to other functions to fetch the data within that dataset. e.g. in getShp
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' vecOccDatasets <- listShpVersions()
 #' @export listShpVersions
 

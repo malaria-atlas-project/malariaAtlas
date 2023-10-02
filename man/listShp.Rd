@@ -20,7 +20,7 @@ listShp(printed = TRUE, admin_level = c("admin0", "admin1"), version = NULL)
 \code{listShp} lists all administrative units for which shapefiles are stored on the MAP geoserver.
 }
 \examples{
-\donttest{
+\dontrun{
 available_admin_units <- listShp()
 available_admin_units <- listShp(admin_level = c('admin2','admin3'), version = '202206')
 }

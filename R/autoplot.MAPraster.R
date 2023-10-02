@@ -17,7 +17,7 @@
 #'   supplied raster.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points
 #' #   for Madagascar in 2013 and visualise these together on a map.
 #'

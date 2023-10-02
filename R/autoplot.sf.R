@@ -12,7 +12,7 @@
 #'
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #' autoplot(MDG_shp)
 #' }

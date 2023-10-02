@@ -11,7 +11,7 @@
 #' @param continent string containing continent for desired data, e.g. \code{c("continent1", "continent2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param ... passed on to isAvailable_vec and isAvailable_pr
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' available_pr_locations <- isAvailable_pr(ISO = 'IDN')
 #' available_vector_locations <- isAvailable_vec(ISO = 'IDN')
 #' }

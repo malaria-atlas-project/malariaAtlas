@@ -60,7 +60,7 @@ getShp(
 }
 \examples{
 #Download PfPR data & associated shapefiles for Nigeria and Cameroon
-\donttest{
+\dontrun{
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 NGA_CMR_shp <- getShp(country = c("Nigeria", "Cameroon"))
 

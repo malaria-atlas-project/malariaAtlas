@@ -16,7 +16,7 @@ objects of their classes.
 }
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-\donttest{
+\dontrun{
 library(dplyr)
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 

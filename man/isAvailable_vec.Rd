@@ -41,7 +41,7 @@ if \code{full_results == TRUE}, a named list is returned with the following elem
 \code{isAvailable_vec} checks whether the MAP database contains Vector Occurrence points for the specified country/location.
 }
 \examples{
-\donttest{
+\dontrun{
 isAvailable_vec(country = "Suriname")
 x <- isAvailable_vec(ISO = "NGA", full_results = TRUE)
 x <- isAvailable_vec(continent = "Oceania", full_results = TRUE)

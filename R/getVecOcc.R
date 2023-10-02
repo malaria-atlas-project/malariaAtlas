@@ -24,7 +24,7 @@
 #'
 #' @examples
 #' # Download vector occurrence data for Brazil and map the locations using autoplot.vector.points
-#' \donttest{
+#' \dontrun{
 #' Brazil_vec <- getVecOcc(country = "Brazil")
 #' autoplot(Brazil_vec)
 #'
@@ -245,7 +245,7 @@ getVecOcc <- function(country = NULL,
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(dplyr)
 #' Brazil_vec <- getVecOcc(country = "Brazil")
 #'

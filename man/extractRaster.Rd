@@ -37,7 +37,7 @@ extractRaster(
 }
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-\donttest{
+\dontrun{
 # Get some data and remove rows with NAs in location or examined or positive columns.
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 complete <- complete.cases(NGA_CMR_PR[, c(4, 5, 16, 17)])

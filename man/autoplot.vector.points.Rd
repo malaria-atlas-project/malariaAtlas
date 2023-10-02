@@ -43,7 +43,7 @@ See the trans argument in \code{\link{continuous_scale}} for possible values.}
 \code{autoplot.vector.points} creates a map of Vector points downloaded from MAP.
 }
 \examples{
-\donttest{
+\dontrun{
 Vector_surveys_NGA_NG <- getVecOcc(country = c("Nigeria", "Niger"))
 autoplot(Vector_surveys_NGA_NG)
 

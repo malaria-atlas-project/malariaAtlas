@@ -33,7 +33,7 @@ isAvailable(
 \code{isAvaiable} is a wrapper for isAvailable_pr and isAvailable_vec, listing data (PR survey point location data and vector occurrence locations available to download from the MAP geoserver.
 }
 \examples{
-\donttest{
+\dontrun{
 available_pr_locations <- isAvailable_pr(ISO = 'IDN')
 available_vector_locations <- isAvailable_vec(ISO = 'IDN')
 }

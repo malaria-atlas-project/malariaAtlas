@@ -23,7 +23,7 @@ use listVecOccPointVersions)}
 \code{listSpecies} lists all species occurrence data available to download from the Malaria Atlas Project database.
 }
 \examples{
-\donttest{
+\dontrun{
 available_species <- listSpecies()
 }
 
