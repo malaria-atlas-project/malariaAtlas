@@ -15,3 +15,4 @@ The character string of the filter.
 \description{
 Builds a filter to be used with getFeatures, that will filter based on the given bounding box.
 }
+\keyword{internal}

@@ -10,7 +10,7 @@ getRaster(
   shp = NULL,
   extent = NULL,
   file_path = NULL,
-  year = as.list(rep(NA, length(dataset_id))),
+  year = NULL,
   vector_year = NULL
 )
 }
@@ -25,7 +25,7 @@ getRaster(
 
 \item{file_path}{string specifying the directory to which raster files will be downloaded, if you want to download them. If none given, rasters will not be saved to files.}
 
-\item{year}{default = \code{rep(NA, length(dataset_id))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.}
+\item{year}{default = \code{rep(NA, length(dataset_id))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{dataset_id}, providing the desired year-range for each time-varying surface in \code{dataset_id} or \code{NA} for static rasters.}
 
 \item{vector_year}{deprecated argument. Please remove it from your code.}
 }

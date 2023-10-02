@@ -12,6 +12,7 @@ vignette: >
 
 
 ```{r globalKnitrOptions, include = FALSE}
+library(malariaAtlas)
 knitr::opts_chunk$set(fig.width=12, fig.height=8)
 ```
 
@@ -259,8 +260,7 @@ pr <- getPR(country = c("Madagascar"), species = "Pf")
 p[[1]] +
 geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = positive / examined, size = examined), shape = 21)+
 scale_size_continuous(name = "Survey Size")+
- scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
- ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
+ scale_fill_distiller(name = "PfPR", palette = "RdYlBu")
 ```
 
 Similarly for vector survey data
@@ -275,6 +275,5 @@ vec <- getVecOcc(country = c("Myanmar"), species = "Anopheles dirus")
 p[[1]] +
 geom_point(data = vec, aes(longitude, latitude, colour = species))+
   scale_colour_manual(values = "black", name = "Vector survey locations")+
- scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "PuBuGn", direction = 1)+
- ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
+ scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "PuBuGn", direction = 1)
 ```

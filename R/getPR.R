@@ -202,7 +202,7 @@ getPR <- function(country = NULL,
     )
   }
   
-  if (!(length(country) == 1 && country == "all") && any(c(!is.null(country), !is.null(ISO), !is.null(continent)))) {
+  if (!(length(country) == 1 && tolower(country) == "all") && any(c(!is.null(country), !is.null(ISO), !is.null(continent)))) {
     message(
       "Data downloaded for ",
       paste(checked_availability_pr$location[checked_availability_pr$is_available == 1], collapse = ", "), "."

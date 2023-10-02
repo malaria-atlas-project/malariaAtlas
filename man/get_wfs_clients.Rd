@@ -12,3 +12,4 @@ A list with of WFSClients by workspace
 \description{
 WFS clients lazily created or from cache
 }
+\keyword{internal}

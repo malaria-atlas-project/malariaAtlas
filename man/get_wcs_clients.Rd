@@ -12,3 +12,4 @@ A list with of WCSClients by workspace
 \description{
 WCS clients lazily created or from cache
 }
+\keyword{internal}

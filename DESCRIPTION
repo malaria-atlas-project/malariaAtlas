@@ -21,12 +21,10 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-  curl, 
   xml2, 
   gridExtra, 
   httr,
   dplyr,
-  stringi,
   tidyr,
   methods,
   stats,
@@ -38,7 +36,9 @@ Imports:
   tidyterra,
   ows4R,
   future.apply,
-  lubridate
+  lubridate,
+  jsonlite,
+  stringr
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,

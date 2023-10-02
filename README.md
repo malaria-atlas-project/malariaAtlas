@@ -4,10 +4,6 @@ output:
     preserve_yaml: false
 ---
 
-[![Build Status](https://travis-ci.org/malaria-atlas-project/malariaAtlas.svg)](https://travis-ci.org/malaria-atlas-project/malariaAtlas) [![codecov.io](https://codecov.io/gh/malaria-atlas-project/malariaAtlas/coverage.svg?branch=master)](https://codecov.io/gh/malaria-atlas-project/malariaAtlas?branch=master)
-
-
-
 # malariaAtlas
 
 ### An R interface to open-access malaria data, hosted by the Malaria Atlas Project.
@@ -20,9 +16,8 @@ This package allows you to download parasite rate data (*Plasmodium falciparum* 
 
 More details and example analyses can be found in the [published paper)[(<https://malariajournal.biomedcentral.com/articles/10.1186/s12936-018-2500-5>).
 
-## Available Data:
-
-The data can be explored at <https://data.malariaatlas.org/maps>.
+## Available Data: 
+The data can be explored at [https://data.malariaatlas.org/maps](https://data.malariaatlas.org/maps).
 
 ### List Versions Functions
 
@@ -301,7 +296,6 @@ autoplot(MMR_vec_data,
 ```r
 MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 ```
-
 
 ```
 ## Rows: 23

@@ -1,6 +1,10 @@
 #' Deprecated function. Please instead use listPRPointCountries for pr points, listVecOccPointCountries for vector points, listRaster for raster and listShp for shape.
 #'
 #' \code{listData}  deprecated function Please remove it from your code.
+#' 
+#' @param datatype "pr points", "vector points" "raster", or "shape"
+#' @param printed whether to pretty print the output in console
+#' @param ... passed on to listPRPointCountries, listVecOccPointCountries, listShp
 #'
 #' @export listData
 

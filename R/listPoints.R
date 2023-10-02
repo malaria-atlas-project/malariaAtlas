@@ -1,7 +1,12 @@
 #' Deprecated function. Please instead use listPRPointCountries for pr points, and listVecOccPointCountries for vector points
 #'
 #' \code{listPoints} deprecated function Please remove it from your code.
-#'
+#' 
+#' @param printed whether to pretty print the output in console
+#' @param sourcedata "pr points" or "vector points"
+#' @param version (optional) The PR dataset version to use If not provided, will just use the most recent version of PR data. (To see available version options, 
+#' use listPRPointVersions)
+#' 
 #' @export listPoints
 #' @importFrom rlang .data
 
