@@ -179,7 +179,7 @@ extractLayerValues <- function(points_to_query,
   headers <- c(`Content-Type` = 'application/json')
   res     <-
     httr::POST(
-      url = 'https://data-dev.malariaatlas.org/explorer-api/ExtractLayerValues',
+      url = 'https://data.malariaatlas.org/explorer-api/ExtractLayerValues',
       httr::add_headers(.headers = headers),
       body = data_json,
       encode = "json"
