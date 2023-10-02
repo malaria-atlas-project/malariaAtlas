@@ -11,7 +11,9 @@ get_wfs_clients <- function(logger=NULL) {
 
   wfs_clients_by_workspace <- list()
   for (workspace in get_workspaces()) {
-    wfs_clients_by_workspace[[workspace]] <- ows4R::WFSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "2.0.0", logger = logger)
+    wfs_clients_by_workspace[[workspace]] <- tryCatch({
+      ows4R::WFSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "2.0.0", logger = logger)
+    }, error=connectionErrFn)
   }
   .malariaAtlasHidden$malariaatlas.wfs_clients <- wfs_clients_by_workspace
   return(wfs_clients_by_workspace)
@@ -30,7 +32,9 @@ get_wcs_clients <- function(logger=NULL) {
 
   wcs_clients_by_workspace <- list()
   for (workspace in get_workspaces()) {
-    wcs_clients_by_workspace[[workspace]] <- ows4R::WCSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "2.0.1", logger = logger)
+    wcs_clients_by_workspace[[workspace]] <- tryCatch({
+      ows4R::WCSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "2.0.1", logger = logger)
+    }, error=connectionErrFn)
   }
   .malariaAtlasHidden$malariaatlas.wcs_clients <- wcs_clients_by_workspace
   return(wcs_clients_by_workspace)
@@ -49,7 +53,9 @@ get_wms_clients <- function(logger=NULL) {
 
   wms_clients_by_workspace <- list()
   for (workspace in get_workspaces()) {
-    wms_clients_by_workspace[[workspace]] <- ows4R::WMSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "1.3.0", logger = logger)
+    wms_clients_by_workspace[[workspace]] <- tryCatch({
+      ows4R::WMSClient$new(paste0(.malariaAtlasHidden$geoserver, workspace, "/ows"), "1.3.0", logger = logger)
+    }, error=connectionErrFn)
   }
   .malariaAtlasHidden$malariaatlas.wms_clients <- wms_clients_by_workspace
   return(wms_clients_by_workspace)
@@ -397,4 +403,9 @@ fetchCountriesGivenDatasetId <- function(wfs_client, dataset_id) {
   
   .malariaAtlasHidden$list_points[[dataset_id]] <- available_countries # add to cache
   return(available_countries)
+}
+
+connectionErrFn <- function(err) {
+  err$message <- "Failed to connect to MAP geoserver. Please try again later. If this error keeps occurring please send us an email at data.malariaatlas.org@telethonkids.org.au"
+  stop(err)
 }
