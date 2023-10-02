@@ -70,9 +70,9 @@ extractRaster <- function(df,
     intersect <- intersect(dataset_id, availableRasters$dataset_id)
     if(length(diff) > 0) {
       if(length(intersect) == 0) {
-        stop(paste0('All value(s) provided for dataset_id are not valid. All values must be from dataset_id column of listRasters()'))
+        stop(paste0('All value(s) provided for dataset_id are not valid. All values must be from dataset_id column of listRaster()'))
       } else {
-        warning(paste0('Following value(s) provided for dataset_id are not valid and so will be ignored: ', diff, ' . All values must be from dataset_id column of listRasters()'))
+        warning(paste0('Following value(s) provided for dataset_id are not valid and so will be ignored: ', diff, ' . All values must be from dataset_id column of listRaster()'))
         dataset_id <- intersect
       }
     }
@@ -179,7 +179,7 @@ extractLayerValues <- function(points_to_query,
   headers <- c(`Content-Type` = 'application/json')
   res     <-
     httr::POST(
-      url = 'https://data-dev.malariaatlas.org/explorer-api/ExtractLayerValues',
+      url = 'https://data.malariaatlas.org/explorer-api/ExtractLayerValues',
       httr::add_headers(.headers = headers),
       body = data_json,
       encode = "json"
