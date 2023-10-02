@@ -50,11 +50,11 @@ getRaster <- function(dataset_id = NULL,
   availableRasters <- suppressMessages(listRaster(printed = FALSE))
   
   if (!is.null(surface)) {
-    lifecycle::deprecate_warn("1.5.0", "getRaster(surface)", details = "The argument 'surface' has been deprecated. It will be removed in the next version. Please use dataset_id to specify the raster instead.")
+    lifecycle::deprecate_warn("1.6.0", "getRaster(surface)", details = "The argument 'surface' has been deprecated. It will be removed in the next version. Please use dataset_id to specify the raster instead.")
   }
   
   if (!is.null(vector_year)) {
-    lifecycle::deprecate_warn("1.5.0", "getRaster(vector_year)", details = "The argument 'vector_year' has been deprecated. It will be removed in the next version. You can now just use the year parameter instead to specify the years for any type of raster.")
+    lifecycle::deprecate_warn("1.6.0", "getRaster(vector_year)", details = "The argument 'vector_year' has been deprecated. It will be removed in the next version. You can now just use the year parameter instead to specify the years for any type of raster.")
   }
   
   if(is.null(dataset_id)) {

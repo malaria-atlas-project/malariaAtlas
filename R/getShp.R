@@ -63,7 +63,7 @@ getShp <- function(country = NULL,
                    lat = NULL, 
                    version = NULL) {
   if (!is.null(format)) {
-    lifecycle::deprecate_warn("1.5.0", "getShp(format)", details = "The argument 'format' has been deprecated. It will be removed in the next version. Admin boundaries will be correctly plotted using autoplot without the argument.")
+    lifecycle::deprecate_warn("1.6.0", "getShp(format)", details = "The argument 'format' has been deprecated. It will be removed in the next version. Admin boundaries will be correctly plotted using autoplot without the argument.")
   }
   
   available_admin <- listShp(printed = FALSE, admin_level= "admin0", version = version)

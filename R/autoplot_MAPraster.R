@@ -55,7 +55,7 @@
 #' @export autoplot_MAPraster
 
 autoplot_MAPraster <- function(object, ...){
-  lifecycle::deprecate_warn("1.5.0", "autoplot_MAPraster()", details = "This function has become unnecessary, just call autoplot directly with the SpatRaster object. It will be removed in the next version.")
+  lifecycle::deprecate_warn("1.6.0", "autoplot_MAPraster()", details = "This function has become unnecessary, just call autoplot directly with the SpatRaster object. It will be removed in the next version.")
   plot <- autoplot(object, ...)
   return(invisible(plot))
 }
