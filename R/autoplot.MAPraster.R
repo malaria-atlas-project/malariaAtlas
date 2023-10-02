@@ -64,7 +64,7 @@ autoplot.MAPraster <- function(object,
                                fill_colour_palette = "RdYlBu",
                                printed = TRUE) {
   
-  lifecycle::deprecate_stop("1.5.0", "autoplot.MAPraster()", details = "This function will is deprecated. getRaster should return an object of type SpatRaster")
+  lifecycle::deprecate_stop("1.6.0", "autoplot.MAPraster()", details = "This function will is deprecated. getRaster should return an object of type SpatRaster")
   
 
   make_plot <- function(object, rastername, shp_df, legend_title){

@@ -12,7 +12,7 @@
 
 listPoints <- function(printed = TRUE, sourcedata, version = NULL) {
   
-  lifecycle::deprecate_warn("1.5.0", "listPoints()", details = "The function 'listPoints' has been deprecated. It will be removed in the next version. Please switch to using listPRPointCountries for pr points, and listVecOccPointCountries for vector points.")
+  lifecycle::deprecate_warn("1.6.0", "listPoints()", details = "The function 'listPoints' has been deprecated. It will be removed in the next version. Please switch to using listPRPointCountries for pr points, and listVecOccPointCountries for vector points.")
 
   if(sourcedata == "pr points"){
 

@@ -53,7 +53,7 @@ extractRaster <- function(df,
   availableRasters <- suppressMessages(listRaster(printed = FALSE))
   
   if (!is.null(surface)) {
-    lifecycle::deprecate_warn("1.5.0", "extractRaster(surface)", details = "The argument 'surface' has been deprecated. It will be removed in the next version. Please use dataset_id to specify the raster instead.")
+    lifecycle::deprecate_warn("1.6.0", "extractRaster(surface)", details = "The argument 'surface' has been deprecated. It will be removed in the next version. Please use dataset_id to specify the raster instead.")
   }
   
   if(is.null(dataset_id)) {

@@ -10,7 +10,7 @@
 
 listData <- function(datatype, printed = TRUE, ...){
   
-  lifecycle::deprecate_warn("1.5.0", "listData()", details = "The function 'listData' has been deprecated. It will be removed in the next version. Please switch to using listPRPointCountries for pr points, listVecOccPointCountries for vector points, listRaster for raster and listShp for shape.")
+  lifecycle::deprecate_warn("1.6.0", "listData()", details = "The function 'listData' has been deprecated. It will be removed in the next version. Please switch to using listPRPointCountries for pr points, listVecOccPointCountries for vector points, listRaster for raster and listShp for shape.")
 
   if(!datatype %in% c('pr points', 'vector points', 'raster', 'shape')){
     stop("Please choose one of: \n datatype = \"pr points\"  \n datatype = \"vector points\" \n datatype = \"raster\" \n datatype = \"shape\"")
