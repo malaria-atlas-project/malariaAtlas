@@ -7,7 +7,7 @@
 #' @param version The admin unit dataset version to return. Is NULL by default, and if left NULL will just use the most recent version of admin unit data.
 #' @return \code{listShp} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' available_admin_units <- listShp()
 #' available_admin_units <- listShp(admin_level = c('admin2','admin3'), version = '202206')
 #' }

@@ -26,7 +26,7 @@
 #'
 #' @examples
 #' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-#' \donttest{
+#' \dontrun{
 #' NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 #' autoplot(NGA_CMR_PR)
 #'
@@ -462,7 +462,7 @@ pr_wide2long <- function(object) {
 #'
 #' @examples
 #' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-#' \donttest{
+#' \dontrun{
 #' library(dplyr)
 #' NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 #'

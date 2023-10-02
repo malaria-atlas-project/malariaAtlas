@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' # Download PfPR2-10 Raster for Madagascar and visualise this immediately.
-#' \donttest{
+#' \dontrun{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #' MDG_PfPR2_10 <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate", shp = MDG_shp)
 #' autoplot(MDG_PfPR2_10)

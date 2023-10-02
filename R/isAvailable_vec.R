@@ -20,7 +20,7 @@
 #' }
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' isAvailable_vec(country = "Suriname")
 #' x <- isAvailable_vec(ISO = "NGA", full_results = TRUE)
 #' x <- isAvailable_vec(continent = "Oceania", full_results = TRUE)

@@ -11,7 +11,7 @@
 #' }
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' available_species <- listSpecies()
 #' }
 #' 

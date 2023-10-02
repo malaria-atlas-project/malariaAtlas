@@ -50,7 +50,7 @@ Download Vector Occurrence points from the MAP database
 }
 \examples{
 # Download vector occurrence data for Brazil and map the locations using autoplot.vector.points
-\donttest{
+\dontrun{
 Brazil_vec <- getVecOcc(country = "Brazil")
 autoplot(Brazil_vec)
 

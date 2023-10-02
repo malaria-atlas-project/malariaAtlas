@@ -16,7 +16,7 @@
 #' @return \code{autoplot.vector.points} returns a plots (gg object) for the supplied vector.points dataframe.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' Vector_surveys_NGA_NG <- getVecOcc(country = c("Nigeria", "Niger"))
 #' autoplot(Vector_surveys_NGA_NG)
 #' 

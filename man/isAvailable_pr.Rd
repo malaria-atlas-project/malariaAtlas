@@ -41,7 +41,7 @@ if \code{full_results == TRUE}, a named list is returned with the following elem
 \code{isAvailable_pr} checks whether the MAP database contains PR points for the specified country/location.
 }
 \examples{
-\donttest{
+\dontrun{
 isAvailable_pr(country = "Suriname")
 x <- isAvailable_pr(ISO = "NGA", full_results = TRUE)
 x <- isAvailable_pr(continent = "Oceania", full_results = TRUE)

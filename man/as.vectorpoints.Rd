@@ -15,7 +15,7 @@ This function is particularly useful for use with packages like dplyr that strip
 objects of their classes.
 }
 \examples{
-\donttest{
+\dontrun{
 library(dplyr)
 Brazil_vec <- getVecOcc(country = "Brazil")
 
