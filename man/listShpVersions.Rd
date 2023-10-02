@@ -16,3 +16,8 @@ The version can then be provided to other functions to fetch the data within tha
 \description{
 \code{listShpVersions} lists available versions of Admin Unit shapefiles from the Web Feature Services provided by the Malaria Atlas Project.
 }
+\examples{
+\dontrun{
+vecOccDatasets <- listShpVersions()
+}
+}

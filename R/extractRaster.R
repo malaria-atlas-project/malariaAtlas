@@ -169,7 +169,6 @@ extractRaster <- function(df,
 #' @param points_to_query matrix of points to get raster data for, with first column being the latitude and second being the longitude. 
 #' @param dataset_id character representing the dataset id.
 #' @param year either a single year, or a list of years, or NA. 
-#' @return 
 #' @keywords internal
 extractLayerValues <- function(points_to_query,
                                dataset_id,

@@ -7,6 +7,7 @@
 #' @examples
 #' \dontrun{
 #' prDatasets <- listPRPointVersions()
+#' }
 #' @export listPRPointVersions
 
 listPRPointVersions <- function(printed = TRUE){

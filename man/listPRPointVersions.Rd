@@ -16,3 +16,8 @@ The version can then be provided to other functions to fetch the data within tha
 \description{
 \code{listPRPointVersions} lists available versions of parasite rate point data from the Web Feature Services provided by the Malaria Atlas Project.
 }
+\examples{
+\dontrun{
+prDatasets <- listPRPointVersions()
+}
+}

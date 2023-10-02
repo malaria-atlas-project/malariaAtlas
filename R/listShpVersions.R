@@ -7,6 +7,7 @@
 #' @examples
 #' \dontrun{
 #' vecOccDatasets <- listShpVersions()
+#' }
 #' @export listShpVersions
 
 listShpVersions <- function(printed = TRUE){

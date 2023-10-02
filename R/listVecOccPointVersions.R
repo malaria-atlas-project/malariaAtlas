@@ -8,6 +8,7 @@
 #' @examples
 #' \dontrun{
 #' vecOccDatasets <- listVecOccPointVersions()
+#' }
 #' @export listVecOccPointVersions
 
 listVecOccPointVersions <- function(printed = TRUE){

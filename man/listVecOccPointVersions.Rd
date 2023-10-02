@@ -17,3 +17,8 @@ The version can then be provided to other functions to fetch the data within tha
 \code{listVecOccPointVersions} lists available versions of all the feature datasets in the Vector Occurrence workspace 
 from the Web Feature Services provided by the Malaria Atlas Project.
 }
+\examples{
+\dontrun{
+vecOccDatasets <- listVecOccPointVersions()
+}
+}
