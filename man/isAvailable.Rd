@@ -9,7 +9,8 @@ isAvailable(
   full_results = FALSE,
   country = NULL,
   ISO = NULL,
-  continent = NULL
+  continent = NULL,
+  ...
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ isAvailable(
 \item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
 \item{continent}{string containing continent for desired data, e.g. \code{c("continent1", "continent2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
+
+\item{...}{passed on to isAvailable_vec and isAvailable_pr}
 }
 \value{
 \code{isAvailable} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
@@ -30,7 +33,7 @@ isAvailable(
 \code{isAvaiable} is a wrapper for isAvailable_pr and isAvailable_vec, listing data (PR survey point location data and vector occurrence locations available to download from the MAP geoserver.
 }
 \examples{
-\donttest{
+\dontrun{
 available_pr_locations <- isAvailable_pr(ISO = 'IDN')
 available_vector_locations <- isAvailable_vec(ISO = 'IDN')
 }

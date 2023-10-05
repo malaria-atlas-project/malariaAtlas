@@ -26,7 +26,7 @@ as.MAPshp(object)
 \examples{
 #Download shapefiles for Madagascar and visualise these on a map.
 
-\donttest{
+\dontrun{
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_shp <- as.MAPshp(MDG_shp)
 autoplot(MDG_shp)

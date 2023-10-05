@@ -2,24 +2,18 @@
 % Please edit documentation in R/listPoints.R
 \name{listPoints}
 \alias{listPoints}
-\title{List countries with available MAP Point data.}
+\title{Deprecated function. Please instead use listPRPointCountries for pr points, and listVecOccPointCountries for vector points}
 \usage{
-listPoints(printed = TRUE, sourcedata)
+listPoints(printed = TRUE, sourcedata, version = NULL)
 }
 \arguments{
-\item{printed}{Should the list be printed to the console?}
+\item{printed}{whether to pretty print the output in console}
 
-\item{sourcedata}{String contining desired dataset within the Malaria Atlas database to be searched, e.g \code{"pr points"} OR \code{"vector points"}}
-}
-\value{
-\code{listPoints} returns a data.frame detailing the countries for which PR points are publicly available.
+\item{sourcedata}{"pr points" or "vector points"}
+
+\item{version}{(optional) The PR dataset version to use If not provided, will just use the most recent version of PR data. (To see available version options, 
+use listPRPointVersions)}
 }
 \description{
-\code{listPoints} lists all countries for which there are publicly visible datapoints in the MAP database required.
-}
-\examples{
-\donttest{
-listPoints(sourcedata = "pr points")
-listPoints(sourcedata = "vector points")
-}
+\code{listPoints} deprecated function Please remove it from your code.
 }

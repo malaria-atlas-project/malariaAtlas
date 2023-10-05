@@ -1,36 +1,25 @@
-#' List data available to download from the MAP geoserver.
+#' Deprecated function. Please instead use listPRPointCountries for pr points, listVecOccPointCountries for vector points, listRaster for raster and listShp for shape.
 #'
-#' \code{listData} is a wrapper for listPoints; listRaster and listShp, listing data (PR survey point data; raster data; shapefiles) available to download from the MAP geoserver.
-#'
-#' @return \code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
-#'
-#' @param datatype One of 'pr points', 'vector points', 'raster' or 'shape'
-#' @param printed Should the list be printed to the console?
-#' @param ... Other arguments to be passed to \code{list*} functions. (e.g. \code{admin_level} for \code{listShp})
-#' @examples
-#' \donttest{
-#' available_admin_units <- listShp()
-#' available_pr_points <- listPoints(sourcedata = "pr points")
-#' available_vector_points <- listPoints(sourcedata = "vector points")
-#' available_rasters <- listRaster()
-#' }
-#' @seealso
-#' \code{link{listPoints}}
-#' \code{\link{listRaster}}
-#' \code{\link{listShp}}
+#' \code{listData}  deprecated function Please remove it from your code.
+#' 
+#' @param datatype "pr points", "vector points" "raster", or "shape"
+#' @param printed whether to pretty print the output in console
+#' @param ... passed on to listPRPointCountries, listVecOccPointCountries, listShp
 #'
 #' @export listData
 
 listData <- function(datatype, printed = TRUE, ...){
+  
+  lifecycle::deprecate_warn("1.6.0", "listData()", details = "The function 'listData' has been deprecated. It will be removed in the next version. Please switch to using listPRPointCountries for pr points, listVecOccPointCountries for vector points, listRaster for raster and listShp for shape.")
 
   if(!datatype %in% c('pr points', 'vector points', 'raster', 'shape')){
     stop("Please choose one of: \n datatype = \"pr points\"  \n datatype = \"vector points\" \n datatype = \"raster\" \n datatype = \"shape\"")
   }
 
   if(datatype == "pr points"){
-    listPoints(printed = printed, sourcedata = "pr points")      
+    listPRPointCountries(printed = printed, ...)      
   }else if(datatype == "vector points"){
-   listPoints(printed = printed, sourcedata = "vector points")
+   listVecOccPointCountries(printed = printed, ...)
   }else if(datatype == "raster"){
     listRaster(printed = printed)
   }else if(datatype == "shape"){

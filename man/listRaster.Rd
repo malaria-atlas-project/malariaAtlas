@@ -13,6 +13,7 @@ listRaster(printed = TRUE)
 \code{listRaster} returns a data.frame detailing the following information for each raster available to download from the Malaria Atlas Project database.
 
 \enumerate{
+\item \code{dataset_id} the unique dataset ID of the raster, which can the be used in functions such as getRaster and extractRaster
 \item \code{raster_code} unique identifier for each raster
 \item \code{title} abbreviated title for each raster, used as \code{surface} argument in getRaster()
 \item \code{title_extended} extended title for each raster, detailing raster content
@@ -27,7 +28,7 @@ listRaster(printed = TRUE)
 \code{listRaster} lists all rasters available to download from the Malaria Atlas Project database.
 }
 \examples{
-\donttest{
+\dontrun{
 available_rasters <- listRaster()
 }
 }

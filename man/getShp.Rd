@@ -11,7 +11,8 @@ getShp(
   admin_level = c("admin0"),
   format = NULL,
   long = NULL,
-  lat = NULL
+  lat = NULL,
+  version = NULL
 )
 }
 \arguments{
@@ -19,8 +20,7 @@ getShp(
 
 \item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use either \code{ISO} OR \code{country})}
 
-\item{extent}{2x2 matrix specifying the spatial extent within which polygons are desired. The first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).
-Note: getShp downloads the entire polygon for any polygons falling within the extent.}
+\item{extent}{2x2 matrix specifying the spatial extent within which polygons are desired, as returned by sp::bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))).}
 
 \item{admin_level}{string specifying the administrative level for which shapefile are desired (only "admin0","admin1","admin2","admin3", or "all" accepted). N.B. Not all administrative levels are available for all countries. Use listShp to check which shapefiles are available. If an administrative level is requested that is not available, the closest available administrative level shapefiles will be returned.}
 
@@ -29,12 +29,13 @@ Note: getShp downloads the entire polygon for any polygons falling within the ex
 \item{long}{longitude of a point location falling within the desired shapefile.}
 
 \item{lat}{latitude of a point location falling within the desired shapefile.}
+
+\item{version}{The admin unit dataset version to return. Is NULL by default, and if left NULL will just use the most recent version of admin unit data.}
 }
 \value{
-\code{getShp} returns either a dataframe or spatialPolygon object for requested administrative unit polygons. The following attribute fields are included:
+\code{getShp} returns a sf object for requested administrative unit polygons. The following attribute fields are included:
 
 \enumerate{
-\item \code{id} unique identifier for any given polygon/administrative unit. 
 \item \code{iso} ISO-3 code of given administrative unit (or the ISO code of parent unit for administrative-level 1 units).
 \item \code{admn_level} administrative level of the given administrative unit - either 0 (national), 1 (first-level division), 2 (second-level division), 3 (third-level division). 
 \item \code{name_0} name of admin0 parent of a given administrative unit (or just shapefile name for admin0 units)
@@ -50,6 +51,7 @@ Note: getShp downloads the entire polygon for any polygons falling within the ex
 \item \code{id_3} id code of admin3 parent of the current shapefile (or just shapefile id for admin3 units); NA for admin0, admin1, admin2 units
 \item \code{type_3} if applicable, type of administrative unit
 \item \code{source} source of administrative boundaries
+\item \code{geometry} geometry of administrative boundaries
 \item \code{country_level} composite \code{iso}_\code{admn_level} field.
 }
 }
@@ -58,7 +60,7 @@ Note: getShp downloads the entire polygon for any polygons falling within the ex
 }
 \examples{
 #Download PfPR data & associated shapefiles for Nigeria and Cameroon
-\donttest{
+\dontrun{
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 NGA_CMR_shp <- getShp(country = c("Nigeria", "Cameroon"))
 

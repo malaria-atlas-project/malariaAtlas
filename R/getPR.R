@@ -10,9 +10,12 @@
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent string containing continent (one of "Africa", "Americas", "Asia", "Oceania") for desired data, e.g. \code{c("continent1", "continent2", ...)}. (Use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param species string specifying the Plasmodium species for which to find PR points, options include: \code{"Pf"} OR \code{"Pv"} OR \code{"BOTH"}
-#' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox().
-#'
-#'
+#' @param extent an object specifying spatial extent within which PR data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max"))))
+#' @param start_date string object representing the lower date to filter the PR data by (inclusive) e.g. '2020-01-01'
+#' @param end_date string object representing the upper date to filter the PR data by (exclusive) e.g. '2020-01-01'
+#' @param version (optional) The PR dataset version to return. If not provided, will just use the most recent version of PR data. (To see available version options, 
+#' use listPRPointVersions)
+#' 
 #' @return \code{getPR} returns a dataframe containing the below columns, in which each row represents a distinct data point/ study site.
 #'
 #' \enumerate{
@@ -23,7 +26,7 @@
 #'
 #' @examples
 #' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-#' \donttest{
+#' \dontrun{
 #' NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 #' autoplot(NGA_CMR_PR)
 #'
@@ -43,21 +46,14 @@
 getPR <- function(country = NULL,
                   ISO = NULL,
                   continent = NULL,
-                  species,
-                  extent = NULL) {
-  if (exists('available_countries_stored_pr', envir = .malariaAtlasHidden)) {
-    available_countries_pr <-
-      .malariaAtlasHidden$available_countries_stored_pr
-  } else{
-    available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
-    if(inherits(available_countries_pr, 'try-error')){
-      message(available_countries_pr)
-      return(available_countries_pr)
-    }
-  }
-  
+                  species = NULL,
+                  extent = NULL,
+                  start_date = NULL,
+                  end_date = NULL,
+                  version = NULL) {
   if (is.null(country) &
-      is.null(ISO) & is.null(continent) & is.null(extent)) {
+      is.null(ISO) &
+      is.null(continent) & is.null(extent)) {
     stop("Must specify one of: 'country', 'ISO', 'continent', or 'extent'.")
   }
   
@@ -65,53 +61,59 @@ getPR <- function(country = NULL,
     extent <- getSpBbox(extent)
   }
   
-  URL <-
-    "https://malariaatlas.org/geoserver/Explorer/ows?service=wfs&version=2.0.0&request=GetFeature&outputFormat=csv&TypeName=PR_Data"
-  
-  if (tolower(species) == "both") {
-    columns <-
-      "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
-    
-  } else if (tolower(species) == "pf") {
-    columns <-
-      "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pf_pos,pf_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
-    
-  } else if (tolower(species) == "pv") {
-    columns <-
-      "&PROPERTYNAME=site_id,dhs_id,site_name,latitude,longitude,month_start,year_start,month_end,year_end,lower_age,upper_age,examined,pv_pos,pv_pr,method,rdt_type,pcr_type,rural_urban,country_id,country,continent_id,malaria_metrics_available,location_available,permissions_info,citation1,citation2,citation3"
-    
+  if (is.null(version)) {
+    version <- getLatestPRPointVersion()
+    message('Please Note: Because you did not provide a version, by default the version being used is ', version, 
+            ' (This is the most recent version of PR data. To see other version options use function listPRPointVersions)')
   } else {
-    stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")
+    df_available_versions <- listPRPointVersions(printed = FALSE)
+    if (!version %in% df_available_versions$version) {
+      stop(
+        paste0(
+          'Version provided is not valid. Valid versions for PR point data can be found using listPRPointVersions() and are ["',
+          paste(df_available_versions$version, collapse = '", "'),
+          '"]. Otherwise, you can choose to not specify a version, and the most recent version will be automatically selected'
+        )
+      )
+    }
   }
   
+  wfs_client <- get_wfs_clients()$Malaria
+  wfs_cap <- wfs_client$getCapabilities()
+  
+  bbox_filter <- NULL
+  time_filter <- NULL
+  location_filter <- NULL
+  
+  #Building time filter
+  start_date <-
+    convert_to_date_with_trycatch(start_date, 'start_date')
+  end_date <- convert_to_date_with_trycatch(end_date, 'end_date')
+  
+  if (!is.null(start_date) | !is.null(end_date)) {
+    time_filter <- build_cql_time_filter(start_date, end_date)
+  }
+  
+  #Building location filter or bbox filter
+  available_countries_pr <-
+    listPRPointCountries(printed = FALSE,
+               version = version)
   
   if ("all" %in% tolower(c(country, ISO))) {
-    message(paste(
-      "Importing PR point data for all locations, please wait...",
-      sep = ""
-    ))
-    df <-
-      try(utils::read.csv(paste(URL, columns, sep = ""), encoding = "UTF-8")[, -1])
-    if(inherits(df, 'try-error')){
-      message(df[1])
-      return(df)
-    }
+    location_filter <- NULL
     
     message("Data downloaded for all available locations.")
   } else{
-    if (any(c(!is.null(country),!is.null(ISO),!is.null(continent)))) {
+    if (any(c(!is.null(country), !is.null(ISO), !is.null(continent)))) {
       if (!(is.null(country))) {
-        cql_filter <- "country"
-        colname <- "country"
+        location_cql_col <- location_col <- "country"
       } else if (!(is.null(ISO))) {
-        cql_filter <- "country_id"
-        colname <- "country_id"
+        location_cql_col <- location_col<- "country_id"
       } else if (!(is.null(continent))) {
-        cql_filter <- "continent_id"
-        colname <- "continent"
+        location_cql_col <- "continent_id"
+        location_col <- "continent"
       }
       
-
       checked_availability_pr <-
         isAvailable_pr(
           sourcedata = "pr points",
@@ -120,88 +122,97 @@ getPR <- function(country = NULL,
           continent = continent,
           full_results = TRUE
         )
+      
       message(paste(
         "Attempting to download PR point data for",
-        paste(available_countries_pr$country[available_countries_pr[, colname] %in% checked_availability_pr$location[checked_availability_pr$is_available ==
-                                                                                                              1]], collapse = ", "),
+        paste(available_countries_pr$country[available_countries_pr[, location_col] %in% checked_availability_pr$location[checked_availability_pr$is_available ==
+                                                                                                                                1]], collapse = ", "),
         "..."
       ))
-      country_URL <-
-        paste("%27",
-              curl::curl_escape(gsub(
-                "'", "''", checked_availability_pr$location[checked_availability_pr$is_available ==
-                                                           1]
-              )),
-              "%27",
-              sep = "",
-              collapse = ",")
-      full_URL <- paste(URL,
-                        columns,
-                        "&cql_filter=",
-                        cql_filter,
-                        "%20IN%20(",
-                        country_URL,
-                        ")",
-                        sep = "")
+      
+      valid_locations <-
+        checked_availability_pr$location[checked_availability_pr$is_available ==
+                                           1]
+      location_filter <-
+        build_cql_filter(location_cql_col, valid_locations)
+      
     } else if (!is.null(extent)) {
-      bbox_filter <-
-        paste0("&srsName=EPSG:4326&bbox=",
-               extent[2, 1],
-               ",",
-               extent[1, 1],
-               ",",
-               extent[2, 2],
-               ",",
-               extent[1, 2])
-      full_URL <- paste0(URL, columns, bbox_filter)
+      bbox_filter <- build_cql_bbox_filter(extent)
     }
-    
-    df <-
-      try(utils::read.csv(full_URL, encoding = "UTF-8")[, -1])
-    if(inherits(df, 'try-error')){
-      message(df[1])
-      return(df)
-    }
-    
-    # Just to avoid visible binding notes
-    pf_pr <- pv_pr <- permissions_info <- NULL
-    
-    # removing points that are publicly available but are for the opposite species to what is currently queried.
-    if (tolower(species) == "pf") {
-      df <-
-        dplyr::filter(df,!(is.na(pf_pr) & permissions_info %in% c("", NA)))
-    } else if (tolower(species) == "pv") {
-      df <-
-        dplyr::filter(df,!(is.na(pv_pr) & permissions_info %in% c("", NA)))
-    }
-    
-    if (!nrow(df) > 0 & !is.null(extent)) {
-      stop(
-        "Error in downloading data for extent: (",
-        paste0(extent, collapse = ","),
-        "),\n try query using country or continent name OR check data availability at malariaatlas.org/explorer."
-      )
-    }
-    
-    if (nrow(df) == 0) {
-      stop(
-        "PR data points are not available for the specified species in requested countries; \n confirm species-specific data availability at malariaatlas.org/explorer."
-      )
-    }
-    
-    if (any(c(!is.null(country),!is.null(ISO),!is.null(continent)))) {
-      message(
-        "Data downloaded for ",
-        paste(checked_availability_pr$location[checked_availability_pr$is_available ==
-                                              1], collapse = ", "),
-        "."
-      )
-    } else if (!is.null(extent)) {
-      message("Data downloaded for extent: ",
-              paste0(extent, collapse = ","))
-    }
-    
   }
+  
+  cql_filters <- list(time_filter, location_filter, bbox_filter)
+  cql_filter <- combine_cql_filters(cql_filters)
+  
+  pf_dataset_id <- getPfPRPointDatasetIdFromVersion(version)
+  pv_dataset_id <- getPvPRPointDatasetIdFromVersion(version)
+  
+  if (tolower(species) == "both") {
+    pf_wfs_feature_type <-
+      wfs_cap$findFeatureTypeByName(pf_dataset_id)
+    pv_wfs_feature_type <-
+      wfs_cap$findFeatureTypeByName(pv_dataset_id)
+    pf_df <-
+      callGetFeaturesWithFilters(pf_wfs_feature_type, cql_filter)
+    pv_df <-
+      callGetFeaturesWithFilters(pv_wfs_feature_type, cql_filter)
+    df <- dplyr::bind_rows(pf_df, pv_df)
+    
+  } else if (tolower(species) == "pf") {
+    wfs_feature_type <-
+      wfs_cap$findFeatureTypeByName(pf_dataset_id)
+    df <-
+      callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
+    
+  } else if (tolower(species) == "pv") {
+    wfs_feature_type <-
+      wfs_cap$findFeatureTypeByName(pv_dataset_id)
+    df <-
+      callGetFeaturesWithFilters(wfs_feature_type, cql_filter)
+    
+  } else {
+    stop("Species not recognized, use one of: \n   \"Pf\" \n   \"Pv\" \n   \"BOTH\"")
+  }
+
+  # Just to avoid visible binding notes
+  pf_pr <- pv_pr <- permissions_info <- NULL
+  
+  # removing points that are publicly available but are for the opposite species to what is currently queried.
+  if (tolower(species) == "pf") {
+    df <-
+      dplyr::filter(df, !(is.na(pf_pr) &
+                            permissions_info %in% c("", NA)))
+  } else if (tolower(species) == "pv") {
+    df <-
+      dplyr::filter(df, !(is.na(pv_pr) &
+                            permissions_info %in% c("", NA)))
+  }
+  
+  if (!nrow(df) > 0 & !is.null(extent)) {
+    stop(
+      "Error in downloading data for extent: (",
+      paste0(extent, collapse = ","),
+      "),\n try query using country or continent name OR check data availability at malariaatlas.org/explorer."
+    )
+  }
+  
+  if (nrow(df) == 0) {
+    stop(
+      "PR data points are not available for the specified species in requested countries; \n confirm species-specific data availability at malariaatlas.org/explorer."
+    )
+  }
+  
+  if (!(length(country) == 1 && tolower(country) == "all") && any(c(!is.null(country), !is.null(ISO), !is.null(continent)))) {
+    message(
+      "Data downloaded for ",
+      paste(checked_availability_pr$location[checked_availability_pr$is_available == 1], collapse = ", "), "."
+    )
+  } else if (!is.null(extent)) {
+    message("Data downloaded for extent: ",
+            paste0(extent, collapse = ","))
+  } 
+  
+  
   
   if (tolower(species) == "both") {
     if (all(is.na(unique(df$pv_pos)))) {
@@ -221,6 +232,7 @@ getPR <- function(country = NULL,
     )
   }
   
+  df <- sf::st_drop_geometry(df)
   class(df) <- c("pr.points", class(df))
   
   df <- pr_wide2long(df)
@@ -236,17 +248,17 @@ pr_wide2long <- function(object) {
   if (all(c("pv_pr", "pf_pr") %in% colnames(object))) {
     pf <-
       rbind(object[is.na(object$pv_pos) &
-                     !is.na(object$pf_pos), -which(names(object) %in% grep("pv", names(object), value = T))],
+                     !is.na(object$pf_pos),-which(names(object) %in% grep("pv", names(object), value = T))],
             object[!is.na(object$pv_pos) &
-                     !is.na(object$pf_pos), -which(names(object) %in% grep("pv", names(object), value = T))])
+                     !is.na(object$pf_pos),-which(names(object) %in% grep("pv", names(object), value = T))])
     pv <-
       rbind(object[!is.na(object$pv_pos) &
-                     is.na(object$pf_pos), -which(names(object) %in% grep("pf", names(object), value = T))],
+                     is.na(object$pf_pos),-which(names(object) %in% grep("pf", names(object), value = T))],
             object[!is.na(object$pv_pos) &
-                     !is.na(object$pf_pos), -which(names(object) %in% grep("pf", names(object), value = T))])
+                     !is.na(object$pf_pos),-which(names(object) %in% grep("pf", names(object), value = T))])
     conf <-
       object[is.na(object$pv_pos) &
-               is.na(object$pf_pos), -which(names(object) %in% grep("pf", names(object), value = T))]
+               is.na(object$pf_pos),-which(names(object) %in% grep("pf", names(object), value = T))]
     
     names(pf)[which(names(pf) %in% grep("pos", names(pf), value = T))] <-
       "positive"
@@ -273,11 +285,13 @@ pr_wide2long <- function(object) {
     
     # To avoid no visible bindings. But maybe need to learn tidyeval.
     object <-
-      dhs_id <- site_id <- site_name <- latitude <-  longitude <- NULL
+      dhs_id <-
+      site_id <- site_name <- latitude <-  longitude <- NULL
     rural_urban <-
       country <- country_id <- continent_id <- month_start <- NULL
     year_start <-
-      month_end <- year_end <- lower_age <- upper_age <- examined <- NULL
+      month_end <-
+      year_end <- lower_age <- upper_age <- examined <- NULL
     positive <-
       pr <- species <- method <- rdt_type <- pcr_type <- NULL
     malaria_metrics_available <-
@@ -320,8 +334,8 @@ pr_wide2long <- function(object) {
     
   } else if ("pv_pr" %in% colnames(object) &
              !("pf_pr" %in% colnames(object))) {
-    pv <- object[!is.na(object$pv_pos), ]
-    conf <- object[is.na(object$pv_pos), ]
+    pv <- object[!is.na(object$pv_pos),]
+    conf <- object[is.na(object$pv_pos),]
     
     names(pv)[which(names(pv) %in% grep("pos", names(pv), value = T))] <-
       "positive"
@@ -376,8 +390,8 @@ pr_wide2long <- function(object) {
     
   } else if (!("pv_pr" %in% colnames(object)) &
              "pf_pr" %in% colnames(object)) {
-    pf <- object[!is.na(object$pf_pos), ]
-    conf <- object[is.na(object$pf_pos), ]
+    pf <- object[!is.na(object$pf_pos),]
+    conf <- object[is.na(object$pf_pos),]
     
     names(pf)[which(names(pf) %in% grep("pos", names(pf), value = T))] <-
       "positive"
@@ -436,46 +450,73 @@ pr_wide2long <- function(object) {
 }
 
 #' Convert data.frames to pr.points objects.
-#' 
+#'
 #' Will create empty columns for any missing columns expected in a pr.points data.frame.
-#' This function is particularly useful for use with packages like dplyr that strip 
+#' This function is particularly useful for use with packages like dplyr that strip
 #' objects of their classes.
-#' 
+#'
 #' @param x A data.frame
-#' 
-#' 
+#'
+#'
 #' @export
-#' 
+#'
 #' @examples
 #' #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-#' \donttest{
+#' \dontrun{
 #' library(dplyr)
 #' NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
-#' 
+#'
 #' # Filter the data frame then readd pr.points class so that autoplot can be used.
-#' NGA_CMR_PR %>% 
-#'   filter(year_start > 2010) %>% 
-#'   as.pr.points %>% 
+#' NGA_CMR_PR %>%
+#'   filter(year_start > 2010) %>%
+#'   as.pr.points %>%
 #'   autoplot
 #'
 #' }
 
-as.pr.points <- function(x){
+as.pr.points <- function(x) {
+  expected_col_names <-
+    c(
+      "dhs_id",
+      "site_id",
+      "site_name",
+      "latitude",
+      "longitude",
+      "rural_urban",
+      "country",
+      "country_id",
+      "continent_id",
+      "month_start",
+      "year_start",
+      "month_end",
+      "year_end",
+      "lower_age",
+      "upper_age",
+      "examined",
+      "positive",
+      "pr",
+      "species",
+      "method",
+      "rdt_type",
+      "pcr_type",
+      "malaria_metrics_available",
+      "location_available",
+      "permissions_info",
+      "citation1",
+      "citation2",
+      "citation3"
+    )
   
-  expected_col_names <- c("dhs_id", "site_id", "site_name", "latitude", "longitude", 
-                          "rural_urban", "country", "country_id", "continent_id", "month_start", 
-                          "year_start", "month_end", "year_end", "lower_age", "upper_age", 
-                          "examined", "positive", "pr", "species", "method", "rdt_type", 
-                          "pcr_type", "malaria_metrics_available", "location_available", 
-                          "permissions_info", "citation1", "citation2", "citation3")
-  
-  missing_columns <- expected_col_names[!(expected_col_names %in% names(x))]
+  missing_columns <-
+    expected_col_names[!(expected_col_names %in% names(x))]
   
   stopifnot(inherits(x, 'data.frame'))
   
-  if(length(missing_columns < 0)){
-    warning('Creating columns of NAs: ', paste0(missing_columns, collapse = ', '))
-    newcols <- data.frame(matrix(NA, ncol = length(missing_columns), nrow = nrow(x)))
+  if (length(missing_columns < 0)) {
+    warning('Creating columns of NAs: ',
+            paste0(missing_columns, collapse = ', '))
+    newcols <-
+      data.frame(matrix(NA, ncol = length(missing_columns), nrow = nrow(x)))
     names(newcols) <- missing_columns
     x <- cbind(x, newcols)
   }
@@ -483,7 +524,4 @@ as.pr.points <- function(x){
   class(x) <- c('pr.points', class(x))
   return(x)
 }
-
-
-
 

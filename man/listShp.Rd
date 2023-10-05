@@ -4,12 +4,14 @@
 \alias{listShp}
 \title{List administrative units for which shapefiles are stored on the MAP geoserver.}
 \usage{
-listShp(printed = TRUE, admin_level = c("admin0", "admin1"))
+listShp(printed = TRUE, admin_level = c("admin0", "admin1"), version = NULL)
 }
 \arguments{
 \item{printed}{Should the list be printed to the console?}
 
 \item{admin_level}{Specifies which administrative unit level for which to return available polygon shapefiles. A string vector including one or more of\code{"admin0"}, \code{"admin1"}, \code{"admin2"} OR \code{"admin3"}. Default: \code{c("admin0", "admin1")}}
+
+\item{version}{The admin unit dataset version to return. Is NULL by default, and if left NULL will just use the most recent version of admin unit data.}
 }
 \value{
 \code{listShp} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
@@ -18,7 +20,8 @@ listShp(printed = TRUE, admin_level = c("admin0", "admin1"))
 \code{listShp} lists all administrative units for which shapefiles are stored on the MAP geoserver.
 }
 \examples{
-\donttest{
+\dontrun{
 available_admin_units <- listShp()
+available_admin_units <- listShp(admin_level = c('admin2','admin3'), version = '202206')
 }
 }

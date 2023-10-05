@@ -2,33 +2,17 @@
 % Please edit documentation in R/listData.R
 \name{listData}
 \alias{listData}
-\title{List data available to download from the MAP geoserver.}
+\title{Deprecated function. Please instead use listPRPointCountries for pr points, listVecOccPointCountries for vector points, listRaster for raster and listShp for shape.}
 \usage{
 listData(datatype, printed = TRUE, ...)
 }
 \arguments{
-\item{datatype}{One of 'pr points', 'vector points', 'raster' or 'shape'}
+\item{datatype}{"pr points", "vector points" "raster", or "shape"}
 
-\item{printed}{Should the list be printed to the console?}
+\item{printed}{whether to pretty print the output in console}
 
-\item{...}{Other arguments to be passed to \code{list*} functions. (e.g. \code{admin_level} for \code{listShp})}
-}
-\value{
-\code{listData} returns a data.frame detailing the administrative units for which shapefiles are stored on the MAP geoserver.
+\item{...}{passed on to listPRPointCountries, listVecOccPointCountries, listShp}
 }
 \description{
-\code{listData} is a wrapper for listPoints; listRaster and listShp, listing data (PR survey point data; raster data; shapefiles) available to download from the MAP geoserver.
-}
-\examples{
-\donttest{
-available_admin_units <- listShp()
-available_pr_points <- listPoints(sourcedata = "pr points")
-available_vector_points <- listPoints(sourcedata = "vector points")
-available_rasters <- listRaster()
-}
-}
-\seealso{
-\code{link{listPoints}}
-\code{\link{listRaster}}
-\code{\link{listShp}}
+\code{listData}  deprecated function Please remove it from your code.
 }

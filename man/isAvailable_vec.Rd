@@ -5,15 +5,16 @@
 \title{Check whether Vector Occurrence points are available for a given location}
 \usage{
 isAvailable_vec(
-  sourcedata = "vector points",
+  sourcedata = NULL,
   country = NULL,
   ISO = NULL,
   continent = NULL,
-  full_results = FALSE
+  full_results = FALSE,
+  version = NULL
 )
 }
 \arguments{
-\item{sourcedata}{by default this is "vector points", highlighting the dataset to be searched}
+\item{sourcedata}{deprecated argument. Please remove it from your code.}
 
 \item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
@@ -22,6 +23,9 @@ isAvailable_vec(
 \item{continent}{string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
 \item{full_results}{By default this is FALSE meaning the function only gives a message outlining whether specified country is available, if \code{full_results == TRUE}, the function returns a named list outlining data availability.}
+
+\item{version}{(optional) The vector points dataset version to use. If not provided, will just use the most recent version of vector points data. (To see available version options, 
+use listVecOccPointVersions)}
 }
 \value{
 \code{isAvailable_Vec} returns a named list of input locations with information regarding data availability.
@@ -37,7 +41,7 @@ if \code{full_results == TRUE}, a named list is returned with the following elem
 \code{isAvailable_vec} checks whether the MAP database contains Vector Occurrence points for the specified country/location.
 }
 \examples{
-\donttest{
+\dontrun{
 isAvailable_vec(country = "Suriname")
 x <- isAvailable_vec(ISO = "NGA", full_results = TRUE)
 x <- isAvailable_vec(continent = "Oceania", full_results = TRUE)

@@ -11,19 +11,19 @@ as.pr.points(x)
 }
 \description{
 Will create empty columns for any missing columns expected in a pr.points data.frame.
-This function is particularly useful for use with packages like dplyr that strip 
+This function is particularly useful for use with packages like dplyr that strip
 objects of their classes.
 }
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-\donttest{
+\dontrun{
 library(dplyr)
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 
 # Filter the data frame then readd pr.points class so that autoplot can be used.
-NGA_CMR_PR \%>\% 
-  filter(year_start > 2010) \%>\% 
-  as.pr.points \%>\% 
+NGA_CMR_PR \%>\%
+  filter(year_start > 2010) \%>\%
+  as.pr.points \%>\%
   autoplot
 
 }

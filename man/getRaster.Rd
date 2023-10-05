@@ -5,27 +5,29 @@
 \title{Download Rasters produced by the Malaria Atlas Project}
 \usage{
 getRaster(
-  surface = "Plasmodium falciparum PR2-10",
+  dataset_id = NULL,
+  surface = NULL,
   shp = NULL,
   extent = NULL,
-  file_path = tempdir(),
-  year = as.list(rep(NA, length(surface))),
+  file_path = NULL,
+  year = NULL,
   vector_year = NULL
 )
 }
 \arguments{
-\item{surface}{string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
-Check \code{\link{listRaster}} to find titles of available rasters.}
+\item{dataset_id}{A character string specifying the dataset ID(s) of one or more rasters. These dataset ids can be found in the data.frame returned by listRaster, in the dataset_id column e.g. c('Malaria__202206_Global_Pf_Mortality_Count', 'Malaria__202206_Global_Pf_Parasite_Rate')}
+
+\item{surface}{deprecated argument. Please remove it from your code.}
 
 \item{shp}{SpatialPolygon(s) object of a shapefile to use when clipping downloaded rasters. (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).}
 
 \item{extent}{2x2 matrix specifying the spatial extent within which raster data is desired, as returned by sf::st_bbox() - the first column has the minimum, the second the maximum values; rows 1 & 2 represent the x & y dimensions respectively (matrix(c("xmin", "ymin","xmax", "ymax"), nrow = 2, ncol = 2, dimnames = list(c("x", "y"), c("min", "max")))) (use either \code{shp} OR \code{extent}; if neither is specified global raster is returned).}
 
-\item{file_path}{string specifying the directory to which working files will be downloaded. Defaults to tempdir().}
+\item{file_path}{string specifying the directory to which raster files will be downloaded, if you want to download them. If none given, rasters will not be saved to files.}
 
-\item{year}{default = \code{rep(NA, length(surface))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.}
+\item{year}{default = \code{rep(NA, length(dataset_id))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{dataset_id}, providing the desired year-range for each time-varying surface in \code{dataset_id} or \code{NA} for static rasters.}
 
-\item{vector_year}{default = \code{NULL} for vector occurence rasters, the desired version as prefixed in raster_code returned using available_rasters. By default (\code{NULL}) returns the most recent raster version )}
+\item{vector_year}{deprecated argument. Please remove it from your code.}
 }
 \value{
 \code{getRaster} returns a SpatRaster for the specified extent. Or a SpatRasterCollection if the two rasters are incompatible in terms of projection/extent/resolution
@@ -34,27 +36,11 @@ Check \code{\link{listRaster}} to find titles of available rasters.}
 \code{getRaster} downloads publicly available MAP rasters for a specific surface & year, clipped to a provided bounding box or shapefile.
 }
 \examples{
-# Download PfPR2-10 Raster for Madagascar in 2015 and visualise this immediately.
-\donttest{
+# Download PfPR2-10 Raster for Madagascar and visualise this immediately.
+\dontrun{
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2015)
+MDG_PfPR2_10 <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate", shp = MDG_shp)
 autoplot(MDG_PfPR2_10)
-
-# Download global raster of G6PD deficiency from Howes et al 2012.
-G6PDd_global <- getRaster(surface = "G6PD Deficiency Allele Frequency")
-autoplot(G6PDd_global)
-
-# Download a temporal raster by range
-MDG_PfPR2_10_range <- getRaster(surface = "Plasmodium falciparum PR2-10", 
-                                shp = MDG_shp, year = 2012:2015)
-
-# Download a mix of rasters
-MDG_rasters <- getRaster(surface = c("Plasmodium falciparum PR2-10", 
-                                     'Plasmodium falciparum Incidence', 
-                                     'Plasmodium falciparum Support'),
-                         shp = MDG_shp, year = list(2009:2012, 2005:2007, NA))
-p <- autoplot(MDG_rasters)
-
 }
 
 }

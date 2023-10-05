@@ -5,6 +5,7 @@
 #' @return \code{listRaster} returns a data.frame detailing the following information for each raster available to download from the Malaria Atlas Project database.
 #'
 #' \enumerate{
+#' \item \code{dataset_id} the unique dataset ID of the raster, which can the be used in functions such as getRaster and extractRaster
 #' \item \code{raster_code} unique identifier for each raster
 #' \item \code{title} abbreviated title for each raster, used as \code{surface} argument in getRaster()
 #' \item \code{title_extended} extended title for each raster, detailing raster content
@@ -15,88 +16,89 @@
 #' \item \code{max_raster_year} latest year for which each raster is available
 #' }
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' available_rasters <- listRaster()
 #' }
 #' @export listRaster
-
 listRaster <- function(printed = TRUE){
-message("Downloading list of available rasters...")
+  message("Downloading list of available rasters...")
+  
   if(exists('available_rasters_stored', envir = .malariaAtlasHidden)){
     available_rasters <- .malariaAtlasHidden$available_rasters_stored
 
     #print out message of long raster names
     if(printed == TRUE){
-      message("Rasters Available for Download: \n ",paste(available_rasters$title, collapse = " \n "))
+      message("Rasters Available for Download: \n ",paste(available_rasters$dataset_id, collapse = " \n "))
     }
-
     return(invisible(available_rasters))
-
-  }else{
-
-  #query the geoserver to return xml containing a list of all available rasters & convert this to a list
-    xml <- try(xml2::read_xml("http://malariaatlas.org/geoserver/ows?service=wms&version=1.3.0&request=GetCapabilities"))
-    if(inherits(xml, 'try-error')){
-      return(xml)
-    }
-    
-    layer_xml <-xml2::xml_find_first(xml2::xml_ns_strip(xml), ".//Layer")
-    layer_xml <-  xml2::xml_find_all(layer_xml, ".//Layer")
-
-    layers <- xml2::as_list(layer_xml)
-    names(layers) <- xml2::xml_name(layer_xml)
-
-  #define small function to remove html tags from raster titles
-  html2text <- function(htmlString) {
-    htmlString <-  gsub("<small>", ":", htmlString)
-    return(gsub("<.*?>", "", htmlString))
   }
 
-  titles <-  sub(":.*$", "", html2text(unname(sapply( X = sapply(layers, function(x){x[["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x)))))
-  extended_titles <- sub("^.*:", "", html2text(unname(sapply( X = sapply(layers, function(x){x[["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x)))))
-  codes <- unname(sapply( X = sapply(layers, function(x){sub("^Explorer:", "", x[["Name"]])}), FUN = function (x) ifelse (is.null (x), NA, x)))
-  abstracts <- html2text(unname(sapply( X = sapply(layers, function(x){x[["Abstract"]]}), FUN = function (x) ifelse (is.null (x), NA, x))))
-  citations <- unlist(unname(sapply( X = sapply(layers, function(x){x[["Attribution"]][["Title"]]}), FUN = function (x) ifelse (is.null (x), NA, x))))
-  dims <-  html2text(unname(sapply( X = sapply(layers, function(x){x[["Dimension"]]}), FUN = function (x) ifelse (is.null (x), NA, x))))
-  min_raster_years <- suppressWarnings(as.numeric(unname(sapply(X = gsub("^(.*?)/.*", "\\1", dims),FUN = substr, 1,4))))
-  max_raster_years <- suppressWarnings(as.numeric(unname(sapply(X = gsub(".*/(.*?)/.*$","\\1", dims),FUN = substr, 1,4))))
-  #pub_years <- as.numeric(as.character(unname(sapply( X = sapply(layers, function(x){sub("^pub_year:","",grep("^pub_year:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))))
-  categories <- unname(sapply( X = sapply(layers, function(x){sub("^category:","",grep("^category:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))
-  downloadable <- unname(sapply( X = sapply(layers, function(x){sub("^download:","",grep("^download:",unname(unlist(x[["KeywordList"]])), value = TRUE))}), FUN = function (x) ifelse (is.null (x), NA, x)))
-
-
-  # extract raster metadata from layers list & turn this into dataframe
-  available_rasters <- data.frame("title"= titles,
-                                  "title_extended" = extended_titles,
-                                  "raster_code" = codes,
-                                  "abstract" = abstracts,
-                                  "citation"= citations,
-                                  # "pub_year" = pub_years,
-                                  "min_raster_year" = min_raster_years,
-                                  "max_raster_year" =  max_raster_years,
-                                  "category" = categories,
-                                  "downloadable" = downloadable,
-                                  stringsAsFactors = FALSE)
-
-  available_rasters <- available_rasters[available_rasters$category %in% "surfaces",-which(names(available_rasters)=="category")]
-  available_rasters <- available_rasters[!available_rasters$downloadable %in% "false",-which(names(available_rasters)=="downloadable")]
-
-  available_rasters <- clean_mosquito_names(available_rasters)
+  workspaces <- get_workspaces()
   
-  available_rasters <- dplyr::arrange(available_rasters, .data$title)
+  available_rasters <- future.apply::future_lapply(workspaces, function(workspace){
+    wcs_client <- get_wcs_clients()[[workspace]]
+    wms_client <- get_wms_clients()[[workspace]]
+    wcs_capabilities <- wcs_client$getCapabilities()
+    wms_capabilities <- wms_client$getCapabilities()
+
+    wcs_coverage_summaries <- wcs_capabilities$getCoverageSummaries()
+
+    wcs_coverages <- future.apply::future_lapply(wcs_coverage_summaries, function(wcs_coverage_summary){
+      id = wcs_coverage_summary$getId()
+      id_parts <- get_workspace_and_version_from_coverage_id(id)
+
+      layer_id <- gsub("__", ":", wcs_coverage_summary$getId())
+      wms_layer <- wms_capabilities$findLayerByName(layer_id)
+      min_raster_year = NA
+      max_raster_year = NA
+
+      if(!is.null(wms_layer$getTimeDimension())) {
+        min_and_max_year <- getMinAndMaxYear(wms_layer$getTimeDimension()$values)
+        min_raster_year <- min_and_max_year$min
+        max_raster_year <- min_and_max_year$max
+      }
+
+      titles <- strsplit(wms_layer$getTitle(), "<small>")
+      title <- xml2::xml_text(xml2::read_html(charToRaw(titles[[1]][1])))
+      title_extended <- xml2::xml_text(xml2::read_html(charToRaw(titles[[1]][2])))
+      abstract <- xml2::xml_text(xml2::read_html(charToRaw(wms_layer$getAbstract())))
+
+      return(data.frame(
+        dataset_id = id,
+        version = id_parts$version,
+        raster_code = layer_id,
+        title = title,
+        title_extended = title_extended,
+        abstract = abstract,
+        min_raster_year = min_raster_year,
+        max_raster_year = max_raster_year
+      ))
+
+    })
+
+    wcs_coverages_df <- do.call(rbind, wcs_coverages)
+    return(wcs_coverages_df)
+    
+  })
+  
+  all_available_rasters <- do.call(rbind, available_rasters)
+  all_available_rasters <- clean_mosquito_names(all_available_rasters)
+  
   #print out message of long raster names
   if(printed == TRUE){
-    message("Rasters Available for Download: \n ",paste(available_rasters$title, collapse = " \n "))
+    message("Rasters Available for Download: \n ",paste(all_available_rasters$dataset_id, collapse = " \n "))
   }
-
-  .malariaAtlasHidden$available_rasters_stored <- available_rasters
-  return(invisible(available_rasters))
-  }
+  
+  .malariaAtlasHidden$available_rasters_stored <- all_available_rasters
+  return(invisible(all_available_rasters))
 }
-
-## z <- listRaster()
-
-# Function to clean up a bunch of mess in the mosquito names.
+  
+#' Function to clean up a bunch of mess in the mosquito names.
+#'
+#' @param available_rasters data.frame of available rasters, with a column for title..
+#' @return The same data.frame inputted, but now with some of the titles corrected.
+#' @keywords internal
+#'
 clean_mosquito_names <- function(available_rasters){
   available_rasters$title[available_rasters$title== "An. dirus species complex"&grepl("^Moyes", available_rasters$citation)] <- "An. dirus species complex (2016)"
   available_rasters$title[available_rasters$title== "An. dirus species complex"&grepl("^Sinka", available_rasters$citation)] <- "An. dirus species complex (2011)"
@@ -111,4 +113,29 @@ clean_mosquito_names <- function(available_rasters){
   available_rasters$title[available_rasters$title== "An. merus D\u0246nitz, 1902"&grepl("^Sinka", available_rasters$citation)] <- "An. merus D\u0246nitz, 1902 (2010)"
   return(available_rasters)
 }
+
+#' Gets the minimum and maximum year for the time dimension values of a WMS Layer. 
+#'
+#' @param time_dimension_values A string or character vector of date strings that represent the time dimension e.g. can be fetched with wms_layer$getTimeDimension()$values.
+#' Can be in the format of "2000-01-01T00:00:00.000Z/2019-01-01T00:00:00.000Z/PT1S" (in which the min year will be 2000 and the max year 2019) or several individual dates, 
+#' for which the min and max year will be calculated.
+#' @return A named list with a value for min and max. 
+#' @keywords internal
+#'
+getMinAndMaxYear <- function(time_dimension_values) {
+  if(length(time_dimension_values) == 1) {
+    #In format "2000-01-01T00:00:00.000Z/2019-01-01T00:00:00.000Z/PT1S"
+    years <- stringr::str_extract_all(time_dimension_values, "\\d{4}")[[1]]
+    return(list(min=years[[1]], max=years[[2]]))
+  }
+  else if(length(time_dimension_values) > 1) {
+    #In format of list of dates
+    years <- unlist(lapply(time_dimension_values, function(date) {as.numeric(format(as.Date(date),'%Y'))}))
+    return(list(min=min(years), max=max(years)))
+  }
+  return(list(min=NA, max=NA))
+}
+
+
+
 

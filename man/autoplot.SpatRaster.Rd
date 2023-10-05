@@ -42,7 +42,7 @@ See the trans argument in \code{\link{continuous_scale}} for possible values.}
   displays these in a grid.
 }
 \examples{
-\donttest{
+\dontrun{
 # Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points
 #   for Madagascar in 2013 and visualise these together on a map.
 

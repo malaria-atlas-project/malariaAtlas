@@ -4,10 +4,13 @@
 \alias{listSpecies}
 \title{list all species which have occurrence data within the MAP database.}
 \usage{
-listSpecies(printed = TRUE)
+listSpecies(printed = TRUE, version = NULL)
 }
 \arguments{
 \item{printed}{should the list be printed to the database.}
+
+\item{version}{(optional) The vector dataset version to use If not provided, will just use the most recent version of vector dataset data. (To see available version options, 
+use listVecOccPointVersions)}
 }
 \value{
 \code{listSpecies} returns a data.frame detailing the following information for each species available to download from the Malaria Atlas Project database.
@@ -20,7 +23,7 @@ listSpecies(printed = TRUE)
 \code{listSpecies} lists all species occurrence data available to download from the Malaria Atlas Project database.
 }
 \examples{
-\donttest{
+\dontrun{
 available_species <- listSpecies()
 }
 

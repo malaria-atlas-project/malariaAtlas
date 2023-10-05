@@ -17,7 +17,7 @@
 #' @return \code{autoplot.pr.points} returns a plots (gg object) for the supplied pr.points dataframe.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' PfPR_surveys_NGA <- getPR(country = c("Nigeria"), species = "Pf")
 #' autoplot(PfPR_surveys_NGA)
 #'

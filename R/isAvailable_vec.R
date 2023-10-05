@@ -4,12 +4,14 @@
 #'
 #' @return \code{isAvailable_Vec} returns a named list of input locations with information regarding data availability.
 #'
-#' @param sourcedata by default this is "vector points", highlighting the dataset to be searched
+#' @param sourcedata deprecated argument. Please remove it from your code.
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent  string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param full_results By default this is FALSE meaning the function only gives a message outlining whether specified country is available, if \code{full_results == TRUE}, the function returns a named list outlining data availability.
-#'
+#' @param version (optional) The vector points dataset version to use. If not provided, will just use the most recent version of vector points data. (To see available version options, 
+#' use listVecOccPointVersions)
+#' 
 #' @return if \code{full_results == TRUE}, a named list is returned with the following elements:
 #' \enumerate{
 #' \item \code{location} - specified input locations
@@ -18,24 +20,24 @@
 #' }
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' isAvailable_vec(country = "Suriname")
 #' x <- isAvailable_vec(ISO = "NGA", full_results = TRUE)
 #' x <- isAvailable_vec(continent = "Oceania", full_results = TRUE)
 #' }
 #' @export isAvailable_vec
 
-isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = NULL, continent = NULL, full_results = FALSE) {
+isAvailable_vec <- function(sourcedata = NULL, country = NULL, ISO = NULL, continent = NULL, full_results = FALSE, version = NULL) {
   
-  if(exists('available_countries_stored_vec', envir = .malariaAtlasHidden)){
-    available_countries_vec <- .malariaAtlasHidden$available_countries_stored_vec
-  }else{
-    available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")
-    if(inherits(available_countries_vec, 'try-error')){
-      message(available_countries_vec)
-      return(available_countries_vec)
-    }
-  }  
+  if (!is.null(sourcedata)) {
+    lifecycle::deprecate_warn("1.6.0", "isAvailable_vec(sourcedata)", details = "The argument 'sourcedata' has been deprecated. It will be removed in the next version. It has no meaning.")
+  }
+  
+  if(is.null(country) & is.null(ISO) & is.null(continent)){
+    stop('Must specify one of country, ISO or continent.')
+  }
+  
+  available_countries_vec <- listVecOccPointCountries(printed = FALSE, version = version)
   
   capwords <- function(string) {
     cap <- function(s) {
@@ -90,7 +92,7 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
   } else if(!(is.null(ISO))){
     location_input_vec <- as.character(toupper(ISO))
     if(nchar(location_input_vec)!= 3){
-      stop("Specifying by iso-code only works with ISO3, use listPoints() to check available countries & their ISO3")
+      stop("Specifying by iso-code only works with ISO3, use listVecOccPointCountries() to check available countries & their ISO3")
     }
     available_locs_vec <- available_countries_vec$country_id
   } else if(!(is.null(continent))){
@@ -129,7 +131,7 @@ isAvailable_vec <- function(sourcedata = "vector points", country = NULL, ISO = 
       if(!(checked_availability_vec$possible_match[checked_availability_vec$is_available==0][i] %in% c("character(0)","",NA))) {
         error_message[i] <- paste("Data not found for '",checked_availability_vec$location[checked_availability_vec$is_available==0][i],"', did you mean ", checked_availability_vec$possible_match[checked_availability_vec$is_available==0][i], "?", sep = "")
       } else {
-        error_message[i] <- paste("Data not found for '",checked_availability_vec$location[checked_availability_vec$is_available==0][i],"', use listPoints() to check data availability. ", sep = "")
+        error_message[i] <- paste("Data not found for '",checked_availability_vec$location[checked_availability_vec$is_available==0][i],"', use listVecOccPointCountries() to check data availability. ", sep = "")
       }
     }
     

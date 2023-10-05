@@ -1,6 +1,6 @@
 Package: malariaAtlas
 Title: An R Interface to Open-Access Malaria Data, Hosted by the 'Malaria Atlas Project'
-Version: 1.2.0
+Version: 1.5.0.9000
 Authors@R: c(
     person("Mauricio", "van den Berg", email =  "mauricio.vandenberg@telethonkids.org.au", role = c("aut", "cre")),
     person("Sarah", "Connor", email =  "sarah.connor@telethonkids.org.au", role = c("aut")),
@@ -21,12 +21,10 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-  curl, 
   xml2, 
   gridExtra, 
   httr,
   dplyr,
-  stringi,
   tidyr,
   methods,
   stats,
@@ -35,7 +33,12 @@ Imports:
   sf,
   lifecycle,
   terra,
-  tidyterra
+  tidyterra,
+  ows4R,
+  future.apply,
+  lubridate,
+  jsonlite,
+  stringr
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,

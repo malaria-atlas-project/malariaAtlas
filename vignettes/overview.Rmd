@@ -12,6 +12,7 @@ vignette: >
 
 
 ```{r globalKnitrOptions, include = FALSE}
+library(malariaAtlas)
 knitr::opts_chunk$set(fig.width=12, fig.height=8)
 ```
 
@@ -21,153 +22,237 @@ This package allows you to download parasite rate data (*Plasmodium falciparum* 
 
 ## Available Data
 
-The data can be interactively explored at [https://malariaatlas.org/explorer/#/explorer](https://malariaatlas.org/explorer/#/explorer).
+The data can be interactively explored at [https://data.malariaatlas.org/maps](https://data.malariaatlas.org/maps).
 This is also useful for finding information on the raster data available and checking the extents of different rasters (some are Africa only for example).
 
 
-### list* Functions
+### List Versions Functions
 
+The list version functions are used to list the available versions of different datasets, and all return a data.frame with a single column for version. These versions can be passed to functions such as `listShp`, `listSpecies`, `listPRPointCountries`, `listVecOccPointCountries`, `getPR`, `getVecOcc` and `getShp`.
 
-`listData()` retrieves a list of available data to download. 
+Use:
 
-Use: 
+-   `listPRPointVerions()` to see the available versions for PR point data, which can then be used in `listPRPointCountries` and `getPR`.
 
-* listData(datatype = "pr points") OR listPoints(sourcedata = "pr points") to see for which countries PR survey point data can be downloaded.
+-   `listVecOccPointVersions()` to see the available versions for vector occurrence data, which can then be used in `listSpecies`, `listVecOccPointCountries` and `getVecOcc`.
 
-* use listData(datatype = "vector points") or listPoints(sourcedata = "vector points") to see for which countries Vector Occurrence data can be downloaded.
+-   `listShpVersions()` to see the available versions for admin unit shape data, which can then be used in `listShp` and `getShp`.
 
-* use listData(datatype = "rasters") OR listRaster() to see rasters available to download. 
-
-* use listData(datatype = "shape") OR listShp() to see shapefiles available to download. 
-
-```{r listd, results = "hide", message = FALSE}
-library(malariaAtlas)
-listData(datatype = "pr points")
-```
 ```{r results = "hide", message = FALSE}
-listData(datatype = "vector points")
+listPRPointVersions()
 ```
+
 ```{r results = "hide", message = FALSE}
-listData(datatype = "raster")
-```
-``` {r results = "hide", message = FALSE}
-listData(datatype = "shape")
+listVecOccPointVersions()
 ```
 
-### is_available
+```{r results = "hide", message = FALSE}
+listShpVersions()
+```
 
-`isAvailable_pr` confirms whether or not PR survey point data is available to download for a specified country. 
+### List Countries and Species Functions
+
+To list the countries where there is available data for PR points or vector occurrence points, use:
+
+-   `listPRPointCountries()` for PR points
+-   `listVecOccPointCountries()` for vector occurrence points
+
+To list the species available for vector point data use `listSpecies()`
+
+All three of these functions can optionally take a version parameter (which can be found with the list versions functions). If you choose not to provide a version, the most recent version of the relevant dataset will be selected by default.
+
+```{r results = "hide", message = FALSE}
+listPRPointCountries(version = "202206")
+```
+
+```{r results = "hide", message = FALSE}
+listVecOccPointCountries(version = "201201")
+```
+
+```{r results = "hide", message = FALSE}
+listSpecies(version = "201201")
+```
+
+### List Administrative Units
+
+To list administrative units for which shapefiles are stored on the MAP geoserver, use `listShp()`. Similar to the list countries and species functions, this function can optionally take a version.
+
+```{r results = "hide", message = FALSE}
+listShp(version = "202206")
+```
+
+### List Raster Function
+
+`listRaster()` gets minimal information on all available rasters. It returns a data.frame with several columns for each raster such as dataset_id, title, abstract, min_raster_year and max_raster_year. The dataset_id can then be used in `getRaster` and `extractRaster`.
+
+```{r results = "hide", message = FALSE}
+listRaster()
+```
+
+### Is Available Functions
+
+`isAvailable_pr` confirms whether or not PR survey point data is available to download for a specified country, ISO3 code or continent.
 
 Check whether PR data is available for Madagascar:
-```{r highlight = TRUE}
+
+```{r results = "hide", message = FALSE}
 isAvailable_pr(country = "Madagascar")
 ```
 
-Check whether PR data is available for the United States of America
-```{r, error = TRUE, purl = FALSE, highlight = TRUE}
+Check whether PR data is available for the United States of America by ISO code:
+
+```{r results = "hide", message = FALSE}
 isAvailable_pr(ISO = "USA")
 ```
 
-`isAvailable_vec` confirms whether or not Vector occurrence point data is available to download for a specified country. 
+Check whether PR data is available for Asia:
 
-Check whether Vector occurrence data is available for Myanmar:
-```{r highlight = TRUE}
+```{r results = "hide", message = FALSE}
+isAvailable_pr(continent = "Asia")
+```
+
+`isAvailable_vec` confirms whether or not vector survey point data is available to download for a specified country, ISO3 code or continent.
+
+Check whether vector data is available for Myanmar:
+
+```{r results = "hide", message = FALSE}
 isAvailable_vec(country = "Myanmar")
 ```
 
-Check whether Vector occcurrence data is available for the Brazil
-```{r, error = TRUE, purl = FALSE, highlight = TRUE}
-isAvailable_vec(ISO = "BRA")
+Check whether vector data is available for multiple countries:
+
+```{r results = "hide", message = FALSE}
+isAvailable_vec(country = c("Nigeria", "Ethiopia"))
 ```
 
-## Downloading & Visualising Data: 
-### get* functions & autoplot methods
+You can also pass these functions a dataset version. If you don't they will default to using the most recent version.
+
+```{r results = "hide", message = FALSE}
+isAvailable_pr(country = "Madagascar", version = "202206")
+```
+
+## Downloading & Visualising Data:
+
+### get\* functions & autoplot methods
 
 ### Parasite Rate Survey Points
-`getPR()` downloads all publicly available PR data points for a specified country and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format: 
 
+`getPR()` downloads all publicly available PR data points for a specified location (country, ISO, continent or extent) and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format:
 
-```{r message = FALSE}
+```{r message = FALSE, warning = FALSE, results = "hide"}
 MDG_pr_data <- getPR(country = "Madagascar", species = "both")
 ```
-```{r echo = FALSE, error = TRUE, purl = FALSE}
+
+```{r echo = FALSE}
 tibble::glimpse(MDG_pr_data)
 ```
 
-### Vector Occurrnece points
-`getVecOcc()` downloads all publicly available Vector Occurrence data points for a specified country and mosquito species (if required) and returns this as a dataframe with the following format: 
-
+```{r message = FALSE}
+Africa_pvpr_data <- getPR(continent = "Africa", species = "Pv")
+```
 
 ```{r message = FALSE}
-MMR_vec_data <- getVecOcc(country = "Myanmar")
-```
-```{r echo = FALSE, error = TRUE, purl = FALSE}
-tibble::glimpse(MMR_vec_data)
+Extent_pfpr_data <- getPR(extent = rbind(c(-2.460181, 13.581921), c(-3.867188, 34.277344)), species = "Pf")
 ```
 
-`autoplot.pr.points` is an autoplot method to enable quick mapping of the locations of downloaded PR points. 
+You can also pass this function a dataset version. If you don't it will default to using the most recent version.
 
+```{r message = FALSE}
+MDG_pr_data_202206 <- getPR(country = "Madagascar", species = "both", version = "202206")
+```
 
-```{r message = FALSE, warning = FALSE, results = "hide", error = TRUE, purl = FALSE}
+`autoplot.pr.points` configures autoplot method to enable quick mapping of the locations of downloaded PR points.
+
+```{r message = FALSE, warning = FALSE, results = "hide"}
 autoplot(MDG_pr_data)
 ```
 
-`autoplot.vector.points` is an autoplot method to enable quick mapping of the locations of downloaded vector occurrence points. 
+A version without facetting is also available.
 
+```{r message = FALSE, warning = FALSE, results = "hide"}
+autoplot(MDG_pr_data,
+         facet = FALSE)
+```
 
-```{r message = FALSE, warning = FALSE, results = "hide", error = TRUE, purl = FALSE}
+### Vector Survey Points
+
+`getVecOcc()` downloads all publicly available Vector survey points for a specified location (country, ISO, continent or extent) and species (options for which can be found with `listSpecies`) and returns this as a dataframe with the following format:
+
+```{r message = FALSE, warning = FALSE, results = "hide"}
+MMR_vec_data <- getVecOcc(country = "Myanmar")
+```
+
+```{r echo = FALSE}
+tibble::glimpse(MMR_vec_data)
+```
+
+You can also pass this function a dataset version. If you don't it will default to using the most recent version.
+
+```{r message = FALSE, warning = FALSE, results = "hide"}
+MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
+```
+
+`autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points.
+
+```{r message = FALSE, warning = FALSE, results = "hide"}
 autoplot(MMR_vec_data)
 ```
 
-Furthermore, being ggplot2 plots, these plots can easily be added to or modified.
+N.B. Facet-wrapped option is also available for species stratification.
 
-```{r message = FALSE, warning = FALSE, results = "hide", error = TRUE, purl = FALSE}
-p <- autoplot(MDG_pr_data, printed = FALSE)
-p + 
-  scale_fill_gradientn(colours = rev(palettetown::pokepal('charmeleon', spread = 3))) +
-  theme_minimal()
+```{r message = FALSE, warning = FALSE, results = "hide"}
+autoplot(MMR_vec_data,
+         facet = TRUE)
 ```
-
 
 ### Shapefiles
-`getShp()` downloads a shapefile for a specified country (or countries) and returns this as either a spatialPolygon or data.frame object.
+
+`getShp()` downloads a shapefile for a specified country (or countries) and returns this as a simple feature object.
 
 ```{r message = FALSE}
-MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin1", "admin2"))
+MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
 ```
-```{r echo = FALSE, error = TRUE, purl = FALSE, error = TRUE, purl = FALSE}
+
+```{r echo = FALSE}
 tibble::glimpse(MDG_shp)
 ```
 
 `autoplot.sf` configures autoplot method to enable quick mapping of downloaded shapefiles.
 
-```{r message = FALSE, error = TRUE, purl = FALSE}
+```{r message = FALSE}
 autoplot(MDG_shp)
 ```
 
-### Modelled Rasters 
+N.B. Facet-wrapped option is also available for species stratification.
 
-`getRaster()`downloads publicly available MAP rasters for a specific surface & year, clipped to a given bounding box or shapefile
-
-```{r message = FALSE, error = TRUE, purl = FALSE}
-MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
+```{r message = FALSE, warning = FALSE, results = "hide"}
+autoplot(MDG_shp,
+         facet = TRUE,
+         map_title = "Example of facetted shapefiles.")
 ```
 
-`autoplot.SpatRaster` and `autoplot.SpatRasterCollection` are autoplot methods to enable quick mapping of downloaded rasters.
+### Modelled Rasters
 
-```{r message = FALSE, error = TRUE, purl = FALSE, purl = FALSE}
+`getRaster()`downloads publicly available MAP rasters for a specific dataset_id & year, clipped to a given bounding box or shapefile
+
+```{r message = FALSE, warning = FALSE, results = "hide"}
+MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
+MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
+```
+
+`autoplot.SpatRaster` & `autoplot.SpatRasterCollection` configures autoplot method to enable quick mapping of downloaded rasters.
+
+```{r message = FALSE}
 p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 ```
 
+### Combined visualisation
 
-### Combined visualisation 
+By using the above tools along with ggplot, simple comparison figures can be easily produced.
 
-By using the above tools along with ggplot, simple comparison figures can be easily produced. 
-
-```{r message = FALSE, warning = FALSE, error = TRUE, purl = FALSE}
+```{r message = FALSE, warning = FALSE, results = "hide"}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2013)
+MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
 
 p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp, printed = FALSE)
 
@@ -175,20 +260,20 @@ pr <- getPR(country = c("Madagascar"), species = "Pf")
 p[[1]] +
 geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = positive / examined, size = examined), shape = 21)+
 scale_size_continuous(name = "Survey Size")+
- scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
- ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
+ scale_fill_distiller(name = "PfPR", palette = "RdYlBu")
 ```
 
-```{r message = FALSE, warning = FALSE, error = TRUE, purl = FALSE}
-MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
-MMR_an_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)
+Similarly for vector survey data
 
-p <- autoplot(MMR_an_dirus, shp_df = MMR_shp, printed = FALSE)
+```{r message = FALSE, warning = FALSE, results = "hide"}
+MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
+MMR_An_dirus <- getRaster(dataset_id = "Explorer__2010_Anopheles_dirus_complex", shp = MMR_shp)
+
+p <- autoplot(MMR_An_dirus, shp_df = MMR_shp, printed = FALSE)
 
 vec <- getVecOcc(country = c("Myanmar"), species = "Anopheles dirus")
 p[[1]] +
-geom_point(data = vec, aes(longitude, latitude), shape = 21,  show.legend = TRUE)+
-  scale_fill_distiller(name = "Predicted distribution of Anopheles dirus species complex", palette = "RdYlBu")+
-  ggtitle("Raw Vector Survey points\n + The predicted distribution of Anohpeles dirus species complex")
+geom_point(data = vec, aes(longitude, latitude, colour = species))+
+  scale_colour_manual(values = "black", name = "Vector survey locations")+
+ scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "PuBuGn", direction = 1)
 ```
-

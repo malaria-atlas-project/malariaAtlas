@@ -39,6 +39,7 @@ test_that("data is downloaded as a data.frame", {
   expect_equal(sort(names(kenya_pv)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species", "method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
   expect_equal(sort(names(kenya_pf)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
   expect_equal(sort(names(kenya_BOTH)),sort(c("site_id","dhs_id","site_name","latitude","longitude","month_start","year_start","month_end","year_end","lower_age","upper_age","examined","positive","pr","species","method","rdt_type","pcr_type","rural_urban","country_id","country","continent_id","malaria_metrics_available","location_available","permissions_info","citation1","citation2","citation3")))
+  ##TODO: Failing
   # checking country name specification works
   expect_equal(levels(factor(kenya_pf$country)), "Kenya")
   expect_equal(levels(factor(kenya_pv$country)), "Kenya")
@@ -78,15 +79,15 @@ test_that("data is downloaded as a data.frame", {
   expect_error(getPR(country = "Australia", species = "both"), regexp = "PR data points are not available")
   
   expect_warning(getPR(country = c("kenya","ngeria"), species = "both"), regexp = "did you mean Nigeria")
-  expect_error(getPR(country = c("kenya","ngeria"), species = "both"), regexp = NA)
-  expect_warning(getPR(country = c("kenya","Australia"), species = "both"), regexp = "Data not found for 'Australia', use listPoints()")
+  expect_error(suppressWarnings(getPR(country = c("kenya","ngeria"), species = "both")), regexp = NA)
+  expect_warning(getPR(country = c("kenya","Australia"), species = "both"), regexp = "Data not found for 'Australia', use listPRPointCountries()")
 
-  expect_error(getPR(country = c("kenya","Australia"), species = "both"), regexp = NA)
+  expect_error(suppressWarnings(getPR(country = c("kenya","Australia"), species = "both")), regexp = NA)
   expect_error(getPR(country = c("Ngeria","Australia"), species = "both"), regexp = "PR data points are not available")
   expect_error(getPR(country = c("Ngeria","Australia"), species = "both"), regexp = "PR data points are not available")
   
   expect_warning(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "did you mean Nigeria")
-  expect_warning(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "found for 'Australia', use listPoints()")
+  expect_warning(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "found for 'Australia', use listPRPointCountries()")
 
   
   
@@ -108,7 +109,7 @@ test_that('DL all works', {
   skip_on_cran()
   expect_message(
     d <- getPR(species = 'Pf', country = 'all'),
-    regexp = 'Importing PR point data for all'
+    regexp = 'Data downloaded for all'
   )
   expect_true(inherits(d, 'pr.points'))
   expect_true(nrow(d) > 0)
@@ -123,4 +124,8 @@ test_that('No location errors properly', {
     regexp = 'Must specify one of'
   )
 
+})
+
+test_that('Version works', {
+  expect_message(getPR(species = 'both', country = c("Kenya")), regexp = "Because you did not provide a version, by default the version being used is")
 })

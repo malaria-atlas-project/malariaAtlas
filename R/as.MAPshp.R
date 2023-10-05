@@ -17,7 +17,7 @@
 #' @examples
 #' #Download shapefiles for Madagascar and visualise these on a map.
 #'
-#' \donttest{
+#' \dontrun{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #' MDG_shp <- as.MAPshp(MDG_shp)
 #' autoplot(MDG_shp)
@@ -31,7 +31,7 @@
 #' @export
 
 as.MAPshp <- function(object){
-  lifecycle::deprecate_warn("1.5.0", "as.MAPshp()", details = "This function has become unnecessary for usage with autoplot. It will be removed in the next version.")
+  lifecycle::deprecate_warn("1.6.0", "as.MAPshp()", details = "This function has become unnecessary for usage with autoplot. It will be removed in the next version.")
   return(object)
 }
 

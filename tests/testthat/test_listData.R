@@ -26,7 +26,8 @@ test_that("downloaded data.frame is in the correct format",{
 #})
 
 #test_that("available_countries_stored_pr object is stored in hidden environment",{
-  expect_true(exists("available_countries_stored_pr", envir = .malariaAtlasHidden))
+  expect_equal(length(grep("Pv_Parasite_Rate_Surveys", names(.malariaAtlasHidden$list_points))), 1)
+  expect_equal(length(grep("Pf_Parasite_Rate_Surveys", names(.malariaAtlasHidden$list_points))), 1)
 })
 
 
@@ -61,7 +62,7 @@ test_that("downloaded data.frame is in the correct format",{
 #})
 
 #test_that("available_countries_stored_vec object is stored in hidden environment",{
-  expect_true(exists("available_countries_stored_vec", envir = .malariaAtlasHidden))
+  expect_equal(length(grep("Global_Dominant_Vector_Surveys", names(.malariaAtlasHidden$list_points))), 1)
 })
 
 # listRaster() tests
@@ -84,7 +85,7 @@ test_that("downloaded data.frame is in the correct format",{
 #})
 
 #test_that("downloaded dataframe contains has correct number of columns",{
-  expect_equal(sort(names(available_rasters)),sort(c("raster_code","title","title_extended", "abstract","citation", "min_raster_year", "max_raster_year")))
+  expect_equal(sort(names(available_rasters)),sort(c("dataset_id","version","raster_code","title","title_extended", "abstract","min_raster_year", "max_raster_year")))
 #})
 
 #test_that("available_countries_stored object is stored in hidden environment",{
@@ -111,20 +112,20 @@ test_that("downloaded data.frame is in the correct format",{
 
 
 #test_that("available_admin_stored object is stored in hidden environment",{
-  expect_true(exists("available_admin_stored", envir = .malariaAtlasHidden))
-  
+  expect_equal(length(names(.malariaAtlasHidden$list_shp$admin0)), 1)
+
   
   # Test that admin level works.
   
   dd1 <- listShp(printed = FALSE, admin_level = 'admin0')
   expect_true(all(dd1$admn_level == 0))
   
-  expect_true(exists("available_admin_stored", envir = .malariaAtlasHidden))
   returned_rows1 <- nrow(dd1)
   #stored_rows1 <- nrow(malariaAtlas:::.malariaAtlasHidden$available_admin_stored)
   
   dd2 <- listShp(printed = FALSE, admin_level = 'admin1')
   expect_true(all(dd2$admn_level == 1))
+  expect_equal(length(names(.malariaAtlasHidden$list_shp$admin1)), 1)
   
   returned_rows2 <- nrow(dd2)
   #stored_rows2 <- nrow(malariaAtlas:::.malariaAtlasHidden$available_admin_stored)

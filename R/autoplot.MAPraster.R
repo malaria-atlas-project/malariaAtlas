@@ -17,7 +17,7 @@
 #'   supplied raster.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points
 #' #   for Madagascar in 2013 and visualise these together on a map.
 #'
@@ -64,7 +64,7 @@ autoplot.MAPraster <- function(object,
                                fill_colour_palette = "RdYlBu",
                                printed = TRUE) {
   
-  lifecycle::deprecate_stop("1.5.0", "autoplot.MAPraster()", details = "This function will is deprecated. getRaster should return an object of type SpatRaster")
+  lifecycle::deprecate_stop("1.6.0", "autoplot.MAPraster()", details = "This function will is deprecated. getRaster should return an object of type SpatRaster")
   
 
   make_plot <- function(object, rastername, shp_df, legend_title){

@@ -5,28 +5,30 @@
 \title{Extract pixel values from MAP rasters using point coordinates.}
 \usage{
 extractRaster(
-  df = NULL,
+  df,
   csv_path = NULL,
-  surface = "PfPR2-10",
-  year = rep(NA, length(surface))
+  surface = NULL,
+  year = NULL,
+  dataset_id = NULL
 )
 }
 \arguments{
 \item{df}{data.frame containing coordinates of input point locations, must contain columns named 'latitude'/'lat'/'x'  AND 'longitude'/'long'/'y')}
 
-\item{csv_path}{(optional) user-specified path to which extractRaster coordinates and results are stored. If not specified, tempdir() is used instead.}
+\item{csv_path}{(optional) user-specified path to which extractRaster coordinates and results are stored.}
 
-\item{surface}{string containing 'title' of desired raster(s), e.g. \code{c("raster1", "raster2")}. Defaults to "PfPR2-10" - the most recent global raster of PfPR 2-10.
-Check \code{\link{listRaster}} to find titles of available rasters.}
+\item{surface}{deprecated argument. Please remove it from your code.}
 
-\item{year}{default = \code{rep(NA, length(surface))}; for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a vector specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.}
+\item{year}{for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a vector specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{surface}, providing the desired year-range for each time-varying surface in \code{surface} or \code{NA} for static rasters.}
+
+\item{dataset_id}{A character string specifying the dataset ID(s) of one or more rasters. These dataset ids can be found in the data.frame returned by listRaster, in the dataset_id column e.g. c('Malaria__202206_Global_Pf_Mortality_Count', 'Malaria__202206_Global_Pf_Parasite_Rate')}
 }
 \value{
-\code{getPR} returns the input dataframe (\code{df}), with the following columns apprended, providing raster values for each surface, location and year.
+\code{extractRaster} returns the input dataframe (\code{df}), with the following columns appended, providing values for each raster, location and year.
 
 \enumerate{
-\item \code{layer} raster code corresponding to extracted raster values for a given row, check \code{\link{listRaster}} for raster metadata.
-\item \code{year} the year for which raster values were extraced (time-varying rasters only; static rasters do not have this column).
+\item \code{layerName} dataset id corresponding to extracted raster values for a given row, check \code{\link{listRaster}} for raster metadata.
+\item \code{year} the year for which raster values were extracted (time-varying rasters only; static rasters do not have this column).
 \item \code{value} the raster value for the pixel in which a given point location falls.
 }
 }
@@ -35,19 +37,16 @@ Check \code{\link{listRaster}} to find titles of available rasters.}
 }
 \examples{
 #Download PfPR data for Nigeria and Cameroon and map the locations of these points using autoplot
-\donttest{
+\dontrun{
 # Get some data and remove rows with NAs in location or examined or positive columns.
 NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
 complete <- complete.cases(NGA_CMR_PR[, c(4, 5, 16, 17)])
 NGA_CMR_PR <- NGA_CMR_PR[complete, ]
 
 # Extract PfPR data at those locations.
-data <- extractRaster(NGA_CMR_PR[, c('latitude', 'longitude')],
-                      surface = 'Plasmodium falciparum PR2-10',
-                      year = 2015)
-
-# Data are returned in the same order.
-all(data$longitude == NGA_CMR_PR$longitude)
+data <- extractRaster(df = NGA_CMR_PR[, c('latitude', 'longitude')],
+                      dataset_id = 'Malaria__202206_Global_Pf_Parasite_Rate',
+                      year=2020)
 
 # Some rasters are stored with NA encoded as -9999
 data$value[data$value == -9999] <- NA

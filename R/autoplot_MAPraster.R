@@ -10,7 +10,7 @@
 #' @return \code{autoplot_MAPraster} returns a list of plots (gg objects) for each supplied raster.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' #Download PfPR2-10 Raster (Bhatt et al 2015) and raw survey points for Madagascar in
 #' #  2013 and visualise these together on a map.
 #'
@@ -32,7 +32,7 @@
 #'
 #'
 #' # Download global raster of G6PD deficiency (Howes et al 2012) and visualise this on a map.
-#' \donttest{
+#' \dontrun{
 #' G6PDd_global <- getRaster(surface = "G6PD Deficiency Allele Frequency")
 #' #autoplot_MAPraster(G6PDd_global)
 #' }
@@ -55,7 +55,7 @@
 #' @export autoplot_MAPraster
 
 autoplot_MAPraster <- function(object, ...){
-  lifecycle::deprecate_warn("1.5.0", "autoplot_MAPraster()", details = "This function has become unnecessary, just call autoplot directly with the SpatRaster object. It will be removed in the next version.")
+  lifecycle::deprecate_warn("1.6.0", "autoplot_MAPraster()", details = "This function has become unnecessary, just call autoplot directly with the SpatRaster object. It will be removed in the next version.")
   plot <- autoplot(object, ...)
   return(invisible(plot))
 }

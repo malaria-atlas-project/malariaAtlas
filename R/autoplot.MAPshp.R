@@ -12,7 +12,7 @@
 #'
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #' autoplot(as.MAPshp(MDG_shp))
 #' }
@@ -27,7 +27,7 @@ autoplot.MAPshp <- function(object,
                             map_title = NULL,
                             facet = FALSE,
                             printed = TRUE){
-  lifecycle::deprecate_stop("1.5.0", "autoplot.MAPshp", details = "This function will is deprecated. getShp should return an object of type sf.")
+  lifecycle::deprecate_stop("1.6.0", "autoplot.MAPshp", details = "This function will is deprecated. getShp should return an object of type sf.")
   
   if(is.null(map_title)){
     map_title <- paste0(paste0(unique(object$name_0), collapse = ", "),": ",paste0("admin", unique(object$admn_level), collapse = ", "))

@@ -9,8 +9,9 @@
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} OR \code{ = "ALL"} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent string containing continent for desired data, e.g. \code{c("continent1", "continent2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
+#' @param ... passed on to isAvailable_vec and isAvailable_pr
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' available_pr_locations <- isAvailable_pr(ISO = 'IDN')
 #' available_vector_locations <- isAvailable_vec(ISO = 'IDN')
 #' }
@@ -20,16 +21,16 @@
 #'
 #' @export isAvailable
 
-isAvailable <- function(sourcedata = NULL, full_results = FALSE, country = NULL, ISO = NULL, continent = NULL){
+isAvailable <- function(sourcedata = NULL, full_results = FALSE, country = NULL, ISO = NULL, continent = NULL, ...){
   
   if(!sourcedata %in% c("vector points", "pr points")){
     stop("Please choose one of:\n sourcedata = \"pr points\"  \n sourcedata = \"vector points\"")
   }
   
   if(sourcedata == "pr points"){
-   isAvailable_pr(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results)      
+   isAvailable_pr(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results, ...)      
   }else if(sourcedata == "vector points"){
-    isAvailable_vec(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results)
+    isAvailable_vec(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results, ...)
   }
   
 }

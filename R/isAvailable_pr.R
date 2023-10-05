@@ -4,11 +4,13 @@
 #'
 #' @return \code{isAvailable_pr} returns a named list of input locations with information regarding data availability.
 #'
-#' @param sourcedata by default this is "pr points", highlighting the dataset to be searched
+#' @param sourcedata deprecated argument. Please remove it from your code.
 #' @param country string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param ISO string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param continent  string containing name of continent for desired data, e.g. \code{c("Continent1", "Continent2", ...)}(use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)
 #' @param full_results By default this is FALSE meaning the function only gives a message outlining whether specified country is available, if \code{full_results == TRUE}, the function returns a named list outlining data availability.
+#' @param version (optional) The PR dataset version to use. If not provided, will just use the most recent version of PR data. (To see available version options, 
+#' use listPRPointVersions)
 #'
 #' @return if \code{full_results == TRUE}, a named list is returned with the following elements:
 #' \enumerate{
@@ -18,28 +20,24 @@
 #' }
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' isAvailable_pr(country = "Suriname")
 #' x <- isAvailable_pr(ISO = "NGA", full_results = TRUE)
 #' x <- isAvailable_pr(continent = "Oceania", full_results = TRUE)
 #' }
 #' @export isAvailable_pr
 
-isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL, continent = NULL, full_results = FALSE) {
+isAvailable_pr <- function(sourcedata = NULL, country = NULL, ISO = NULL, continent = NULL, full_results = FALSE, version = NULL) {
   
-  if(exists('available_countries_stored_pr', envir = .malariaAtlasHidden)){
-    available_countries_pr <- .malariaAtlasHidden$available_countries_stored_pr
-  }else{
-    available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
-    if(inherits(available_countries_pr, 'try-error')){
-      message(available_countries_pr)
-      return(available_countries_pr)
-    }
-  }  
-  
+  if (!is.null(sourcedata)) {
+    lifecycle::deprecate_warn("1.6.0", "isAvailable_pr(sourcedata)", details = "The argument 'sourcedata' has been deprecated. It will be removed in the next version. It has no meaning.")
+  }
+
   if(is.null(country) & is.null(ISO) & is.null(continent)){
     stop('Must specify one of country, ISO or continent.')
   }
+  
+  available_countries_pr <- listPRPointCountries(printed = FALSE, version = version)
   
   capwords <- function(string) {
     cap <- function(s) {
@@ -91,7 +89,7 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
   } else if(!(is.null(ISO))){
     location_input_pr <- as.character(toupper(ISO))
     if(nchar(location_input_pr)!= 3){
-      stop("Specifying by iso-code only works with ISO3, use listPoints() to check available countries & their ISO3")
+      stop("Specifying by iso-code only works with ISO3, use listPRPointCountries() to check available countries & their ISO3")
     }
     available_locs_pr <- available_countries_pr$country_id
   } else if(!(is.null(continent))){
@@ -103,7 +101,6 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
   message("Confirming availability of PR data for: ", paste(location_input_pr, collapse = ", "), "...")
   
   checked_availability_pr <- list("location"= location_input_pr, "is_available"=rep(NA,length = length(location_input_pr)), "possible_match"=rep(NA,length = length(location_input_pr)))
-  
   
   for(i in 1:length(unique(location_input_pr))) {
     if(!(location_input_pr[i] %in% available_locs_pr)){
@@ -117,7 +114,6 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
     checked_availability_pr$possible_match[checked_availability_pr$possible_match %in% c("NULL","")] <- NA
   }
   
-  
   if(1 %in% checked_availability_pr$is_available) {
     message("PR points are available for ", paste(checked_availability_pr$location[checked_availability_pr$is_available==1], collapse = ", "), ".")
   }
@@ -130,7 +126,7 @@ isAvailable_pr <- function(sourcedata = "pr points", country = NULL, ISO = NULL,
       if(!(checked_availability_pr$possible_match[checked_availability_pr$is_available==0][i] %in% c("character(0)","",NA))) {
         error_message[i] <- paste("Data not found for '",checked_availability_pr$location[checked_availability_pr$is_available==0][i],"', did you mean ", checked_availability_pr$possible_match[checked_availability_pr$is_available==0][i], "?", sep = "")
       } else {
-        error_message[i] <- paste("Data not found for '",checked_availability_pr$location[checked_availability_pr$is_available==0][i],"', use listPoints() to check data availability. ", sep = "")
+        error_message[i] <- paste("Data not found for '",checked_availability_pr$location[checked_availability_pr$is_available==0][i],"', use listPRPointCountries() to check data availability. ", sep = "")
       }
     }
     
