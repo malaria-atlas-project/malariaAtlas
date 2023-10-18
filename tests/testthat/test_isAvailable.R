@@ -76,9 +76,9 @@ test_that("correct error messages are returned for various combinations of count
   expect_message(isAvailable(country = c("Libya","Ngeria"), sourcedata = "vector points"), "Data not found for 'Ngeria', did you mean Nigeria")
 #nonsense
   expect_message(isAvailable(country = "XfUEC43", sourcedata = "pr points"), "Specified location not found, see below comments:")
-  expect_message(isAvailable(country = "XfUEC43", sourcedata = "pr points"), "Data not found for 'Xfuec43', use listPRPointCountries()")
+  expect_message(isAvailable(country = "XfUEC43", sourcedata = "pr points"), "Data not found for 'XfUEC43', use listPRPointCountries()")
   expect_message(isAvailable(country = "XfUEC43", sourcedata = "vector points"), "Specified location not found, see below comments:")
-  expect_message(isAvailable(country = "XfUEC43", sourcedata = "vector points"), "Data not found for 'Xfuec43', use listVecOccPointCountries()")
+  expect_message(isAvailable(country = "XfUEC43", sourcedata = "vector points"), "Data not found for 'XfUEC43', use listVecOccPointCountries()")
   
   })
 
