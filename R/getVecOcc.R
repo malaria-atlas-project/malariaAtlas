@@ -197,13 +197,13 @@ getVecOcc <- function(country = NULL,
     stop(
       "Error in downloading data for extent: (",
       paste0(extent, collapse = ","),
-      "), \n try query using country or continent name OR check data availability at malariaatlas.org/explorer."
+      "), \n try query using country or continent name."
     )
   }
   
   if (nrow(df) == 0) {
     stop(
-      "Vector occurrence data is not available for the specificed countries; \n confirm data availability at malariaatlas.org/explorer."
+      "Vector occurrence data is not available for the specificed countries."
     )
   }
   

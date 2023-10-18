@@ -192,13 +192,13 @@ getPR <- function(country = NULL,
     stop(
       "Error in downloading data for extent: (",
       paste0(extent, collapse = ","),
-      "),\n try query using country or continent name OR check data availability at malariaatlas.org/explorer."
+      "),\n try query using country or continent name."
     )
   }
   
   if (nrow(df) == 0) {
     stop(
-      "PR data points are not available for the specified species in requested countries; \n confirm species-specific data availability at malariaatlas.org/explorer."
+      "PR data points are not available for the specified species in requested countries."
     )
   }
   
