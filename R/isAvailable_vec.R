@@ -39,55 +39,8 @@ isAvailable_vec <- function(sourcedata = NULL, country = NULL, ISO = NULL, conti
   
   available_countries_vec <- listVecOccPointCountries(printed = FALSE, version = version)
   
-  capwords <- function(string) {
-    cap <- function(s) {
-      
-      if(grepl("\\(", s)){
-        l1 <- toupper(substring(s, 2, 2))
-      }else{
-        l1 <- toupper(substring(s, 1, 1))
-      }
-      
-      if(grepl("\\(", s)){
-        l2 <- tolower(substring(s, 3))
-      }else{
-        l2 <- tolower(substring(s, 2))
-      }
-      
-      if(grepl("\\(", s)){
-        s <- paste(strtrim(s,1),l1,l2,sep = "", collapse = " ")
-      }else{
-        s <- paste(l1,l2,sep = "", collapse = " ")
-      }
-      
-      if(grepl("d'ivo",s, ignore.case = TRUE)){
-        s <- gsub("d'ivo", "d'Ivo",s, ignore.case = TRUE)
-      }
-      if(grepl("of",s, ignore.case = TRUE)){
-        s <- gsub("of", "of",s, ignore.case = TRUE)
-      }
-      if(grepl("the",s, ignore.case = TRUE)& !grepl("gambia", string, ignore.case =TRUE)){
-        s <- gsub("the", "the",s, ignore.case = TRUE)
-      }
-      if(grepl("and",s, ignore.case = TRUE)){
-        s <- gsub("and", "and",s, ignore.case = TRUE)
-      }
-      if(grepl("Former",s, ignore.case = TRUE)){
-        s <- gsub("Former", "former",s, ignore.case = TRUE)
-      }
-      return(s)
-    }
-    
-    string_return <- paste(sapply(unlist(strsplit(string, split = " ")), cap, USE.NAMES = !is.null(names(string))), collapse = " ")
-    
-    if(grepl("-",string)){
-      string_return <- paste(sapply(unlist(strsplit(string, split = "-")), cap, USE.NAMES = !is.null(names(string))), collapse = "-")
-    }
-    return(string_return)
-  }
-  
   if(!(is.null(country))){
-    location_input_vec <- sapply(country, capwords)
+    location_input_vec <- country
     available_locs_vec <- available_countries_vec$country
   } else if(!(is.null(ISO))){
     location_input_vec <- as.character(toupper(ISO))
@@ -96,7 +49,7 @@ isAvailable_vec <- function(sourcedata = NULL, country = NULL, ISO = NULL, conti
     }
     available_locs_vec <- available_countries_vec$country_id
   } else if(!(is.null(continent))){
-    location_input_vec <- sapply(continent, capwords)
+    location_input_vec <- continent
     available_locs_vec <- unique(available_countries_vec$continent)
   }
   
