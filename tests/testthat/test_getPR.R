@@ -74,20 +74,20 @@ test_that("data is downloaded as a data.frame", {
 
  # test_that("error messages are appropriate to given error",{
   expect_error(getPR(country = "knya", species = "both"), regexp = "PR data points are not available")
-  expect_error(getPR(country = "kenya", species = "both"), regexp = NA)
+  expect_error(getPR(country = "Kenya", species = "both"), regexp = NA)
   expect_error(getPR(country = "xxxx", species = "both"), regexp = "PR data points are not available")
   expect_error(getPR(country = "Australia", species = "both"), regexp = "PR data points are not available")
   
-  expect_warning(getPR(country = c("kenya","ngeria"), species = "both"), regexp = "did you mean Nigeria")
-  expect_error(suppressWarnings(getPR(country = c("kenya","ngeria"), species = "both")), regexp = NA)
-  expect_warning(getPR(country = c("kenya","Australia"), species = "both"), regexp = "Data not found for 'Australia', use listPRPointCountries()")
+  expect_warning(getPR(country = c("Kenya","ngeria"), species = "both"), regexp = "did you mean Nigeria")
+  expect_error(suppressWarnings(getPR(country = c("Kenya","ngeria"), species = "both")), regexp = NA)
+  expect_warning(getPR(country = c("Kenya","Australia"), species = "both"), regexp = "Data not found for 'Australia', use listPRPointCountries()")
 
-  expect_error(suppressWarnings(getPR(country = c("kenya","Australia"), species = "both")), regexp = NA)
+  expect_error(suppressWarnings(getPR(country = c("Kenya","Australia"), species = "both")), regexp = NA)
   expect_error(getPR(country = c("Ngeria","Australia"), species = "both"), regexp = "PR data points are not available")
   expect_error(getPR(country = c("Ngeria","Australia"), species = "both"), regexp = "PR data points are not available")
   
-  expect_warning(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "did you mean Nigeria")
-  expect_warning(getPR(country = c("kenya","Ngeria","Australia"), species = "both"), regexp = "found for 'Australia', use listPRPointCountries()")
+  expect_warning(getPR(country = c("Kenya","Ngeria","Australia"), species = "both"), regexp = "did you mean Nigeria")
+  expect_warning(getPR(country = c("Kenya","Ngeria","Australia"), species = "both"), regexp = "found for 'Australia', use listPRPointCountries()")
 
   
   
