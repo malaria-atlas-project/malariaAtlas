@@ -1,3 +1,9 @@
+# malariaAtlas 1.5.1
+
+* Updated rdhs dependency to 0.8.0
+
+* Fixed bug where Sao Tome and Principe couldn't be found in getPR
+
 # malariaAtlas 1.5.0
 
 * A number of underlying data sources have been updated. All datasets are now versioned, this is reflected in the `get*` functions. We have tried to keep the API changes small so as to minimise breaking your code. 
