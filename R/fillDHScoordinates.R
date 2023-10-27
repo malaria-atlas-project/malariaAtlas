@@ -116,7 +116,7 @@ fillDHSCoordinates <- function(data,
       # did we find that file
       if (length(file_name)==1) {
         # read in the data and then fill in blanks
-        shp <- readRDS(geo[[file_name]])@data
+        shp <- readRDS(geo[[file_name]])
         matches <- match(shp$DHSID,data$dhs_id)
 
         data[stats::na.omit(matches), mis_info] <- shp[which(!is.na(matches)), dhs_info]
