@@ -15,7 +15,7 @@ autoplot_MAPraster(object, ...)
 \code{autoplot_MAPraster} returns a list of plots (gg objects) for each supplied raster.
 }
 \description{
-\code{autoplot_MAPraster} is a wrapper for /code{/link{autoplot.MAPraster}} that calls
+\code{autoplot_MAPraster} is a wrapper for \code{\link{autoplot.MAPraster}} that calls
   \code{\link{as.MAPraster}} to allow automatic map creation for RasterLayer/RasterStack
   objects downloaded from MAP.
 }
@@ -60,5 +60,5 @@ to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame
 
 \code{\link{autoplot.MAPraster}}:
 
-to quickly visualise MAPraster objects created using /code{as.MAPraster}.
+to quickly visualise MAPraster objects created using \code{as.MAPraster}.
 }

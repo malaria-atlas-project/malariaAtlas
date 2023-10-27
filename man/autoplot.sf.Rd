@@ -7,7 +7,7 @@
 \method{autoplot}{sf}(object, ..., map_title = NULL, facet = FALSE, printed = TRUE)
 }
 \arguments{
-\item{object}{A sf object downloaded using /code{/link{getShp}}.}
+\item{object}{A sf object downloaded using \code{\link{getShp}}.}
 
 \item{...}{Other arguments passed to specific methods}
 

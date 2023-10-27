@@ -18,13 +18,13 @@
 )
 }
 \arguments{
-\item{object}{a pr.points object downloaded using /code{/link{getPR}}}
+\item{object}{a pr.points object downloaded using \code{\link{getPR}}}
 
 \item{...}{Other arguments passed to specific methods}
 
 \item{shp_df}{Shapefile(s) (data.frame) to plot with downloaded points. (If not specified automatically uses getShp() for all countries included in pr.points object).}
 
-\item{admin_level}{the administrative level used for plotting administrative boundaries; either /code{"admin0"}; /code{"admin1"} OR /code{"both"}}
+\item{admin_level}{the administrative level used for plotting administrative boundaries; either \code{"admin0"}; \code{"admin1"} OR \code{"both"}}
 
 \item{map_title}{custom title used for the plot}
 

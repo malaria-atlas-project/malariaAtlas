@@ -2,9 +2,9 @@
 #'
 #' \code{autoplot.pr.points} creates a map of PR points downloaded from MAP.
 #'
-#' @param object a pr.points object downloaded using /code{/link{getPR}}
+#' @param object a pr.points object downloaded using \code{\link{getPR}}
 #' @param shp_df Shapefile(s) (data.frame) to plot with downloaded points. (If not specified automatically uses getShp() for all countries included in pr.points object).
-#' @param admin_level the administrative level used for plotting administrative boundaries; either /code{"admin0"}; /code{"admin1"} OR /code{"both"}
+#' @param admin_level the administrative level used for plotting administrative boundaries; either \code{"admin0"}; \code{"admin1"} OR \code{"both"}
 #' @param map_title custom title used for the plot
 #' @param facet if TRUE, splits map into a separate facet for each malaria species; by default FALSE if only one species is present in object, TRUE if both P. falciparum and P. vivax data are present in object.
 #' @param hide_confidential if TRUE, removes confidential points from the map

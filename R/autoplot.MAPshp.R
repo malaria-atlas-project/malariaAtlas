@@ -2,7 +2,7 @@
 #'
 #' \code{autoplot.MAPshp} creates a map of shapefiles downloaded using getShp.
 #'
-#' @param object A MAPshp object downloaded using /code{/link{getShp}} with format = "df" specified.
+#' @param object A MAPshp object downloaded using \code{\link{getShp}} with format = "df" specified.
 #' @param map_title Custom title used for the plot.
 #' @param facet If TRUE, splits map into a separate facet for each administrative level.
 #' @param printed Should the plot print to graphics device.

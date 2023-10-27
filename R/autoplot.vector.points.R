@@ -2,9 +2,9 @@
 #'
 #' \code{autoplot.vector.points} creates a map of Vector points downloaded from MAP.
 #'
-#' @param object a vector.points object downloaded using /code{/link{getVecOcc}}
+#' @param object a vector.points object downloaded using \code{\link{getVecOcc}}
 #' @param shp_df Shapefile(s) (data.frame) to plot with downloaded points. (If not specified automatically uses getShp() for all countries included in vector.points object).
-#' @param admin_level the administrative level used for plotting administrative boundaries; either /code{"admin0"}; /code{"admin1"} OR /code{"both"}
+#' @param admin_level the administrative level used for plotting administrative boundaries; either \code{"admin0"}; \code{"admin1"} OR \code{"both"}
 #' @param map_title custom title used for the plot
 #' @param facet if TRUE, splits map into a separate facet for each malaria species; by default FALSE.
 #' @param fill_legend_title Add a title to the legend.

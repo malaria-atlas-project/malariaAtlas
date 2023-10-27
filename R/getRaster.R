@@ -33,7 +33,7 @@
 #'
 #' \code{\link{autoplot.MAPraster}}
 #'
-#' to quickly visualise MAPraster objects created using /code{as.MAPraster}.
+#' to quickly visualise MAPraster objects created using \code{as.MAPraster}.
 #'
 #' @export getRaster
 

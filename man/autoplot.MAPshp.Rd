@@ -7,7 +7,7 @@
 \method{autoplot}{MAPshp}(object, ..., map_title = NULL, facet = FALSE, printed = TRUE)
 }
 \arguments{
-\item{object}{A MAPshp object downloaded using /code{/link{getShp}} with format = "df" specified.}
+\item{object}{A MAPshp object downloaded using \code{\link{getShp}} with format = "df" specified.}
 
 \item{...}{Other arguments passed to specific methods}
 

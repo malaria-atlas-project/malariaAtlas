@@ -56,5 +56,5 @@ to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame
 
 \code{\link{autoplot.MAPraster}}
 
-to quickly visualise MAPraster objects created using /code{as.MAPraster}.
+to quickly visualise MAPraster objects created using \code{as.MAPraster}.
 }

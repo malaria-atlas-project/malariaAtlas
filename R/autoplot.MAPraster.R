@@ -49,7 +49,7 @@
 #'
 #' \code{\link{autoplot.MAPraster}}:
 #'
-#' to quickly visualise MAPraster objects created using /code{as.MAPraster}.
+#' to quickly visualise MAPraster objects created using \code{as.MAPraster}.
 #'
 #' @importFrom ggplot2 autoplot
 #' @method autoplot MAPraster

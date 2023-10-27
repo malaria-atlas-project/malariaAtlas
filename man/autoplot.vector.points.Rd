@@ -17,13 +17,13 @@
 )
 }
 \arguments{
-\item{object}{a vector.points object downloaded using /code{/link{getVecOcc}}}
+\item{object}{a vector.points object downloaded using \code{\link{getVecOcc}}}
 
 \item{...}{Other arguments passed to specific methods}
 
 \item{shp_df}{Shapefile(s) (data.frame) to plot with downloaded points. (If not specified automatically uses getShp() for all countries included in vector.points object).}
 
-\item{admin_level}{the administrative level used for plotting administrative boundaries; either /code{"admin0"}; /code{"admin1"} OR /code{"both"}}
+\item{admin_level}{the administrative level used for plotting administrative boundaries; either \code{"admin0"}; \code{"admin1"} OR \code{"both"}}
 
 \item{map_title}{custom title used for the plot}
 

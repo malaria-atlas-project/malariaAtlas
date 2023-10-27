@@ -2,7 +2,7 @@
 #'
 #' \code{autoplot.sf} creates a map of shapefiles downloaded using getShp.
 #'
-#' @param object A sf object downloaded using /code{/link{getShp}}.
+#' @param object A sf object downloaded using \code{\link{getShp}}.
 #' @param map_title Custom title used for the plot.
 #' @param facet If TRUE, splits map into a separate facet for each administrative level.
 #' @param printed Should the plot print to graphics device.
