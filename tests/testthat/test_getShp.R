@@ -50,6 +50,13 @@ test_that('Repeated getSHP works. That getting shapes from .malariaAtlasHidden d
   }
 )
 
+test_that("getShp works with ISO='all' argument", {
+    skip_on_cran()
+    shp <- malariaAtlas::getShp(ISO = "ALL")
+    expect_true(inherits(shp, "sf"))
+  }
+)
+
 
 test_that('Broken arguments get handled nicely.', {
 
