@@ -197,12 +197,9 @@ build_cql_filter <- function(attribute, values) {
 #' @return The features returned from the getFeatures called on the feature_type with the filter where not NULL.
 #' @keywords internal
 #'
-callGetFeaturesWithFilters <-
-  function(feature_type, cql_filter, ...) {
+callGetFeaturesWithFilters <- function(feature_type, cql_filter, ...) {
     if (!is.null(cql_filter)) {
-      features <-
-        feature_type$getFeatures(outputFormat = "json",
-                                 cql_filter = cql_filter)
+      features <- feature_type$getFeatures(outputFormat = "json", cql_filter = cql_filter, ...)
     } else {
       features <- feature_type$getFeatures(outputFormat = "json", ...)
     }

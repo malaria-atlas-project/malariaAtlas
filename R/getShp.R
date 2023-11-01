@@ -70,13 +70,15 @@ getShp <- function(country = NULL,
 
   if(all(!admin_level %in% c("admin0", "admin1", "admin2", "admin3", "all"))){
     stop('admin_level must be one or more of: c("admin0", "admin1", "admin2", "admin3", "all")')
-  }  
+  }
+  
+  doing_all_countries <- "all" %in% tolower(c(country, ISO))
 
-  if(any(!ISO %in% available_admin$iso) & !is.null(ISO)){
+  if(any(!ISO %in% available_admin$iso) & !is.null(ISO) & !doing_all_countries){
     stop('One or more ISO codes are wrong')
   }  
 
-  if(any(!country %in% available_admin$name_0) & !is.null(country)){
+  if(any(!country %in% available_admin$name_0) & !is.null(country) & !doing_all_countries){
     stop('One or more country names are wrong')
   }  
   
@@ -103,27 +105,29 @@ getShp <- function(country = NULL,
   bbox_filter <- NULL
   
   #Building location filter or bbox filter
-  
-  if (!is.null(ISO)) {
-    iso_list <- toupper(ISO)
-  } else if (!is.null(country)) {
-    iso_list <-
-      as.character(available_admin$iso[available_admin$name_0 %in% country])
-  } else if (!is.null(lat) & !is.null(long)) {
-    latlong_extent <- matrix(unlist(sf::st_bbox(array(data.frame(long, lat)))), ncol = 2)
-    bbox_filter <- build_bbox_filter(latlong_extent)
-  } else if (!is.null(extent)) {
-    bbox_filter <- build_bbox_filter(extent)
-  } 
-  
-  location_filter <- build_cql_filter('iso', iso_list)
-  
-  if (length(iso_list) == 0 & is.null(c(extent, lat, long))) {
-    stop(
-      "Invalid country/ISO definition, use isAvailable() OR listShp() to confirm country spelling and/or ISO code."
-    )
+  if ("all" %in% tolower(c(country, ISO))) {
+    message("Importing SHP data for all locations, please wait...")
+  } else {
+    if (!is.null(ISO)) {
+      iso_list <- toupper(ISO)
+    } else if (!is.null(country)) {
+      iso_list <-
+        as.character(available_admin$iso[available_admin$name_0 %in% country])
+    } else if (!is.null(lat) & !is.null(long)) {
+      latlong_extent <- matrix(unlist(sf::st_bbox(array(data.frame(long, lat)))), ncol = 2)
+      bbox_filter <- build_bbox_filter(latlong_extent)
+    } else if (!is.null(extent)) {
+      bbox_filter <- build_bbox_filter(extent)
+    } 
+    
+    if (length(iso_list) == 0 & is.null(c(extent, lat, long))) {
+      stop(
+        "Invalid country/ISO definition, use isAvailable() OR listShp() to confirm country spelling and/or ISO code."
+      )
+    }
+    
+    location_filter <- build_cql_filter('iso', iso_list)
   }
-
 
   #Getting features
 
@@ -146,7 +150,8 @@ download_shp <- function(wfs_cap, individual_admin_level, version, location_filt
     getDatasetIdForAdminDataGivenAdminLevelAndVersion(individual_admin_level, version)
   wfs_ft_type <-
     wfs_cap$findFeatureTypeByName(dataset_id_admin_level)
-  features_admin_level <- callGetFeaturesWithFilters(wfs_ft_type, location_filter, bbox_filter, propertyName = getPropertiesForAdminLevel(individual_admin_level))
+  
+  features_admin_level <- callGetFeaturesWithFilters(wfs_ft_type, location_filter, bbox_filter = bbox_filter)
   
   extra_cols <- c("id_0", "name_1", "id_1", "code_1", "type_1", "name_2", "id_2", "code_2", "type_2", "name_3", "id_3", "code_3", "type_3")
   for (col_name in setdiff(extra_cols, names(features_admin_level))) {
