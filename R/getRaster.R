@@ -105,6 +105,10 @@ getRaster <- function(dataset_id = NULL,
     shp <- terra::vect(shp)
   }
   
+  if (!is.null(file_path) && !dir.exists(file_path)) {
+    stop(stringr::str_glue("Path to download rasters '{file_path}' must be an existing directory."))
+  }
+  
   message("Checking if the following Surface-Year combinations are available to download:")
   message(paste0("\n    ", "DATASET ID  ", "YEAR "))
   query_def <- data.frame()
