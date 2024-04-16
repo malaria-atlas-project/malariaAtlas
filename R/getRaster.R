@@ -286,13 +286,23 @@ getRaster <- function(dataset_id = NULL,
   }
 }
 
-#Define a small function that downloads rasters from the MAP geoserver to a specifed location
-download_rst <-
-  function(dataset_id,
-           extent,
-           year,
-           file_name, 
-           file_path) {
+#' Download rasters from the MAP geoserver to a specifed location. If file already exists it will read it instead.
+#' 
+#' @return SpatRaster
+#' 
+download_rst <- function(
+    dataset_id,
+    extent,
+    year,
+    file_name, 
+    file_path
+) {
+    if(!is.null(file_path)) {
+      rst_path <- file.path(file_path, paste0(file_name, ".tiff"))
+      if (file.exists(rst_path)) {
+        return(terra::rast(rst_path))
+      }
+    }
     
     wcs_client <- get_wcs_client_from_raster_id(dataset_id)
     
