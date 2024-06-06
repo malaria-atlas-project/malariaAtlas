@@ -108,12 +108,25 @@ test_that('Wrong year errors correctly', {
 
 test_that('Using surface works', {
   skip_on_cran()
+  # Trying to handle new and old data depending on whether the database has been updated yet
+
+  # fails with new data
+  tryCatch({
+    r <- getRaster(surface = "Number of deaths from Plasmodium falciparum during a defined year 2000-2020", year = 2015)
+    MDG_surface <- r
+  }, error = function(e) {
+    print("Failed with new data")
+  })
   
-  MDG_surface <- getRaster(surface = "Number of deaths from Plasmodium falciparum during a defined year",
-                           year = 2015)
-  
+  # fails with old data
+  tryCatch({
+    r <- getRaster(surface = "Number of deaths from Plasmodium falciparum during a defined year", year = 2015)
+    MDG_surface <- r
+  }, error = function(e) {
+    print("Failed with old data")
+  })
+
   expect_true(inherits(MDG_surface, 'SpatRaster'))
-  
 })
 
 test_that('Explorer datasets work', {
