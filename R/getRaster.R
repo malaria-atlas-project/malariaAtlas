@@ -334,6 +334,10 @@ download_rst <- function(
       terra::writeRaster(spat_raster, rst_path,  filetype = "GTiff", overwrite=FALSE)
     }
     
+    if (terra::nlyr(spat_raster) > 1) { # ignore multi-band rasters
+      spat_raster <- spat_raster[[1]]
+    }
+    
     names(spat_raster) <- file_name
     
     return(spat_raster)
