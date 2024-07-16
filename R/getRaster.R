@@ -219,7 +219,8 @@ getRaster <- function(dataset_id = NULL,
   } else if (length(rasters) == 1) {
     raster <- rasters[[1]]
     terra::NAflag(raster) <- -9999
-    names(raster) <- query_def$raster_title
+    
+    names(raster[[1]]) <- query_def$raster_title # Apply only to first/main band
     if (!is.null(shp)) {
       raster <- terra::mask(raster, shp)
     }
@@ -334,11 +335,12 @@ download_rst <- function(
       terra::writeRaster(spat_raster, rst_path,  filetype = "GTiff", overwrite=FALSE)
     }
     
-    if (terra::nlyr(spat_raster) > 1) { # ignore multi-band rasters
-      spat_raster <- spat_raster[[1]]
+    if (terra::nlyr(spat_raster) > 1) {
+      band2_description <- wcs_client$describeCoverage(dataset_id)$rangeType$field[[2]]$description$value
+      names(spat_raster[[2]]) <- band2_description
     }
     
-    names(spat_raster) <- file_name
+    names(spat_raster[[1]]) <- file_name
     
     return(spat_raster)
   }
