@@ -238,30 +238,9 @@ getRaster <- function(dataset_id = NULL,
         )))
       ))
     
-    #check whether more than one resolution is present in downloaded rasters
-    #if only one resolution is present, create a raster stack of all downloaded rasters
-    if (length(unique(rasters_index$res_id)) == 1) {
-      rst_stk <- terra::rast(rasters)
+      stk_list <- rasters
       
-      terra::NAflag(rst_stk) <- -9999
-      
-      if (!is.null(shp)) {
-        rst_stk <- terra::mask(rst_stk, shp)
-      }
-      
-      names(rst_stk) <- query_def$raster_title
-      return(rst_stk)
-      #if not then we want to return a list of raster stacks - one for each resolution present in the index dataframe above.
-    } else if (length(unique(rasters_index$res_id)) != 1) {
-      #for each unique raster resolution create a raster stack and store this in stk_list
-      
-      stack_rst <- function(res_id) {
-        return(terra::rast(rasters[rasters_index$res_id == res_id]))
-      }
-      
-      stk_list <-
-        lapply(X = unique(rasters_index$res_id), FUN = stack_rst)
-      
+      # Set NDV for all rasters
       for (i in 1:length(stk_list)) {
         for (r in 1:length(names(stk_list[[i]]))) {
           terra::NAflag(stk_list[[i]][[r]]) <- -9999
@@ -275,15 +254,11 @@ getRaster <- function(dataset_id = NULL,
                            mask = shp)
       }
       
-      # tidy names of rasters within the stacks within this list.
+      # Tidy names of main band of each raster
       for (i in 1:length(stk_list)) {
-        for (ii in 1:length(stk_list[i])) {
-          names(stk_list[i][[ii]]) <-
-            query_def$raster_title[query_def$file_name %in% names(stk_list[i][[ii]])]
-        }
+        names(stk_list[[i]][[1]]) <- query_def$raster_title[query_def$file_name %in% names(stk_list[i][[1]])]
       }
       return(terra::sprc(stk_list))
-    }
   }
 }
 
@@ -336,8 +311,19 @@ download_rst <- function(
     }
     
     if (terra::nlyr(spat_raster) > 1) {
-      band2_description <- wcs_client$describeCoverage(dataset_id)$rangeType$field[[2]]$description$value
-      names(spat_raster[[2]]) <- band2_description
+      band_descriptions <- wcs_client$describeCoverage(dataset_id)$rangeType$field
+      
+      if (length(band_descriptions) < 1) {
+        stop(paste0("Multiple bands, but missing higher band descriptions. raster: ", names(spat_raster[[1]])))
+      } else {
+        band2_description <- band_descriptions[[2]]$description$value
+        if (!startsWith(band2_description, "Mask:")) {
+          message(paste0("Skipping second band '", band2_description, "'. Unknown how to handle it."))
+          spat_raster <- spat_raster[[1]]
+        } else {
+          names(spat_raster[[2]]) <- band2_description
+        }
+      }
     }
     
     names(spat_raster[[1]]) <- file_name
