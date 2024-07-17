@@ -26,20 +26,38 @@ makeSpatRasterAutoplot <- function(
   }
   
   plot <- plot +
-    tidyterra::geom_spatraster(data = spatraster, aes()) +
+    tidyterra::geom_spatraster(data = spatraster[[1]], aes()) +
     ggplot2::coord_sf() +
     ggplot2::scale_fill_distiller(name = paste(legend_title),
                                   palette = fill_colour_palette,
                                   trans = fill_scale_transform,
                                   na.value = grDevices::grey(0.9)) +
-    ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
-                   panel.background = ggplot2::element_rect(fill = "white"),
-                   panel.grid = ggplot2::element_blank(),
-                   axis.title = ggplot2::element_blank(),
-                   panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5))
+    ggplot2::theme(
+      plot.title = ggplot2::element_text(vjust=-1),
+      panel.background = ggplot2::element_rect(fill = "white"),
+      panel.grid = ggplot2::element_blank(),
+      axis.title = ggplot2::element_blank(),
+      panel.border = ggplot2::element_rect(colour = "grey50", fill=NA, size = 0.5),
+      legend.key = element_rect(colour = "black")
+    )
+  
+  if (isMaskedRaster(spatraster)) {
+    maskBand <- terra::as.factor(getMaskBand(spatraster))
+    plot <- plot + 
+      ggnewscale::new_scale_fill() +
+      tidyterra::geom_spatraster(data = maskBand, aes()) +
+      scale_fill_manual(
+        name="",
+        values = c("white"), 
+        limits = c("1"), 
+        labels = getMaskBandName(maskBand),
+        na.value = NA, na.translate = FALSE
+      )
+  }
   
   if (plot_titles == TRUE) {
-    plot <- plot +  ggplot2::ggtitle(paste(rastername))
+    name <- if (isMaskedRaster(spatraster)) {rastername[[1]]} else {paste(rastername)}
+    plot <- plot +  ggplot2::ggtitle(name)
   }
   
   if (!is.null(shp_df)) {

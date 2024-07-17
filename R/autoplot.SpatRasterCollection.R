@@ -30,7 +30,7 @@ autoplot.SpatRasterCollection <- function(
     printed = TRUE
 ) {
   collection_list <- as.list(object)
-  names(collection_list) <- lapply(as.list(object), names)
+  names(collection_list) <- lapply(collection_list, function(o) ifelse(length(o) == 1, names(o), names(o[[1]])))
   
   raster_names <- unique(names(collection_list))
   plot_list <- lapply(X = raster_names, function(name) {

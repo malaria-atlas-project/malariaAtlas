@@ -38,7 +38,8 @@ Imports:
   future.apply,
   lubridate,
   jsonlite,
-  stringr
+  stringr,
+  ggnewscale
 Depends: ggplot2
 RoxygenNote: 7.2.3
 Suggests: testthat,
