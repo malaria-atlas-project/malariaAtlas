@@ -1,3 +1,10 @@
+# malariaAtlas 1.6.0
+
+* Improve handling downloading rasters
+
+* Include mask raster in download. Ignore other multi-band rasters
+
+
 # malariaAtlas 1.5.1
 
 * Updated rdhs dependency to 0.8.0
