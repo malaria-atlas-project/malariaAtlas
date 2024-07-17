@@ -13,7 +13,7 @@ test_that('All combinations of spatially aligned requests work', {
 
   #time varying range
   MDG_PfPR2_10_range <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate", shp = MDG_shp, year = 2012:2015)
-  expect_true(inherits(MDG_PfPR2_10_range, 'SpatRaster'))
+  expect_true(inherits(MDG_PfPR2_10_range, 'SpatRasterCollection'))
 
   # Time varying default
   MDG_PfPR2_10_def <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate", shp = MDG_shp, year = NA)
@@ -21,39 +21,39 @@ test_that('All combinations of spatially aligned requests work', {
 
 
   # two time varying single
-  MDG_tvs_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage'), shp = MDG_shp, year = list(2012, 2010))
-  expect_true(inherits(MDG_tvs_tvs, 'SpatRaster'))
+  MDG_tvs_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_IRS_Coverage'), shp = MDG_shp, year = list(2012, 2010))
+  expect_true(inherits(MDG_tvs_tvs, 'SpatRasterCollection'))
 
   # time varying range plus time varying single
-  MDG_tvr_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage'), shp = MDG_shp, year = list(2009:2012, 2010))
-  expect_true(inherits(MDG_tvr_tvs, 'SpatRaster'))
+  MDG_tvr_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_IRS_Coverage'), shp = MDG_shp, year = list(2009:2012, 2010))
+  expect_true(inherits(MDG_tvr_tvs, 'SpatRasterCollection'))
 
   # two time varying range
-  MDG_tvr_tvr <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage'), shp = MDG_shp, year = list(2009:2012, 2005:2007))
-  expect_true(inherits(MDG_tvr_tvr, 'SpatRaster'))
+  MDG_tvr_tvr <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_IRS_Coverage'), shp = MDG_shp, year = list(2009:2012, 2005:2007))
+  expect_true(inherits(MDG_tvr_tvr, 'SpatRasterCollection'))
 
   # two static
   MDG_stat_stat <- getRaster(dataset_id = c("Accessibility__202001_Global_Motorized_Travel_Time_to_Healthcare", 'Accessibility__202001_Global_Walking_Only_Travel_Time_To_Healthcare'), 
                              shp = MDG_shp, year = c(NA, NA))
-  expect_true(inherits(MDG_stat_stat, 'SpatRaster'))
+  expect_true(inherits(MDG_stat_stat, 'SpatRasterCollection'))
 
  # one time varying single plus one static
   MDG_tvs_stat <- getRaster(dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 'Blood_Disorders__201201_Africa_HbC_Allele_Frequency'), shp = MDG_shp, year = c(2012, NA))
-  expect_true(inherits(MDG_tvs_stat, 'SpatRaster'))
+  expect_true(inherits(MDG_tvs_stat, 'SpatRasterCollection'))
 
 # time varying range plus static
   MDG_tvr_tvs <- getRaster(
     dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 'Blood_Disorders__201201_Africa_HbC_Allele_Frequency'), 
     shp = MDG_shp, year = list(2009:2012, NA))
-  expect_true(inherits(MDG_tvr_tvs, 'SpatRaster'))
+  expect_true(inherits(MDG_tvr_tvs, 'SpatRasterCollection'))
 
 # two time varying range plus static.
   MDG_tvr_tvr_s <- getRaster(
-    dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 'Interventions__202106_Africa_Indoor_Residual_Spraying_Coverage', 'Blood_Disorders__201201_Africa_HbC_Allele_Frequency'), 
+    dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 'Interventions__202106_Africa_IRS_Coverage', 'Blood_Disorders__201201_Africa_HbC_Allele_Frequency'), 
     shp = MDG_shp, 
     year = list(2009:2012, 2005:2007, NA)
     )
-  expect_true(inherits(MDG_tvr_tvr_s, 'SpatRaster'))
+  expect_true(inherits(MDG_tvr_tvr_s, 'SpatRasterCollection'))
   # p <- autoplot_MAPraster(MDG_tvr_tvr_s)
   
   
@@ -135,7 +135,7 @@ test_that('Explorer datasets work', {
   MDG_surface <- getRaster(dataset_id = c("Explorer__2020_Global_Pv_Cases", "Explorer__2020_Global_PvPR", "Explorer__2020_Global_Pf_Reproductive_Number"),
                            year = list(2015, 2004:2007, NA))
   
-  expect_true(inherits(MDG_surface, 'SpatRaster'))
+  expect_true(inherits(MDG_surface, 'SpatRasterCollection'))
   
   #TODO: Failing
 })
