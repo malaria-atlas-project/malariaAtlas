@@ -264,6 +264,11 @@ getRaster <- function(dataset_id = NULL,
 
 #' Download rasters from the MAP geoserver to a specifed location. If file already exists it will read it instead.
 #' 
+#' @param dataset_id ID for dataset on MAP geoserver
+#' @param extent desired raster extent
+#' @param year desired year to download
+#' @param file_name file name (excluding extension) to save raster to
+#' @param file_path path to save raster to
 #' @return SpatRaster
 #' 
 download_rst <- function(
