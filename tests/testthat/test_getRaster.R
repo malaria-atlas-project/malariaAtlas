@@ -21,15 +21,15 @@ test_that('All combinations of spatially aligned requests work', {
 
 
   # two time varying single
-  MDG_tvs_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_IRS_Coverage'), shp = MDG_shp, year = list(2012, 2010))
+  MDG_tvs_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_Insecticide_Treated_Net_Use'), shp = MDG_shp, year = list(2012, 2010))
   expect_true(inherits(MDG_tvs_tvs, 'SpatRasterCollection'))
 
   # time varying range plus time varying single
-  MDG_tvr_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_IRS_Coverage'), shp = MDG_shp, year = list(2009:2012, 2010))
+  MDG_tvr_tvs <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_Insecticide_Treated_Net_Use'), shp = MDG_shp, year = list(2009:2012, 2010))
   expect_true(inherits(MDG_tvr_tvs, 'SpatRasterCollection'))
 
   # two time varying range
-  MDG_tvr_tvr <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_IRS_Coverage'), shp = MDG_shp, year = list(2009:2012, 2005:2007))
+  MDG_tvr_tvr <- getRaster(dataset_id = c("Malaria__202206_Global_Pf_Parasite_Rate", 'Interventions__202106_Africa_Insecticide_Treated_Net_Use'), shp = MDG_shp, year = list(2009:2012, 2005:2007))
   expect_true(inherits(MDG_tvr_tvr, 'SpatRasterCollection'))
 
   # two static
@@ -49,7 +49,7 @@ test_that('All combinations of spatially aligned requests work', {
 
 # two time varying range plus static.
   MDG_tvr_tvr_s <- getRaster(
-    dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 'Interventions__202106_Africa_IRS_Coverage', 'Blood_Disorders__201201_Africa_HbC_Allele_Frequency'), 
+    dataset_id = c("Interventions__202106_Africa_Insecticide_Treated_Net_Use", 'Malaria__202406_Global_Pf_Parasite_Rate', 'Blood_Disorders__201201_Africa_HbC_Allele_Frequency'), 
     shp = MDG_shp, 
     year = list(2009:2012, 2005:2007, NA)
     )

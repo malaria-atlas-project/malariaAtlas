@@ -123,7 +123,7 @@ test_that('Extract raster with incorrect year length', {
   skip_on_cran()
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   expect_error(extractRaster(d,
-                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_IRS_Coverage'),
+                        dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Insecticide_Treated_Net_Use'),
                         year = 2014))
 })
 
@@ -131,7 +131,7 @@ test_that('Extract raster with no year', {
   
   skip_on_cran()
   d <- data.frame(x = c(4, 8), y = c(13, 9))
-  data <- extractRaster(d, dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202406_Africa_IRS_Coverage'))
+  data <- extractRaster(d, dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Insecticide_Treated_Net_Use'))
   expect_true(inherits(data, 'data.frame'))
 })
 
