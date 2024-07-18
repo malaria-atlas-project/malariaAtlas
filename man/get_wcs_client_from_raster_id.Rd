@@ -10,7 +10,7 @@ get_wcs_client_from_raster_id(raster)
 \item{raster}{The raster ID.}
 }
 \value{
-A \link{WCSClient} object from the \pkg{ows4R} package.
+A \link[ows4R]{WCSClient} object.
 }
 \description{
 Get the WCS client for a raster ID.

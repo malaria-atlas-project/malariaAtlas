@@ -27,7 +27,7 @@
 \item{plot_titles}{Plot name of raster object as header for each individual raster plot?}
 
 \item{fill_scale_transform}{String givning a transformation for the fill aesthetic.
-See the trans argument in \code{\link{continuous_scale}} for possible values.}
+See the trans argument in \code{\link[ggplot2]{continuous_scale}} for possible values.}
 
 \item{fill_colour_palette}{String referring to a colorbrewer palette to be used for raster colour scale.}
 

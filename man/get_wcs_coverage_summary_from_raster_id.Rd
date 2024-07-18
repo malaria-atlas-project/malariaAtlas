@@ -10,7 +10,7 @@ get_wcs_coverage_summary_from_raster_id(raster)
 \item{raster}{The raster ID.}
 }
 \value{
-A \link{WCSCoverageSummary} object from the \pkg{ows4R} package.
+A \link[ows4R]{WCSCoverageSummary} object.
 }
 \description{
 Get the WCS coverage summary for a raster ID.
