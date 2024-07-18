@@ -280,7 +280,7 @@ combine_cql_filters <- function(filter_list) {
 #' Get the WCS coverage summary for a raster ID.
 #'
 #' @param raster The raster ID.
-#' @return A \link{WCSCoverageSummary} object from the \pkg{ows4R} package.
+#' @return A \link[ows4R]{WCSCoverageSummary} object.
 #' @keywords internal
 #'
 get_wcs_coverage_summary_from_raster_id <- function(raster) {
@@ -296,7 +296,7 @@ get_wcs_coverage_summary_from_raster_id <- function(raster) {
 #' Get the WCS client for a raster ID.
 #'
 #' @param raster The raster ID.
-#' @return A \link{WCSClient} object from the \pkg{ows4R} package.
+#' @return A \link[ows4R]{WCSClient} object.
 #' @keywords internal
 #'
 get_wcs_client_from_raster_id <- function(raster) {

@@ -9,7 +9,7 @@
 #' @param facet if TRUE, splits map into a separate facet for each malaria species; by default FALSE.
 #' @param fill_legend_title Add a title to the legend.
 #' @param fill_scale_transform String givning a transformation for the fill aesthetic.
-#'   See the trans argument in \code{\link{continuous_scale}} for possible values.
+#'   See the trans argument in \code{\link[ggplot2]{continuous_scale}} for possible values.
 #' @param printed Should the plot be printed to the graphics device.
 #' @param ... Other arguments passed to specific methods
 #'

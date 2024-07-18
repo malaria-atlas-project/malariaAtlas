@@ -10,7 +10,7 @@
 #' @param printed Logical vector indicating whether to print maps of supplied rasters.
 #' @param fill_colour_palette String referring to a colorbrewer palette to be used for raster colour scale.
 #' @param fill_scale_transform String givning a transformation for the fill aesthetic.
-#'   See the trans argument in \code{\link{continuous_scale}} for possible values.
+#'   See the trans argument in \code{\link[ggplot2]{continuous_scale}} for possible values.
 #' @param ... Other arguments passed to specific methods
 #'
 #' @return \code{autoplot.SpatRaster} returns a list of plots (gg objects) for each
