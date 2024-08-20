@@ -48,6 +48,10 @@ test_that('Single masked plot works', {
   expect_true(inherits(pp, "list"))
   expect_true(inherits(VEN_PfPR2_10_2022, 'SpatRaster'))
   expect_true(length(pp) == 1)
+  
+  # Contains mask, so 2 rasters plotted
+  layer_geoms <- sapply(pp[[1]]$layers, function(x) class(x$geom)[1])
+  expect_true(sum(grepl("GeomRaster", layer_geoms)) == 2)
 })
 
 test_that('Plots with mask, where all pixels are NaN works', {
@@ -60,9 +64,13 @@ test_that('Plots with mask, where all pixels are NaN works', {
   expect_true(inherits(pp, "list"))
   expect_true(inherits(PAK_PfPR2_10, 'SpatRaster'))
   expect_true(length(pp) == 1)
+  
+  # doesn't plot mask layer so just single raster layer is plotted
+  layer_geoms <- sapply(pp[[1]]$layers, function(x) class(x$geom)[1])
+  expect_true(sum(grepl("GeomRaster", layer_geoms)) == 1)
 })
 
-test_that('Plots with mask works', {
+test_that('Multiple plots with mask works', {
   skip_on_cran()
   VEN_shp <- getShp(ISO = "VEN", admin_level = "admin0")
   VEN_PfPR2_10 <- getRaster(dataset_id = "Malaria__202406_Global_Pf_Parasite_Rate", shp = VEN_shp, year = 2020:2022)
@@ -72,4 +80,8 @@ test_that('Plots with mask works', {
   expect_true(inherits(VEN_PfPR2_10, 'SpatRasterCollection'))
   expect_true(inherits(pp, "list"))
   expect_true(length(pp) == 3)
+  
+  # Contains mask, so 2 rasters plotted
+  layer_geoms <- sapply(pp[[1]]$layers, function(x) class(x$geom)[1])
+  expect_true(sum(grepl("GeomRaster", layer_geoms)) == 2)
 })
