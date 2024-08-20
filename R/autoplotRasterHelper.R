@@ -42,17 +42,20 @@ makeSpatRasterAutoplot <- function(
     )
   
   if (isMaskedRaster(spatraster)) {
-    maskBand <- terra::as.factor(getMaskBand(spatraster))
-    plot <- plot + 
-      ggnewscale::new_scale_fill() +
-      tidyterra::geom_spatraster(data = maskBand, aes()) +
-      scale_fill_manual(
-        name="",
-        values = c("white"), 
-        limits = c("1"), 
-        labels = getMaskBandName(maskBand),
-        na.value = NA, na.translate = FALSE
-      )
+    # skip if all pixels are NA
+    if (terra::global(getMaskBand(spatraster), fun="notNA")[[1]] != 0) {
+      maskBand <- terra::as.factor(getMaskBand(spatraster))
+      plot <- plot + 
+        ggnewscale::new_scale_fill() +
+        tidyterra::geom_spatraster(data = maskBand, aes()) +
+        scale_fill_manual(
+          name="",
+          values = c("white"), 
+          limits = c("1"), 
+          labels = getMaskBandName(maskBand),
+          na.value = NA, na.translate = FALSE
+        )
+    }
   }
   
   if (plot_titles == TRUE) {
