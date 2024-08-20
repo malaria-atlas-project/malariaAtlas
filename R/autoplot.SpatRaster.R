@@ -65,12 +65,11 @@ autoplot.SpatRaster <- function(
     fill_colour_palette = "RdYlBu",
     printed = TRUE
 ) {
-  raster_names <- unique(names(object))
-  plot_list <- lapply(X = raster_names, function(name) {
-    makeSpatRasterAutoplot(spatraster = object[[name]], name, shp_df, legend_title, fill_scale_transform, fill_colour_palette, plot_titles)
-  })
-                     
-  names(plot_list) <- raster_names
+  raster_name <- names(object)[1]
+  rast_plot <- makeSpatRasterAutoplot(spatraster = object, raster_name, shp_df, legend_title, fill_scale_transform, fill_colour_palette, plot_titles)
+  
+  plot_list <- list(rast_plot)
+  names(plot_list) <- raster_name
   
   if (printed == TRUE) {
     if (length(plot_list) == 1) {

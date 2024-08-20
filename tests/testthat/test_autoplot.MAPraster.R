@@ -34,5 +34,18 @@ test_that('Printing plot works', {
   expect_true(inherits(pp, "list"))
   expect_true(all(sapply(pp, inherits, "gg")))
   expect_true(length(pp) == 4)
+})
 
+test_that('Single masked plot works', {
+  skip_on_cran()
+  
+  VEN_shp <- getShp(ISO = "VEN", admin_level = "admin0")
+  VEN_PfPR2_10_2022 <- getRaster(dataset_id = "Malaria__202406_Global_Pf_Parasite_Rate", shp = VEN_shp, year = 2022)
+  
+  pp <- autoplot(VEN_PfPR2_10_2022)
+  
+  expect_true(terra::nlyr(VEN_PfPR2_10_2022) == 2)
+  expect_true(inherits(pp, "list"))
+  expect_true(inherits(VEN_PfPR2_10_2022, 'SpatRaster'))
+  expect_true(length(pp) == 1)
 })
