@@ -1,8 +1,8 @@
 context('Test getShp')
 
 test_that("getShp downloads the correct shapefiles and stores them",{
-  
   skip_on_cran()
+  
   #test getShp
   #test one country, admin0
   test_getshp_poly_0_1 <- getShp(ISO = "BDI", admin_level = "admin0")
@@ -45,6 +45,7 @@ test_that("getShp downloads the correct shapefiles and stores them",{
 
 test_that('Repeated getSHP works. That getting shapes from .malariaAtlasHidden does not break.', {
   skip_on_cran()
+  
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
   }
@@ -52,6 +53,7 @@ test_that('Repeated getSHP works. That getting shapes from .malariaAtlasHidden d
 
 test_that("getShp works with ISO='all' argument", {
     skip_on_cran()
+  
     shp <- malariaAtlas::getShp(ISO = "ALL")
     expect_true(inherits(shp, "sf"))
   }
@@ -59,8 +61,8 @@ test_that("getShp works with ISO='all' argument", {
 
 
 test_that('Broken arguments get handled nicely.', {
-
   skip_on_cran()
+  
   expect_error(DRC <- getShp(ISO = "DRC"), "One or more ISO codes are wrong")
 
   expect_error(DRC <- getShp(ISO = c("DRC", "BTN")), "One or more ISO codes are wrong")

@@ -1,14 +1,10 @@
 # isAvailable() tests
 
 context("Using isAvailable to check whether there are PR and Vector points for specified locations in the MAP database")
-
-
 # specify the example sets that I want to be available to test the returned data frame
-
-
 test_that("correct error messages are returned for various combinations of countries and sourcedata", {
-  
   skip_on_cran()
+  
 #one right
   expect_message(isAvailable(country = "Madagascar", sourcedata = "pr points"), "PR points are available for Madagascar")
   expect_message(isAvailable(country = "Myanmar", sourcedata = "vector points"), "Vector points are available for Myanmar")
@@ -80,6 +76,4 @@ test_that("correct error messages are returned for various combinations of count
   expect_message(isAvailable(country = "XfUEC43", sourcedata = "vector points"), "Specified location not found, see below comments:")
   expect_message(isAvailable(country = "XfUEC43", sourcedata = "vector points"), "Data not found for 'XfUEC43', use listVecOccPointCountries()")
   
-  })
-
-
+})

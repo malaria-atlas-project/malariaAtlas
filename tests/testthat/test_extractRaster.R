@@ -1,9 +1,8 @@
-
 context('Test extract raster')
 
 test_that('Extract raster basics works', {
-    
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
                         dataset_id = 'Malaria__202206_Global_Pf_Mortality_Count',
@@ -16,8 +15,8 @@ test_that('Extract raster basics works', {
 })
 
 test_that('Extract single raster with year range works', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
                         dataset_id = 'Malaria__202206_Global_Pf_Mortality_Count',
@@ -28,8 +27,8 @@ test_that('Extract single raster with year range works', {
 })
 
 test_that('Extract multiple rasters with single years works', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
                         dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202406_Africa_Insecticide_Treated_Net_Use'),
@@ -48,8 +47,8 @@ test_that('Extract multiple rasters with single years works', {
 
 
 test_that('Extract multiple rasters with single year and year range works', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
                         dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202406_Africa_Insecticide_Treated_Net_Use'),
@@ -67,8 +66,8 @@ test_that('Extract multiple rasters with single year and year range works', {
 })
 
 test_that('Extract multiple rasters with both year ranges works', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
                         dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202406_Africa_Insecticide_Treated_Net_Use'),
@@ -86,8 +85,8 @@ test_that('Extract multiple rasters with both year ranges works', {
 })
 
 test_that('Extract multiple rasters with single year, NA and year range', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
                         dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202406_Africa_Insecticide_Treated_Net_Use', 'Malaria__202206_Global_Pf_Parasite_Rate'),
@@ -108,8 +107,8 @@ test_that('Extract multiple rasters with single year, NA and year range', {
 })
 
 test_that('Extract raster with surface works', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
                         surface = 'Plasmodium falciparum PR2 - 10',
@@ -128,16 +127,16 @@ test_that('Extract raster with incorrect year length', {
 })
 
 test_that('Extract raster with no year', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d, dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202106_Africa_Insecticide_Treated_Net_Use'))
   expect_true(inherits(data, 'data.frame'))
 })
 
 test_that('Extract raster with no year as vector', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d, dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count', 'Interventions__202406_Africa_IRS_Coverage'), 
                         year = c(2015, 2014))
@@ -145,32 +144,32 @@ test_that('Extract raster with no year as vector', {
 })
 
 test_that('Extract raster with no valid latitude column', {
-  
   skip_on_cran()
+  
   d <- data.frame(v = c(4, 8), y = c(13, 9))
   expect_error(extractRaster(d, dataset_id = 'Malaria__202206_Global_Pf_Mortality_Count', 
                         year = 2015))
 })
 
 test_that('Extract raster with no valid longitude column', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), m = c(13, 9))
   expect_error(extractRaster(d, dataset_id = 'Malaria__202206_Global_Pf_Mortality_Count', 
                              year = 2015))
 })
 
 test_that('Extract raster with incorrect dataset_id', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   expect_error(extractRaster(d, dataset_id = 'gibberish', 
                              year = 2015))
 })
 
 test_that('Extract raster with one incorrect dataset_id and one correct', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- expect_warning(extractRaster(d, dataset_id = c('gibberish', 'Malaria__202206_Global_Pf_Mortality_Count'), 
                              year = list(2014, 2015)))

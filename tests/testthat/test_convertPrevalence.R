@@ -1,6 +1,5 @@
 context('Test convertPrevalence.')
 
-
 test_that('convertPrevalence works for all reasonable inputs', {
     
   pr <- seq(0, 1, 0.2)
@@ -21,18 +20,13 @@ test_that('convertPrevalence works for all reasonable inputs', {
                                        all_combs$min_out, 
                                        all_combs$max_out)
   
-    
   expect_true(all(pr_standardised <= 1))
   expect_true(all(pr_standardised >= 0))
-  
-  
-  
 })
 
 
 
 test_that('convertPrevalence works with gething parameters', {
-  
   pr <- seq(0, 1, 0.2)
   min_in <- c(1, 5, 10)
   max_in <- c(6, 15, 20)
@@ -55,14 +49,12 @@ test_that('convertPrevalence works with gething parameters', {
   
   expect_true(all(pr_standardised <= 1))
   expect_true(all(pr_standardised >= 0))
-  
 })
 
 
 
 
 test_that('NAs get handled right', {
-  
   set.seed(1)
   pr <- runif(20, 0.1, 0.15)
   min_in <- sample(1:5, 20, replace = TRUE)
@@ -83,8 +75,4 @@ test_that('NAs get handled right', {
 
   expect_error(convertPrevalence(0.1, 2, 5, NA, 10))
   expect_error(convertPrevalence(0.1, 2, 5, 2, NA))
-  
 })
-
-
-
