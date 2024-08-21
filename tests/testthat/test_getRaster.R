@@ -6,7 +6,6 @@ test_that('All combinations of spatially aligned requests work', {
   # Static
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 
-  skip_on_cran()
   # Time varying single
   MDG_PfPR2_10 <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate", shp = MDG_shp, year = 2015)
   expect_true(inherits(MDG_PfPR2_10, 'SpatRaster'))

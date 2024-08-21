@@ -181,8 +181,8 @@ test_that('Extract raster with one incorrect dataset_id and one correct', {
 
 
 test_that('Extract raster keeps additional rows of original df', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9), test=c('Y', 'N'))
   data <- extractRaster(d, dataset_id = c('Malaria__202206_Global_Pf_Mortality_Count'))
   
@@ -192,8 +192,8 @@ test_that('Extract raster keeps additional rows of original df', {
 
 
 test_that('Extract raster with static raster, but given year', {
-  
   skip_on_cran()
+  
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d, dataset_id = c('Explorer__2010_Anopheles_koliensis'), year = 2014)
   
@@ -202,6 +202,8 @@ test_that('Extract raster with static raster, but given year', {
 })
 
 test_that('Output in same order as input', {
+  skip_on_cran()
+  
   NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
   complete <- complete.cases(NGA_CMR_PR[, c(4, 5, 16, 17)])
   NGA_CMR_PR <- NGA_CMR_PR[complete, ]

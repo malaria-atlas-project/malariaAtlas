@@ -127,5 +127,7 @@ test_that('No location errors properly', {
 })
 
 test_that('Version works', {
+  skip_on_cran()
+  
   expect_message(getPR(species = 'both', country = c("Kenya")), regexp = "Because you did not provide a version, by default the version being used is")
 })
