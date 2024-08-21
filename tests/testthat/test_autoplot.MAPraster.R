@@ -19,7 +19,6 @@ test_that('Plotting works for 4 years of the same raster', {
   expect_true(all(sapply(pp, inherits, "gg")))
   expect_true(length(p) == 4)
   expect_true(length(pp) == 4)
-
 })
 
 
@@ -56,6 +55,7 @@ test_that('Single masked plot works', {
 
 test_that('Plots with mask, where all pixels are NaN works', {
   skip_on_cran()
+  
   PAK_shp <- getShp(ISO = "PAK", admin_level = "admin0")
   PAK_PfPR2_10 <- getRaster(dataset_id = "Malaria__202406_Global_Pf_Parasite_Rate", shp = PAK_shp, year = 2022)
   pp <- autoplot(PAK_PfPR2_10)
@@ -72,6 +72,7 @@ test_that('Plots with mask, where all pixels are NaN works', {
 
 test_that('Multiple plots with mask works', {
   skip_on_cran()
+  
   VEN_shp <- getShp(ISO = "VEN", admin_level = "admin0")
   VEN_PfPR2_10 <- getRaster(dataset_id = "Malaria__202406_Global_Pf_Parasite_Rate", shp = VEN_shp, year = 2020:2022)
   pp <- autoplot(VEN_PfPR2_10)

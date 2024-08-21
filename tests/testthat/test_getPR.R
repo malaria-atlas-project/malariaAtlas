@@ -3,8 +3,8 @@
 context("Using getPR to download PR points")
 
 test_that("data is downloaded as a data.frame", {
-  
   skip_on_cran()
+  
   kenya_pv <- getPR(country = "Kenya", species = "Pv")
   kenya_pf <- getPR(country = "Kenya", species = "Pf")
   kenya_BOTH <- getPR(country = "Kenya", species = "BOTH")
@@ -88,44 +88,43 @@ test_that("data is downloaded as a data.frame", {
   
   expect_warning(getPR(country = c("Kenya","Ngeria","Australia"), species = "both"), regexp = "did you mean Nigeria")
   expect_warning(getPR(country = c("Kenya","Ngeria","Australia"), species = "both"), regexp = "found for 'Australia', use listPRPointCountries()")
-
-  
-  
 })
 
 test_that('Extent works', {
   skip_on_cran()
+  
   d <- getPR(species = 'both', extent = matrix(c(0, -30, 40, 10), nrow = 2))
   expect_true(inherits(d, 'pr.points'))
   expect_true(nrow(d) > 0)
   
   expect_true(all(d$latitude > -30 & d$latitude < 10))
   expect_true(all(d$longitude > -0 & d$longitude < 40))
-  
 })
 
 
 test_that('DL all works', {
   skip_on_cran()
+  
   expect_message(
     d <- getPR(species = 'Pf', country = 'all'),
     regexp = 'Data downloaded for all'
   )
   expect_true(inherits(d, 'pr.points'))
   expect_true(nrow(d) > 0)
-  
 })
 
 
 test_that('No location errors properly', {
   skip_on_cran()
+  
   expect_error(
     d <- getPR(species = 'Pf', country = NULL),
     regexp = 'Must specify one of'
   )
-
 })
 
 test_that('Version works', {
+  skip_on_cran()
+  
   expect_message(getPR(species = 'both', country = c("Kenya")), regexp = "Because you did not provide a version, by default the version being used is")
 })

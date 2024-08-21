@@ -1,12 +1,11 @@
 context('Test all raster combinations.')
 
 test_that('All combinations of spatially aligned requests work', {
-  
   skip_on_cran()
+  
   # Static
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 
-  skip_on_cran()
   # Time varying single
   MDG_PfPR2_10 <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate", shp = MDG_shp, year = 2015)
   expect_true(inherits(MDG_PfPR2_10, 'SpatRaster'))
@@ -69,7 +68,6 @@ test_that('All combinations of spatially aligned requests work', {
   expect_true(inherits(MDG_res, 'SpatRasterCollection'))
   expect_true(!all(terra::res(MDG_res[1]) == terra::res(MDG_res[2])) )
   # p <- autoplot_MAPraster(MDG_tvr_tvr_s)
-  
 })
 
 
@@ -82,12 +80,12 @@ test_that('arg length mismatched work', {
                                          'Malaria__202206_Global_Pf_Incidence_Count'),
                              year = list(2009:2011)),
       regexp = "If downloading multiple different rasters, 'year' must be a list of the same length as 'dataset_id'.")
-               
 })
 
 
 test_that('Wrong name errors correctly', {
   skip_on_cran()
+  
   expect_error(
     MDG_rasters <- getRaster(dataset_id = "Plasmodium falciparum PR2",
                              year = NA))
@@ -103,11 +101,11 @@ test_that('Wrong year errors correctly', {
   
   expect_true(inherits(MDG_rasters, 'character'))
   expect_true(grepl('not available for all requested years', MDG_rasters))
-  
 })
 
 test_that('Using surface works', {
   skip_on_cran()
+  
   # Trying to handle new and old data depending on whether the database has been updated yet
 
   # fails with new data

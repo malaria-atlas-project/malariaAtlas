@@ -3,7 +3,6 @@
  context("Using getVecOcc to download vector occurrence points")
 
  test_that("data is downloaded as a data.frame", {
-   
    skip_on_cran()
    
    Brazil_all <- getVecOcc(country = "Brazil")
@@ -27,9 +26,6 @@
    expect_true(inherits(americas_multiple,"data.frame"))
    
    expect_true(length(unique(Brazil_darlingi$species)) == 1)
-   
-   
-   
 # })
 
 # test_that("dataframe contains expected data", {
@@ -58,30 +54,21 @@
    expect_true(unique(Brazil_darlingi$month_start[!is.na(Brazil_darlingi$month_start)] %in% c(1:12)))
    expect_true(unique(Brazil_darlingi$month_end[!is.na(Brazil_darlingi$month_end)] %in% c(1:12)))
    
-   
-   
-   
    # Test two species.
    two_sp <- getVecOcc(country = "Brazil", species = c("Anopheles darlingi", "Anopheles albitarsis"))
    
    expect_true(length(unique(two_sp$species)) == 2)
-   
-   
  })
 
 
 test_that("error messages are appropriate to given error", {
-  
   skip_on_cran()
+  
   expect_error(getVecOcc(country = "madgascar"), regexp = "Vector occurrence data is not available?")
   expect_error(getVecOcc(country = "xxxx"), regexp = "Vector occurrence data is not available")
 })
 
-
-
-
 test_that("all option works", {
-  
   skip_on_cran()
 
   d <- getVecOcc(country = 'all', species = 'Anopheles darlingi')
@@ -90,16 +77,13 @@ test_that("all option works", {
   expect_true(length(unique(d$country)) > 1)
   
   expect_true(length(unique(d$species)) == 1)
-
-  
-  
 })
 
 
 
 test_that("extent argument works", {
-  
   skip_on_cran()
+  
   d1 <- getVecOcc(extent = matrix(c(100,13,110,18), nrow = 2), species = 'all')
   expect_true(inherits(d1, 'vector.points'))
   expect_true(nrow(d1) > 0)
@@ -109,7 +93,4 @@ test_that("extent argument works", {
   expect_true(inherits(d2, 'vector.points'))
   expect_true(nrow(d2) > 0)
   expect_true(length(unique(d2$country)) > 1)
-  
-  
 })
-

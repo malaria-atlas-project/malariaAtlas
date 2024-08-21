@@ -1,14 +1,14 @@
 # listPoints(sourcedata = "pr points") tests
 
 context("Using listPoints to check which countries have available PR data.")
-if(exists("available_countries_stored_pr", envir = .malariaAtlasHidden)){
-rm(available_countries_stored_pr, envir = .malariaAtlasHidden)
+
+if (exists("available_countries_stored_pr", envir = .malariaAtlasHidden)) {
+  rm(available_countries_stored_pr, envir = .malariaAtlasHidden)
 }
 
-
 test_that("downloaded data.frame is in the correct format",{
-  
   skip_on_cran()
+  
   available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
   
   expect_true(nrow(available_countries_pr)>0)
@@ -30,19 +30,14 @@ test_that("downloaded data.frame is in the correct format",{
   expect_equal(length(grep("Pf_Parasite_Rate_Surveys", names(.malariaAtlasHidden$list_points))), 1)
 })
 
-
-
-
 # listPoints(sourcedata = "vector points") tests
 
 context("Using listPoints to check which countries have available Vector Occurrence data.")
-if(exists("available_countries_stored_vec", envir = .malariaAtlasHidden)){
+if (exists("available_countries_stored_vec", envir = .malariaAtlasHidden)) {
   rm(available_countries_stored_vec, envir = .malariaAtlasHidden)
 }
 
-
 test_that("downloaded data.frame is in the correct format",{
-  
   skip_on_cran()
   
   available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")
@@ -69,13 +64,12 @@ test_that("downloaded data.frame is in the correct format",{
 
 context("Using listRaster to check which Rasters are available for downlaod.")
 
-if(exists("available_rasters_stored", envir = .malariaAtlasHidden)){
-rm(available_rasters_stored, envir = .malariaAtlasHidden)
+if (exists("available_rasters_stored", envir = .malariaAtlasHidden)) {
+  rm(available_rasters_stored, envir = .malariaAtlasHidden)
 }
 
 
 test_that("downloaded data.frame is in the correct format",{
-  
   skip_on_cran()
   
   available_rasters <- listRaster()
@@ -96,14 +90,13 @@ test_that("downloaded data.frame is in the correct format",{
 
 context("Using listShp to check which shapes are available for downlaod.")
 
-if(exists("available_admin_stored", envir = .malariaAtlasHidden)){
+if (exists("available_admin_stored", envir = .malariaAtlasHidden)) {
   rm(available_admin_stored, envir = .malariaAtlasHidden)
 }
 
-
 test_that("downloaded data.frame is in the correct format",{
-  
   skip_on_cran()
+  
   available_admin <- listShp()
   
   expect_true(nrow(available_admin)>0)
@@ -137,15 +130,13 @@ test_that("downloaded data.frame is in the correct format",{
   
   dd3 <- listShp(printed = FALSE, admin_level = c('admin1', 'admin0'))
   expect_true(nrow(dd3) == returned_rows1 + returned_rows2)
-  
 })
-
 
 context("Test listData wrapper.")
 
 test_that('All options for list data work.', {
-    
   skip_on_cran()
+  
   d1 <- listData(datatype = 'pr points', printed = FALSE)
   d2 <- listData(datatype = 'vector points', printed = FALSE)
   d3 <- listData(datatype = 'raster', printed = FALSE)
@@ -170,10 +161,5 @@ test_that('All options for list data work.', {
 
   expect_true(inherits(d5, 'data.frame'))
   expect_true(nrow(d4) > nrow(d5))
-  
-            
   }
 )
-
-
-
