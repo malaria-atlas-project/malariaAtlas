@@ -16,6 +16,19 @@ library(malariaAtlas)
 knitr::opts_chunk$set(fig.width=12, fig.height=8)
 ```
 
+```{r echo=FALSE}
+# Helper function for ensuring functions don't ever throw errors for CRAN
+tryOrLog <- function(...) {
+  tryCatch({
+    eval(...)
+  },
+  error = function(e) {
+    print(e)
+    return(NULL)
+  })
+}
+```
+
 # Overview 
 
 This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*) and modelled raster outputs from the [Malaria Atlas Project](https://malariaatlas.org/).
@@ -38,15 +51,15 @@ Use:
 
 -   `listShpVersions()` to see the available versions for admin unit shape data, which can then be used in `listShp` and `getShp`.
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 listPRPointVersions()
 ```
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 listVecOccPointVersions()
 ```
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 listShpVersions()
 ```
 
@@ -61,15 +74,15 @@ To list the species available for vector point data use `listSpecies()`
 
 All three of these functions can optionally take a version parameter (which can be found with the list versions functions). If you choose not to provide a version, the most recent version of the relevant dataset will be selected by default.
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 listPRPointCountries(version = "202206")
 ```
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 listVecOccPointCountries(version = "201201")
 ```
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 listSpecies(version = "201201")
 ```
 
@@ -77,7 +90,7 @@ listSpecies(version = "201201")
 
 To list administrative units for which shapefiles are stored on the MAP geoserver, use `listShp()`. Similar to the list countries and species functions, this function can optionally take a version.
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 listShp(version = "202206")
 ```
 
@@ -85,7 +98,7 @@ listShp(version = "202206")
 
 `listRaster()` gets minimal information on all available rasters. It returns a data.frame with several columns for each raster such as dataset_id, title, abstract, min_raster_year and max_raster_year. The dataset_id can then be used in `getRaster` and `extractRaster`.
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 listRaster()
 ```
 
@@ -95,19 +108,19 @@ listRaster()
 
 Check whether PR data is available for Madagascar:
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 isAvailable_pr(country = "Madagascar")
 ```
 
 Check whether PR data is available for the United States of America by ISO code:
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 isAvailable_pr(ISO = "USA")
 ```
 
 Check whether PR data is available for Asia:
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 isAvailable_pr(continent = "Asia")
 ```
 
@@ -115,19 +128,19 @@ isAvailable_pr(continent = "Asia")
 
 Check whether vector data is available for Myanmar:
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 isAvailable_vec(country = "Myanmar")
 ```
 
 Check whether vector data is available for multiple countries:
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 isAvailable_vec(country = c("Nigeria", "Ethiopia"))
 ```
 
 You can also pass these functions a dataset version. If you don't they will default to using the most recent version.
 
-```{r results = "hide", message = FALSE}
+```{r eval = FALSE}
 isAvailable_pr(country = "Madagascar", version = "202206")
 ```
 
@@ -139,26 +152,46 @@ isAvailable_pr(country = "Madagascar", version = "202206")
 
 `getPR()` downloads all publicly available PR data points for a specified location (country, ISO, continent or extent) and plasmodium species (Pf, Pv or BOTH) and returns this as a dataframe with the following format:
 
-```{r message = FALSE, warning = FALSE, results = "hide"}
+```{r eval = FALSE}
 MDG_pr_data <- getPR(country = "Madagascar", species = "both")
+```
+
+```{r message = FALSE, warning = FALSE, results = "hide", echo=FALSE}
+# Hiding error handling for CRAN
+MDG_pr_data <- tryOrLog(getPR(country = "Madagascar", species = "both"))
 ```
 
 ```{r echo = FALSE}
 tibble::glimpse(MDG_pr_data)
 ```
 
-```{r message = FALSE}
+```{r eval = FALSE}
 Africa_pvpr_data <- getPR(continent = "Africa", species = "Pv")
 ```
 
-```{r message = FALSE}
+```{r  message = FALSE, warning = FALSE, results = "hide", echo = FALSE}
+# Hiding error handling for CRAN
+Africa_pvpr_data <- tryOrLog(getPR(continent = "Africa", species = "Pv"))
+```
+
+```{r eval = FALSE}
 Extent_pfpr_data <- getPR(extent = rbind(c(-2.460181, 13.581921), c(-3.867188, 34.277344)), species = "Pf")
+```
+
+```{r message = FALSE, warning = FALSE, results = "hide", echo = FALSE}
+# Hiding error handling for CRAN
+Extent_pfpr_data <- tryOrLog(getPR(extent = rbind(c(-2.460181, 13.581921), c(-3.867188, 34.277344)), species = "Pf"))
 ```
 
 You can also pass this function a dataset version. If you don't it will default to using the most recent version.
 
-```{r message = FALSE}
+```{r eval = FALSE}
 MDG_pr_data_202206 <- getPR(country = "Madagascar", species = "both", version = "202206")
+```
+
+```{r message = FALSE, warning = FALSE, results = "hide", echo = FALSE}
+# Hiding error handling for CRAN
+MDG_pr_data_202206 <- tryOrLog(getPR(country = "Madagascar", species = "both", version = "202206"))
 ```
 
 `autoplot.pr.points` configures autoplot method to enable quick mapping of the locations of downloaded PR points.
@@ -178,8 +211,13 @@ autoplot(MDG_pr_data,
 
 `getVecOcc()` downloads all publicly available Vector survey points for a specified location (country, ISO, continent or extent) and species (options for which can be found with `listSpecies`) and returns this as a dataframe with the following format:
 
-```{r message = FALSE, warning = FALSE, results = "hide"}
+```{r eval=FALSE}
 MMR_vec_data <- getVecOcc(country = "Myanmar")
+```
+
+```{r message = FALSE, warning = FALSE, results = "hide", echo=FALSE}
+# Hiding error handling for CRAN
+MMR_vec_data <- tryOrLog(getVecOcc(country = "Myanmar"))
 ```
 
 ```{r echo = FALSE}
@@ -188,8 +226,13 @@ tibble::glimpse(MMR_vec_data)
 
 You can also pass this function a dataset version. If you don't it will default to using the most recent version.
 
-```{r message = FALSE, warning = FALSE, results = "hide"}
+```{r eval=FALSE}
 MMR_vec_data_201201 <- getVecOcc(country = "Myanmar", version = "201201")
+```
+
+```{r message = FALSE, warning = FALSE, results = "hide", echo=FALSE}
+# Hiding error handling for CRAN
+MMR_vec_data_201201 <- tryOrLog(getVecOcc(country = "Myanmar", version = "201201"))
 ```
 
 `autoplot.vector.points` configures autoplot method to enable quick mapping of the locations of downloaded vector points.
@@ -209,8 +252,13 @@ autoplot(MMR_vec_data,
 
 `getShp()` downloads a shapefile for a specified country (or countries) and returns this as a simple feature object.
 
-```{r message = FALSE}
+```{r eval = FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
+```
+
+```{r message = FALSE, warning = FALSE, results = "hide", echo = FALSE}
+# Hiding error handling for CRAN
+MDG_shp <- tryOrLog(getShp(ISO = "MDG", admin_level = c("admin0", "admin1")))
 ```
 
 ```{r echo = FALSE}
@@ -235,9 +283,15 @@ autoplot(MDG_shp,
 
 `getRaster()`downloads publicly available MAP rasters for a specific dataset_id & year, clipped to a given bounding box or shapefile
 
-```{r message = FALSE, warning = FALSE, results = "hide"}
+```{r eval=FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
+```
+
+```{r message = FALSE, warning = FALSE, results = "hide", echo=FALSE}
+# Hiding error handling for CRAN
+MDG_shp <- tryOrLog(getShp(ISO = "MDG", admin_level = "admin0"))
+MDG_PfPR2_10 <- tryOrLog(getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013))
 ```
 
 `autoplot.SpatRaster` & `autoplot.SpatRasterCollection` configures autoplot method to enable quick mapping of downloaded rasters.
@@ -250,7 +304,7 @@ p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 
 By using the above tools along with ggplot, simple comparison figures can be easily produced.
 
-```{r message = FALSE, warning = FALSE, results = "hide"}
+```{r eval=FALSE}
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 MDG_PfPR2_10 <- getRaster(dataset_id = "Explorer__2020_Global_PfPR", shp = MDG_shp, year = 2013)
 
@@ -265,7 +319,7 @@ scale_size_continuous(name = "Survey Size")+
 
 Similarly for vector survey data
 
-```{r message = FALSE, warning = FALSE, results = "hide"}
+```{r eval=FALSE}
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 MMR_An_dirus <- getRaster(dataset_id = "Explorer__2010_Anopheles_dirus_complex", shp = MMR_shp)
 
