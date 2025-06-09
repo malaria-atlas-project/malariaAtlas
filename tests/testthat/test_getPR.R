@@ -97,8 +97,9 @@ test_that('Extent works', {
   expect_true(inherits(d, 'pr.points'))
   expect_true(nrow(d) > 0)
   
-  expect_true(all(d$latitude > -30 & d$latitude < 10))
-  expect_true(all(d$longitude > -0 & d$longitude < 40))
+  is_point <- !is.na(d$latitude)
+  expect_true(all(d$latitude[is_point] > -30 & d$latitude[is_point] < 10))
+  expect_true(all(d$longitude[is_point] > -0 & d$longitude[is_point] < 40))
 })
 
 

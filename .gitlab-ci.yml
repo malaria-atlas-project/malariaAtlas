@@ -1,4 +1,4 @@
-image: rocker/geospatial:4.2.1
+image: rocker/geospatial:4.4.3
 
 stages:
   - test

@@ -317,16 +317,28 @@ download_rst <- function(
     
     if (terra::nlyr(spat_raster) > 1) {
       band_descriptions <- wcs_client$describeCoverage(dataset_id)$rangeType$field
+      band_names <- lapply(FUN=function(x) {x$description$value}, band_descriptions)
       
       if (length(band_descriptions) < 1) {
         stop(paste0("Multiple bands, but missing higher band descriptions. raster: ", names(spat_raster[[1]])))
       } else {
-        band2_description <- band_descriptions[[2]]$description$value
-        if (!startsWith(band2_description, "Mask:")) {
-          message(paste0("Skipping second band '", band2_description, "'. Unknown how to handle it."))
-          spat_raster <- spat_raster[[1]]
+        band2_name <- band_names[[2]]
+        if (startsWith(band2_name, "Mask:")) {
+          names(spat_raster[[2]]) <- band2_name
         } else {
-          names(spat_raster[[2]]) <- band2_description
+          message(paste0("Skipping second band '", band2_name, "'. Unknown how to handle it."))
+          spat_raster <- spat_raster[[1]]
+        }
+
+        if (length(band_names) >= 4) { # has CI bands
+          if (band_names[[3]] == "LCI" && band_names[[4]] == "UCI") {
+            names(spat_raster[[3]]) <- "LCI"
+            names(spat_raster[[4]]) <- "UCI"
+          } else {
+            message(paste0("Skipping bands after second band '", band_name[[3]], "', '", band_name[[4]], "'. Unknown how to handle them."))
+            spat_raster <- spat_raster[[1:2]]
+          }
+
         }
       }
     }

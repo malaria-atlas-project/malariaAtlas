@@ -62,6 +62,8 @@ test_that("getShp works with ISO='all' argument", {
 
 test_that('Broken arguments get handled nicely.', {
   skip_on_cran()
+
+  options(future.globals.maxSize = 1.0 * 1e9)
   
   expect_error(DRC <- getShp(ISO = "DRC"), "One or more ISO codes are wrong")
 

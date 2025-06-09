@@ -3,6 +3,8 @@ context('Test other autoplotting is working.')
 test_that('Plotting works for shapes', {
 #time varying range
   skip_on_cran()
+
+  options(future.globals.maxSize = 1.0 * 1e9)
   
   MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
   p1 <- autoplot(as.MAPshp(MDG_shp), map_title = 'a title')
@@ -24,6 +26,8 @@ test_that('Plotting works for shapes', {
 test_that('Plotting works for PR', {
   #time varying range
   skip_on_cran()
+
+  options(future.globals.maxSize = 1.0 * 1e9)
   
   MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
   NGA_CMR_PR <- getPR(country = c("Nigeria", "Cameroon"), species = "Pf")
@@ -54,6 +58,8 @@ test_that('Plotting works for PR', {
 test_that('Plotting works for vectors', {
   #time varying range
   skip_on_cran()
+
+  options(future.globals.maxSize = 1.0 * 1e9)
   
   PAK_vec <- getVecOcc(country = "Pakistan")
   p1 <- autoplot(PAK_vec)
