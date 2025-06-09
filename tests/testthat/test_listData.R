@@ -107,6 +107,7 @@ test_that("downloaded data.frame is in the correct format",{
 #test_that("available_admin_stored object is stored in hidden environment",{
   expect_equal(length(names(.malariaAtlasHidden$list_shp$admin0)), 1)
 
+  options(future.globals.maxSize = 1.0 * 1e9)
   
   # Test that admin level works.
   
@@ -136,6 +137,8 @@ context("Test listData wrapper.")
 
 test_that('All options for list data work.', {
   skip_on_cran()
+
+  options(future.globals.maxSize = 1.0 * 1e9)
   
   d1 <- listData(datatype = 'pr points', printed = FALSE)
   d2 <- listData(datatype = 'vector points', printed = FALSE)
