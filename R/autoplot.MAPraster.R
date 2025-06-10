@@ -70,7 +70,7 @@ autoplot.MAPraster <- function(object,
   make_plot <- function(object, rastername, shp_df, legend_title){
 
   plot <- ggplot2::ggplot()+
-    ggplot2::geom_raster(data = object[object$raster_name == rastername,], ggplot2::aes(x, y, fill = z))+
+    ggplot2::geom_raster(data = object[object$raster_name == rastername,], ggplot2::aes(.data$x, .data$y, fill = .data$z))+
     ggplot2::coord_equal()+
     ggplot2::scale_fill_distiller(name = paste(legend_title),
                          palette = fill_colour_palette,
@@ -87,9 +87,9 @@ autoplot.MAPraster <- function(object,
   }
 
   if(!is.null(shp_df)){
-    plot$layers <- c(ggplot2::geom_polygon(data = shp_df, ggplot2::aes(long, lat, group = group), fill = "grey65"),
+    plot$layers <- c(ggplot2::geom_polygon(data = shp_df, ggplot2::aes(.data$long, .data$lat, group = .data$group), fill = "grey65"),
                      plot$layers)
-    plot <- plot + ggplot2::geom_polygon(data = shp_df, ggplot2::aes(long, lat, group = group), alpha = 0, colour = "grey40")
+    plot <- plot + ggplot2::geom_polygon(data = shp_df, ggplot2::aes(.data$long, .data$lat, group = .data$group), alpha = 0, colour = "grey40")
   }
 
   return(plot)

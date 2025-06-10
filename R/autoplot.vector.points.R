@@ -105,7 +105,7 @@ autoplot.vector.points <- function(object,
   vector_plot <- vector_plot +
     ggplot2::coord_sf() +
     ggplot2::ggtitle(paste(map_title))+
-    ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes(longitude, latitude, fill = species), alpha = 0.8, shape = 21, na.rm = TRUE)+
+    ggplot2::geom_point(data = object[!object$species %in% "Confidential",], aes(.data$longitude, .data$latitude, fill = .data$species), alpha = 0.8, shape = 21, na.rm = TRUE)+
     ggplot2::theme(plot.title = ggplot2::element_text(vjust=-1),
                    strip.text = ggplot2::element_text(face = "bold"),
                    strip.background = element_blank(),

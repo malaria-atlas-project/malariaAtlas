@@ -331,7 +331,7 @@ download_rst <- function(
             names(spat_raster[[3]]) <- "LCI"
             names(spat_raster[[4]]) <- "UCI"
           } else {
-            message(paste0("Skipping bands after second band '", band_name[[3]], "', '", band_name[[4]], "'. Unknown how to handle them."))
+            message(paste0("Skipping bands after second band '", band_names[[3]], "', '", band_names[[4]], "'. Unknown how to handle them."))
             spat_raster <- spat_raster[[1:2]]
           }
 
