@@ -403,6 +403,6 @@ fetchCountriesGivenDatasetId <- function(wfs_client, dataset_id) {
 }
 
 connectionErrFn <- function(err) {
-  err$message <- "Failed to connect to MAP geoserver. Please try again later. If this error keeps occurring please send us an email at data.malariaatlas.org@telethonkids.org.au"
+  err$message <- "Failed to connect to MAP geoserver. Please try again later. If this error keeps occurring please send us an email at data.malariaatlas.org@thekids.org.au"
   stop(err)
 }
