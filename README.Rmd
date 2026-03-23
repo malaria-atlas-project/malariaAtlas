@@ -8,7 +8,7 @@ output:
 library(malariaAtlas)
 library(tibble)
 
-knitr::opts_chunk$set(fig.path = 'man/figures/')
+knitr::opts_chunk$set(fig.path = 'man/figures/', eval = FALSE)
 ```
 
 # malariaAtlas
