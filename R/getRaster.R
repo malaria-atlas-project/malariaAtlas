@@ -299,8 +299,25 @@ download_rst <- function(
 
     if (!is.null(time_filter)) {
       workspace <- get_workspace_and_version_from_coverage_id(dataset_id)[[1]]
-      spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, time = time)
       
+      if (startsWith(dataset_id, "Explorer__")) {
+        # monkey patch for old Explorer rasters that don't properly broadcast the time component
+        dataset_coverage <- wcs_client$capabilities$findCoverageSummaryById(dataset_id, exact = TRUE)
+        if (is.null(dataset_coverage$.__enclos_env__$private$dimensions)) { 
+          dims <- dataset_coverage$getDimensions() # cache dims
+          
+          cov <- wcs_client$describeCoverage(dataset_id)
+          years <- seq(from = cov$metadata$TimeDomain$beginPosition$value, to = cov$metadata$TimeDomain$endPosition$value, by = "years")
+          years <- lapply(years, format, format = '%Y-%m-%dT%H:%M:%S')
+          for (i in seq(1, length(dataset_coverage$.__enclos_env__$private$dimensions))) {
+            if (dataset_coverage$.__enclos_env__$private$dimensions[[i]]$type == "temporal") {
+              dataset_coverage$.__enclos_env__$private$dimensions[[i]]$coefficients <- years
+            }
+          }
+        }
+      }
+      
+      spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent, time = time)
     } else {
       spat_raster <- wcs_client$getCoverage(identifier = dataset_id, bbox = extent)
     }
