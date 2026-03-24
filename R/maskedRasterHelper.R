@@ -4,7 +4,7 @@
 #' @param raster SpatRaster object containing a single layer
 #' 
 isMaskedRaster <- function(raster) {
-  return(terra::nlyr(raster) == 2 && startsWith(names(raster[[2]]), "Mask:"))
+  return(terra::nlyr(raster) > 1 && startsWith(names(raster[[2]]), "Mask:"))
 }
 
 #' @param raster SpatRaster object containing a single layer

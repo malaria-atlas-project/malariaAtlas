@@ -43,7 +43,7 @@ test_that('Single masked plot works', {
   
   pp <- autoplot(VEN_PfPR2_10_2022)
   
-  expect_true(terra::nlyr(VEN_PfPR2_10_2022) == 2)
+  expect_true(terra::nlyr(VEN_PfPR2_10_2022) == 4)
   expect_true(inherits(pp, "list"))
   expect_true(inherits(VEN_PfPR2_10_2022, 'SpatRaster'))
   expect_true(length(pp) == 1)
@@ -60,7 +60,7 @@ test_that('Plots with mask, where all pixels are NaN works', {
   PAK_PfPR2_10 <- getRaster(dataset_id = "Malaria__202406_Global_Pf_Parasite_Rate", shp = PAK_shp, year = 2022)
   pp <- autoplot(PAK_PfPR2_10)
   
-  expect_true(terra::nlyr(PAK_PfPR2_10) == 2)
+  expect_true(terra::nlyr(PAK_PfPR2_10) == 4)
   expect_true(inherits(pp, "list"))
   expect_true(inherits(PAK_PfPR2_10, 'SpatRaster'))
   expect_true(length(pp) == 1)
@@ -77,7 +77,7 @@ test_that('Multiple plots with mask works', {
   VEN_PfPR2_10 <- getRaster(dataset_id = "Malaria__202406_Global_Pf_Parasite_Rate", shp = VEN_shp, year = 2020:2022)
   pp <- autoplot(VEN_PfPR2_10)
   
-  expect_true(all(terra::nlyr(VEN_PfPR2_10) == c(2,2,2)))
+  expect_true(all(terra::nlyr(VEN_PfPR2_10) == c(4,4,4)))
   expect_true(inherits(VEN_PfPR2_10, 'SpatRasterCollection'))
   expect_true(inherits(pp, "list"))
   expect_true(length(pp) == 3)
