@@ -173,12 +173,13 @@ extractRaster <- function(df,
 extractLayerValues <- function(points_to_query,
                                dataset_id,
                                year) {
+  dataset_id <- gsub("__", ":", dataset_id)
   data_json <-
     list(points = points_to_query, layerNames = as.list(dataset_id))
   headers <- c(`Content-Type` = 'application/json')
   res     <-
     httr::POST(
-      url = 'https://data.malariaatlas.org/explorer-api/ExtractLayerValues',
+      url = 'https://data.malariaatlas.org/map-platform-app-backend/api/v1/maps/extract-layer-values',
       httr::add_headers(.headers = headers),
       body = data_json,
       encode = "json"
@@ -194,6 +195,8 @@ extractLayerValues <- function(points_to_query,
     
     layerValues <- subset(layerValues, (year >= min_year) & (year <= max_year))
   }
+  
+  layerValues$layerName <- gsub(":","__", layerValues$layerName)
   
   return(layerValues)
 }
