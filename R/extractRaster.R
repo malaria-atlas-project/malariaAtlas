@@ -61,7 +61,7 @@ extractRaster <- function(df,
       dataset_id = future.apply::future_lapply(surface, function(individual_surface){
         id <- getRasterDatasetIdFromSurface(availableRasters, individual_surface)
         return(id)
-      })
+      }, future.seed=NULL)
     } else {
       stop('Please provide a value for dataset_id. Options for this variable can be found by running listRaster() and looking in the dataset_id column.')
     }

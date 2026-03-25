@@ -24,7 +24,7 @@ listVecOccPointVersions <- function(printed = TRUE){
     if(name == 'Global_Dominant_Vector_Surveys') {
       return(workspace_and_version$version)
     }
-  })
+  }, future.seed=NULL)
   
   versions <- unique(versions)
   

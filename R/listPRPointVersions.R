@@ -23,7 +23,7 @@ listPRPointVersions <- function(printed = TRUE){
     if(name %in% list('Global_Pf_Parasite_Rate_Surveys', 'Global_Pv_Parasite_Rate_Surveys')) {
       return(workspace_and_version$version)
     }
-  })
+  }, future.seed=NULL)
   
   versions <- unique(versions)
   

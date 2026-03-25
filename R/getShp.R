@@ -132,7 +132,7 @@ getShp <- function(country = NULL,
   #Getting features
 
   features_list <- future.apply::future_sapply(
-    admin_level, function(al) {download_shp(wfs_cap, al, version, location_filter, bbox_filter)}, simplify = FALSE, USE.NAMES = TRUE
+    admin_level, function(al) {download_shp(wfs_cap, al, version, location_filter, bbox_filter)}, future.seed=NULL, simplify = FALSE, USE.NAMES = TRUE
   )
 
   if (length(admin_level) == 1 & !("all" %in% admin_level)){

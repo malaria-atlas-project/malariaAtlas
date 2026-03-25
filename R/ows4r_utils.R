@@ -129,7 +129,7 @@ listFeatureTypeDatasetsFromWorkspace <- function(workspace) {
       version = workspace_and_version$version,
       workspace = workspace_and_version$workspace
     ))
-  })
+  }, future.seed=NULL)
   
   df_datasets <- do.call(rbind, wfs_ft_types_dataframes)
   return(df_datasets)

@@ -25,7 +25,7 @@ listShpVersions <- function(printed = TRUE){
     workspace_and_version <- get_workspace_and_version_from_wfs_feature_type_id(id)
     
     return(workspace_and_version$version)
-  })
+  }, future.seed=NULL)
   
   versions <- unique(versions)
   

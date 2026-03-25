@@ -56,7 +56,7 @@ listShp <- function(printed = TRUE,
       
       .malariaAtlasHidden$list_shp[[individual_admin_level]][[version]] <- features_admin_level # add to cache
       return(features_admin_level)
-    })
+    }, future.seed=NULL)
   
   features <- dplyr::bind_rows(features_list)
   

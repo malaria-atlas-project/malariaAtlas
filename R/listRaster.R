@@ -74,12 +74,12 @@ listRaster <- function(printed = TRUE){
         max_raster_year = max_raster_year
       ))
 
-    })
+    }, future.seed=NULL)
 
     wcs_coverages_df <- do.call(rbind, wcs_coverages)
     return(wcs_coverages_df)
     
-  })
+  },future.seed=NULL)
   
   all_available_rasters <- do.call(rbind, available_rasters)
   all_available_rasters <- clean_mosquito_names(all_available_rasters)
