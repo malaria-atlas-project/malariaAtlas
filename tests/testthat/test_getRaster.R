@@ -110,7 +110,7 @@ test_that('Using surface works', {
 
   # fails with new data
   tryCatch({
-    r <- getRaster(surface = "Number of deaths from Plasmodium falciparum during a defined year 2000-2020", year = 2015)
+    r <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Mortality_Count", year = 2030)
     MDG_surface <- r
   }, error = function(e) {
     print("Failed with new data")
@@ -118,7 +118,7 @@ test_that('Using surface works', {
   
   # fails with old data
   tryCatch({
-    r <- getRaster(surface = "Number of deaths from Plasmodium falciparum during a defined year", year = 2015)
+    r <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Mortality_Count", year = 1999)
     MDG_surface <- r
   }, error = function(e) {
     print("Failed with old data")

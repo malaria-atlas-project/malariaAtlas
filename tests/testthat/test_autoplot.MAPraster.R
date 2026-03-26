@@ -8,7 +8,7 @@ test_that('Plotting works for 4 years of the same raster', {
   skip_on_cran()
     
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-  MDG_PfPR2_10_range <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2012:2015)
+  MDG_PfPR2_10_range <- getRaster(dataset_id = "Explorer__2015_Nature_Africa_PR", shp = MDG_shp, year = 2012:2015)
     
   p <- autoplot(MDG_PfPR2_10_range, printed = FALSE) # this works
   pp <- autoplot(MDG_PfPR2_10_range, printed = FALSE) # This goes funky. Need invisible()
@@ -26,7 +26,7 @@ test_that('Printing plot works', {
   skip_on_cran()
   
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-  MDG_PfPR2_10_range <- getRaster(surface = "Plasmodium falciparum PR2-10", shp = MDG_shp, year = 2012:2015)
+  MDG_PfPR2_10_range <- getRaster(dataset_id = "Explorer__2015_Nature_Africa_PR", shp = MDG_shp, year = 2012:2015)
     
   pp <- autoplot(MDG_PfPR2_10_range, printed = TRUE) # This goes funky. Need invisible()
   expect_true(inherits(MDG_PfPR2_10_range, 'SpatRasterCollection'))

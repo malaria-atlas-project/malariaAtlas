@@ -25,7 +25,7 @@
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
 #'
 #' # Download PfPR2-10 Raster for 2013 & plot this
-#' MDG_PfPR2_10 <- getRaster(surface = "Plasmodium falciparum PR2-10", 
+#' MDG_PfPR2_10 <- getRaster(dataset_id = "Malaria__202508_Global_Pf_Parasite_Rate", 
 #'                           shp = MDG_shp, year = 2013)
 #' p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp)
 #'

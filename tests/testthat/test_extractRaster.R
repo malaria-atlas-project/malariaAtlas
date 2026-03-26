@@ -106,12 +106,12 @@ test_that('Extract multiple rasters with single year, NA and year range', {
   expect_true(all(data_third_raster$year <= 2019 & data_third_raster$year >= 2017))
 })
 
-test_that('Extract raster with surface works', {
+test_that('Extract raster with dataset_id works', {
   skip_on_cran()
   
   d <- data.frame(x = c(4, 8), y = c(13, 9))
   data <- extractRaster(d,
-                        surface = 'Plasmodium falciparum PR2 - 10',
+                        dataset_id = 'Explorer__2019_Global_PfPR',
                         year = 2015)
   
   expect_true(inherits(data, 'data.frame'))
