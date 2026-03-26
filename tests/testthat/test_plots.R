@@ -68,7 +68,7 @@ test_that('Plotting works for vectors', {
   expect_true(inherits(p2, 'gg'))
   
   PAK_shp <- getShp(ISO = "PAK", admin_level = c("admin0", "admin1"))
-  p3 <- autoplot(PAK_vec, shp_df = as.MAPshp(PAK_shp))
+  p3 <- autoplot(PAK_vec, shp_df = PAK_shp)
   expect_true(inherits(p3, 'gg'))
   
   # Check all admin levels

@@ -22,7 +22,7 @@
 #'
 #' \code{\link{autoplot.MAPraster}}
 #'
-#' to quickly visualise MAPraster objects created using \code{as.MAPraster}.
+#' to quickly visualise raster objects
 #'
 #' @export getRaster
 

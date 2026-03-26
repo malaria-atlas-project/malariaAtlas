@@ -42,14 +42,10 @@
 #'
 #' to download rasters directly from MAP.
 #'
-#' \code{\link{as.MAPraster}}:
-#'
-#' to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for
-#'   easy plotting with ggplot.
 #'
 #' \code{\link{autoplot.MAPraster}}:
 #'
-#' to quickly visualise MAPraster objects created using \code{as.MAPraster}.
+#' to quickly visualise raster objects 
 #'
 #'
 #' @export autoplot_MAPraster

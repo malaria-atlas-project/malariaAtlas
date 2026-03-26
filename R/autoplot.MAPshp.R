@@ -14,7 +14,7 @@
 #' @examples
 #' \dontrun{
 #' MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-#' autoplot(as.MAPshp(MDG_shp))
+#' autoplot(MDG_shp)
 #' }
 #'
 #' @importFrom ggplot2 autoplot
