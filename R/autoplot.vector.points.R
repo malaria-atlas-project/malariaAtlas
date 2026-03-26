@@ -80,7 +80,7 @@ autoplot.vector.points <- function(object,
     } else {
       admin_level_request <- admin_level
     }
-    vector_shp <- getShp(ISO = unique(object$country_id), format = "df", admin_level = admin_level_request)
+    vector_shp <- getShp(ISO = unique(object$country_id), admin_level = admin_level_request)
     
     if(admin_level == "admin0"){
       vector_plot <-  ggplot2::ggplot()+
