@@ -53,7 +53,7 @@ test_that('All combinations of spatially aligned requests work', {
     year = list(2009:2012, 2005:2007, NA)
     )
   expect_true(inherits(MDG_tvr_tvr_s, 'SpatRasterCollection'))
-  # p <- autoplot_MAPraster(MDG_tvr_tvr_s)
+  # p <- autoplot(MDG_tvr_tvr_s)
   
   
   # Different resolutions 
@@ -67,7 +67,7 @@ test_that('All combinations of spatially aligned requests work', {
   
   expect_true(inherits(MDG_res, 'SpatRasterCollection'))
   expect_true(!all(terra::res(MDG_res[1]) == terra::res(MDG_res[2])) )
-  # p <- autoplot_MAPraster(MDG_tvr_tvr_s)
+  # p <- autoplot(MDG_tvr_tvr_s)
 })
 
 

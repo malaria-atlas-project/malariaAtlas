@@ -21,16 +21,6 @@
 #' autoplot(MDG_PfPR2_10)
 #' }
 #'
-#' @seealso
-#' \code{\link{autoplot_MAPraster}}
-#'
-#' to quickly visualise rasters downloded using \code{\link{getRaster}}.
-#'
-#' \code{\link{as.MAPraster}}
-#'
-#' to convert RasterLayer/RasterStack objects into a 'MAPraster' object (data.frame) for
-#'   easy plotting with ggplot.
-#'
 #' \code{\link{autoplot.MAPraster}}
 #'
 #' to quickly visualise MAPraster objects created using \code{as.MAPraster}.
