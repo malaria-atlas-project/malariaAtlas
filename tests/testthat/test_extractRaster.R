@@ -194,7 +194,7 @@ test_that('Extract raster with static raster, but given year', {
   skip_on_cran()
   
   d <- data.frame(x = c(4, 8), y = c(13, 9))
-  data <- extractRaster(d, dataset_id = c('Explorer__2010_Anopheles_koliensis'), year = 2014)
+  data <- extractRaster(d, dataset_id = c('Explorer__2010_Anopheles_koliensis'))
   
   expect_true(inherits(data, 'data.frame'))
   expect_true(nrow(data) == 2)

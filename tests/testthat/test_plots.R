@@ -7,14 +7,14 @@ test_that('Plotting works for shapes', {
   options(future.globals.maxSize = 1.0 * 1e9)
   
   MDG_shp <- getShp(ISO = "MDG", admin_level = c("admin0", "admin1"))
-  p1 <- autoplot(as.MAPshp(MDG_shp), map_title = 'a title')
-  p2 <- autoplot(as.MAPshp(MDG_shp), map_title = 'a title', printed = T)
-  p3 <- autoplot(as.MAPshp(MDG_shp), facet = TRUE)
+  p1 <- autoplot(MDG_shp, map_title = 'a title')
+  p2 <- autoplot(MDG_shp, map_title = 'a title', printed = T)
+  p3 <- autoplot(MDG_shp, facet = TRUE)
   
   
   # Check facetting without multiple admin units doesn't break
   MDG_shp <- getShp(ISO = "MDG", admin_level = "admin1")
-  p4 <- autoplot(as.MAPshp(MDG_shp), facet = TRUE)
+  p4 <- autoplot(MDG_shp, facet = TRUE)
   
   
   expect_true(inherits(p1, 'gg'))
