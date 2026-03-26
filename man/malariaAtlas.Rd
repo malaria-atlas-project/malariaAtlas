@@ -2,6 +2,7 @@
 % Please edit documentation in R/malariaAtlas.R
 \docType{package}
 \name{malariaAtlas}
+\alias{malariaAtlas-package}
 \alias{malariaAtlas}
 \title{An R interface to open-access malaria data, hosted by the Malaria Atlas Project.}
 \description{
@@ -18,3 +19,32 @@
  }
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/malaria-atlas-project/malariaAtlas}
+  \item Report bugs at \url{https://github.com/malaria-atlas-project/malariaAtlas/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Mauricio van den Berg \email{mauricio.vandenberg@thekids.org.au}
+
+Authors:
+\itemize{
+  \item Daniel Pfeffer \email{daniel.pfeffer@uqconnect.edu.au} (\href{https://orcid.org/0000-0002-2204-3488}{ORCID})
+  \item Tim Lucas \email{timcdlucas@gmail.com} (\href{https://orcid.org/0000-0003-4694-8107}{ORCID})
+  \item Daniel May (\href{https://orcid.org/0000-0003-0005-2452}{ORCID})
+  \item Suzanne Keddie (\href{https://orcid.org/0000-0003-1254-7794}{ORCID})
+  \item Jen Rozier (\href{https://orcid.org/0000-0002-2610-7557}{ORCID})
+  \item Oliver Watson (\href{https://orcid.org/0000-0003-2374-0741}{ORCID})
+  \item Harry Gibson (\href{https://orcid.org/0000-0001-6779-3250}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Nick Golding [contributor]
+  \item David Smith [contributor]
+}
+
+}

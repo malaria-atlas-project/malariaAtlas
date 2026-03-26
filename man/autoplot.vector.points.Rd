@@ -54,7 +54,7 @@ autoplot(Vector_surveys_NGA_NG)
 MMR_shp <- getShp(ISO = "MMR", admin_level = "admin0")
 
 # Download An. dirus predicted distribution Raster & plot this
-MMR_An_dirus <- getRaster(surface = "Anopheles dirus species complex", shp = MMR_shp)
+MMR_An_dirus <- getRaster(dataset_id = "Explorer__2010_Anopheles_dirus_complex", shp = MMR_shp)
 p <- autoplot(MMR_An_dirus, shp_df = MMR_shp, printed = FALSE)
 
 # Download raw occurrence points & plot these over the top of the raster   

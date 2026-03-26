@@ -5,17 +5,15 @@
 \title{Check whether PR points are available for a given location}
 \usage{
 isAvailable_pr(
-  sourcedata = NULL,
   country = NULL,
   ISO = NULL,
   continent = NULL,
   full_results = FALSE,
-  version = NULL
+  version = NULL,
+  sourcedata = NULL
 )
 }
 \arguments{
-\item{sourcedata}{deprecated argument. Please remove it from your code.}
-
 \item{country}{string containing name of desired country, e.g. \code{ c("Country1", "Country2", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
 
 \item{ISO}{string containing ISO3 code for desired country, e.g. \code{c("XXX", "YYY", ...)} (use one of \code{country} OR \code{ISO} OR \code{continent}, not combined)}
@@ -26,6 +24,8 @@ isAvailable_pr(
 
 \item{version}{(optional) The PR dataset version to use. If not provided, will just use the most recent version of PR data. (To see available version options, 
 use listPRPointVersions)}
+
+\item{sourcedata}{deprecated argument. Please remove it from your code.}
 }
 \value{
 \code{isAvailable_pr} returns a named list of input locations with information regarding data availability.

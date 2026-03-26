@@ -7,7 +7,7 @@
 \method{autoplot}{MAPshp}(object, ..., map_title = NULL, facet = FALSE, printed = TRUE)
 }
 \arguments{
-\item{object}{A MAPshp object downloaded using \code{\link{getShp}} with format = "df" specified.}
+\item{object}{A MAPshp object downloaded using \code{\link{getShp}}}
 
 \item{...}{Other arguments passed to specific methods}
 
@@ -26,7 +26,7 @@
 \examples{
 \dontrun{
 MDG_shp <- getShp(ISO = "MDG", admin_level = "admin0")
-autoplot(as.MAPshp(MDG_shp))
+autoplot(MDG_shp)
 }
 
 }

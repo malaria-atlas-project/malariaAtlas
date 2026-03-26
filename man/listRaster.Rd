@@ -15,7 +15,7 @@ listRaster(printed = TRUE)
 \enumerate{
 \item \code{dataset_id} the unique dataset ID of the raster, which can the be used in functions such as getRaster and extractRaster
 \item \code{raster_code} unique identifier for each raster
-\item \code{title} abbreviated title for each raster, used as \code{surface} argument in getRaster()
+\item \code{title} abbreviated title for each raster
 \item \code{title_extended} extended title for each raster, detailing raster content
 \item \code{abstract} full description of each raster, outlining raster creation methods, raster content and more.
 \item \code{citation} citation of peer-reviewed article in which each raster has been published
