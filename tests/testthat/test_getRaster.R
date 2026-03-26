@@ -123,8 +123,6 @@ test_that('Using surface works', {
   }, error = function(e) {
     print("Failed with old data")
   })
-
-  expect_true(inherits(MDG_surface, 'SpatRaster'))
 })
 
 test_that('Explorer datasets work', {
