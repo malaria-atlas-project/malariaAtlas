@@ -13,7 +13,7 @@ test_that("data is downloaded as a data.frame", {
   multiple_pf <- getPR(country = c("Madagascar","Nigeria","Suriname"), species = "Pf")
   multiple_BOTH <- getPR(country = c("Madagascar","Nigeria","Suriname"), species = "BOTH")
   
-  available_countries_pr <- paste(listPoints(printed = FALSE, sourcedata = "pr points")$country)
+  available_countries_pr <- paste(listPRPointCountries(printed = FALSE)$country)
   ALL_pv <- getPR(country = available_countries_pr, species = "Pv")
   ALL_pf <- getPR(country = available_countries_pr, species = "Pf")
   ALL_BOTH <- getPR(country = available_countries_pr, species = "BOTH")

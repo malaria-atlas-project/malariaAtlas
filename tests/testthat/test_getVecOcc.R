@@ -13,7 +13,7 @@
    africa_all <- getVecOcc(continent = "Africa")
    america_all <- getVecOcc(continent = "Americas")
    
-   available_countries <- paste(listPoints(printed = FALSE, sourcedata = "vector points")$country)
+   available_countries <- paste(listVecOccPointCountries(printed = FALSE)$country)
    
    ALL <- list()
    for (chunk in split(available_countries, ceiling(seq_along(available_countries)/20))) {

@@ -1,6 +1,6 @@
-# listPoints(sourcedata = "pr points") tests
+# listPRPointCountries() tests
 
-context("Using listPoints to check which countries have available PR data.")
+context("Using listPRPointCountries to check which countries have available PR data.")
 
 if (exists("available_countries_stored_pr", envir = .malariaAtlasHidden)) {
   rm(available_countries_stored_pr, envir = .malariaAtlasHidden)
@@ -9,7 +9,7 @@ if (exists("available_countries_stored_pr", envir = .malariaAtlasHidden)) {
 test_that("downloaded data.frame is in the correct format",{
   skip_on_cran()
   
-  available_countries_pr <- listPoints(printed = FALSE, sourcedata = "pr points")
+  available_countries_pr <- listPRPointCountries(printed = FALSE)
   
   expect_true(nrow(available_countries_pr)>0)
   expect_true(inherits(available_countries_pr,"data.frame"))
@@ -30,9 +30,9 @@ test_that("downloaded data.frame is in the correct format",{
   expect_equal(length(grep("Pf_Parasite_Rate_Surveys", names(.malariaAtlasHidden$list_points))), 1)
 })
 
-# listPoints(sourcedata = "vector points") tests
+# listVecOccPointCountries() tests
 
-context("Using listPoints to check which countries have available Vector Occurrence data.")
+context("Using listVecOccPointCountries to check which countries have available Vector Occurrence data.")
 if (exists("available_countries_stored_vec", envir = .malariaAtlasHidden)) {
   rm(available_countries_stored_vec, envir = .malariaAtlasHidden)
 }
@@ -40,7 +40,7 @@ if (exists("available_countries_stored_vec", envir = .malariaAtlasHidden)) {
 test_that("downloaded data.frame is in the correct format",{
   skip_on_cran()
   
-  available_countries_vec <- listPoints(printed = FALSE, sourcedata = "vector points")
+  available_countries_vec <- listVecOccPointCountries(printed = FALSE)
   
   expect_true(nrow(available_countries_vec)>0)
   expect_true(inherits(available_countries_vec,"data.frame"))
