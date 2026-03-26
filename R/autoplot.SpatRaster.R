@@ -41,7 +41,9 @@
 #'
 #'
 #' # Download global raster of G6PD deficiency (Howes et al 2012) and visualise this on a map.
-#' G6PDd_global <- getRaster(dataset_id = "Explorer__2012_G6PDd_Allele_Frequency_Global_5k_Decompressed")
+#' G6PDd_global <- getRaster(
+#'   dataset_id = "Explorer__2012_G6PDd_Allele_Frequency_Global_5k_Decompressed"
+#' )
 #' autoplot(G6PDd_global)
 #' }
 #'

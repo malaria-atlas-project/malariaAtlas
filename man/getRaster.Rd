@@ -26,9 +26,11 @@ getRaster(
 \item{file_path}{string specifying the directory to which raster files will be downloaded, if you want to download them. If none given, rasters will not be saved to files.}
 
 \item{year}{default = \code{rep(NA, length(dataset_id))} (use \code{NA} for static rasters); for time-varying rasters: if downloading a single surface for one or more years, \code{year} should be a string specifying the desired year(s). if downloading more than one surface, use a list the same length as \code{dataset_id}, providing the desired year-range for each time-varying surface in \code{dataset_id} or \code{NA} for static rasters.}
+
+\item{vector_year}{deprecated, use year instead}
 }
 \value{
-\code{getRaster} returns a SpatRaster for the specified extent. Or a SpatRasterCollection if the two rasters are incompatible in terms of projection/extent/resolution
+getRaster returns a SpatRaster for the specified extent. Or a SpatRasterCollection if the two rasters are incompatible in terms of projection/extent/resolution
 }
 \description{
 \code{getRaster} downloads publicly available MAP rasters for a specific surface & year, clipped to a provided bounding box or shapefile.
@@ -41,8 +43,9 @@ MDG_PfPR2_10 <- getRaster(dataset_id = "Malaria__202206_Global_Pf_Parasite_Rate"
 autoplot(MDG_PfPR2_10)
 }
 
-\code{\link{autoplot.MAPraster}}
+}
+\seealso{
+\code{\link{autoplot.MAPraster}}:
 
 to quickly visualise raster objects
-
 }
