@@ -27,10 +27,10 @@
 #' }
 #' @export isAvailable_pr
 
-isAvailable_pr <- function(sourcedata = NULL, country = NULL, ISO = NULL, continent = NULL, full_results = FALSE, version = NULL) {
+isAvailable_pr <- function(country = NULL, ISO = NULL, continent = NULL, full_results = FALSE, version = NULL, sourcedata = NULL) {
   
   if (!is.null(sourcedata)) {
-    lifecycle::deprecate_warn("1.6.0", "isAvailable_pr(sourcedata)", details = "The argument 'sourcedata' has been deprecated. It will be removed in the next version. It has no meaning.")
+    lifecycle::deprecate_stop("1.6.0", "isAvailable_pr(sourcedata)", details = "The argument 'sourcedata' has been deprecated. Please remove it.")
   }
 
   if(is.null(country) & is.null(ISO) & is.null(continent)){

@@ -150,7 +150,6 @@ getVecOcc <- function(country = NULL,
       
       checked_availability_vec <-
         isAvailable_vec(
-          sourcedata = "vector points",
           country = country,
           ISO = ISO,
           continent = continent,

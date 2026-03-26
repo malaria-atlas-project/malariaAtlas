@@ -28,9 +28,9 @@ isAvailable <- function(sourcedata = NULL, full_results = FALSE, country = NULL,
   }
   
   if(sourcedata == "pr points"){
-   isAvailable_pr(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results, ...)      
+   isAvailable_pr(country = country, ISO = ISO, continent = continent, full_results = full_results, ...)      
   }else if(sourcedata == "vector points"){
-    isAvailable_vec(sourcedata = sourcedata, country = country, ISO = ISO, continent = continent, full_results = full_results, ...)
+    isAvailable_vec(country = country, ISO = ISO, continent = continent, full_results = full_results, ...)
   }
   
 }

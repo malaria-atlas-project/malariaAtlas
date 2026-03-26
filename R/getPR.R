@@ -116,7 +116,6 @@ getPR <- function(country = NULL,
       
       checked_availability_pr <-
         isAvailable_pr(
-          sourcedata = "pr points",
           country = country,
           ISO = ISO,
           continent = continent,
