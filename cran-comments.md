@@ -1,6 +1,6 @@
 ## Notable changes
 
-Updated maintainer email address due to institute name change. telethonkids.org.au -> thekids.org.au
+Disabled automatic README.Rmd generation to avoid flakiness (requires external data).
 
 ## Test environments
 
