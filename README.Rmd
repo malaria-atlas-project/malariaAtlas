@@ -7,6 +7,7 @@ output:
 ```{r, echo = FALSE, message = FALSE, results = "hide", warning = FALSE}
 library(malariaAtlas)
 library(tibble)
+library(ggplot2)
 
 knitr::opts_chunk$set(fig.path = 'man/figures/', eval = FALSE)
 ```
@@ -21,7 +22,7 @@ knitr::opts_chunk$set(fig.path = 'man/figures/', eval = FALSE)
 
 This package allows you to download parasite rate data (*Plasmodium falciparum* and *P. vivax*), survey occurrence data of the 41 dominant malaria vector species, and modelled raster outputs from the [Malaria Atlas Project](https://malariaatlas.org/).
 
-More details and example analyses can be found in the [published paper)[(<https://malariajournal.biomedcentral.com/articles/10.1186/s12936-018-2500-5>).
+More details and example analyses can be found in the [published paper)[(<https://link.springer.com/article/10.1186/s12936-018-2500-5>).
 
 ## Available Data: 
 The data can be explored at [https://data.malariaatlas.org/maps](https://data.malariaatlas.org/maps).
@@ -258,10 +259,10 @@ p <- autoplot(MDG_PfPR2_10, shp_df = MDG_shp, printed = FALSE)
 
 pr <- getPR(country = c("Madagascar"), species = "Pf")
 p[[1]] +
-geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = positive / examined, size = examined), shape = 21)+
-scale_size_continuous(name = "Survey Size")+
- scale_fill_distiller(name = "PfPR", palette = "RdYlBu")+
- ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
+  geom_point(data = pr[pr$year_start==2013,], aes(longitude, latitude, fill = positive / examined, size = examined), shape = 21) +
+  scale_size_continuous(name = "Survey Size") +
+  scale_fill_distiller(name = "PfPR", palette = "RdYlBu") +
+  ggtitle("Raw PfPR Survey points\n + Modelled PfPR 2-10 in Madagascar in 2013")
 ```
 
 Similarly for vector survey data
@@ -274,10 +275,10 @@ p <- autoplot(MMR_An_dirus, shp_df = MMR_shp, printed = FALSE)
 
 vec <- getVecOcc(country = c("Myanmar"), species = "Anopheles dirus")
 p[[1]] +
-geom_point(data = vec, aes(longitude, latitude, colour = species))+
-  scale_colour_manual(values = "black", name = "Vector survey locations")+
- scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "PuBuGn", direction = 1)+
- ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
+  geom_point(data = vec, aes(longitude, latitude, colour = species)) +
+  scale_colour_manual(values = "black", name = "Vector survey locations") +
+  scale_fill_distiller(name = "Predicted distribution of An. dirus complex", palette = "PuBuGn", direction = 1) +
+  ggtitle("Vector Survey points\n + The predicted distribution of An. dirus complex")
 ```
 
 ## Installation
